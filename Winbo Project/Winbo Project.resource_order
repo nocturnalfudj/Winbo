@@ -1,0 +1,21 @@
+{
+  "FolderOrderSettings":[
+    {"name":"Objects","order":9,"path":"folders/Objects.yy",},
+    {"name":"Rooms","order":10,"path":"folders/Rooms.yy",},
+    {"name":"Sprites","order":1,"path":"folders/Sprites.yy",},
+  ],
+  "ResourceOrderSettings":[
+    {"name":"obj_camera","order":6,"path":"objects/obj_camera/obj_camera.yy",},
+    {"name":"obj_coin","order":2,"path":"objects/obj_coin/obj_coin.yy",},
+    {"name":"obj_flag","order":4,"path":"objects/obj_flag/obj_flag.yy",},
+    {"name":"obj_gameManager","order":5,"path":"objects/obj_gameManager/obj_gameManager.yy",},
+    {"name":"obj_spikes","order":3,"path":"objects/obj_spikes/obj_spikes.yy",},
+    {"name":"obj_wall","order":1,"path":"objects/obj_wall/obj_wall.yy",},
+    {"name":"Room2","order":1,"path":"rooms/Room2/Room2.yy",},
+    {"name":"Room3","order":2,"path":"rooms/Room3/Room3.yy",},
+    {"name":"spr_coin","order":2,"path":"sprites/spr_coin/spr_coin.yy",},
+    {"name":"spr_flag","order":4,"path":"sprites/spr_flag/spr_flag.yy",},
+    {"name":"spr_spikes","order":3,"path":"sprites/spr_spikes/spr_spikes.yy",},
+    {"name":"spr_wall","order":1,"path":"sprites/spr_wall/spr_wall.yy",},
+  ],
+}
