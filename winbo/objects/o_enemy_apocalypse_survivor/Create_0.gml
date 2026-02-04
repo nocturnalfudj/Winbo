@@ -44,6 +44,14 @@ event_inherited();
 	aim_body_sprite_offset_y = 0;
 	aim_legs_sprite_offset_x = 0;
 	aim_legs_sprite_offset_y = 0;
+
+	// Laser sight (placeholder offsets until anchor points are finalized)
+	laser_origin_offset_x = 60;
+	laser_origin_offset_y = -40;
+	laser_length = 2000;
+	laser_width = 2;
+	laser_alpha = 0.65;
+	laser_color = c_red;
 #endregion
 
 #region Combat - Apocalypse Survivor Overrides

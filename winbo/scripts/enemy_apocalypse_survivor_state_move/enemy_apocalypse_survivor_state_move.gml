@@ -17,6 +17,10 @@ function enemy_apocalypse_survivor_state_move(){
 	else{
 		// Hostile posture: kneel/aim and hold position (no chase movement)
 		is_kneeling = true;
+
+		// Track aim angle continuously while hostile
+		target_update(TargetType.attack);
+		aim_angle = point_direction(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
 	}
 
 	// If de-aggro resets hostility, clear kneel flag
