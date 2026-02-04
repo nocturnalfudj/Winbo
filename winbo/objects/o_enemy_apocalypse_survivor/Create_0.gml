@@ -93,4 +93,12 @@ event_inherited();
 	// Store patrol origin for return after deaggro
 	patrol_origin_x = x;
 	patrol_origin_y = y;
+
+	// Patrol pause settings (random idle pauses)
+	patrol_pause_min = 0.5 * SECOND;
+	patrol_pause_max = 1.5 * SECOND;
+	patrol_pause_chance = 0.01; // 1% chance per step to pause when relaxed
+	patrol_pause_timer = 0;
+	patrol_pause_cooldown_max = 1.25 * SECOND;
+	patrol_pause_cooldown = 0;
 #endregion

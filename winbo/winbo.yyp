@@ -4760,6 +4760,24 @@
     },
     {
       "id": {
+        "name": "enemy_apocalypse_survivor_state_idle",
+        "path": "scripts/enemy_apocalypse_survivor_state_idle/enemy_apocalypse_survivor_state_idle.yy",
+      },
+    },
+    {
+      "id": {
+        "name": "enemy_apocalypse_survivor_state_move",
+        "path": "scripts/enemy_apocalypse_survivor_state_move/enemy_apocalypse_survivor_state_move.yy",
+      },
+    },
+    {
+      "id": {
+        "name": "enemy_apocalypse_survivor_state_startled",
+        "path": "scripts/enemy_apocalypse_survivor_state_startled/enemy_apocalypse_survivor_state_startled.yy",
+      },
+    },
+    {
+      "id": {
         "name": "iOS_IAPs",
         "path": "extensions/iOS_IAPs/iOS_IAPs.yy",
       },

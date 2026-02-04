@@ -16,11 +16,11 @@ function enemy_apocalypse_survivor_gamestate_play(){
 		break;
 
 		case EnemyState.idle:
-			enemy_state_idle();
+			enemy_apocalypse_survivor_state_idle();
 		break;
 
 		case EnemyState.move:
-			enemy_state_move();
+			enemy_apocalypse_survivor_state_move();
 		break;
 
 		case EnemyState.sheathe:
@@ -28,7 +28,7 @@ function enemy_apocalypse_survivor_gamestate_play(){
 		break;
 
 		case EnemyState.startled:
-			enemy_state_startled();
+			enemy_apocalypse_survivor_state_startled();
 		break;
 		
 		case EnemyState.attack_telegraph:
