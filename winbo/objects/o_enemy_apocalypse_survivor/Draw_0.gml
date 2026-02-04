@@ -93,7 +93,7 @@ if(_sector != "out"){
 
 // Muzzle flash + shell (optional; uses string asset lookup so it won't crash if missing)
 if(muzzle_flash_timer > 0){
-	var _spr_flash = asset_get_index("spr_apocalypse_survivor_muzzle_flash_rifle");
+	var _spr_flash = asset_get_index("spr_muzzle_flash_rifle");
 	if(_spr_flash >= 0){
 		var _frame = floor((1 - (muzzle_flash_timer / muzzle_flash_timer_max)) * (sprite_get_number(_spr_flash) - 1));
 		var _mx = x + (attack_projectile_spawn_offset_x * face_horizontal);
@@ -103,7 +103,7 @@ if(muzzle_flash_timer > 0){
 }
 
 if(shell_timer > 0){
-	var _spr_shell = asset_get_index("spr_apocalypse_survivor_shell");
+	var _spr_shell = asset_get_index("spr_bullet_shell_empty");
 	if(_spr_shell >= 0){
 		var _sx = x + (attack_projectile_spawn_offset_x * face_horizontal) - 20 * face_horizontal;
 		var _sy = y + attack_projectile_spawn_offset_y + 10;
