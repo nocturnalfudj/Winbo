@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ui_dialogue_create_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ui_dialogue_create_main",
+  "parent":{
+    "name":"Dialogue",
+    "path":"folders/UI/Dialogue.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"console_state_idle",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"console_state_idle",
+  "parent":{
+    "name":"States",
+    "path":"folders/Control/Console/Scripts/States.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

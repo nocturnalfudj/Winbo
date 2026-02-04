@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"txtPstr_advert_idle_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"txtPstr_advert_idle_main",
+  "parent":{
+    "name":"Timer",
+    "path":"folders/UI/Advert/Timer.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"anchor_advert_destroy_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"anchor_advert_destroy_main",
+  "parent":{
+    "name":"Anchor",
+    "path":"folders/UI/Advert/Anchor.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"master_game_state_boot",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"master_game_state_boot",
+  "parent":{
+    "name":"GameState",
+    "path":"folders/Control/Master/Scripts/GameState.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

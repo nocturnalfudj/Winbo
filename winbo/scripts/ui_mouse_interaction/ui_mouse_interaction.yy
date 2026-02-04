@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ui_mouse_interaction",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ui_mouse_interaction",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/UI/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

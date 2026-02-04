@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"player_movement_update",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"player_movement_update",
+  "parent":{
+    "name":"Parent",
+    "path":"folders/Actors/Characters/Player/Parent.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

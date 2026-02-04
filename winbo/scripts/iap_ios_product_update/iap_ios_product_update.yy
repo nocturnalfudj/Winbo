@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"iap_ios_product_update",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"iap_ios_product_update",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/IAP/iOS/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

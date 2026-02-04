@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"console_log_save",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"console_log_save",
+  "parent":{
+    "name":"Commands",
+    "path":"folders/Control/Console/Scripts/Commands.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

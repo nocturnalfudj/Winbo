@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ui_game_create_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ui_game_create_main",
+  "parent":{
+    "name":"Game",
+    "path":"folders/UI/Game.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CommandAction",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CommandAction",
+  "parent":{
+    "name":"Commands",
+    "path":"folders/Control/Console/Scripts/Commands.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

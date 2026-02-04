@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ui_hud_create_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ui_hud_create_main",
+  "parent":{
+    "name":"HUD",
+    "path":"folders/UI/HUD.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

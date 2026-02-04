@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"txtPstr_heal_idle_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"txtPstr_heal_idle_main",
+  "parent":{
+    "name":"Heal",
+    "path":"folders/UI/Game/Heal.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

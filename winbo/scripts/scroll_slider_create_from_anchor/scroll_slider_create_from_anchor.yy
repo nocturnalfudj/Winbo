@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scroll_slider_create_from_anchor",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scroll_slider_create_from_anchor",
+  "parent":{
+    "name":"Slider",
+    "path":"folders/UI/Parents/Scroll/Slider.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

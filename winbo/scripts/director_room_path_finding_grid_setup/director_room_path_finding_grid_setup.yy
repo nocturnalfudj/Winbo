@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"director_room_path_finding_grid_setup",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"director_room_path_finding_grid_setup",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/Director/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"txtPstr_winbo_lives_idle_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"txtPstr_winbo_lives_idle_main",
+  "parent":{
+    "name":"Lives",
+    "path":"folders/UI/HUD/Lives.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

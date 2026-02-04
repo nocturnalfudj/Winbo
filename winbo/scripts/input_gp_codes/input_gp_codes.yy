@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"input_gp_codes",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"input_gp_codes",
+  "parent":{
+    "name":"Codes",
+    "path":"folders/Control/Input/Scripts/Codes.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,15 @@
+/*
+!winbo/
+!.gitignore
+
+# Git-ignored local config files
+.mcp.json
+CLAUDE.md
+
+# Temporary work files (DELETE WHEN COMPLETE)
+TEMP_*.md
+
+
+# GMS MCP logs and cache
+winbo/.gms_mcp/
+winbo/.gml_index_cache.json

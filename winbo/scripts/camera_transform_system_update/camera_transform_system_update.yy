@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"camera_transform_system_update",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"camera_transform_system_update",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/Camera/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

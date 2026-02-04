@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"camera_apply_resolution_intended_width",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"camera_apply_resolution_intended_width",
+  "parent":{
+    "name":"Resolution",
+    "path":"folders/Control/Camera/Scripts/Resolution.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

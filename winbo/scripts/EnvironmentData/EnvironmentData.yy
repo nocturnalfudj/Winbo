@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"EnvironmentData",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnvironmentData",
+  "parent":{
+    "name":"Environment",
+    "path":"folders/Control/Director/Environment.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

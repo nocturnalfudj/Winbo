@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"spawner_gamestate_play",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"spawner_gamestate_play",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Volumes/Spawners/Parent/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,48 @@
+{
+  "$GMObject":"",
+  "%Name":"o_tab_level_select",
+  "eventList":[
+    {
+      "$GMEvent":"v1",
+      "%Name":"Create_0",
+      "collisionObjectId":null,
+      "eventNum":0,
+      "eventType":0,
+      "isDnD":false,
+      "name":"Create_0",
+      "resourceType":"GMEvent",
+      "resourceVersion":"2.0"
+    }
+  ],
+  "managed":true,
+  "name":"o_tab_level_select",
+  "overriddenProperties":[],
+  "parent":{
+    "name":"Level Select",
+    "path":"folders/UI/Main Menu/Tabs/Level Select.yy"
+  },
+  "parentObjectId":{
+    "name":"o_tab_menu_parent",
+    "path":"objects/o_tab_menu_parent/o_tab_menu_parent.yy"
+  },
+  "persistent":false,
+  "physicsAngularDamping":0.1,
+  "physicsDensity":0.5,
+  "physicsFriction":0.2,
+  "physicsGroup":0,
+  "physicsKinematic":false,
+  "physicsLinearDamping":0.1,
+  "physicsObject":false,
+  "physicsRestitution":0.1,
+  "physicsSensor":false,
+  "physicsShape":1,
+  "physicsShapePoints":[],
+  "physicsStartAwake":true,
+  "properties":[],
+  "resourceType":"GMObject",
+  "resourceVersion":"2.0",
+  "solid":false,
+  "spriteId":null,
+  "spriteMaskId":null,
+  "visible":true
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"master_os_paused_check",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"master_os_paused_check",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/Master/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

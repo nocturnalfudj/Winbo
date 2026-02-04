@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"txtPstr_dialogue_next_idle_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"txtPstr_dialogue_next_idle_main",
+  "parent":{
+    "name":"Next",
+    "path":"folders/UI/Dialogue/Next.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

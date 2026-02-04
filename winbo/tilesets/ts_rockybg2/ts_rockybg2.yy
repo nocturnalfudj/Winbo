@@ -1,0 +1,40 @@
+{
+  "$GMTileSet":"v1",
+  "%Name":"ts_rockybg2",
+  "autoTileSets":[
+    {"$GMAutoTileSet":"","%Name":"rockybg2","closed_edge":false,"name":"rockybg2","resourceType":"GMAutoTileSet","resourceVersion":"2.0","tiles":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0,],},
+  ],
+  "macroPageTiles":{
+    "SerialiseHeight":0,
+    "SerialiseWidth":0,
+    "TileSerialiseData":[],
+  },
+  "name":"ts_rockybg2",
+  "out_columns":4,
+  "out_tilehborder":2,
+  "out_tilevborder":2,
+  "parent":{
+    "name":"Background Tiles",
+    "path":"folders/Tilesets/Background Tiles.yy",
+  },
+  "resourceType":"GMTileSet",
+  "resourceVersion":"2.0",
+  "spriteId":{
+    "name":"spr_rockybg2",
+    "path":"sprites/spr_rockybg2/spr_rockybg2.yy",
+  },
+  "spriteNoExport":false,
+  "textureGroupId":{
+    "name":"Default",
+    "path":"texturegroups/Default",
+  },
+  "tileAnimationFrames":[],
+  "tileAnimationSpeed":15.0,
+  "tileHeight":320,
+  "tilehsep":0,
+  "tilevsep":0,
+  "tileWidth":320,
+  "tilexoff":0,
+  "tileyoff":0,
+  "tile_count":16,
+}

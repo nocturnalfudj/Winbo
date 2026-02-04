@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"music_level_test",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":119.337006,
+  "exportDir":"",
+  "name":"music_level_test",
+  "parent":{
+    "name":"Music",
+    "path":"folders/Control/Audio/Music.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"music_level_test.wav",
+  "volume":1.0,
+}

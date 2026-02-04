@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"cmd_game_spawn",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"cmd_game_spawn",
+  "parent":{
+    "name":"Game",
+    "path":"folders/Control/Console/Scripts/Commands/Actions/Game.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

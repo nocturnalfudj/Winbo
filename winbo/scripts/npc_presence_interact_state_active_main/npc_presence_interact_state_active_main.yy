@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"npc_presence_interact_state_active_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"npc_presence_interact_state_active_main",
+  "parent":{
+    "name":"Presence",
+    "path":"folders/Actors/Characters/NPC/Presence.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

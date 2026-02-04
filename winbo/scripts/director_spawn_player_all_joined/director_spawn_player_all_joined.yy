@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"director_spawn_player_all_joined",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"director_spawn_player_all_joined",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/Director/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"text_grid_write_template_all",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"text_grid_write_template_all",
+  "parent":{
+    "name":"Write",
+    "path":"folders/Control/Text/Scripts/Grid/Write.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

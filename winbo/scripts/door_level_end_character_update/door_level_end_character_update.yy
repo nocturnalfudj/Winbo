@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"door_level_end_character_update",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"door_level_end_character_update",
+  "parent":{
+    "name":"Parent",
+    "path":"folders/Actors/Door/Parent.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

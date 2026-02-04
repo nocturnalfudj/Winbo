@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"glitch_setting_update",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"glitch_setting_update",
+  "parent":{
+    "name":"Setting",
+    "path":"folders/Control/Camera/VFX/Glitch/Setting.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

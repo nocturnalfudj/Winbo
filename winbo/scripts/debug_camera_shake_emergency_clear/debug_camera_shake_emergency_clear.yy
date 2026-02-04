@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"debug_camera_shake_emergency_clear",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"debug_camera_shake_emergency_clear",
+  "parent":{
+    "name":"Shake",
+    "path":"folders/Control/Camera/Scripts/Shake.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

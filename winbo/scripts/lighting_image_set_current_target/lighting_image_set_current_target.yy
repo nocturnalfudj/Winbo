@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"lighting_image_set_current_target",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"lighting_image_set_current_target",
+  "parent":{
+    "name":"Image",
+    "path":"folders/Control/Camera/VFX/Lighting/Image.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

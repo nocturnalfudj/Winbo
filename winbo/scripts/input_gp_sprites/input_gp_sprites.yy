@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"input_gp_sprites",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"input_gp_sprites",
+  "parent":{
+    "name":"Sprites",
+    "path":"folders/Control/Input/Scripts/Sprites.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

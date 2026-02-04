@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"gamepad_draw_crosshair",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"gamepad_draw_crosshair",
+  "parent":{
+    "name":"Gamepad",
+    "path":"folders/Control/Input/Scripts/Gamepad.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

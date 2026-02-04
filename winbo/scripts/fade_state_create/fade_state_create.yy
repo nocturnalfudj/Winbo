@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"fade_state_create",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"fade_state_create",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/UI/Parents/Fade/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

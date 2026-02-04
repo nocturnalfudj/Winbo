@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"txtPstr_dialogue_name_idle_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"txtPstr_dialogue_name_idle_main",
+  "parent":{
+    "name":"Name",
+    "path":"folders/UI/Dialogue/Name.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

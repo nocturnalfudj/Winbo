@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"txtPstr_bump_idle_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"txtPstr_bump_idle_main",
+  "parent":{
+    "name":"Bump",
+    "path":"folders/UI/Game/Bump.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

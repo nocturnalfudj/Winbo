@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"window_state_down",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"window_state_down",
+  "parent":{
+    "name":"States",
+    "path":"folders/UI/Parents/Window/Scripts/States.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

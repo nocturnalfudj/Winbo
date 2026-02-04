@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"window_surface_redraw_set",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"window_surface_redraw_set",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/UI/Parents/Window/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"window_state_idle",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"window_state_idle",
+  "parent":{
+    "name":"States",
+    "path":"folders/UI/Parents/Window/Scripts/States.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

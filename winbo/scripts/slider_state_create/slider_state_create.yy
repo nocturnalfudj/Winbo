@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"slider_state_create",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"slider_state_create",
+  "parent":{
+    "name":"States",
+    "path":"folders/UI/Parents/Slider/Scripts/States.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

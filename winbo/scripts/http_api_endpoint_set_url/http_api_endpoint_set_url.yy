@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"http_api_endpoint_set_url",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"http_api_endpoint_set_url",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/HTTP/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"anchor_cutscene_destroy_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"anchor_cutscene_destroy_main",
+  "parent":{
+    "name":"Cutscene",
+    "path":"folders/UI/Cutscene.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

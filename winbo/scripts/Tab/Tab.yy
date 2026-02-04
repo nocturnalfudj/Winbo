@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Tab",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Tab",
+  "parent":{
+    "name":"Tab",
+    "path":"folders/UI/Parents/Tab/Tab.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

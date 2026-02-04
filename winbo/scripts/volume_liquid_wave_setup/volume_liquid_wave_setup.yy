@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"volume_liquid_wave_setup",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"volume_liquid_wave_setup",
+  "parent":{
+    "name":"Parent",
+    "path":"folders/Volumes/Liquid/Parent.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

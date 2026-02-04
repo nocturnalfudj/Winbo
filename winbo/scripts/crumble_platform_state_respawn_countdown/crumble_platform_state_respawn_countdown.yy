@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"crumble_platform_state_respawn_countdown",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"crumble_platform_state_respawn_countdown",
+  "parent":{
+    "name":"States",
+    "path":"folders/Solids/Platform/Crumble/Parent/States.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

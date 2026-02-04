@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"camera_filter_settings_update_layers",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"camera_filter_settings_update_layers",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/Camera/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

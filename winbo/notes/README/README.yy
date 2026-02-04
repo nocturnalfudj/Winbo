@@ -1,0 +1,12 @@
+{
+  "$GMNotes":"v1",
+  "%Name":"README",
+  "name":"README",
+  "openedOnFirstLoad":true,
+  "parent":{
+    "name":"Glitch",
+    "path":"folders/Control/Camera/VFX/Glitch.yy",
+  },
+  "resourceType":"GMNotes",
+  "resourceVersion":"2.0",
+}

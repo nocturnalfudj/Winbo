@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"anchor_dialogue_destroy_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"anchor_dialogue_destroy_main",
+  "parent":{
+    "name":"Anchor",
+    "path":"folders/UI/Dialogue/Anchor.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

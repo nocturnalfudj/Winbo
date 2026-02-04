@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"anchor_gameover_destroy_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"anchor_gameover_destroy_main",
+  "parent":{
+    "name":"Anchor",
+    "path":"folders/UI/Gameover/Anchor.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

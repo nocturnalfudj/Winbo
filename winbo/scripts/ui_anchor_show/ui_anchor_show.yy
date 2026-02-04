@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ui_anchor_show",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ui_anchor_show",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/UI/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

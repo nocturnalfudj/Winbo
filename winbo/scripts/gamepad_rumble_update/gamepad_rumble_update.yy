@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"gamepad_rumble_update",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"gamepad_rumble_update",
+  "parent":{
+    "name":"Gamepad",
+    "path":"folders/Control/Input/Scripts/Gamepad.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

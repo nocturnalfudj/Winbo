@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"txtPstr_cash_idle_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"txtPstr_cash_idle_main",
+  "parent":{
+    "name":"Coins",
+    "path":"folders/UI/HUD/Coins.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

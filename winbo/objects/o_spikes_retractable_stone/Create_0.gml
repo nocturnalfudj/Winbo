@@ -1,0 +1,4 @@
+event_inherited();
+
+sprite_grate_front = spr_spikes_retractable_grate_front_stone;
+sprite_grate_back = spr_spikes_retractable_grate_back_stone;

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"level_select_unlock_all",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"level_select_unlock_all",
+  "parent":{
+    "name":"Level",
+    "path":"folders/Control/Director/Level.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

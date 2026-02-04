@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"input_check_gamepad_user_device_connected",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"input_check_gamepad_user_device_connected",
+  "parent":{
+    "name":"Check",
+    "path":"folders/Control/Input/Scripts/Check.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

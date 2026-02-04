@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"lighting_colour_set_lerpval",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"lighting_colour_set_lerpval",
+  "parent":{
+    "name":"Colour",
+    "path":"folders/Control/Camera/VFX/Lighting/Colour.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

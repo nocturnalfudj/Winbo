@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"camera_state_stationary",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"camera_state_stationary",
+  "parent":{
+    "name":"States",
+    "path":"folders/Control/Camera/Scripts/States.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

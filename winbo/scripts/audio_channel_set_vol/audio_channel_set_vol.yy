@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"audio_channel_set_vol",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"audio_channel_set_vol",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/Audio/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"console_extraction",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"console_extraction",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/Console/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

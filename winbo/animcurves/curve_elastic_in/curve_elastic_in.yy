@@ -1,0 +1,24 @@
+{
+  "$GMAnimCurve":"",
+  "%Name":"curve_elastic_in",
+  "channels":[
+    {"$GMAnimCurveChannel":"","%Name":"x","colour":4282401023,"name":"x","points":[
+        {"th0":1.0,"th1":-1.0,"tv0":0.0,"tv1":0.0,"x":0.0,"y":0.0,},
+        {"th0":1.0,"th1":-1.0,"tv0":0.0,"tv1":0.0,"x":0.27,"y":0.02,},
+        {"th0":1.0,"th1":-1.0,"tv0":0.0,"tv1":0.0,"x":0.43,"y":-0.03,},
+        {"th0":1.0,"th1":-1.0,"tv0":0.0,"tv1":0.0,"x":0.62,"y":0.05,},
+        {"th0":1.0,"th1":-1.0,"tv0":0.0,"tv1":0.0,"x":0.7,"y":-0.075,},
+        {"th0":1.0,"th1":-1.0,"tv0":0.0,"tv1":0.0,"x":0.8,"y":0.1,},
+        {"th0":1.0,"th1":-1.0,"tv0":0.0,"tv1":0.0,"x":0.91,"y":-0.5,},
+        {"th0":1.0,"th1":-1.0,"tv0":0.0,"tv1":0.0,"x":1.0,"y":1.0,},
+      ],"resourceType":"GMAnimCurveChannel","resourceVersion":"2.0","visible":true,},
+  ],
+  "function":1,
+  "name":"curve_elastic_in",
+  "parent":{
+    "name":"Curves",
+    "path":"folders/Tools & Systems/Curves.yy",
+  },
+  "resourceType":"GMAnimCurve",
+  "resourceVersion":"2.0",
+}

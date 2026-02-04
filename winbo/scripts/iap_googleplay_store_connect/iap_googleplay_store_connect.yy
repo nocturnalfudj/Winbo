@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"iap_googleplay_store_connect",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"iap_googleplay_store_connect",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/IAP/GooglePlay/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

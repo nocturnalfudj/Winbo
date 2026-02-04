@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"sh_bloom",
+  "name":"sh_bloom",
+  "parent":{
+    "name":"Shaders",
+    "path":"folders/Control/Camera/VFX/Lighting/Shaders.yy",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}

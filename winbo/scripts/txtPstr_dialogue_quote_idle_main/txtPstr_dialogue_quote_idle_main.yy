@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"txtPstr_dialogue_quote_idle_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"txtPstr_dialogue_quote_idle_main",
+  "parent":{
+    "name":"Quote",
+    "path":"folders/UI/Dialogue/Quote.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

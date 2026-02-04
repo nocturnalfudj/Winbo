@@ -1,0 +1,40 @@
+{
+  "$GMTileSet":"v1",
+  "%Name":"ts_leafybg",
+  "autoTileSets":[
+    {"$GMAutoTileSet":"","%Name":"leafybg","closed_edge":false,"name":"leafybg","resourceType":"GMAutoTileSet","resourceVersion":"2.0","tiles":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0,],},
+  ],
+  "macroPageTiles":{
+    "SerialiseHeight":0,
+    "SerialiseWidth":0,
+    "TileSerialiseData":[],
+  },
+  "name":"ts_leafybg",
+  "out_columns":4,
+  "out_tilehborder":2,
+  "out_tilevborder":2,
+  "parent":{
+    "name":"Background Tiles",
+    "path":"folders/Tilesets/Background Tiles.yy",
+  },
+  "resourceType":"GMTileSet",
+  "resourceVersion":"2.0",
+  "spriteId":{
+    "name":"spr_leafybg",
+    "path":"sprites/spr_leafybg/spr_leafybg.yy",
+  },
+  "spriteNoExport":false,
+  "textureGroupId":{
+    "name":"Default",
+    "path":"texturegroups/Default",
+  },
+  "tileAnimationFrames":[],
+  "tileAnimationSpeed":15.0,
+  "tileHeight":320,
+  "tilehsep":0,
+  "tilevsep":0,
+  "tileWidth":320,
+  "tilexoff":0,
+  "tileyoff":0,
+  "tile_count":16,
+}

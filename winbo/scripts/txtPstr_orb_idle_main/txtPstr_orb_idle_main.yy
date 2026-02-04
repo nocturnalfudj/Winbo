@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"txtPstr_orb_idle_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"txtPstr_orb_idle_main",
+  "parent":{
+    "name":"Coin",
+    "path":"folders/UI/Game/Coin.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

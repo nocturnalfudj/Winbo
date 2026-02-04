@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ui_persitent_create_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ui_persitent_create_main",
+  "parent":{
+    "name":"Persistent",
+    "path":"folders/UI/Persistent.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

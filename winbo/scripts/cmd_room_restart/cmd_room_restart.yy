@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"cmd_room_restart",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"cmd_room_restart",
+  "parent":{
+    "name":"Room",
+    "path":"folders/Control/Console/Scripts/Commands/Actions/Room.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

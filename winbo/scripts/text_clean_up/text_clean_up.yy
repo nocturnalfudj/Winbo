@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"text_clean_up",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"text_clean_up",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/Text/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

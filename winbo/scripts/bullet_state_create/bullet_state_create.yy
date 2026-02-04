@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"bullet_state_create",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"bullet_state_create",
+  "parent":{
+    "name":"States",
+    "path":"folders/Actors/Bullets/Parent/Scripts/States.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

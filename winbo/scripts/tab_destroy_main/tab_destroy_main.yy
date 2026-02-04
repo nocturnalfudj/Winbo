@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"tab_destroy_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"tab_destroy_main",
+  "parent":{
+    "name":"Tab",
+    "path":"folders/UI/Parents/Tab.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

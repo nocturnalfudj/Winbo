@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"console_draw_id_show_ui",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"console_draw_id_show_ui",
+  "parent":{
+    "name":"Commands",
+    "path":"folders/Control/Console/Scripts/Commands.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

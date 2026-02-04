@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"gamepad_connect_to_first_available_user",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"gamepad_connect_to_first_available_user",
+  "parent":{
+    "name":"Gamepad",
+    "path":"folders/Control/Input/Scripts/Gamepad.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

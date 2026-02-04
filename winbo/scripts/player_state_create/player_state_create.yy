@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"player_state_create",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"player_state_create",
+  "parent":{
+    "name":"States",
+    "path":"folders/Actors/Characters/Player/Parent/States.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

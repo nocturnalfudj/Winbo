@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"console_new_resolution",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"console_new_resolution",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/Console/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

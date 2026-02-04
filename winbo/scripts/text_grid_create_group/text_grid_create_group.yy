@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"text_grid_create_group",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"text_grid_create_group",
+  "parent":{
+    "name":"Create",
+    "path":"folders/Control/Text/Scripts/Grid/Create.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

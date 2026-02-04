@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"slider_val_update",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"slider_val_update",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/UI/Parents/Slider/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"lighting_light_tracking_set_offset_targets_to_current",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"lighting_light_tracking_set_offset_targets_to_current",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/Camera/VFX/Lighting/Lights/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

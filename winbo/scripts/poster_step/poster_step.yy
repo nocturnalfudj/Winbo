@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"poster_step",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"poster_step",
+  "parent":{
+    "name":"Poster",
+    "path":"folders/UI/Parents/Poster.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

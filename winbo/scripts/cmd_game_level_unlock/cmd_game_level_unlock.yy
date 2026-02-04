@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"cmd_game_level_unlock",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"cmd_game_level_unlock",
+  "parent":{
+    "name":"Game",
+    "path":"folders/Control/Console/Scripts/Commands/Actions/Game.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

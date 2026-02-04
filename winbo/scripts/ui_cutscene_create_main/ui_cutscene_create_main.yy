@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ui_cutscene_create_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ui_cutscene_create_main",
+  "parent":{
+    "name":"Cutscene",
+    "path":"folders/UI/Cutscene.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

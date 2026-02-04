@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"txtPstr_life_idle_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"txtPstr_life_idle_main",
+  "parent":{
+    "name":"Life",
+    "path":"folders/UI/Game/Life.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

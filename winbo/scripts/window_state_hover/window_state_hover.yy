@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"window_state_hover",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"window_state_hover",
+  "parent":{
+    "name":"States",
+    "path":"folders/UI/Parents/Window/Scripts/States.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

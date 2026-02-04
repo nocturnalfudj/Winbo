@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"slider_transform_update",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"slider_transform_update",
+  "parent":{
+    "name":"Transform",
+    "path":"folders/UI/Parents/Slider/Scripts/Transform.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

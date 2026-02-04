@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"window_step",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"window_step",
+  "parent":{
+    "name":"Step",
+    "path":"folders/UI/Parents/Window/Scripts/Step.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

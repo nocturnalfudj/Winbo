@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"IOSProductData",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"IOSProductData",
+  "parent":{
+    "name":"iOS",
+    "path":"folders/Control/IAP/iOS.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

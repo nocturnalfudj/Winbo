@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"iap_purchase_product",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"iap_purchase_product",
+  "parent":{
+    "name":"IAP",
+    "path":"folders/Control/IAP.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

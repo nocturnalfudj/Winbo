@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"camera_shake_clear_all",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"camera_shake_clear_all",
+  "parent":{
+    "name":"Shake",
+    "path":"folders/Control/Camera/VFX/Shake.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"tab_exit_horizontal",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"tab_exit_horizontal",
+  "parent":{
+    "name":"Tab",
+    "path":"folders/UI/Parents/Tab/Tab.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

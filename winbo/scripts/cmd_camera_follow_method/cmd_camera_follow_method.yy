@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"cmd_camera_follow_method",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"cmd_camera_follow_method",
+  "parent":{
+    "name":"Camera",
+    "path":"folders/Control/Console/Scripts/Commands/Actions/Camera.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"pickup_collect_orb",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"pickup_collect_orb",
+  "parent":{
+    "name":"Parent",
+    "path":"folders/Actors/Pickups/Orb/Parent.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

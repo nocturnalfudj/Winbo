@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ui_results_create_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ui_results_create_main",
+  "parent":{
+    "name":"Results",
+    "path":"folders/UI/Results.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

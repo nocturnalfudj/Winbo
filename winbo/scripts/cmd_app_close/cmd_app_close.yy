@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"cmd_app_close",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"cmd_app_close",
+  "parent":{
+    "name":"App",
+    "path":"folders/Control/Console/Scripts/Commands/Actions/App.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

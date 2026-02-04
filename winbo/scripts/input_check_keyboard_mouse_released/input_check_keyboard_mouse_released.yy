@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"input_check_keyboard_mouse_released",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"input_check_keyboard_mouse_released",
+  "parent":{
+    "name":"Check",
+    "path":"folders/Control/Input/Scripts/Check.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

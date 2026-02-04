@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"http_request_sdm_fail",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"http_request_sdm_fail",
+  "parent":{
+    "name":"SDMs",
+    "path":"folders/Control/HTTP/Scripts/SDMs.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

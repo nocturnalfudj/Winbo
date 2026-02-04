@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"txtPstr_talisman_idle_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"txtPstr_talisman_idle_main",
+  "parent":{
+    "name":"Talisman",
+    "path":"folders/UI/Game/Talisman.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

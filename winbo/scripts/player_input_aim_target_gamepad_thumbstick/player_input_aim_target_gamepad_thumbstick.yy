@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"player_input_aim_target_gamepad_thumbstick",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"player_input_aim_target_gamepad_thumbstick",
+  "parent":{
+    "name":"Parent",
+    "path":"folders/Actors/Characters/Player/Parent.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

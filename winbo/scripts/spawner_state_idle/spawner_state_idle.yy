@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"spawner_state_idle",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"spawner_state_idle",
+  "parent":{
+    "name":"States",
+    "path":"folders/Volumes/Spawners/Parent/Scripts/States.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

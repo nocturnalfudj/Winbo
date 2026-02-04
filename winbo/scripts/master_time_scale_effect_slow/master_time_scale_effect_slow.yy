@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"master_time_scale_effect_slow",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"master_time_scale_effect_slow",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/Master/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"text_grid_string_get",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"text_grid_string_get",
+  "parent":{
+    "name":"Grid",
+    "path":"folders/Control/Text/Scripts/Grid.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

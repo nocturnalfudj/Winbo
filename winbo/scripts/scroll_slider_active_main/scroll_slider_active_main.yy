@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scroll_slider_active_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scroll_slider_active_main",
+  "parent":{
+    "name":"Slider",
+    "path":"folders/UI/Parents/Scroll/Slider.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

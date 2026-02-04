@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"sh_bkt_glitch",
+  "name":"sh_bkt_glitch",
+  "parent":{
+    "name":"Glitch",
+    "path":"folders/Control/Camera/VFX/Glitch.yy",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ui_advert_create_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ui_advert_create_main",
+  "parent":{
+    "name":"Advert",
+    "path":"folders/UI/Advert.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

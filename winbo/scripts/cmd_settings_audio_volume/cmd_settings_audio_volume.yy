@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"cmd_settings_audio_volume",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"cmd_settings_audio_volume",
+  "parent":{
+    "name":"Settings",
+    "path":"folders/Control/Console/Scripts/Commands/Actions/Settings.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

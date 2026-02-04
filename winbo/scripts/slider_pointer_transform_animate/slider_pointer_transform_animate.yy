@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"slider_pointer_transform_animate",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"slider_pointer_transform_animate",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/UI/Parents/Slider/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

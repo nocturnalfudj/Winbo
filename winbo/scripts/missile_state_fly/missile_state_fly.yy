@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"missile_state_fly",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"missile_state_fly",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Actors/Characters/Enemies/Ranged/SpaceRanger/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

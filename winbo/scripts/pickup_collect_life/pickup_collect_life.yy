@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"pickup_collect_life",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"pickup_collect_life",
+  "parent":{
+    "name":"Parent",
+    "path":"folders/Actors/Pickups/Life/Parent.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

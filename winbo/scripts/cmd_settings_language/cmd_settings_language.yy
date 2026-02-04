@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"cmd_settings_language",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"cmd_settings_language",
+  "parent":{
+    "name":"Settings",
+    "path":"folders/Control/Console/Scripts/Commands/Actions/Settings.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

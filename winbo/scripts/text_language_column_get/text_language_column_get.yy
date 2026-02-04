@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"text_language_column_get",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"text_language_column_get",
+  "parent":{
+    "name":"Language",
+    "path":"folders/Control/Text/Scripts/Language.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

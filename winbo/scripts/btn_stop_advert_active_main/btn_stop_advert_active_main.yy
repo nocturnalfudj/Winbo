@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"btn_stop_advert_active_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"btn_stop_advert_active_main",
+  "parent":{
+    "name":"Stop",
+    "path":"folders/UI/Advert/Stop.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

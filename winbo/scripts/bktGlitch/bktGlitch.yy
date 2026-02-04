@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"bktGlitch",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"bktGlitch",
+  "parent":{
+    "name":"Glitch",
+    "path":"folders/Control/Camera/VFX/Glitch.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

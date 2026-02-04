@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"bar_step",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"bar_step",
+  "parent":{
+    "name":"Bar",
+    "path":"folders/UI/Parents/Bar.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

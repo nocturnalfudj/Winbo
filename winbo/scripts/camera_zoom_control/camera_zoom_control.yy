@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"camera_zoom_control",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"camera_zoom_control",
+  "parent":{
+    "name":"Zoom",
+    "path":"folders/Control/Camera/Scripts/Zoom.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

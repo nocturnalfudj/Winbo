@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"camera_get_intended_height",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"camera_get_intended_height",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/Camera/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

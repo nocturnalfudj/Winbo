@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"tabBtn_active_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"tabBtn_active_main",
+  "parent":{
+    "name":"Buttons",
+    "path":"folders/UI/Parents/Tab/Buttons.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

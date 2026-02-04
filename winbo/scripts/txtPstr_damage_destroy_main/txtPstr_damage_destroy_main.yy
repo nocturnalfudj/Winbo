@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"txtPstr_damage_destroy_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"txtPstr_damage_destroy_main",
+  "parent":{
+    "name":"Damage",
+    "path":"folders/UI/Game/Damage.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

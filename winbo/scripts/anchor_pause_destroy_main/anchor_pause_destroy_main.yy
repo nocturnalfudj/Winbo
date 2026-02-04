@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"anchor_pause_destroy_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"anchor_pause_destroy_main",
+  "parent":{
+    "name":"Anchor",
+    "path":"folders/UI/Pause/Anchor.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

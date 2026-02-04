@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"liquid_impulse",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"liquid_impulse",
+  "parent":{
+    "name":"Parent",
+    "path":"folders/Volumes/Liquid/Parent.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

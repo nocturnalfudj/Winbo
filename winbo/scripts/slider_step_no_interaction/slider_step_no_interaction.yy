@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"slider_step_no_interaction",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"slider_step_no_interaction",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/UI/Parents/Slider/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

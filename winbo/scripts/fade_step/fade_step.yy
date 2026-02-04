@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"fade_step",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"fade_step",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/UI/Parents/Fade/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

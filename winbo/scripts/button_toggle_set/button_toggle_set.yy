@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"button_toggle_set",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"button_toggle_set",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/UI/Parents/Button/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

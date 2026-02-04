@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"pstr_winbo_hp_idle_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"pstr_winbo_hp_idle_main",
+  "parent":{
+    "name":"HP",
+    "path":"folders/UI/HUD/HP.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

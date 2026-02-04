@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"fade_intro_idle_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"fade_intro_idle_main",
+  "parent":{
+    "name":"Fade",
+    "path":"folders/UI/Intro/Fade.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

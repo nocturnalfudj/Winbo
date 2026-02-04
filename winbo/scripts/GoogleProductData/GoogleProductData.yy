@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"GoogleProductData",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GoogleProductData",
+  "parent":{
+    "name":"GooglePlay",
+    "path":"folders/Control/IAP/GooglePlay.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

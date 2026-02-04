@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"bar_scale_update",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"bar_scale_update",
+  "parent":{
+    "name":"Bar",
+    "path":"folders/UI/Parents/Bar.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

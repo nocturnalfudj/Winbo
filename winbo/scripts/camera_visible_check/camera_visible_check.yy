@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"camera_visible_check",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"camera_visible_check",
+  "parent":{
+    "name":"Visible",
+    "path":"folders/Control/Camera/Scripts/Visible.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

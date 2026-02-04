@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"camera_visible_system_create",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"camera_visible_system_create",
+  "parent":{
+    "name":"Visible",
+    "path":"folders/Control/Camera/Scripts/Visible.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

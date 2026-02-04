@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"vfx_scheme_set_active",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"vfx_scheme_set_active",
+  "parent":{
+    "name":"Schemes",
+    "path":"folders/Control/Camera/VFX/Schemes.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

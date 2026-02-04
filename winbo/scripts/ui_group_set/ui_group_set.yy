@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ui_group_set",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ui_group_set",
+  "parent":{
+    "name":"Group",
+    "path":"folders/Control/UI/Scripts/Group.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

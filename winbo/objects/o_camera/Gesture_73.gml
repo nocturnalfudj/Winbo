@@ -1,0 +1,1 @@
+zoom_control_pinch_active = false;

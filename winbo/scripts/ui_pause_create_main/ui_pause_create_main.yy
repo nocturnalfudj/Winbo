@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ui_pause_create_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ui_pause_create_main",
+  "parent":{
+    "name":"Pause",
+    "path":"folders/UI/Pause.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

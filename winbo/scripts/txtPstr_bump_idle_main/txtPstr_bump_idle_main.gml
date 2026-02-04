@@ -1,0 +1,8 @@
+function txtPstr_bump_idle_main(){
+	if(!transform[TransformType.anchor].value[TransformValue.alpha].animating){
+		transform_animate_from_current_shrink_and_fade(0.2*SECOND,ease_back_in,-1.6*SECOND);
+			
+		//Set UI State
+		ui_object_state_set(UIState.destroy);
+	}
+}

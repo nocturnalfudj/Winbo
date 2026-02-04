@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ui_gameover_create_main",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ui_gameover_create_main",
+  "parent":{
+    "name":"Gameover",
+    "path":"folders/UI/Gameover.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

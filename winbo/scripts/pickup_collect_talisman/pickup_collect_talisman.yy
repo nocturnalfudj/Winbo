@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"pickup_collect_talisman",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"pickup_collect_talisman",
+  "parent":{
+    "name":"Parent",
+    "path":"folders/Actors/Pickups/Talisman/Parent.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

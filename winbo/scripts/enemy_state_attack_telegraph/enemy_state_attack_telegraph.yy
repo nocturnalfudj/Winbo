@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"enemy_state_attack_telegraph",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"enemy_state_attack_telegraph",
+  "parent":{
+    "name":"States",
+    "path":"folders/Actors/Characters/Enemies/Parent/Scripts/States.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

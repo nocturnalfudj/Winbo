@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ui_anchor_step",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ui_anchor_step",
+  "parent":{
+    "name":"Anchor",
+    "path":"folders/UI/Parents/Anchor.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

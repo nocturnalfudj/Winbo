@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"director_get_custom_sprite",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"director_get_custom_sprite",
+  "parent":{
+    "name":"Director",
+    "path":"folders/Control/Director.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
