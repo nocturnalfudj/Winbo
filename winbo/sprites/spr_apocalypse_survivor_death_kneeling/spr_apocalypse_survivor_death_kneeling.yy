@@ -104,7 +104,7 @@
               "$Keyframe<SpriteFrameKeyframe>": "",
               "Channels": {
                 "0": {
-                  "$SpriteFrameKeyframe>": "",
+                  "$SpriteFrameKeyframe": "",
                   "Id": {
                     "name": "edc6ca7cac1c4bcda342f909a8dba9c1",
                     "path": "sprites/spr_apocalypse_survivor_death_kneeling/spr_apocalypse_survivor_death_kneeling.yy",
@@ -126,7 +126,7 @@
               "$Keyframe<SpriteFrameKeyframe>": "",
               "Channels": {
                 "0": {
-                  "$SpriteFrameKeyframe>": "",
+                  "$SpriteFrameKeyframe": "",
                   "Id": {
                     "name": "05d307fafce4489a8a3700fd00d7b569",
                     "path": "sprites/spr_apocalypse_survivor_death_kneeling/spr_apocalypse_survivor_death_kneeling.yy",
