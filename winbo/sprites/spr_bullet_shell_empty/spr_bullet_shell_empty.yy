@@ -22,7 +22,7 @@
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 1,
+  "height": 7,
   "HTile": false,
   "layers": [
     {
@@ -42,8 +42,8 @@
   "nineSlice": null,
   "origin": 0,
   "parent": {
-    "name": "winbo",
-    "path": "winbo.yyp"
+    "name": "Bullets",
+    "path": "folders/Actors/Bullets.yy"
   },
   "preMultiplyAlpha": false,
   "resourceType": "GMSprite",
@@ -129,8 +129,8 @@
     ],
     "visibleRange": null,
     "volume": 1.0,
-    "xorigin": 0,
-    "yorigin": 0
+    "xorigin": 11,
+    "yorigin": 3
   },
   "swatchColours": null,
   "swfPrecision": 2.525,
@@ -140,5 +140,5 @@
   },
   "type": 0,
   "VTile": false,
-  "width": 1
+  "width": 22
 }

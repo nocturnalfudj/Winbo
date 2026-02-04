@@ -70,8 +70,8 @@
   "nineSlice": null,
   "origin": 0,
   "parent": {
-    "name": "winbo",
-    "path": "winbo.yyp"
+    "name": "Sprites",
+    "path": "folders/Actors/Characters/Enemies/Ranged/ApocalypseSurvivor/Sprites.yy"
   },
   "preMultiplyAlpha": false,
   "resourceType": "GMSprite",
@@ -245,8 +245,8 @@
     ],
     "visibleRange": null,
     "volume": 1.0,
-    "xorigin": 0,
-    "yorigin": 0
+    "xorigin": 735,
+    "yorigin": 731
   },
   "swatchColours": null,
   "swfPrecision": 2.525,
