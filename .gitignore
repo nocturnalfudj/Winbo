@@ -15,3 +15,4 @@ TEMP_*.md
 winbo/.gms_mcp/
 winbo/.gms-mcp.json
 winbo/.gml_index_cache.json
+winbo/.cursor/
