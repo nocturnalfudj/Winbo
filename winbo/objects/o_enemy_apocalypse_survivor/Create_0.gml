@@ -22,9 +22,9 @@ event_inherited();
 	sprite_attack_active = spr_apocalypse_survivor_shoot_side_body;
 	sprite_attack_recover = spr_apocalypse_survivor_idle;
 
-	// Death sprites (single sequence for now)
-	sprite_death_1 = spr_apocalypse_survivor_death;
-	sprite_death_2 = spr_apocalypse_survivor_death;
+	// Death sprites (standing vs kneeling)
+	sprite_death_1 = spr_apocalypse_survivor_death_standing;
+	sprite_death_2 = spr_apocalypse_survivor_death_kneeling;
 
 	// Two-layer aim sprites (side-facing placeholders)
 	sprite_aim_body = spr_apocalypse_survivor_aim_side_body;
@@ -73,6 +73,7 @@ event_inherited();
 #region Detection / Hostility
 	// Start non-hostile (patrol mode)
 	is_hostile = false;
+	is_kneeling = false; // posture flag (set true when kneeling)
 
 	// Enable detection to aggro when player gets close
 	hostility_detection_enable = true;

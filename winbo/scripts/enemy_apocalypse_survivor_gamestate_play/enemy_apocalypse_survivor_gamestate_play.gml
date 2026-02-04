@@ -44,7 +44,7 @@ function enemy_apocalypse_survivor_gamestate_play(){
 		break;
 
 		case EnemyState.death:
-			enemy_state_death();
+			enemy_apocalypse_survivor_state_death();
 		break;
 
 		case EnemyState.destroy:

@@ -4754,6 +4754,12 @@
     },
     {
       "id": {
+        "name": "enemy_apocalypse_survivor_state_death",
+        "path": "scripts/enemy_apocalypse_survivor_state_death/enemy_apocalypse_survivor_state_death.yy",
+      },
+    },
+    {
+      "id": {
         "name": "iOS_IAPs",
         "path": "extensions/iOS_IAPs/iOS_IAPs.yy",
       },
@@ -10558,6 +10564,18 @@
       "id": {
         "name": "spr_apocalypse_survivor_death",
         "path": "sprites/spr_apocalypse_survivor_death/spr_apocalypse_survivor_death.yy",
+      },
+    },
+    {
+      "id": {
+        "name": "spr_apocalypse_survivor_death_kneeling",
+        "path": "sprites/spr_apocalypse_survivor_death_kneeling/spr_apocalypse_survivor_death_kneeling.yy",
+      },
+    },
+    {
+      "id": {
+        "name": "spr_apocalypse_survivor_death_standing",
+        "path": "sprites/spr_apocalypse_survivor_death_standing/spr_apocalypse_survivor_death_standing.yy",
       },
     },
     {
