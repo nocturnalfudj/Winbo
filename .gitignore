@@ -4,6 +4,7 @@
 
 # Git-ignored local config files
 .mcp.json
+.claude-plugin/
 CLAUDE.md
 
 # Temporary work files (DELETE WHEN COMPLETE)
@@ -12,4 +13,5 @@ TEMP_*.md
 
 # GMS MCP logs and cache
 winbo/.gms_mcp/
+winbo/.gms-mcp.json
 winbo/.gml_index_cache.json
