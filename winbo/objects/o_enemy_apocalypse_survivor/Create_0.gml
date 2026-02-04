@@ -69,6 +69,19 @@ event_inherited();
 	attack_active_countdown_max = SECOND * 0.5;
 	attack_active_countdown = attack_active_countdown_max;
 
+	// Projectile tuning (temporary until dedicated projectile/hitbox exists)
+	attack_projectile_spawn_frame = 0;
+	attack_projectile_spawn_offset_x = 80;
+	attack_projectile_spawn_offset_y = -40;
+	attack_projectile_speed = 25;
+	attack_projectile_damage = 1;
+
+	// Simple FX timers (Draw handles assets by string name)
+	muzzle_flash_timer_max = 0.12 * SECOND;
+	muzzle_flash_timer = 0;
+	shell_timer_max = 0.2 * SECOND;
+	shell_timer = 0;
+
 	// Recover
 	attack_recover_progress_at_end_of_animation = true;
 	attack_recover_countdown_max = SECOND * 0.5;

@@ -4778,6 +4778,18 @@
     },
     {
       "id": {
+        "name": "enemy_apocalypse_survivor_state_attack_telegraph",
+        "path": "scripts/enemy_apocalypse_survivor_state_attack_telegraph/enemy_apocalypse_survivor_state_attack_telegraph.yy",
+      },
+    },
+    {
+      "id": {
+        "name": "enemy_apocalypse_survivor_state_attack_active",
+        "path": "scripts/enemy_apocalypse_survivor_state_attack_active/enemy_apocalypse_survivor_state_attack_active.yy",
+      },
+    },
+    {
+      "id": {
         "name": "iOS_IAPs",
         "path": "extensions/iOS_IAPs/iOS_IAPs.yy",
       },

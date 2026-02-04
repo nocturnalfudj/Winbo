@@ -7,6 +7,9 @@ function enemy_apocalypse_survivor_gamestate_play(){
 		if(attack_countdown > 0){
 			attack_countdown -= _delta_time_scaled;
 		}
+		// FX timers
+		if(muzzle_flash_timer > 0) muzzle_flash_timer -= _delta_time_scaled;
+		if(shell_timer > 0) shell_timer -= _delta_time_scaled;
 	#endregion
 
 	// State Switch - using base enemy state functions for now
@@ -32,11 +35,11 @@ function enemy_apocalypse_survivor_gamestate_play(){
 		break;
 		
 		case EnemyState.attack_telegraph:
-			enemy_state_attack_telegraph();
+			enemy_apocalypse_survivor_state_attack_telegraph();
 		break;
 		
 		case EnemyState.attack_active:
-			enemy_state_attack_active();
+			enemy_apocalypse_survivor_state_attack_active();
 		break;
 		
 		case EnemyState.attack_recover:
