@@ -1,9 +1,12 @@
 // Custom drawing for Apocalypse Survivor aiming (layered rotation + laser)
 // Falls back to inherited draw for non-aim states.
 
-// Only custom-draw when hostile (kneeling/aiming) OR during attack telegraph
+// Only custom-draw when hostile AND kneeling (aiming states), NOT during startled/death
 var _do_custom;
-_do_custom = aim_two_layer_enable && (is_hostile || state == EnemyState.attack_telegraph);
+_do_custom = aim_two_layer_enable
+	&& is_hostile
+	&& is_kneeling
+	&& (state == EnemyState.move || state == EnemyState.attack_telegraph || state == EnemyState.attack_active);
 
 if(!_do_custom){
 	event_inherited();
