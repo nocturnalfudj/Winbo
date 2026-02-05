@@ -168,7 +168,8 @@ function enemy_state_move(){
 					// Relaxed/patrol (and default): flip direction at edge/wall
 					input_aim_direction = (input_aim_direction == 0) ? 180 : 0;
 					face_horizontal = (input_aim_direction == 0) ? 1 : -1;
-					velocity.x = 0; // Optional - kills the slide quicker
+					velocity.x = 0;
+					input_move_magnitude = 0; // Reset so animation switches to idle during turn
 
 					// If patrol auto-turn is enabled, reset the loop counter when we turn due to an edge/wall.
 					if(!is_hostile && patrol_turn_after_walk_loops_enable){

@@ -7,6 +7,11 @@ function enemy_apocalypse_survivor_state_idle(){
 
 	// Patrol pause handling (non-hostile only)
 	if(!is_hostile){
+		// Set idle animation (separate idle sprite, loops fully)
+		if(sprite_current != sprite_idle){
+			image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT * animation_fps_multiplier, true, true, 0, IMAGE_LOOP_FULL);
+		}
+
 		if(patrol_pause_timer > 0){
 			patrol_pause_timer -= _delta_time;
 		}

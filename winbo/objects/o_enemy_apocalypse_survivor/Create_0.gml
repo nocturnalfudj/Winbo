@@ -29,13 +29,15 @@ event_inherited();
 	//   Frame 0: transition frame from idle into walk and vice versa
 	//   Frames 1-14: walk cycle loop
 	//   Frames 15-19: turnaround frames (not used as separate sprite - would need extraction)
-	walk_relaxed_idle_start = 0;
-	walk_relaxed_idle_end = 0;     // Frame 0 is idle/transition frame
+	// NOTE: This character uses a separate sprite_idle, so "idle" frame range
+	// in walk sprite should just be the walk loop (prevents frozen frame)
+	walk_relaxed_idle_start = 1;
+	walk_relaxed_idle_end = 14;    // Use walk loop even when "idle" in move state
 	walk_relaxed_walk_start = 1;
 	walk_relaxed_walk_end = 14;    // Frames 1-14 are walk loop
 	// Hostile walk uses same frame ranges
-	walk_hostile_idle_start = 0;
-	walk_hostile_idle_end = 0;
+	walk_hostile_idle_start = 1;
+	walk_hostile_idle_end = 14;
 	walk_hostile_walk_start = 1;
 	walk_hostile_walk_end = 14;
 
