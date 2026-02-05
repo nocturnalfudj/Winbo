@@ -44,7 +44,8 @@ var _spr_legs = sprite_aim_legs;
 var _spr_body = sprite_aim_body;
 
 // Compute draw xscale and rotation based on facing
-var _aim_xscale = image_xscale * face_horizontal;
+// Account for sprite_face_direction (sprites face left by default)
+var _aim_xscale = image_xscale * face_horizontal * sprite_face_direction;
 var _draw_angle = (face_horizontal == 1) ? aim_angle : (aim_angle + 180);
 
 // Draw base enemy (legs) first (static, no rotation)

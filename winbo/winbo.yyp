@@ -1989,6 +1989,8 @@
     {"id":{"name":"spr_apocalypse_survivor_aim_diagonal_legs","path":"sprites/spr_apocalypse_survivor_aim_diagonal_legs/spr_apocalypse_survivor_aim_diagonal_legs.yy",},},
     {"id":{"name":"spr_apocalypse_survivor_aim_side_body","path":"sprites/spr_apocalypse_survivor_aim_side_body/spr_apocalypse_survivor_aim_side_body.yy",},},
     {"id":{"name":"spr_apocalypse_survivor_aim_side_legs","path":"sprites/spr_apocalypse_survivor_aim_side_legs/spr_apocalypse_survivor_aim_side_legs.yy",},},
+    {"id":{"name":"spr_apocalypse_survivor_death_kneeling","path":"sprites/spr_apocalypse_survivor_death_kneeling/spr_apocalypse_survivor_death_kneeling.yy",},},
+    {"id":{"name":"spr_apocalypse_survivor_death_standing","path":"sprites/spr_apocalypse_survivor_death_standing/spr_apocalypse_survivor_death_standing.yy",},},
     {"id":{"name":"spr_apocalypse_survivor_idle","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},},
     {"id":{"name":"spr_apocalypse_survivor_shoot_side_body","path":"sprites/spr_apocalypse_survivor_shoot_side_body/spr_apocalypse_survivor_shoot_side_body.yy",},},
     {"id":{"name":"spr_apocalypse_survivor_shoot_side_legs","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},},

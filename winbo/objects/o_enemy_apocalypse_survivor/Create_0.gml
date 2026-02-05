@@ -6,6 +6,9 @@ event_inherited();
 	sprite_direction_enable = false;
 	face_horizontal_draw_enable = true;
 
+	// Apocalypse Survivor sprites face LEFT by default - use system-level flip
+	sprite_face_direction = -1;
+
 	// Core sprites
 	sprite_idle = spr_apocalypse_survivor_idle;
 	sprite_startled_left = spr_apocalypse_survivor_startle;
@@ -16,6 +19,10 @@ event_inherited();
 	sprite_walk_relaxed_right = spr_apocalypse_survivor_walk;
 	sprite_walk_hostile_left = spr_apocalypse_survivor_walk;
 	sprite_walk_hostile_right = spr_apocalypse_survivor_walk;
+
+	// Enable extended animation system (required for walk/idle sprite switching)
+	sprite_animation_extended_enable = true;
+	animation_fps_multiplier = 1;
 
 	// Attack sprites (side-facing placeholders; multi-direction swaps will be handled later)
 	sprite_attack_telegraph = spr_apocalypse_survivor_aim_side_body;
@@ -35,6 +42,14 @@ event_inherited();
 
 	// Initialize dimensions from sprite (required for height-based combat checks)
 	dimensions_system_update(sprite_idle);
+
+	// Scale down (and set rest scale)
+	var _scale = 0.75;
+	var _transform = transform[TransformType.anchor];
+	transform_set(_transform, TransformValue.xscale, _scale, false);
+	transform_set(_transform, TransformValue.yscale, _scale, false);
+	transform_set_rest_to_current(_transform, TransformValue.xscale);
+	transform_set_rest_to_current(_transform, TransformValue.yscale);
 #endregion
 
 #region Two-Layer Aim System
@@ -87,6 +102,10 @@ event_inherited();
 	attack_recover_countdown_max = SECOND * 0.5;
 	attack_recover_countdown = attack_recover_countdown_max;
 
+	// Recoil effect when firing
+	attack_recoil_enable = true;
+	attack_recoil_amount = 4;
+
 	// Grounded enemies should not walk off ledges during attacks
 	edge_guard_attack_enable = true;
 #endregion
@@ -106,10 +125,22 @@ event_inherited();
 #endregion
 
 #region Movement - Patrol Defaults
+	// Movement speed settings
+	movement_velocity_retention_and_acceleration_max_set(0.7, 1000);
+	movement_input_move_acceleration_default_set(2);
+
 	// Grounded patrol (no path)
 	movement_path_enable = false;
 	movement_path_start_x = x;
 	movement_path_end_x = x + 1000;
+	movement_path_direction = 1;
+
+	// Patrol: turn around after N walk loops (relaxed)
+	patrol_turn_after_walk_loops_enable = true;
+	patrol_walk_loops_before_turn = 5;
+
+	// Hostile: stop at edges (ranged enemy doesn't chase)
+	hostile_stop_at_edges_enable = true;
 
 	// Store patrol origin for return after deaggro
 	patrol_origin_x = x;

@@ -1,11 +1,11 @@
 {
   "$GMSprite":"v2",
   "%Name":"spr_apocalypse_survivor_idle",
-  "bboxMode":0,
-  "bbox_bottom":799,
-  "bbox_left":0,
-  "bbox_right":799,
-  "bbox_top":0,
+  "bboxMode":2,
+  "bbox_bottom":644,
+  "bbox_left":314,
+  "bbox_right":500,
+  "bbox_top":174,
   "collisionKind":1,
   "collisionTolerance":0,
   "DynamicTexturePage":false,
@@ -55,6 +55,7 @@
     "backdropXOffset":0.0,
     "backdropYOffset":0.0,
     "events":{
+      "$KeyframeStore<MessageEventKeyframe>":"",
       "Keyframes":[],
       "resourceType":"KeyframeStore<MessageEventKeyframe>",
       "resourceVersion":"2.0",
@@ -64,6 +65,7 @@
     "length":14.0,
     "lockOrigin":false,
     "moments":{
+      "$KeyframeStore<MomentsEventKeyframe>":"",
       "Keyframes":[],
       "resourceType":"KeyframeStore<MomentsEventKeyframe>",
       "resourceVersion":"2.0",
@@ -78,21 +80,49 @@
     "showBackdropImage":false,
     "timeUnits":1,
     "tracks":[
-      {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"Keyframes":[
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"ce1221089200409e936f6fbd85029da7","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"c762ead0714b44c0b7eb57c95f8716e0","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"1eeee134d6934493ae5bdde66a38d057","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"1fc33ffd34514ba9b5395a05340998d9","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"e71edc2510ee476f8171077e33feb1d9","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"14a5298bd51d44e19c20e9ef9d6f2678","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"e69570b7c34c450a9be2a62e61739e1f","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"adcb4b29e8ae44839287c264979711c5","IsCreationKey":false,"Key":3.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"add8d8845d8e435d8af835c0272c73d7","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"844975ba8caf48f0bb1f990bb082613a","IsCreationKey":false,"Key":4.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"7890a079e1de493e8905a384c4b858a8","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"805dc290dc8d4a249173cef1ce13dbdf","IsCreationKey":false,"Key":5.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"aca25d71332f434ba37ebfb50f41bbdc","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"773acba34f87451380507b9343c49c40","IsCreationKey":false,"Key":6.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"1da662de7102458b974fbc7a0a477f5a","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"338923e006ea45a995e60c7945e2ca6c","IsCreationKey":false,"Key":7.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"096d7a3659894c9e861487f57222e958","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"d57eace32619458897a6ab3af3f15930","IsCreationKey":false,"Key":8.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"1df8b6ce88584ed8abc324bab2fb747e","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"54db14746cc7468d9cae9fb3ed0e78e1","IsCreationKey":false,"Key":9.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"abc647916ad1475abb8ab584b31b6e9e","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"cd0bed1510b744b083f61b7b7c878013","IsCreationKey":false,"Key":10.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"934d749cddb84c43a05fe92acd9f3ee5","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"f6e3b88a3a6641deab8696196ad38bb9","IsCreationKey":false,"Key":11.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"a5453198579f43168e0facaff192c969","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"7ef1e39c153147638b2b9f2c078392ce","IsCreationKey":false,"Key":12.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"6e90950096414470a74230bd5a31f451","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"8c1535db275e471480310a996cb96a3c","IsCreationKey":false,"Key":13.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+      {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"ce1221089200409e936f6fbd85029da7","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"c762ead0-714b-44c0-b7eb-57c95f8716e0","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"1eeee134d6934493ae5bdde66a38d057","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"1fc33ffd-3451-4ba9-b539-5a05340998d9","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"e71edc2510ee476f8171077e33feb1d9","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"14a5298b-d51d-44e1-9c20-e9ef9d6f2678","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"e69570b7c34c450a9be2a62e61739e1f","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"adcb4b29-e8ae-4483-9287-c264979711c5","IsCreationKey":false,"Key":3.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"add8d8845d8e435d8af835c0272c73d7","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"844975ba-8caf-48f0-bb1f-990bb082613a","IsCreationKey":false,"Key":4.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"7890a079e1de493e8905a384c4b858a8","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"805dc290-dc8d-4a24-9173-cef1ce13dbdf","IsCreationKey":false,"Key":5.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"aca25d71332f434ba37ebfb50f41bbdc","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"773acba3-4f87-4513-8050-7b9343c49c40","IsCreationKey":false,"Key":6.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"1da662de7102458b974fbc7a0a477f5a","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"338923e0-06ea-45a9-95e6-0c7945e2ca6c","IsCreationKey":false,"Key":7.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"096d7a3659894c9e861487f57222e958","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"d57eace3-2619-4588-97a6-ab3af3f15930","IsCreationKey":false,"Key":8.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"1df8b6ce88584ed8abc324bab2fb747e","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"54db1474-6cc7-468d-9cae-9fb3ed0e78e1","IsCreationKey":false,"Key":9.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"abc647916ad1475abb8ab584b31b6e9e","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"cd0bed15-10b7-44b0-83f6-1b7b7c878013","IsCreationKey":false,"Key":10.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"934d749cddb84c43a05fe92acd9f3ee5","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"f6e3b88a-3a66-41de-ab86-96196ad38bb9","IsCreationKey":false,"Key":11.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"a5453198579f43168e0facaff192c969","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"7ef1e39c-1531-4763-8b2b-9f2c078392ce","IsCreationKey":false,"Key":12.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"6e90950096414470a74230bd5a31f451","path":"sprites/spr_apocalypse_survivor_idle/spr_apocalypse_survivor_idle.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"8c1535db-275e-4714-8031-0a996cb96a3c","IsCreationKey":false,"Key":13.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
