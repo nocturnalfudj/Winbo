@@ -1,637 +1,120 @@
 {
-  "$GMSprite": "",
-  "%Name": "spr_apocalypse_survivor_shoot_diagonal_body",
-  "bboxMode": 0,
-  "bbox_bottom": 0,
-  "bbox_left": 0,
-  "bbox_right": 0,
-  "bbox_top": 0,
-  "collisionKind": 1,
-  "collisionTolerance": 0,
-  "DynamicTexturePage": false,
-  "edgeFiltering": false,
-  "For3D": false,
-  "frames": [
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "964f8aee60a347c8846306ad36a47175",
-      "name": "964f8aee60a347c8846306ad36a47175",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "54b20a955e714a72a47e169e4eb3da24",
-      "name": "54b20a955e714a72a47e169e4eb3da24",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "5e8c52baec8048d8bd394f9f368217e9",
-      "name": "5e8c52baec8048d8bd394f9f368217e9",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "b5e689f6197a444eb6b0b0f0ea098d6b",
-      "name": "b5e689f6197a444eb6b0b0f0ea098d6b",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "89365b23fcaa4ddfb32ed50022748b7e",
-      "name": "89365b23fcaa4ddfb32ed50022748b7e",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "435a27daaa7540b4a4daa8f47f3bfc02",
-      "name": "435a27daaa7540b4a4daa8f47f3bfc02",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "338307dd36cd49e89b38ef4786bad617",
-      "name": "338307dd36cd49e89b38ef4786bad617",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "a84f2b23c5904c31a56b592100b25336",
-      "name": "a84f2b23c5904c31a56b592100b25336",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "3fa50b33115246af9382683aa9ace103",
-      "name": "3fa50b33115246af9382683aa9ace103",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "c1c800a7c2e04216ac6f94da06ecc135",
-      "name": "c1c800a7c2e04216ac6f94da06ecc135",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "570e667fbf8a4a438dc1843e8544a118",
-      "name": "570e667fbf8a4a438dc1843e8544a118",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "c881e3d5c9ce44019ae0db8dc8ab2fe9",
-      "name": "c881e3d5c9ce44019ae0db8dc8ab2fe9",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "c1231ab69f0e4a72a551847e8ebbb922",
-      "name": "c1231ab69f0e4a72a551847e8ebbb922",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "cf4ad0b840fb4e158505fe5490d3a48f",
-      "name": "cf4ad0b840fb4e158505fe5490d3a48f",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "3be50c3baedb46a3b0f10603ed72d990",
-      "name": "3be50c3baedb46a3b0f10603ed72d990",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "9a00af18c9004c5180958b4a5a35654d",
-      "name": "9a00af18c9004c5180958b4a5a35654d",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "ad7e3f5c07a24acabbb2efe2c057d61e",
-      "name": "ad7e3f5c07a24acabbb2efe2c057d61e",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "41e0a476ed434d5aae423104b4997f0c",
-      "name": "41e0a476ed434d5aae423104b4997f0c",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    }
+  "$GMSprite":"v2",
+  "%Name":"spr_apocalypse_survivor_shoot_diagonal_body",
+  "bboxMode":0,
+  "bbox_bottom":0,
+  "bbox_left":0,
+  "bbox_right":0,
+  "bbox_top":0,
+  "collisionKind":1,
+  "collisionTolerance":0,
+  "DynamicTexturePage":false,
+  "edgeFiltering":false,
+  "For3D":false,
+  "frames":[
+    {"$GMSpriteFrame":"v1","%Name":"964f8aee60a347c8846306ad36a47175","name":"964f8aee60a347c8846306ad36a47175","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"54b20a955e714a72a47e169e4eb3da24","name":"54b20a955e714a72a47e169e4eb3da24","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"5e8c52baec8048d8bd394f9f368217e9","name":"5e8c52baec8048d8bd394f9f368217e9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"b5e689f6197a444eb6b0b0f0ea098d6b","name":"b5e689f6197a444eb6b0b0f0ea098d6b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"89365b23fcaa4ddfb32ed50022748b7e","name":"89365b23fcaa4ddfb32ed50022748b7e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"435a27daaa7540b4a4daa8f47f3bfc02","name":"435a27daaa7540b4a4daa8f47f3bfc02","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"338307dd36cd49e89b38ef4786bad617","name":"338307dd36cd49e89b38ef4786bad617","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a84f2b23c5904c31a56b592100b25336","name":"a84f2b23c5904c31a56b592100b25336","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"3fa50b33115246af9382683aa9ace103","name":"3fa50b33115246af9382683aa9ace103","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"c1c800a7c2e04216ac6f94da06ecc135","name":"c1c800a7c2e04216ac6f94da06ecc135","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"570e667fbf8a4a438dc1843e8544a118","name":"570e667fbf8a4a438dc1843e8544a118","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"c881e3d5c9ce44019ae0db8dc8ab2fe9","name":"c881e3d5c9ce44019ae0db8dc8ab2fe9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"c1231ab69f0e4a72a551847e8ebbb922","name":"c1231ab69f0e4a72a551847e8ebbb922","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"cf4ad0b840fb4e158505fe5490d3a48f","name":"cf4ad0b840fb4e158505fe5490d3a48f","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"3be50c3baedb46a3b0f10603ed72d990","name":"3be50c3baedb46a3b0f10603ed72d990","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"9a00af18c9004c5180958b4a5a35654d","name":"9a00af18c9004c5180958b4a5a35654d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"ad7e3f5c07a24acabbb2efe2c057d61e","name":"ad7e3f5c07a24acabbb2efe2c057d61e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"41e0a476ed434d5aae423104b4997f0c","name":"41e0a476ed434d5aae423104b4997f0c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
-  "gridX": 0,
-  "gridY": 0,
-  "height": 1462,
-  "HTile": false,
-  "layers": [
-    {
-      "$GMImageLayer": "",
-      "%Name": "1f6d641eea224cb08e70ebb006309780",
-      "blendMode": 0,
-      "displayName": "default",
-      "isLocked": false,
-      "name": "1f6d641eea224cb08e70ebb006309780",
-      "opacity": 100.0,
-      "resourceType": "GMImageLayer",
-      "resourceVersion": "2.0",
-      "visible": true
-    }
+  "gridX":0,
+  "gridY":0,
+  "height":1462,
+  "HTile":false,
+  "layers":[
+    {"$GMImageLayer":"","%Name":"1f6d641eea224cb08e70ebb006309780","blendMode":0,"displayName":"default","isLocked":false,"name":"1f6d641eea224cb08e70ebb006309780","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
-  "name": "spr_apocalypse_survivor_shoot_diagonal_body",
-  "nineSlice": null,
-  "origin": 0,
-  "parent": {
-    "name": "Sprites",
-    "path": "folders/Actors/Characters/Enemies/Ranged/ApocalypseSurvivor/Sprites.yy"
+  "name":"spr_apocalypse_survivor_shoot_diagonal_body",
+  "nineSlice":null,
+  "origin":0,
+  "parent":{
+    "name":"Sprites",
+    "path":"folders/Actors/Characters/Enemies/Ranged/ApocalypseSurvivor/Sprites.yy",
   },
-  "preMultiplyAlpha": false,
-  "resourceType": "GMSprite",
-  "resourceVersion": "2.0",
-  "sequence": {
-    "$GMSequence": "v1",
-    "%Name": "spr_apocalypse_survivor_shoot_diagonal_body",
-    "autoRecord": true,
-    "backdropHeight": 768,
-    "backdropImageOpacity": 0.5,
-    "backdropImagePath": "",
-    "backdropWidth": 1366,
-    "backdropXOffset": 0.0,
-    "backdropYOffset": 0.0,
-    "events": {
-      "resourceType": "KeyframeStore<MessageEventKeyframe>",
-      "resourceVersion": "2.0",
-      "Keyframes": []
+  "preMultiplyAlpha":false,
+  "resourceType":"GMSprite",
+  "resourceVersion":"2.0",
+  "sequence":{
+    "$GMSequence":"v1",
+    "%Name":"spr_apocalypse_survivor_shoot_diagonal_body",
+    "autoRecord":true,
+    "backdropHeight":768,
+    "backdropImageOpacity":0.5,
+    "backdropImagePath":"",
+    "backdropWidth":1366,
+    "backdropXOffset":0.0,
+    "backdropYOffset":0.0,
+    "events":{
+      "Keyframes":[],
+      "resourceType":"KeyframeStore<MessageEventKeyframe>",
+      "resourceVersion":"2.0",
     },
-    "eventStubScript": null,
-    "eventToFunction": {},
-    "length": 18.0,
-    "lockOrigin": false,
-    "moments": {
-      "resourceType": "KeyframeStore<MomentsEventKeyframe>",
-      "resourceVersion": "2.0",
-      "Keyframes": []
+    "eventStubScript":null,
+    "eventToFunction":{},
+    "length":18.0,
+    "lockOrigin":false,
+    "moments":{
+      "Keyframes":[],
+      "resourceType":"KeyframeStore<MomentsEventKeyframe>",
+      "resourceVersion":"2.0",
     },
-    "name": "spr_apocalypse_survivor_shoot_diagonal_body",
-    "playback": 1,
-    "playbackSpeed": 30.0,
-    "playbackSpeedType": 0,
-    "resourceType": "GMSequence",
-    "resourceVersion": "2.0",
-    "showBackdrop": true,
-    "showBackdropImage": false,
-    "timeUnits": 1,
-    "tracks": [
-      {
-        "$GMSpriteFramesTrack": "",
-        "builtinName": 0,
-        "events": [],
-        "inheritsTrackColour": true,
-        "interpolation": 1,
-        "isCreationTrack": false,
-        "keyframes": {
-          "resourceType": "KeyframeStore<SpriteFrameKeyframe>",
-          "resourceVersion": "2.0",
-          "Keyframes": [
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "964f8aee60a347c8846306ad36a47175",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "ff58edf5ebf441a1ae2e16cc5712bfe8",
-              "IsCreationKey": false,
-              "Key": 0.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "54b20a955e714a72a47e169e4eb3da24",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "b60859ec3c5b4dbbb068252ca17e69b3",
-              "IsCreationKey": false,
-              "Key": 1.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "5e8c52baec8048d8bd394f9f368217e9",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "c87de26d662b41fd84c65863f99a3889",
-              "IsCreationKey": false,
-              "Key": 2.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "b5e689f6197a444eb6b0b0f0ea098d6b",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "424f25f5bfe944a39a88e796f0322bce",
-              "IsCreationKey": false,
-              "Key": 3.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "89365b23fcaa4ddfb32ed50022748b7e",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "e2665564372449ad9ed03dc03b939656",
-              "IsCreationKey": false,
-              "Key": 4.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "435a27daaa7540b4a4daa8f47f3bfc02",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "fbf96802f5984b42a196f7d73144208e",
-              "IsCreationKey": false,
-              "Key": 5.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "338307dd36cd49e89b38ef4786bad617",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "ea1dd8cbfaaa4a54b149f2bc0725359e",
-              "IsCreationKey": false,
-              "Key": 6.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "a84f2b23c5904c31a56b592100b25336",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "c4c3fee3085d49729f8c9b8fa5e551c9",
-              "IsCreationKey": false,
-              "Key": 7.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "3fa50b33115246af9382683aa9ace103",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "c862903c3d554852af3b3b463027e788",
-              "IsCreationKey": false,
-              "Key": 8.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "c1c800a7c2e04216ac6f94da06ecc135",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "0f9af36bb7144d94b4252bf6a2da3abb",
-              "IsCreationKey": false,
-              "Key": 9.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "570e667fbf8a4a438dc1843e8544a118",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "659a85732f3b4045adf57885d6203f91",
-              "IsCreationKey": false,
-              "Key": 10.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "c881e3d5c9ce44019ae0db8dc8ab2fe9",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "2752a9791710469f89ceb3e136c5fb08",
-              "IsCreationKey": false,
-              "Key": 11.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "c1231ab69f0e4a72a551847e8ebbb922",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "720e7255428b4d6fbe8788beb21b529f",
-              "IsCreationKey": false,
-              "Key": 12.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "cf4ad0b840fb4e158505fe5490d3a48f",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "1317af2449df47f6b328dfdb5dea3fad",
-              "IsCreationKey": false,
-              "Key": 13.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "3be50c3baedb46a3b0f10603ed72d990",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "9dcb5d112f624b2da3962472106825e3",
-              "IsCreationKey": false,
-              "Key": 14.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "9a00af18c9004c5180958b4a5a35654d",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "7371a0fd15c04c8aa57bdafea98204a4",
-              "IsCreationKey": false,
-              "Key": 15.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "ad7e3f5c07a24acabbb2efe2c057d61e",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "b83a55abc6454839b9d1480f78f1a34c",
-              "IsCreationKey": false,
-              "Key": 16.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "41e0a476ed434d5aae423104b4997f0c",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "78444ee771544e04a1b85820fed79383",
-              "IsCreationKey": false,
-              "Key": 17.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            }
-          ]
-        },
-        "modifiers": [],
-        "name": "frames",
-        "resourceType": "GMSpriteFramesTrack",
-        "resourceVersion": "2.0",
-        "spriteId": null,
-        "trackColour": 0,
-        "tracks": [],
-        "traits": 0
-      }
+    "name":"spr_apocalypse_survivor_shoot_diagonal_body",
+    "playback":1,
+    "playbackSpeed":30.0,
+    "playbackSpeedType":0,
+    "resourceType":"GMSequence",
+    "resourceVersion":"2.0",
+    "showBackdrop":true,
+    "showBackdropImage":false,
+    "timeUnits":1,
+    "tracks":[
+      {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"Keyframes":[
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"964f8aee60a347c8846306ad36a47175","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"ff58edf5ebf441a1ae2e16cc5712bfe8","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"54b20a955e714a72a47e169e4eb3da24","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"b60859ec3c5b4dbbb068252ca17e69b3","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"5e8c52baec8048d8bd394f9f368217e9","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"c87de26d662b41fd84c65863f99a3889","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"b5e689f6197a444eb6b0b0f0ea098d6b","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"424f25f5bfe944a39a88e796f0322bce","IsCreationKey":false,"Key":3.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"89365b23fcaa4ddfb32ed50022748b7e","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"e2665564372449ad9ed03dc03b939656","IsCreationKey":false,"Key":4.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"435a27daaa7540b4a4daa8f47f3bfc02","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"fbf96802f5984b42a196f7d73144208e","IsCreationKey":false,"Key":5.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"338307dd36cd49e89b38ef4786bad617","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"ea1dd8cbfaaa4a54b149f2bc0725359e","IsCreationKey":false,"Key":6.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"a84f2b23c5904c31a56b592100b25336","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"c4c3fee3085d49729f8c9b8fa5e551c9","IsCreationKey":false,"Key":7.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"3fa50b33115246af9382683aa9ace103","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"c862903c3d554852af3b3b463027e788","IsCreationKey":false,"Key":8.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"c1c800a7c2e04216ac6f94da06ecc135","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"0f9af36bb7144d94b4252bf6a2da3abb","IsCreationKey":false,"Key":9.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"570e667fbf8a4a438dc1843e8544a118","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"659a85732f3b4045adf57885d6203f91","IsCreationKey":false,"Key":10.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"c881e3d5c9ce44019ae0db8dc8ab2fe9","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"2752a9791710469f89ceb3e136c5fb08","IsCreationKey":false,"Key":11.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"c1231ab69f0e4a72a551847e8ebbb922","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"720e7255428b4d6fbe8788beb21b529f","IsCreationKey":false,"Key":12.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"cf4ad0b840fb4e158505fe5490d3a48f","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"1317af2449df47f6b328dfdb5dea3fad","IsCreationKey":false,"Key":13.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"3be50c3baedb46a3b0f10603ed72d990","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"9dcb5d112f624b2da3962472106825e3","IsCreationKey":false,"Key":14.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"9a00af18c9004c5180958b4a5a35654d","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"7371a0fd15c04c8aa57bdafea98204a4","IsCreationKey":false,"Key":15.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"ad7e3f5c07a24acabbb2efe2c057d61e","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"b83a55abc6454839b9d1480f78f1a34c","IsCreationKey":false,"Key":16.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"41e0a476ed434d5aae423104b4997f0c","path":"sprites/spr_apocalypse_survivor_shoot_diagonal_body/spr_apocalypse_survivor_shoot_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"78444ee771544e04a1b85820fed79383","IsCreationKey":false,"Key":17.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+          ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
-    "visibleRange": null,
-    "volume": 1.0,
-    "xorigin": 735,
-    "yorigin": 731
+    "visibleRange":null,
+    "volume":1.0,
+    "xorigin":735,
+    "yorigin":731,
   },
-  "swatchColours": null,
-  "swfPrecision": 2.525,
-  "textureGroupId": {
-    "name": "Default",
-    "path": "texturegroups/Default"
+  "swatchColours":null,
+  "swfPrecision":2.525,
+  "textureGroupId":{
+    "name":"Default",
+    "path":"texturegroups/Default",
   },
-  "type": 0,
-  "VTile": false,
-  "width": 1470
+  "type":0,
+  "VTile":false,
+  "width":1470,
 }

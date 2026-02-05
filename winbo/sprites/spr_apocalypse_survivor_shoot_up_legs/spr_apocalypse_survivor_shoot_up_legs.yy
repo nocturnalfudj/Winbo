@@ -1,260 +1,94 @@
 {
-  "$GMSprite": "",
-  "%Name": "spr_apocalypse_survivor_shoot_up_legs",
-  "bboxMode": 0,
-  "bbox_bottom": 0,
-  "bbox_left": 0,
-  "bbox_right": 0,
-  "bbox_top": 0,
-  "collisionKind": 1,
-  "collisionTolerance": 0,
-  "DynamicTexturePage": false,
-  "edgeFiltering": false,
-  "For3D": false,
-  "frames": [
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "6a682518da5247a2b8f963447c56a2f1",
-      "name": "6a682518da5247a2b8f963447c56a2f1",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "b1c7a214ff9444fb9b6a1b0c4b1e12ba",
-      "name": "b1c7a214ff9444fb9b6a1b0c4b1e12ba",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "e0733669697e4285bf6d9e951389b719",
-      "name": "e0733669697e4285bf6d9e951389b719",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "08324d0fe10142aa99b71045735a0577",
-      "name": "08324d0fe10142aa99b71045735a0577",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "",
-      "%Name": "c9a05e10311d49b5832caa3809c333f2",
-      "name": "c9a05e10311d49b5832caa3809c333f2",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
-    }
+  "$GMSprite":"v2",
+  "%Name":"spr_apocalypse_survivor_shoot_up_legs",
+  "bboxMode":0,
+  "bbox_bottom":0,
+  "bbox_left":0,
+  "bbox_right":0,
+  "bbox_top":0,
+  "collisionKind":1,
+  "collisionTolerance":0,
+  "DynamicTexturePage":false,
+  "edgeFiltering":false,
+  "For3D":false,
+  "frames":[
+    {"$GMSpriteFrame":"v1","%Name":"6a682518da5247a2b8f963447c56a2f1","name":"6a682518da5247a2b8f963447c56a2f1","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"b1c7a214ff9444fb9b6a1b0c4b1e12ba","name":"b1c7a214ff9444fb9b6a1b0c4b1e12ba","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"e0733669697e4285bf6d9e951389b719","name":"e0733669697e4285bf6d9e951389b719","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"08324d0fe10142aa99b71045735a0577","name":"08324d0fe10142aa99b71045735a0577","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"c9a05e10311d49b5832caa3809c333f2","name":"c9a05e10311d49b5832caa3809c333f2","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
-  "gridX": 0,
-  "gridY": 0,
-  "height": 1462,
-  "HTile": false,
-  "layers": [
-    {
-      "$GMImageLayer": "",
-      "%Name": "b669a60a539541d2be49983dfdf7bd76",
-      "blendMode": 0,
-      "displayName": "default",
-      "isLocked": false,
-      "name": "b669a60a539541d2be49983dfdf7bd76",
-      "opacity": 100.0,
-      "resourceType": "GMImageLayer",
-      "resourceVersion": "2.0",
-      "visible": true
-    }
+  "gridX":0,
+  "gridY":0,
+  "height":1462,
+  "HTile":false,
+  "layers":[
+    {"$GMImageLayer":"","%Name":"b669a60a539541d2be49983dfdf7bd76","blendMode":0,"displayName":"default","isLocked":false,"name":"b669a60a539541d2be49983dfdf7bd76","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
-  "name": "spr_apocalypse_survivor_shoot_up_legs",
-  "nineSlice": null,
-  "origin": 0,
-  "parent": {
-    "name": "Sprites",
-    "path": "folders/Actors/Characters/Enemies/Ranged/ApocalypseSurvivor/Sprites.yy"
+  "name":"spr_apocalypse_survivor_shoot_up_legs",
+  "nineSlice":null,
+  "origin":0,
+  "parent":{
+    "name":"Sprites",
+    "path":"folders/Actors/Characters/Enemies/Ranged/ApocalypseSurvivor/Sprites.yy",
   },
-  "preMultiplyAlpha": false,
-  "resourceType": "GMSprite",
-  "resourceVersion": "2.0",
-  "sequence": {
-    "$GMSequence": "v1",
-    "%Name": "spr_apocalypse_survivor_shoot_up_legs",
-    "autoRecord": true,
-    "backdropHeight": 768,
-    "backdropImageOpacity": 0.5,
-    "backdropImagePath": "",
-    "backdropWidth": 1366,
-    "backdropXOffset": 0.0,
-    "backdropYOffset": 0.0,
-    "events": {
-      "resourceType": "KeyframeStore<MessageEventKeyframe>",
-      "resourceVersion": "2.0",
-      "Keyframes": []
+  "preMultiplyAlpha":false,
+  "resourceType":"GMSprite",
+  "resourceVersion":"2.0",
+  "sequence":{
+    "$GMSequence":"v1",
+    "%Name":"spr_apocalypse_survivor_shoot_up_legs",
+    "autoRecord":true,
+    "backdropHeight":768,
+    "backdropImageOpacity":0.5,
+    "backdropImagePath":"",
+    "backdropWidth":1366,
+    "backdropXOffset":0.0,
+    "backdropYOffset":0.0,
+    "events":{
+      "Keyframes":[],
+      "resourceType":"KeyframeStore<MessageEventKeyframe>",
+      "resourceVersion":"2.0",
     },
-    "eventStubScript": null,
-    "eventToFunction": {},
-    "length": 5.0,
-    "lockOrigin": false,
-    "moments": {
-      "resourceType": "KeyframeStore<MomentsEventKeyframe>",
-      "resourceVersion": "2.0",
-      "Keyframes": []
+    "eventStubScript":null,
+    "eventToFunction":{},
+    "length":5.0,
+    "lockOrigin":false,
+    "moments":{
+      "Keyframes":[],
+      "resourceType":"KeyframeStore<MomentsEventKeyframe>",
+      "resourceVersion":"2.0",
     },
-    "name": "spr_apocalypse_survivor_shoot_up_legs",
-    "playback": 1,
-    "playbackSpeed": 30.0,
-    "playbackSpeedType": 0,
-    "resourceType": "GMSequence",
-    "resourceVersion": "2.0",
-    "showBackdrop": true,
-    "showBackdropImage": false,
-    "timeUnits": 1,
-    "tracks": [
-      {
-        "$GMSpriteFramesTrack": "",
-        "builtinName": 0,
-        "events": [],
-        "inheritsTrackColour": true,
-        "interpolation": 1,
-        "isCreationTrack": false,
-        "keyframes": {
-          "resourceType": "KeyframeStore<SpriteFrameKeyframe>",
-          "resourceVersion": "2.0",
-          "Keyframes": [
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "6a682518da5247a2b8f963447c56a2f1",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_up_legs/spr_apocalypse_survivor_shoot_up_legs.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "bffebf65e027443c9cb43ec029d16d35",
-              "IsCreationKey": false,
-              "Key": 0.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "b1c7a214ff9444fb9b6a1b0c4b1e12ba",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_up_legs/spr_apocalypse_survivor_shoot_up_legs.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "f46f6bc2118a42bb9f8d7ab73811f4e3",
-              "IsCreationKey": false,
-              "Key": 1.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "e0733669697e4285bf6d9e951389b719",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_up_legs/spr_apocalypse_survivor_shoot_up_legs.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "cb73659a7d2e4cff94daab70e8a8879d",
-              "IsCreationKey": false,
-              "Key": 2.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "08324d0fe10142aa99b71045735a0577",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_up_legs/spr_apocalypse_survivor_shoot_up_legs.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "55badc9a40054d51bc6f619f1e2445e1",
-              "IsCreationKey": false,
-              "Key": 3.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "c9a05e10311d49b5832caa3809c333f2",
-                    "path": "sprites/spr_apocalypse_survivor_shoot_up_legs/spr_apocalypse_survivor_shoot_up_legs.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "f5ff981e5baf4ddaaea26823cc657878",
-              "IsCreationKey": false,
-              "Key": 4.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            }
-          ]
-        },
-        "modifiers": [],
-        "name": "frames",
-        "resourceType": "GMSpriteFramesTrack",
-        "resourceVersion": "2.0",
-        "spriteId": null,
-        "trackColour": 0,
-        "tracks": [],
-        "traits": 0
-      }
+    "name":"spr_apocalypse_survivor_shoot_up_legs",
+    "playback":1,
+    "playbackSpeed":30.0,
+    "playbackSpeedType":0,
+    "resourceType":"GMSequence",
+    "resourceVersion":"2.0",
+    "showBackdrop":true,
+    "showBackdropImage":false,
+    "timeUnits":1,
+    "tracks":[
+      {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"Keyframes":[
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"6a682518da5247a2b8f963447c56a2f1","path":"sprites/spr_apocalypse_survivor_shoot_up_legs/spr_apocalypse_survivor_shoot_up_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"bffebf65e027443c9cb43ec029d16d35","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"b1c7a214ff9444fb9b6a1b0c4b1e12ba","path":"sprites/spr_apocalypse_survivor_shoot_up_legs/spr_apocalypse_survivor_shoot_up_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"f46f6bc2118a42bb9f8d7ab73811f4e3","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"e0733669697e4285bf6d9e951389b719","path":"sprites/spr_apocalypse_survivor_shoot_up_legs/spr_apocalypse_survivor_shoot_up_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"cb73659a7d2e4cff94daab70e8a8879d","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"08324d0fe10142aa99b71045735a0577","path":"sprites/spr_apocalypse_survivor_shoot_up_legs/spr_apocalypse_survivor_shoot_up_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"55badc9a40054d51bc6f619f1e2445e1","IsCreationKey":false,"Key":3.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"c9a05e10311d49b5832caa3809c333f2","path":"sprites/spr_apocalypse_survivor_shoot_up_legs/spr_apocalypse_survivor_shoot_up_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"f5ff981e5baf4ddaaea26823cc657878","IsCreationKey":false,"Key":4.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+          ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
-    "visibleRange": null,
-    "volume": 1.0,
-    "xorigin": 735,
-    "yorigin": 731
+    "visibleRange":null,
+    "volume":1.0,
+    "xorigin":735,
+    "yorigin":731,
   },
-  "swatchColours": null,
-  "swfPrecision": 2.525,
-  "textureGroupId": {
-    "name": "Default",
-    "path": "texturegroups/Default"
+  "swatchColours":null,
+  "swfPrecision":2.525,
+  "textureGroupId":{
+    "name":"Default",
+    "path":"texturegroups/Default",
   },
-  "type": 0,
-  "VTile": false,
-  "width": 1470
+  "type":0,
+  "VTile":false,
+  "width":1470,
 }

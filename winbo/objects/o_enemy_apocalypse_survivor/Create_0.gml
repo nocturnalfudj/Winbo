@@ -15,10 +15,34 @@ event_inherited();
 	sprite_startled_right = spr_apocalypse_survivor_startle;
 
 	// Walk (relaxed + hostile use same cycle for now)
+	// Walk sprite layout per Trello:
+	// Frame 0: transition frame from idle into walk and vice versa
+	// Frames 1-14: walk cycle loop
+	// Frames 15-19: turnaround (not yet used as separate sprite)
 	sprite_walk_relaxed_left = spr_apocalypse_survivor_walk;
 	sprite_walk_relaxed_right = spr_apocalypse_survivor_walk;
 	sprite_walk_hostile_left = spr_apocalypse_survivor_walk;
 	sprite_walk_hostile_right = spr_apocalypse_survivor_walk;
+
+	// Walk animation frame ranges (per Trello specification)
+	// Walk sprite structure:
+	//   Frame 0: transition frame from idle into walk and vice versa
+	//   Frames 1-14: walk cycle loop
+	//   Frames 15-19: turnaround frames (not used as separate sprite - would need extraction)
+	walk_relaxed_idle_start = 0;
+	walk_relaxed_idle_end = 0;     // Frame 0 is idle/transition frame
+	walk_relaxed_walk_start = 1;
+	walk_relaxed_walk_end = 14;    // Frames 1-14 are walk loop
+	// Hostile walk uses same frame ranges
+	walk_hostile_idle_start = 0;
+	walk_hostile_idle_end = 0;
+	walk_hostile_walk_start = 1;
+	walk_hostile_walk_end = 14;
+
+	// Turnaround sprites (not available - frames 15-19 in walk sprite need extraction)
+	// For smooth turn animations, extract frames 15-19 from spr_apocalypse_survivor_walk
+	// into a separate sprite: spr_apocalypse_survivor_turn
+	sprite_turn_relaxed = noone;  // TODO: Create from walk sprite frames 15-19
 
 	// Enable extended animation system (required for walk/idle sprite switching)
 	sprite_animation_extended_enable = true;
@@ -33,9 +57,37 @@ event_inherited();
 	sprite_death_1 = spr_apocalypse_survivor_death_standing;
 	sprite_death_2 = spr_apocalypse_survivor_death_kneeling;
 
-	// Two-layer aim sprites (side-facing placeholders)
-	sprite_aim_body = spr_apocalypse_survivor_aim_side_body;
-	sprite_aim_legs = spr_apocalypse_survivor_aim_side_legs;
+	// Two-layer aim sprites for each sector
+	// SIDE sector (0-45°, 315-360° and mirrored 135-225°)
+	sprite_aim_side_body = spr_apocalypse_survivor_aim_side_body;
+	sprite_aim_side_legs = spr_apocalypse_survivor_aim_side_legs;
+
+	// DIAGONAL sector (45-85° and mirrored 95-135°)
+	sprite_aim_diag_body = spr_apocalypse_survivor_aim_diagonal_body;
+	sprite_aim_diag_legs = spr_apocalypse_survivor_aim_diagonal_legs;
+
+	// UPWARD sector (85-95°) - 3 layers: body (top), mid (rotating), legs (bottom)
+	sprite_aim_up_body = spr_apocalypse_survivor_aim_up_body;
+	sprite_aim_up_mid = spr_apocalypse_survivor_aim_up_mid;
+	sprite_aim_up_legs = spr_apocalypse_survivor_aim_up_legs;
+
+	// Default aim sprites (backwards compatibility)
+	sprite_aim_body = sprite_aim_side_body;
+	sprite_aim_legs = sprite_aim_side_legs;
+
+	// Two-layer SHOOT sprites for each sector (used during attack_active)
+	// SIDE sector
+	sprite_shoot_side_body = spr_apocalypse_survivor_shoot_side_body;
+	sprite_shoot_side_legs = spr_apocalypse_survivor_shoot_side_legs;
+
+	// DIAGONAL sector
+	sprite_shoot_diag_body = spr_apocalypse_survivor_shoot_diagonal_body;
+	sprite_shoot_diag_legs = spr_apocalypse_survivor_shoot_diagonal_legs;
+
+	// UPWARD sector - 3 layers
+	sprite_shoot_up_body = spr_apocalypse_survivor_shoot_up_body;
+	sprite_shoot_up_mid = spr_apocalypse_survivor_shoot_up_mid;
+	sprite_shoot_up_legs = spr_apocalypse_survivor_shoot_up_legs
 
 	// Initial sprite
 	image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);

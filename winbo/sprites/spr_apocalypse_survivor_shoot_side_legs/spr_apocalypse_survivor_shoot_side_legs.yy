@@ -2,10 +2,10 @@
   "$GMSprite":"v2",
   "%Name":"spr_apocalypse_survivor_shoot_side_legs",
   "bboxMode":0,
-  "bbox_bottom":1461,
-  "bbox_left":0,
-  "bbox_right":1469,
-  "bbox_top":0,
+  "bbox_bottom":986,
+  "bbox_left":561,
+  "bbox_right":810,
+  "bbox_top":730,
   "collisionKind":1,
   "collisionTolerance":0,
   "DynamicTexturePage":false,
@@ -18,7 +18,7 @@
     {"$GMSpriteFrame":"v1","%Name":"14b33092ab5a4db8adb4ffdae5ecb91b","name":"14b33092ab5a4db8adb4ffdae5ecb91b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
     {"$GMSpriteFrame":"v1","%Name":"f1a3e62d4dab4d79a0844f5e3dc9cd8e","name":"f1a3e62d4dab4d79a0844f5e3dc9cd8e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
     {"$GMSpriteFrame":"v1","%Name":"6d204ec998f1418e808971737d5f398f","name":"6d204ec998f1418e808971737d5f398f","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"v1","%Name":"06c0258fc06947039951dc7aa9926da6","name":"06c0258fc06947039951dc7aa9926da6","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"d87aa50d-6dd8-4e88-bea6-b2a4533a0970","name":"d87aa50d-6dd8-4e88-bea6-b2a4533a0970","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -48,6 +48,7 @@
     "backdropXOffset":0.0,
     "backdropYOffset":0.0,
     "events":{
+      "$KeyframeStore<MessageEventKeyframe>":"",
       "Keyframes":[],
       "resourceType":"KeyframeStore<MessageEventKeyframe>",
       "resourceVersion":"2.0",
@@ -57,6 +58,7 @@
     "length":7.0,
     "lockOrigin":false,
     "moments":{
+      "$KeyframeStore<MomentsEventKeyframe>":"",
       "Keyframes":[],
       "resourceType":"KeyframeStore<MomentsEventKeyframe>",
       "resourceVersion":"2.0",
@@ -71,14 +73,28 @@
     "showBackdropImage":false,
     "timeUnits":1,
     "tracks":[
-      {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"Keyframes":[
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"402fc1d6e29b41fcb02bb1bcc9180368","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"75d40e36e22f468fba678e03e96f10a1","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"dcc528c34c7e469c9b08d38ed58e953e","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"efc51cda0569427ab49fa9ae2454afc3","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"f0a840f3d18a4c3c94d439da15a26951","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"514e09eab3964e5f96433ca7c16fd724","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"14b33092ab5a4db8adb4ffdae5ecb91b","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"f2f7288ef9f84185a1283ebd92b39acf","IsCreationKey":false,"Key":3.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"f1a3e62d4dab4d79a0844f5e3dc9cd8e","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"cec074bf69ef4987af1e536734274953","IsCreationKey":false,"Key":4.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"6d204ec998f1418e808971737d5f398f","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"99b9bdf7161240d0aa45610c40ee0fc8","IsCreationKey":false,"Key":5.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"06c0258fc06947039951dc7aa9926da6","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"4ca78a61aeb24bfb88057615ce6c62c6","IsCreationKey":false,"Key":6.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+      {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"402fc1d6e29b41fcb02bb1bcc9180368","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"75d40e36-e22f-468f-ba67-8e03e96f10a1","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"dcc528c34c7e469c9b08d38ed58e953e","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"efc51cda-0569-427a-b49f-a9ae2454afc3","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"f0a840f3d18a4c3c94d439da15a26951","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"514e09ea-b396-4e5f-9643-3ca7c16fd724","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"14b33092ab5a4db8adb4ffdae5ecb91b","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"f2f7288e-f9f8-4185-a128-3ebd92b39acf","IsCreationKey":false,"Key":3.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"f1a3e62d4dab4d79a0844f5e3dc9cd8e","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"cec074bf-69ef-4987-af1e-536734274953","IsCreationKey":false,"Key":4.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"6d204ec998f1418e808971737d5f398f","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"99b9bdf7-1612-40d0-aa45-610c40ee0fc8","IsCreationKey":false,"Key":5.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"d87aa50d-6dd8-4e88-bea6-b2a4533a0970","path":"sprites/spr_apocalypse_survivor_shoot_side_legs/spr_apocalypse_survivor_shoot_side_legs.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"93386317-1cee-4d91-af80-c1cb64c18d3c","IsCreationKey":false,"Key":6.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,

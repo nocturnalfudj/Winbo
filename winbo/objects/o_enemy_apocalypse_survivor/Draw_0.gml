@@ -6,7 +6,7 @@ var _do_custom;
 _do_custom = aim_two_layer_enable
 	&& is_hostile
 	&& is_kneeling
-	&& (state == EnemyState.move || state == EnemyState.attack_telegraph || state == EnemyState.attack_active);
+	&& (state == EnemyState.move || state == EnemyState.attack_telegraph || state == EnemyState.attack_active || state == EnemyState.attack_recover);
 
 if(!_do_custom){
 	event_inherited();
@@ -41,44 +41,197 @@ else if(aim_angle >= 95 && aim_angle < 135) _sector = "diag_flip";
 else if(aim_angle >= 135 && aim_angle < 225) _sector = "side_flip";
 else _sector = "out"; // 225-315
 
-// Placeholder sprite set switching:
-// When proper diagonal/upward sprites are imported, swap these per-sector.
-var _spr_legs = sprite_aim_legs;
-var _spr_body = sprite_aim_body;
+// Select sprite set based on sector AND state (aim vs shoot)
+// During attack_active, use animated shoot sprites; otherwise use static aim sprites
+var _spr_legs = sprite_aim_side_legs;
+var _spr_body = sprite_aim_side_body;
+var _is_shooting = (state == EnemyState.attack_active);
 
-// Compute draw xscale and rotation based on facing
-// Account for sprite_face_direction (sprites face left by default)
-var _aim_xscale = image_xscale * face_horizontal * sprite_face_direction;
-var _draw_angle = (face_horizontal == 1) ? aim_angle : (aim_angle + 180);
+switch(_sector){
+	case "side":
+	case "side_flip":
+		if(_is_shooting){
+			_spr_legs = sprite_shoot_side_legs;
+			_spr_body = sprite_shoot_side_body;
+		}else{
+			_spr_legs = sprite_aim_side_legs;
+			_spr_body = sprite_aim_side_body;
+		}
+	break;
 
-// Draw base enemy (legs) first (static, no rotation)
-if(_spr_legs != noone){
-	draw_sprite_ext(
-		_spr_legs,
-		0,
-		x + aim_legs_sprite_offset_x,
-		y + aim_legs_sprite_offset_y,
-		_aim_xscale,
-		image_yscale,
-		0,
-		image_blend,
-		image_alpha
-	);
+	case "diag":
+	case "diag_flip":
+		if(_is_shooting){
+			_spr_legs = sprite_shoot_diag_legs;
+			_spr_body = sprite_shoot_diag_body;
+		}else{
+			_spr_legs = sprite_aim_diag_legs;
+			_spr_body = sprite_aim_diag_body;
+		}
+	break;
+
+	case "up":
+		if(_is_shooting){
+			_spr_legs = sprite_shoot_up_legs;
+			_spr_body = sprite_shoot_up_body;
+		}else{
+			_spr_legs = sprite_aim_up_legs;
+			_spr_body = sprite_aim_up_body;
+		}
+	break;
+
+	case "out":
+		// Behind the character - don't draw aim, fall back to side
+		if(_is_shooting){
+			_spr_legs = sprite_shoot_side_legs;
+			_spr_body = sprite_shoot_side_body;
+		}else{
+			_spr_legs = sprite_aim_side_legs;
+			_spr_body = sprite_aim_side_body;
+		}
+	break;
 }
 
-// Draw body (rotated)
-if(_spr_body != noone){
-	draw_sprite_ext(
-		_spr_body,
-		sprite_current_frame,
-		x + aim_body_sprite_offset_x,
-		y + aim_body_sprite_offset_y,
-		_aim_xscale,
-		image_yscale,
-		_draw_angle,
-		image_blend,
-		image_alpha
-	);
+// Compute draw xscale based on facing
+// Account for sprite_face_direction (sprites face left by default)
+var _aim_xscale = image_xscale * face_horizontal * sprite_face_direction;
+
+// Calculate rotation angle for the rotating layer
+// Each sprite set has a neutral angle; we rotate relative to that
+// The rotation amount is how far we deviate from the sector's neutral direction
+var _sector_neutral = 0;  // Neutral aim angle for this sprite set
+var _draw_angle = 0;
+
+switch(_sector){
+	case "side":
+		_sector_neutral = 0;  // Side sprite aims horizontally
+		_draw_angle = aim_angle - _sector_neutral;
+	break;
+	case "side_flip":
+		_sector_neutral = 180;
+		_draw_angle = aim_angle - _sector_neutral;
+	break;
+	case "diag":
+		_sector_neutral = 65;  // Diagonal sprite aims at ~65 degrees
+		_draw_angle = aim_angle - _sector_neutral;
+	break;
+	case "diag_flip":
+		_sector_neutral = 115;  // Flipped diagonal aims at ~115 degrees
+		_draw_angle = aim_angle - _sector_neutral;
+	break;
+	case "up":
+		_sector_neutral = 90;  // Upward sprite aims straight up
+		_draw_angle = aim_angle - _sector_neutral;
+	break;
+	case "out":
+		_draw_angle = 0;  // No rotation for out-of-range
+	break;
+}
+
+// Get the body frame for animation
+var _body_frame = 0;
+if(_is_shooting){
+	_body_frame = sprite_current_frame;
+}
+
+// UPWARD sector uses 3 layers (legs/bottom, mid/rotating, body/top)
+if(_sector == "up"){
+	// Get upward sprite sets
+	var _spr_up_legs = _is_shooting ? sprite_shoot_up_legs : sprite_aim_up_legs;
+	var _spr_up_mid = _is_shooting ? sprite_shoot_up_mid : sprite_aim_up_mid;
+	var _spr_up_body = _is_shooting ? sprite_shoot_up_body : sprite_aim_up_body;
+
+	// Frame handling for shooting
+	var _legs_frame = 0;
+	var _mid_frame = 0;
+	if(_is_shooting){
+		if(_spr_up_legs != noone) _legs_frame = min(sprite_current_frame, sprite_get_number(_spr_up_legs) - 1);
+		if(_spr_up_mid != noone) _mid_frame = min(sprite_current_frame, sprite_get_number(_spr_up_mid) - 1);
+		_body_frame = min(sprite_current_frame, sprite_get_number(_spr_up_body) - 1);
+	}
+
+	// Draw layer 1: Bottom (legs/body part) - STATIC
+	if(_spr_up_legs != noone){
+		draw_sprite_ext(
+			_spr_up_legs,
+			_legs_frame,
+			x + aim_legs_sprite_offset_x,
+			y + aim_legs_sprite_offset_y,
+			_aim_xscale,
+			image_yscale,
+			0,
+			image_blend,
+			image_alpha
+		);
+	}
+
+	// Draw layer 2: Middle (rotating torso/arm) - ROTATES
+	if(_spr_up_mid != noone){
+		draw_sprite_ext(
+			_spr_up_mid,
+			_mid_frame,
+			x + aim_body_sprite_offset_x,
+			y + aim_body_sprite_offset_y,
+			_aim_xscale,
+			image_yscale,
+			_draw_angle,
+			image_blend,
+			image_alpha
+		);
+	}
+
+	// Draw layer 3: Top (front knee) - STATIC
+	if(_spr_up_body != noone){
+		draw_sprite_ext(
+			_spr_up_body,
+			_body_frame,
+			x + aim_body_sprite_offset_x,
+			y + aim_body_sprite_offset_y,
+			_aim_xscale,
+			image_yscale,
+			0,
+			image_blend,
+			image_alpha
+		);
+	}
+}
+else{
+	// SIDE and DIAGONAL sectors use 2 layers (legs/static, body/rotating)
+
+	// Draw base enemy (legs) first (static, no rotation)
+	if(_spr_legs != noone){
+		var _legs_frame = 0;
+		if(_is_shooting){
+			var _legs_num_frames = sprite_get_number(_spr_legs);
+			_legs_frame = min(sprite_current_frame, _legs_num_frames - 1);
+		}
+		draw_sprite_ext(
+			_spr_legs,
+			_legs_frame,
+			x + aim_legs_sprite_offset_x,
+			y + aim_legs_sprite_offset_y,
+			_aim_xscale,
+			image_yscale,
+			0,
+			image_blend,
+			image_alpha
+		);
+	}
+
+	// Draw body (rotated to aim)
+	if(_spr_body != noone){
+		draw_sprite_ext(
+			_spr_body,
+			_body_frame,
+			x + aim_body_sprite_offset_x,
+			y + aim_body_sprite_offset_y,
+			_aim_xscale,
+			image_yscale,
+			_draw_angle,
+			image_blend,
+			image_alpha
+		);
+	}
 }
 
 // Laser sight (skip if out-of-sight sector)
