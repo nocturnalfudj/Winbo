@@ -48,8 +48,8 @@ event_inherited();
 	aim_legs_sprite_offset_y = 0;
 
 	// Hybrid rotation: two-layer draw within threshold, whole-sprite rotation beyond
-	// (past ~30° the layer split becomes visually noticeable per artist)
-	aim_split_threshold = 30;
+	// (past ~25° the layer split becomes visually noticeable per artist)
+	aim_split_threshold = 25;
 
 	// Locked rotation for attack/recover (set when transitioning from aim to attack)
 	attack_locked_angle = 0;
