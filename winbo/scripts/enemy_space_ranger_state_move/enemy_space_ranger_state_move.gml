@@ -1,6 +1,14 @@
 function enemy_space_ranger_state_move(){
-	// Clear attack rotation when returning to move state
-	attack_rotation_active = false;
+	// Lerp attack rotation back to 0 instead of snapping
+	if (attack_rotation_active) {
+		var _diff = angle_difference(0, attack_locked_draw_angle);
+		if (abs(_diff) < 1) {
+			attack_locked_draw_angle = 0;
+			attack_rotation_active = false;
+		} else {
+			attack_locked_draw_angle += _diff * attack_rotation_lerp_speed;
+		}
+	}
 
 	// Debug: periodic animation state logging
 	if (!variable_instance_exists(id, "_move_log_timer")) _move_log_timer = 0;
@@ -182,17 +190,14 @@ function enemy_space_ranger_state_move(){
 
 			// Apply sprite change if different from current
 			if (sprite_current != _target_sprite && _target_sprite != noone) {
-				// Calculate proper loop range based on artist specs:
-				// - First 3 frames (0-2) = intro, play once
-				// - Last 2 frames = outro, excluded from loop
-				var _sprite_frame_count = sprite_get_number(_target_sprite);
-				// TODO: Verify these frame ranges with artist
-				// Artist said "first 3 frames and last 2 frames are transition"
-				// But visual inspection may show the loop starts/ends at different frames
-				var _loop_start = 4;  // Try starting loop one frame later
-				var _loop_end = _sprite_frame_count - 3;  // Try ending loop one frame earlier
+				var _loop_start = 3;
+				var _loop_end = 16;
+				if (_target_sprite == sprite_move_down) {
+					_loop_start = 8;
+					_loop_end = 10;
+				}
 
-				__mcp_log("[MOVE] Setting sprite with loop_start=" + string(_loop_start) + " loop_end=" + string(_loop_end) + " (frames=" + string(_sprite_frame_count) + ")");
+				__mcp_log("[MOVE] Setting sprite with loop_start=" + string(_loop_start) + " loop_end=" + string(_loop_end));
 				image_system_setup(_target_sprite, ANIMATION_FPS_DEFAULT, true, true, _loop_start, _loop_end);
 			}
 		}

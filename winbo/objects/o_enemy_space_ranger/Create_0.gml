@@ -48,13 +48,13 @@ event_inherited();
 	aim_legs_sprite_offset_y = 0;
 
 	// Hybrid rotation: two-layer draw within threshold, whole-sprite rotation beyond
-	// (past ~25° the layer split becomes visually noticeable per artist)
 	aim_split_threshold = 25;
 
 	// Locked rotation for attack/recover (set when transitioning from aim to attack)
 	attack_locked_angle = 0;
 	attack_locked_draw_angle = 0;
 	attack_rotation_active = false;
+	attack_rotation_lerp_speed = 0.15;
 #endregion
 
 #region Combat - Space Ranger Overrides
@@ -81,7 +81,7 @@ event_inherited();
 	missile_object = o_missile;
 	missile_spawn_offset_x = -201;  // Offset from sprite origin (741,400) to launcher barrel (540,238)
 	missile_spawn_offset_y = -162;
-	missile_spawn_frame = 8;        // Frame of attack animation when missile should spawn
+	missile_spawn_frame = 0;        // Frame of attack animation when missile should spawn (0 = instant)
 	missile_speed = 6;
 	missile_damage = 1;
 

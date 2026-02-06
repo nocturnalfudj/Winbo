@@ -102,7 +102,7 @@ var _custom_draw = false;
 #endregion
 
 #region Attack / Recover — Rotated draw at locked aim angle
-	if(!_custom_draw && attack_rotation_active && (state == EnemyState.attack_active || state == EnemyState.attack_recover)){
+	if(!_custom_draw && attack_rotation_active && (state == EnemyState.attack_active || state == EnemyState.attack_recover || state == EnemyState.move)){
 		_custom_draw = true;
 
 		// Ignore if Not Visible
