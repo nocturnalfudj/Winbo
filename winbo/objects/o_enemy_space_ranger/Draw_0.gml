@@ -11,75 +11,135 @@ if(sprite_current == noone || sprite_current < 0){
 	}
 }
 
-// Check if we need custom two-layer drawing during attack telegraph
-if(aim_two_layer_enable && (state == EnemyState.attack_telegraph)){
-	// Ignore if Not Visible
-	if(!camera_visible)
-		exit;
+// Custom drawing for aim, attack, and recover states
+var _custom_draw = false;
 
-	// Determine xscale and draw angle based on face_horizontal
-	// Uses sprite_face_direction for consistent left-facing sprite handling
-	var _aim_xscale = image_xscale * face_horizontal * sprite_face_direction;
-	var _draw_angle;
-	if (face_horizontal == 1) {
-		// Facing right (flipped sprite faces 0°)
-		_draw_angle = aim_angle;
-	} else {
-		// Facing left (sprite faces 180°)
-		_draw_angle = aim_angle + 180;
-	}
+#region Aim State — Hybrid two-layer / whole-sprite rotation
+	if(aim_two_layer_enable && (state == EnemyState.attack_telegraph)){
+		_custom_draw = true;
 
-	// Draw legs first (static, no rotation) - use calculated xscale
-	if(sprite_aim_legs != noone){
-		draw_sprite_ext(
-			sprite_aim_legs,
-			0,
-			x + aim_legs_sprite_offset_x,
-			y + aim_legs_sprite_offset_y,
-			_aim_xscale,
-			image_yscale,
-			0,
-			image_blend,
-			image_alpha
-		);
-	}
+		// Ignore if Not Visible
+		if(!camera_visible)
+			exit;
 
-	// Draw body/aim sprite (rotated to aim at target)
-	if(sprite_aim_body != noone){
-		draw_sprite_ext(
-			sprite_aim_body,
-			sprite_current_frame,
-			x + aim_body_sprite_offset_x,
-			y + aim_body_sprite_offset_y,
-			_aim_xscale,
-			image_yscale,
-			_draw_angle,
-			image_blend,
-			image_alpha
-		);
+		// Determine xscale and draw angle based on face_horizontal
+		var _aim_xscale = image_xscale * face_horizontal * sprite_face_direction;
+		var _draw_angle;
+		if(face_horizontal == 1){
+			_draw_angle = aim_angle;
+		}
+		else{
+			_draw_angle = aim_angle + 180;
+		}
+
+		// Calculate how far the aim deviates from horizontal
+		var _horizontal_angle = (face_horizontal == 1) ? 0 : 180;
+		var _deviation = abs(angle_difference(aim_angle, _horizontal_angle));
+
+		if(_deviation <= aim_split_threshold){
+			// Within threshold: two-layer draw (body rotates, legs static)
+			if(sprite_aim_legs != noone){
+				draw_sprite_ext(
+					sprite_aim_legs, 0,
+					x + aim_legs_sprite_offset_x, y + aim_legs_sprite_offset_y,
+					_aim_xscale, image_yscale,
+					0,
+					image_blend, image_alpha
+				);
+			}
+			if(sprite_aim_body != noone){
+				draw_sprite_ext(
+					sprite_aim_body, sprite_current_frame,
+					x + aim_body_sprite_offset_x, y + aim_body_sprite_offset_y,
+					_aim_xscale, image_yscale,
+					_draw_angle,
+					image_blend, image_alpha
+				);
+			}
+		}
+		else{
+			// Beyond threshold: rotate entire sprite (both layers) to hide the split
+			if(sprite_aim_legs != noone){
+				draw_sprite_ext(
+					sprite_aim_legs, 0,
+					x + aim_legs_sprite_offset_x, y + aim_legs_sprite_offset_y,
+					_aim_xscale, image_yscale,
+					_draw_angle,
+					image_blend, image_alpha
+				);
+			}
+			if(sprite_aim_body != noone){
+				draw_sprite_ext(
+					sprite_aim_body, sprite_current_frame,
+					x + aim_body_sprite_offset_x, y + aim_body_sprite_offset_y,
+					_aim_xscale, image_yscale,
+					_draw_angle,
+					image_blend, image_alpha
+				);
+			}
+		}
+
+		// Flash effect
+		if(flash_alpha > 0 && sprite_current != noone && sprite_current >= 0){
+			shader_set(sh_monochrome);
+			draw_sprite_ext(sprite_current, sprite_current_frame, x, y, image_xscale, image_yscale, image_angle, flash_colour, flash_alpha);
+			shader_reset();
+		}
+
+		// Info Bar
+		info_bar_system_draw();
+
+		// Dev Mode debug
+		if(o_master.dev_mode){
+			draw_bounding_box();
+
+			// Draw aim line
+			draw_set_color(c_red);
+			draw_line(x, y, x + lengthdir_x(100, aim_angle), y + lengthdir_y(100, aim_angle));
+			draw_set_color(c_white);
+		}
 	}
-	
-	// Flash effect
-	if(flash_alpha > 0 && sprite_current != noone && sprite_current >= 0){
-		shader_set(sh_monochrome);
-		draw_sprite_ext(sprite_current, sprite_current_frame, x, y, image_xscale, image_yscale, image_angle, flash_colour, flash_alpha);
-		shader_reset();
+#endregion
+
+#region Attack / Recover — Rotated draw at locked aim angle
+	if(!_custom_draw && attack_rotation_active && (state == EnemyState.attack_active || state == EnemyState.attack_recover)){
+		_custom_draw = true;
+
+		// Ignore if Not Visible
+		if(!camera_visible)
+			exit;
+
+		var _atk_xscale = image_xscale * face_horizontal * sprite_face_direction;
+
+		// Draw current sprite rotated to the locked attack angle
+		if(sprite_current != noone && sprite_current >= 0){
+			draw_sprite_ext(
+				sprite_current, sprite_current_frame,
+				x, y,
+				_atk_xscale, image_yscale,
+				attack_locked_draw_angle,
+				image_blend, image_alpha
+			);
+		}
+
+		// Flash effect
+		if(flash_alpha > 0 && sprite_current != noone && sprite_current >= 0){
+			shader_set(sh_monochrome);
+			draw_sprite_ext(sprite_current, sprite_current_frame, x, y, _atk_xscale, image_yscale, attack_locked_draw_angle, flash_colour, flash_alpha);
+			shader_reset();
+		}
+
+		// Info Bar
+		info_bar_system_draw();
+
+		// Dev Mode debug
+		if(o_master.dev_mode){
+			draw_bounding_box();
+		}
 	}
-	
-	// Info Bar
-	info_bar_system_draw();
-	
-	// Dev Mode debug
-	if(o_master.dev_mode){
-		draw_bounding_box();
-		
-		// Draw aim line
-		draw_set_color(c_red);
-		draw_line(x, y, x + lengthdir_x(100, aim_angle), y + lengthdir_y(100, aim_angle));
-		draw_set_color(c_white);
-	}
-}
-else{
+#endregion
+
+if(!_custom_draw){
 	// Normal drawing - use parent
 	event_inherited();
 }

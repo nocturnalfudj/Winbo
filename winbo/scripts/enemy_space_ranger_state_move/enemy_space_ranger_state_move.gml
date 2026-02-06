@@ -1,4 +1,7 @@
 function enemy_space_ranger_state_move(){
+	// Clear attack rotation when returning to move state
+	attack_rotation_active = false;
+
 	// Debug: periodic animation state logging
 	if (!variable_instance_exists(id, "_move_log_timer")) _move_log_timer = 0;
 	_move_log_timer++;

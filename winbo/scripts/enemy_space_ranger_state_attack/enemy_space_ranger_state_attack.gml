@@ -27,25 +27,22 @@ function enemy_space_ranger_state_attack(){
 
 		// Create Missile (only once, on the correct animation frame)
 		if(!attack_active_attack_created && sprite_current_frame >= missile_spawn_frame){
-			// Fire horizontally in the direction the ranger is facing
-			// (attack animation is designed for horizontal fire, not angled)
-			var _fire_direction = (face_horizontal == 1) ? 0 : 180;
+			// Fire in the locked aim direction (attack animation is rotated to match)
+			var _fire_direction = attack_locked_angle;
 
 			__mcp_log("[ATK] FIRING missile at frame " + string(sprite_current_frame) + ", dir=" + string(_fire_direction) + ", face=" + string(face_horizontal));
 
-			// Calculate spawn position for horizontal fire (no rotation, just flip for facing)
+			// Calculate spawn position — rotate the base offset by the locked draw angle
 			var _xscale_factor = face_horizontal * sprite_face_direction;
+			var _base_offset_x = (_xscale_factor < 0) ? -missile_spawn_offset_x : missile_spawn_offset_x;
+			var _base_offset_y = missile_spawn_offset_y;
 
-			// Apply X offset with flip, Y offset stays the same
-			var _spawn_x, _spawn_y;
-			if (_xscale_factor < 0) {
-				// Sprite is flipped - mirror the X offset
-				_spawn_x = x - missile_spawn_offset_x;
-			} else {
-				// Sprite is normal
-				_spawn_x = x + missile_spawn_offset_x;
-			}
-			_spawn_y = y + missile_spawn_offset_y;
+			// Rotate offset to match the rotated attack sprite
+			var _offset_dist = point_distance(0, 0, _base_offset_x, _base_offset_y);
+			var _offset_angle = point_direction(0, 0, _base_offset_x, _base_offset_y);
+			var _rotated_angle = _offset_angle + attack_locked_draw_angle;
+			var _spawn_x = x + lengthdir_x(_offset_dist, _rotated_angle);
+			var _spawn_y = y + lengthdir_y(_offset_dist, _rotated_angle);
 
 			// Create missile instance
 			var _missile = instance_create_layer(_spawn_x, _spawn_y, "lyr_player", missile_object);

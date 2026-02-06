@@ -46,6 +46,15 @@ event_inherited();
 	aim_body_sprite_offset_y = 0;
 	aim_legs_sprite_offset_x = 0;
 	aim_legs_sprite_offset_y = 0;
+
+	// Hybrid rotation: two-layer draw within threshold, whole-sprite rotation beyond
+	// (past ~30° the layer split becomes visually noticeable per artist)
+	aim_split_threshold = 30;
+
+	// Locked rotation for attack/recover (set when transitioning from aim to attack)
+	attack_locked_angle = 0;
+	attack_locked_draw_angle = 0;
+	attack_rotation_active = false;
 #endregion
 
 #region Combat - Space Ranger Overrides
@@ -84,6 +93,12 @@ event_inherited();
 #region Detection / Hostility
 	// Start non-hostile (patrol mode)
 	is_hostile = false;
+
+	// Skip startled state (no startled sprite — base enemy_state_move would
+	// transition to startled anyway, but the exit condition checks for the
+	// animation reaching its last frame, which never happens when a looping
+	// movement sprite with a restricted loop range is playing)
+	has_played_startled = true;
 
 	// Enable detection to aggro when player gets close
 	hostility_detection_enable = true;

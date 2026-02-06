@@ -54,15 +54,25 @@ function enemy_space_ranger_state_aim(){
 		if(attack_telegraph_countdown <= 0){
 			__mcp_log("[AIM] -> ACTIVE, cnt=" + string(_aim_log_count) + " flag_before=" + string(attack_active_attack_created));
 			_aim_log_count = 0;
-			
+
+			// Lock the current aim angle for the attack/recover animation rotation
+			attack_locked_angle = aim_angle;
+			attack_rotation_active = true;
+			if(face_horizontal == 1){
+				attack_locked_draw_angle = aim_angle;
+			}
+			else{
+				attack_locked_draw_angle = aim_angle + 180;
+			}
+
 			// Go to Attack Active State
 			state = EnemyState.attack_active;
-			
+
 			// Reset attack created flag
 			attack_active_attack_created = false;
-			
+
 			__mcp_log("[AIM] flag_after=" + string(attack_active_attack_created));
-			
+
 			// Update Sprite to attack sprite
 			image_system_setup(sprite_attack_active, ANIMATION_FPS_DEFAULT * animation_fps_multiplier, true, false, 0, IMAGE_LOOP_FULL);
 		}
