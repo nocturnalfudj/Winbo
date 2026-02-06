@@ -190,6 +190,13 @@ function enemy_space_ranger_state_move(){
 
 			// Apply sprite change if different from current
 			if (sprite_current != _target_sprite && _target_sprite != noone) {
+				var _was_moving = (sprite_current == sprite_move_forward
+					|| sprite_current == sprite_move_backward
+					|| sprite_current == sprite_move_up
+					|| sprite_current == sprite_move_down
+					|| sprite_current == sprite_move_diag_forward
+					|| sprite_current == sprite_move_diag_backward);
+
 				var _loop_start = 3;
 				var _loop_end = 16;
 				if (_target_sprite == sprite_move_down) {
@@ -199,6 +206,12 @@ function enemy_space_ranger_state_move(){
 
 				__mcp_log("[MOVE] Setting sprite with loop_start=" + string(_loop_start) + " loop_end=" + string(_loop_end));
 				image_system_setup(_target_sprite, ANIMATION_FPS_DEFAULT, true, true, _loop_start, _loop_end);
+
+				// Skip intro frames when changing direction mid-move
+				if (_was_moving) {
+					image.position = 2;
+					sprite_current_frame = 2;
+				}
 			}
 		}
 		else {
