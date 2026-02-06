@@ -121,7 +121,7 @@ if(o_master.dev_mode){
 	_debug_y += 16;
 	
 	// Target distance
-	if(variable_instance_exists(id, "target") && instance_exists(target[TargetType.attack].object)){
+	if(variable_instance_exists(id, "target") && target[TargetType.attack] != noone && instance_exists(target[TargetType.attack].object)){
 		var _dist = point_distance(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
 		draw_text(_debug_x, _debug_y, "tgt_dist: " + string(round(_dist)));
 		_debug_y += 16;

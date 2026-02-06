@@ -35,14 +35,16 @@ function enemy_space_ranger_state_move(){
 		// to prevent 1-frame glitch where aim_angle hasn't been calculated yet
 		if(state == EnemyState.attack_telegraph){
 			target_update(TargetType.attack);
-			aim_angle = point_direction(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
+			if(target[TargetType.attack] != noone){
+				aim_angle = point_direction(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
 
-			// Set face_horizontal based on target position
-			if(target[TargetType.attack].x > x){
-				face_horizontal = 1;
-			}
-			else{
-				face_horizontal = -1;
+				// Set face_horizontal based on target position
+				if(target[TargetType.attack].x > x){
+					face_horizontal = 1;
+				}
+				else{
+					face_horizontal = -1;
+				}
 			}
 		}
 
@@ -206,6 +208,13 @@ function enemy_space_ranger_state_move(){
 		// Space Ranger uses 2D deaggro (both X and Y distance) plus line-of-sight check
 		if(is_hostile){
 			target_update(TargetType.attack);
+
+			// Target lost — immediately deaggro
+			if(target[TargetType.attack] == noone){
+				movement_input_move_acceleration_factor_set(3.0);
+				state = EnemyState.sheathe;
+				return;
+			}
 
 			// Check both horizontal and vertical distance
 			var _x_dist = abs(target[TargetType.attack].x - x);

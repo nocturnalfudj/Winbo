@@ -24,10 +24,15 @@ function enemy_space_ranger_state_aim(){
 		target_update(TargetType.attack);
 		
 		// Calculate aim angle toward player
+		if(target[TargetType.attack] == noone){
+			// Target lost during aim — return to move state
+			state = EnemyState.move;
+			return;
+		}
 		var _target_x = target[TargetType.attack].x;
 		var _target_y = target[TargetType.attack].y;
 		aim_angle = point_direction(x, y, _target_x, _target_y);
-		
+
 		// Update face direction based on target (standard logic)
 		if(_target_x > x){
 			face_horizontal = 1;
