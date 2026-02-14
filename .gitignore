@@ -16,3 +16,5 @@ winbo/.gms_mcp/
 winbo/.gms-mcp.json
 winbo/.gml_index_cache.json
 winbo/.cursor/
+winbo/.codex/
+winbo/mcp-configs/
