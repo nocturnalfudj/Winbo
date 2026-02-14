@@ -20,9 +20,6 @@ function enemy_space_ranger_state_move(){
 		}
 	}
 
-	// Track if we were hostile last frame (for speed boost on first aggro)
-	var _was_hostile = is_hostile;
-
 	// Backup path movement enable flag and disable it when hostile
 	// (Base function's patrol path runs unconditionally when movement_path_enable = true)
 	var _path_enable_backup = movement_path_enable;
@@ -62,35 +59,87 @@ function enemy_space_ranger_state_move(){
 		return;
 	}
 
-	// Speed boost when first becoming hostile
-	if(is_hostile && !_was_hostile){
-		movement_input_move_acceleration_factor_set(3.0);
-	}
-
-	// Override hostile movement: flying enemies need 2D movement, not X-axis following
-	// (Base function's hostile movement is designed for grounded enemies)
+	// Burst movement for hostile mode (short dashes with idle pauses between)
 	if(is_hostile){
 		target_update(TargetType.attack);
-		if(target[TargetType.attack] != noone){
-			// Try pathfinding first
-			actor_pathfind_and_move_to_target(target[TargetType.attack]);
 
-			// If pathfinding failed (no path found), fall back to direct flight
-			// Flying enemies can move directly toward player without obstacles
-			if(!path_finding_path_found){
-				input_move_direction = point_direction(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
-				input_move_magnitude = 1;
+		// Face player during all burst phases
+		if(target[TargetType.attack] != noone){
+			if(target[TargetType.attack].x > x){
+				face_horizontal = 1;
+			}
+			else{
+				face_horizontal = -1;
+			}
+		}
+
+		if(burst_phase == 0){
+			// PAUSE - idle, wait for next burst
+			input_move_magnitude = 0;
+
+			burst_pause_timer -= global.delta_time_factor_scaled;
+			if(burst_pause_timer <= 0 && target[TargetType.attack] != noone){
+				// Pick direction toward player (try pathfinding, fallback to direct)
+				actor_pathfind_and_move_to_target(target[TargetType.attack]);
+				if(path_finding_path_found){
+					burst_direction = input_move_direction;
+				}
+				else{
+					burst_direction = point_direction(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
+				}
+
+				// Start burst
+				burst_phase = 1;
+				burst_duration_timer = random_range(burst_duration_min, burst_duration_max);
+				movement_input_move_acceleration_factor_set(3.5);
+			}
+		}
+		else if(burst_phase == 1){
+			// MOVING - accelerate toward burst direction
+			input_move_direction = burst_direction;
+			input_move_magnitude = 1;
+			acceleration.AddMagnitudeDirection(INPUT_MOVE_ACCELERATION * input_move_magnitude, input_move_direction);
+
+			burst_duration_timer -= global.delta_time_factor_scaled;
+			if(burst_duration_timer <= 0){
+				// Stop accelerating, let outro frames play
+				image.loop = false;
+				burst_phase = 2;
+				velocity_retention = 1.0;  // Bypass setter to preserve velocity_retention_default
+			}
+		}
+		else if(burst_phase == 2){
+			// STOPPING - maintain velocity during remaining loop frames, decelerate during outro
+			input_move_magnitude = 0;
+
+			// Start decelerating once outro frames begin
+			if(image.position >= image.loop_end && velocity_retention == 1.0){
+				movement_velocity_retention_set(burst_coast_velocity_retention);
 			}
 
-			// Apply acceleration based on movement input
-			acceleration.AddMagnitudeDirection(INPUT_MOVE_ACCELERATION * input_move_magnitude, input_move_direction);
+			if(!image.animate){
+				burst_phase = 0;
+				burst_pause_timer = random_range(burst_pause_duration_min, burst_pause_duration_max);
+				movement_input_move_acceleration_factor_set(1.0);
+				movement_velocity_retention_set(velocity_retention_default);
+			}
 		}
 	}
 
 	#region Movement Sprite Selection
-		// Update movement sprite based on direction RELATIVE to facing
-		// Only update when actually moving (has input or velocity)
-		if (input_move_magnitude > 0 || abs(velocity.x) > 0.05 || abs(velocity.y) > 0.05) {
+		// Hostile burst phases: handle sprite directly
+		if(is_hostile && burst_phase == 0){
+			// PAUSE phase - show idle sprite
+			if(sprite_current != sprite_idle){
+				image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+			}
+			face_horizontal_draw_enable = true;
+		}
+		else if(is_hostile && burst_phase == 2){
+			// STOPPING phase - don't change sprite (outro animation playing)
+		}
+		// Normal movement sprite selection (patrol or hostile burst moving phase)
+		else if (input_move_magnitude > 0 || abs(velocity.x) > 0.05 || abs(velocity.y) > 0.05) {
 			// Normalize angle to 0-360 range
 			var _move_angle = input_move_direction mod 360;
 			if (_move_angle < 0) {
@@ -232,7 +281,10 @@ function enemy_space_ranger_state_move(){
 
 			// Target lost — immediately deaggro
 			if(target[TargetType.attack] == noone){
+				burst_phase = 0;
+				burst_pause_timer = 0;
 				movement_input_move_acceleration_factor_set(3.0);
+				movement_velocity_retention_set(velocity_retention_default);
 				state = EnemyState.sheathe;
 				return;
 			}
@@ -250,8 +302,11 @@ function enemy_space_ranger_state_move(){
 				deaggro_timer += global.delta_time_factor_scaled;
 
 				if(deaggro_timer >= deaggro_timer_max){
-					// De-aggro: keep speed high for return flight, then reset when arriving
+					// De-aggro: reset burst state, keep speed high for return flight
+					burst_phase = 0;
+					burst_pause_timer = 0;
 					movement_input_move_acceleration_factor_set(3.0); // Fast return flight
+					movement_velocity_retention_set(velocity_retention_default);
 					state = EnemyState.sheathe;
 					return;
 				}

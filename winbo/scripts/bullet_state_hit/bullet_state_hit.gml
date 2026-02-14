@@ -1,4 +1,9 @@
 function bullet_state_hit(){
+	// Missile explosion screen shake
+	if (object_index == o_missile) {
+		camera_shake_add(0.3, 8);
+	}
+
 	//Post Hit Movement Update
 	if(post_hit_movement_update_enable){
 		//Remove Solide Detection

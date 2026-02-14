@@ -30,6 +30,14 @@ event_inherited();
 	// Initialize dimensions from sprite (required for height-based combat checks)
 	dimensions_system_update(sprite_idle);
 
+	// Scale down (and set rest scale)
+	var _scale = 0.75;
+	var _transform = transform[TransformType.anchor];
+	transform_set(_transform, TransformValue.xscale, _scale, false);
+	transform_set(_transform, TransformValue.yscale, _scale, false);
+	transform_set_rest_to_current(_transform, TransformValue.xscale);
+	transform_set_rest_to_current(_transform, TransformValue.yscale);
+
 	// Space Ranger sprites face LEFT by default - use system-level flip
 	// Note: face_horizontal_draw_enable is toggled per-state:
 	// - false for directional movement sprites (already oriented correctly)
@@ -82,7 +90,7 @@ event_inherited();
 	missile_spawn_offset_x = -201;  // Offset from sprite origin (741,400) to launcher barrel (540,238)
 	missile_spawn_offset_y = -162;
 	missile_spawn_frame = 0;        // Frame of attack animation when missile should spawn (0 = instant)
-	missile_speed = 6;
+	missile_speed = 10;
 	missile_damage = 1;
 
 	// Recoil effect when firing
@@ -125,5 +133,16 @@ event_inherited();
 
 	// Slower movement - reduce acceleration by 50% (drag stays at default 0.7)
 	movement_input_move_acceleration_default_set(0.5);
+
+	// Burst movement config (hostile mode - short dashes with idle pauses)
+	burst_phase = 0;  // 0=pause, 1=moving, 2=stopping (outro frames)
+	burst_pause_timer = 0;
+	burst_pause_duration_min = 0.3 * SECOND;
+	burst_pause_duration_max = 0.6 * SECOND;
+	burst_duration_timer = 0;
+	burst_duration_min = 0.6 * SECOND;
+	burst_duration_max = 1.0 * SECOND;
+	burst_direction = 0;
+	burst_coast_velocity_retention = 0.9;  // Higher retention during Phase 2 coast (default is 0.75)
 #endregion
 
