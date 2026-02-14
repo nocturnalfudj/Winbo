@@ -20,6 +20,29 @@ function enemy_space_ranger_state_move(){
 		}
 	}
 
+	// Shared burst reset used at all deadlock-sensitive exits.
+	var _burst_reset = function(_reason, _replan_now){
+		burst_phase = 0;
+		burst_duration_timer = 0;
+		burst_stuck_timer = 0;
+		input_move_magnitude = 0;
+		movement_input_move_acceleration_factor_set(1.0);
+		movement_velocity_retention_set(burst_velocity_retention_base);
+		velocity_retention_default = burst_velocity_retention_base;
+		image.loop = true;
+
+		if(_replan_now){
+			burst_pause_timer = 0;
+		}
+		else{
+			burst_pause_timer = random_range(burst_pause_duration_min, burst_pause_duration_max);
+		}
+
+		if(_reason != ""){
+			__mcp_log("[SR_BURST] reset=" + _reason + " replan=" + string(_replan_now));
+		}
+	};
+
 	// Backup path movement enable flag and disable it when hostile
 	// (Base function's patrol path runs unconditionally when movement_path_enable = true)
 	var _path_enable_backup = movement_path_enable;
@@ -37,6 +60,7 @@ function enemy_space_ranger_state_move(){
 	// If parent transitioned to a different state (e.g., attack_telegraph), exit early
 	// and re-enable face flip for the new state's sprites
 	if(state != EnemyState.move){
+		_burst_reset("state-exit", false);
 		face_horizontal_draw_enable = true;
 
 		// If transitioning to attack_telegraph, initialize aim values BEFORE the first draw
@@ -63,6 +87,18 @@ function enemy_space_ranger_state_move(){
 	if(is_hostile){
 		target_update(TargetType.attack);
 
+		var _is_burst_move_sprite = (sprite_current == sprite_move_forward
+			|| sprite_current == sprite_move_backward
+			|| sprite_current == sprite_move_up
+			|| sprite_current == sprite_move_down
+			|| sprite_current == sprite_move_diag_forward
+			|| sprite_current == sprite_move_diag_backward);
+
+		// Guard against returning from non-move states with stale phase-2 data.
+		if(burst_phase == 2 && !_is_burst_move_sprite){
+			_burst_reset("phase2-invalid", true);
+		}
+
 		// Face player during all burst phases
 		if(target[TargetType.attack] != noone){
 			if(target[TargetType.attack].x > x){
@@ -76,6 +112,7 @@ function enemy_space_ranger_state_move(){
 		if(burst_phase == 0){
 			// PAUSE - idle, wait for next burst
 			input_move_magnitude = 0;
+			burst_stuck_timer = 0;
 
 			burst_pause_timer -= global.delta_time_factor_scaled;
 			if(burst_pause_timer <= 0 && target[TargetType.attack] != noone){
@@ -91,6 +128,7 @@ function enemy_space_ranger_state_move(){
 				// Start burst
 				burst_phase = 1;
 				burst_duration_timer = random_range(burst_duration_min, burst_duration_max);
+				burst_stuck_timer = 0;
 				movement_input_move_acceleration_factor_set(3.5);
 			}
 		}
@@ -100,28 +138,45 @@ function enemy_space_ranger_state_move(){
 			input_move_magnitude = 1;
 			acceleration.AddMagnitudeDirection(INPUT_MOVE_ACCELERATION * input_move_magnitude, input_move_direction);
 
-			burst_duration_timer -= global.delta_time_factor_scaled;
-			if(burst_duration_timer <= 0){
-				// Stop accelerating, let outro frames play
-				image.loop = false;
-				burst_phase = 2;
-				velocity_retention = 1.0;  // Bypass setter to preserve velocity_retention_default
+			var _watchdog_triggered = false;
+			var _blocked = (collision.x != 0 || collision.y != 0);
+			var _speed = point_distance(0, 0, velocity.x, velocity.y);
+
+			if(_blocked && _speed <= burst_stuck_min_speed){
+				burst_stuck_timer += global.delta_time_factor_scaled;
+
+				if(burst_stuck_timer >= burst_stuck_timeout){
+					_burst_reset("watchdog", true);
+					_watchdog_triggered = true;
+				}
+			}
+			else{
+				burst_stuck_timer = 0;
+			}
+
+			if(!_watchdog_triggered){
+				burst_duration_timer -= global.delta_time_factor_scaled;
+				if(burst_duration_timer <= 0){
+					// Stop accelerating, let outro frames play
+					image.loop = false;
+					burst_phase = 2;
+					velocity_retention = 1.0;  // Keep momentum through loop-outro frames
+				}
 			}
 		}
 		else if(burst_phase == 2){
 			// STOPPING - maintain velocity during remaining loop frames, decelerate during outro
 			input_move_magnitude = 0;
+			burst_stuck_timer = 0;
 
 			// Start decelerating once outro frames begin
 			if(image.position >= image.loop_end && velocity_retention == 1.0){
 				movement_velocity_retention_set(burst_coast_velocity_retention);
+				velocity_retention_default = burst_velocity_retention_base;
 			}
 
 			if(!image.animate){
-				burst_phase = 0;
-				burst_pause_timer = random_range(burst_pause_duration_min, burst_pause_duration_max);
-				movement_input_move_acceleration_factor_set(1.0);
-				movement_velocity_retention_set(velocity_retention_default);
+				_burst_reset("", false);
 			}
 		}
 	}
@@ -281,10 +336,9 @@ function enemy_space_ranger_state_move(){
 
 			// Target lost — immediately deaggro
 			if(target[TargetType.attack] == noone){
-				burst_phase = 0;
-				burst_pause_timer = 0;
+				_burst_reset("", false);
 				movement_input_move_acceleration_factor_set(3.0);
-				movement_velocity_retention_set(velocity_retention_default);
+				velocity_retention_default = burst_velocity_retention_base;
 				state = EnemyState.sheathe;
 				return;
 			}
@@ -303,10 +357,9 @@ function enemy_space_ranger_state_move(){
 
 				if(deaggro_timer >= deaggro_timer_max){
 					// De-aggro: reset burst state, keep speed high for return flight
-					burst_phase = 0;
-					burst_pause_timer = 0;
+					_burst_reset("", false);
 					movement_input_move_acceleration_factor_set(3.0); // Fast return flight
-					movement_velocity_retention_set(velocity_retention_default);
+					velocity_retention_default = burst_velocity_retention_base;
 					state = EnemyState.sheathe;
 					return;
 				}

@@ -144,5 +144,10 @@ event_inherited();
 	burst_duration_max = 1.0 * SECOND;
 	burst_direction = 0;
 	burst_coast_velocity_retention = 0.9;  // Higher retention during Phase 2 coast (default is 0.75)
-#endregion
 
+	// Burst deadlock watchdog + baseline movement restore values
+	burst_stuck_timer = 0;
+	burst_stuck_timeout = 0.25 * SECOND;
+	burst_stuck_min_speed = 0.2;
+	burst_velocity_retention_base = velocity_retention_default;
+#endregion
