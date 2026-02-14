@@ -21,12 +21,12 @@ function enemy_apocalypse_survivor_state_attack_active(){
 		var _barrel_x, _barrel_y;
 		var _a = aim_angle;
 		if(_a >= 315 || _a < 45){
-			_draw_angle = _a;           // side
+			_draw_angle = _a - 2;       // side (measured neutral = 2°)
 			_barrel_x = barrel_offset_x_side;
 			_barrel_y = barrel_offset_y_side;
 		}
 		else if(_a >= 45 && _a < 85){
-			_draw_angle = _a - 65;      // diag
+			_draw_angle = _a - 44.5;    // diag (measured neutral = 44.5°)
 			_barrel_x = barrel_offset_x_diag;
 			_barrel_y = barrel_offset_y_diag;
 		}
@@ -36,12 +36,12 @@ function enemy_apocalypse_survivor_state_attack_active(){
 			_barrel_y = barrel_offset_y_up;
 		}
 		else if(_a >= 95 && _a < 135){
-			_draw_angle = _a - 115;     // diag_flip
+			_draw_angle = _a - 135.5;   // diag_flip (measured neutral = 135.5°)
 			_barrel_x = barrel_offset_x_diag;
 			_barrel_y = barrel_offset_y_diag;
 		}
 		else if(_a >= 135 && _a < 225){
-			_draw_angle = _a - 180;     // side_flip
+			_draw_angle = _a - 178;     // side_flip (measured neutral = 178°)
 			_barrel_x = barrel_offset_x_side;
 			_barrel_y = barrel_offset_y_side;
 		}

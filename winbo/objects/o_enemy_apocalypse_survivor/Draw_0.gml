@@ -104,19 +104,19 @@ var _draw_angle = 0;
 
 switch(_sector){
 	case "side":
-		_sector_neutral = 0;  // Side sprite aims horizontally
+		_sector_neutral = 2;  // Measured barrel direction from sprite artwork
 		_draw_angle = aim_angle - _sector_neutral;
 	break;
 	case "side_flip":
-		_sector_neutral = 180;
+		_sector_neutral = 178;
 		_draw_angle = aim_angle - _sector_neutral;
 	break;
 	case "diag":
-		_sector_neutral = 65;  // Diagonal sprite aims at ~65 degrees
+		_sector_neutral = 44.5;  // Measured barrel direction from sprite artwork
 		_draw_angle = aim_angle - _sector_neutral;
 	break;
 	case "diag_flip":
-		_sector_neutral = 115;  // Flipped diagonal aims at ~115 degrees
+		_sector_neutral = 135.5;
 		_draw_angle = aim_angle - _sector_neutral;
 	break;
 	case "up":
@@ -316,6 +316,6 @@ info_bar_system_draw();
 if(o_master.dev_mode){
 	draw_bounding_box();
 	draw_set_color(c_yellow);
-	draw_text(x + 40, y - 80, "aim=" + string(round(aim_angle)) + " sector=" + _sector);
+	draw_text(x + 40, y - 80, "aim=" + string(round(aim_angle)) + " sector=" + _sector + " rot=" + string(round(_draw_angle)));
 	draw_set_color(c_white);
 }
