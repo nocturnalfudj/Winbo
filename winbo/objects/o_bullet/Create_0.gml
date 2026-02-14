@@ -56,9 +56,9 @@ owner = noone;
 	homing_delay = 0;             // Delay before homing kicks in
 #endregion
 
-#region Bullet
-	//Damage
-	damage = 10;
+	#region Bullet
+		//Damage
+		damage = 10;
 	
 	//Hit
 	hit_target = noone;
@@ -72,9 +72,16 @@ owner = noone;
 	//Alive Time
 	alive_time = infinity;
 	
-	//Knockback Factor
-	knockback_factor = 1;
-#endregion
+		//Knockback Factor
+		knockback_factor = 1;
+		
+		//Optional Death Animation
+		death_anim_sprite = noone;
+		death_anim_fps = ANIMATION_FPS_DEFAULT;
+		death_anim_started = false;
+		death_anim_suppressed = false;
+		death_anim_suppress_on_deflect = false;
+	#endregion
 
 //Create
 create_appear_animation_time_max = 0.1 * SECOND;

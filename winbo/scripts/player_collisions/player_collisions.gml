@@ -39,6 +39,10 @@ function player_collisions(){
 				// Check if player is dashing/recently dashed - deflect bullet instead of damage
 				// Uses bump_allow for 0.1s leniency window (same as wall bumps)
 				if(other.bump_allow){
+					if(death_anim_suppress_on_deflect){
+						death_anim_suppressed = true;
+					}
+					
 					// Bullet destroyed (no damage to player)
 					state = BulletState.death;
 

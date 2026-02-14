@@ -25,6 +25,9 @@ function bullet_gamestate_play(){
 	//Transform Update
 	transform_system_update();
 	
+	//Image Update
+	image_system_update();
+	
 	//PFX Execute
 	//pfx_system_execute();
 }

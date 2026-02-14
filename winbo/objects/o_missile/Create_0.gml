@@ -8,6 +8,9 @@ sprite_index = spr_missile;
 // Missile settings
 damage = 1;
 alive_time = 5 * SECOND;
+death_anim_sprite = spr_missile_explosion;
+death_anim_fps = ANIMATION_FPS_DEFAULT;
+death_anim_suppress_on_deflect = true;
 
 // Rotate to velocity direction
 rotate_to_velocity_direction = true;

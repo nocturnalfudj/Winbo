@@ -10,6 +10,23 @@ function bullet_state_death(){
 		//Update Velocity
 		movement_velocity_update(_delta_time,false);
 	}
+
+	#region Optional Death Animation
+		if((death_anim_sprite != noone) && (!death_anim_suppressed)){
+			if(!death_anim_started){
+				death_anim_started = true;
+				image_system_setup(death_anim_sprite,death_anim_fps,true,false,0,IMAGE_LOOP_FULL);
+				image_set_frame(image,0);
+				exit;
+			}
+			
+			if((image == noone) || (!image.animate)){
+				state = BulletState.destroy;
+			}
+			
+			exit;
+		}
+	#endregion
 	
 	#region Disappear Animation
 		//Expand & Fade
