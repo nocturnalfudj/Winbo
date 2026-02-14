@@ -114,12 +114,17 @@ event_inherited();
 	aim_legs_sprite_offset_x = 0;
 	aim_legs_sprite_offset_y = 0;
 
-	// Laser sight (placeholder offsets until anchor points are finalized)
-	laser_origin_offset_x = 60;
-	laser_origin_offset_y = -40;
+	// Per-sector barrel offsets (sprite origin to rifle barrel tip, scaled to 0.75)
+	barrel_offset_x_side = 291;
+	barrel_offset_y_side = -10;
+	barrel_offset_x_diag = 201;
+	barrel_offset_y_diag = -197;
+	barrel_offset_x_up = 13;
+	barrel_offset_y_up = -278;
+
 	laser_length = 2000;
 	laser_width = 2;
-	laser_alpha = 0.65;
+	laser_alpha = 1.0;
 	laser_color = c_red;
 #endregion
 
@@ -140,8 +145,6 @@ event_inherited();
 
 	// Projectile tuning (temporary until dedicated projectile/hitbox exists)
 	attack_projectile_spawn_frame = 0;
-	attack_projectile_spawn_offset_x = 80;
-	attack_projectile_spawn_offset_y = -40;
 	attack_projectile_speed = 25;
 	attack_projectile_damage = 1;
 

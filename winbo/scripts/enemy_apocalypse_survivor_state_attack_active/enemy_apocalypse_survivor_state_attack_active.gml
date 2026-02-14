@@ -16,9 +16,48 @@ function enemy_apocalypse_survivor_state_attack_active(){
 
 	// Fire once, at configured animation frame (or immediately if frame 0)
 	if(!attack_active_attack_created && sprite_current_frame >= attack_projectile_spawn_frame){
-		// Spawn a fast bullet along aim_angle
-		var _spawn_x = x + (attack_projectile_spawn_offset_x * face_horizontal);
-		var _spawn_y = y + attack_projectile_spawn_offset_y;
+		// Compute body sprite draw angle and select barrel offset (mirrors Draw_0.gml sector/rotation logic)
+		var _draw_angle = 0;
+		var _barrel_x, _barrel_y;
+		var _a = aim_angle;
+		if(_a >= 315 || _a < 45){
+			_draw_angle = _a;           // side
+			_barrel_x = barrel_offset_x_side;
+			_barrel_y = barrel_offset_y_side;
+		}
+		else if(_a >= 45 && _a < 85){
+			_draw_angle = _a - 65;      // diag
+			_barrel_x = barrel_offset_x_diag;
+			_barrel_y = barrel_offset_y_diag;
+		}
+		else if(_a >= 85 && _a < 95){
+			_draw_angle = _a - 90;      // up
+			_barrel_x = barrel_offset_x_up;
+			_barrel_y = barrel_offset_y_up;
+		}
+		else if(_a >= 95 && _a < 135){
+			_draw_angle = _a - 115;     // diag_flip
+			_barrel_x = barrel_offset_x_diag;
+			_barrel_y = barrel_offset_y_diag;
+		}
+		else if(_a >= 135 && _a < 225){
+			_draw_angle = _a - 180;     // side_flip
+			_barrel_x = barrel_offset_x_side;
+			_barrel_y = barrel_offset_y_side;
+		}
+		else{
+			// 225-315: "out" sector, no rotation, use side offset
+			_barrel_x = barrel_offset_x_side;
+			_barrel_y = barrel_offset_y_side;
+		}
+
+		// Rotate spawn offset to match body sprite rotation
+		var _base_x = _barrel_x * face_horizontal;
+		var _base_y = _barrel_y;
+		var _off_dist = point_distance(0, 0, _base_x, _base_y);
+		var _off_dir = point_direction(0, 0, _base_x, _base_y);
+		var _spawn_x = x + lengthdir_x(_off_dist, _off_dir + _draw_angle);
+		var _spawn_y = y + lengthdir_y(_off_dist, _off_dir + _draw_angle);
 
 		var _b = instance_create_layer(_spawn_x, _spawn_y, "lyr_player", o_bullet);
 		with(_b){
