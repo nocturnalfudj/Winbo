@@ -5,6 +5,9 @@ event_inherited();
 sprite_current = spr_missile;
 sprite_index = spr_missile;
 
+// Use the custom image system (sprite_current_frame) to animate the missile.
+image_system_setup(sprite_current, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+
 // Missile settings
 damage = 1;
 alive_time = 5 * SECOND;
