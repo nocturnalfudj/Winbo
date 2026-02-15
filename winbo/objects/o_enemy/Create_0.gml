@@ -22,6 +22,12 @@ state = EnemyState.create;
 
 death_state = EnemyState.death;
 
+// Optional: stomp-kill smoke handled in enemy_state_death()
+death_smoke_enable = false;
+death_smoke_spawned = false;
+death_smoke_step_count = 0;
+death_smoke_delay_steps = 2;
+
 #region Image
 	sprite_idle				= spr_enemy_ranged_test_idle;
 	sprite_attack_telegraph	= spr_enemy_ranged_test_attack_telegraph;

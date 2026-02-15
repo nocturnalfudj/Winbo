@@ -1,4 +1,9 @@
 function enemy_state_death(){
+	// Winbo stomp-kill smoke: delay a couple steps so the death sprite is visible briefly.
+	if (death_smoke_enable && !death_smoke_spawned) {
+		death_smoke_step_count++;
+	}
+
 	// If we have a death animation sprite, play it once before shrinking/fading.
 	// Otherwise, fall back to the legacy instant shrink/fade.
 	var _death_sprite;
@@ -12,11 +17,22 @@ function enemy_state_death(){
 		_death_sprite = sprite_death_left;
 	}
 	
-	// No death sprite configured: shrink/fade immediately.
+	// No death sprite configured: shrink/fade immediately (unless overridden by stomp-kill smoke).
 	if(_death_sprite == noone){
-		transform_animate_from_current_shrink_and_fade();
-		state = EnemyState.destroy;
-		exit;
+		if (death_smoke_enable) {
+			if (!death_smoke_spawned && (death_smoke_step_count > death_smoke_delay_steps)) {
+				death_smoke_spawned = true;
+				fx_spawn_sprite_once(x, y, "lyr_pfx_foreground", spr_smoke_explosion_large, 1, 1, 0, ANIMATION_FPS_DEFAULT);
+				transform_animate_from_current_shrink_and_fade();
+				state = EnemyState.destroy;
+			}
+			exit;
+		}
+		else {
+			transform_animate_from_current_shrink_and_fade();
+			state = EnemyState.destroy;
+			exit;
+		}
 	}
 	
 	// Ensure the death sprite is set once (do not loop).
@@ -26,6 +42,15 @@ function enemy_state_death(){
 		// from the previous animation during this same step.
 		image_set_frame(image, 0);
 		// Wait until subsequent steps to evaluate completion.
+		exit;
+	}
+
+	// Stomp-kill: interrupt the full death animation and cover it with smoke.
+	if (death_smoke_enable && !death_smoke_spawned && (death_smoke_step_count > death_smoke_delay_steps)) {
+		death_smoke_spawned = true;
+		fx_spawn_sprite_once(x, y, "lyr_pfx_foreground", spr_smoke_explosion_large, 1, 1, 0, ANIMATION_FPS_DEFAULT);
+		transform_animate_from_current_shrink_and_fade();
+		state = EnemyState.destroy;
 		exit;
 	}
 	

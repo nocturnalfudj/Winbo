@@ -129,6 +129,11 @@ function player_collisions(){
 						
 				//Enemy Top Was Below Player Last Frame
 				if(bbox_top > other.yprevious){
+					// Winbo stomp-kill: spawn the large smoke explosion a couple frames into death state.
+					death_smoke_enable = true;
+					death_smoke_spawned = false;
+					death_smoke_step_count = 0;
+					
 					character_kill();
 					
 					// Track enemy defeat by type

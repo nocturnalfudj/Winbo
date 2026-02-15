@@ -97,13 +97,22 @@ function player_state_float(){
 				}
 				
 				// Tell camera to dampen vertical follow during jump
-				with(o_camera){
-					if(follow_jump_dampening_enable){
-						follow_jump_dampening_factor = 0;
+					with(o_camera){
+						if(follow_jump_dampening_enable){
+							follow_jump_dampening_factor = 0;
+						}
 					}
+					
+					// Jumping smoke FX (ground puff)
+					var _jump_smoke_sprite = (input_move_magnitude > 0.1) ? spr_smoke_jump_diagonal : spr_smoke_jump_upward;
+					var _jump_smoke_xscale = 1;
+					if (input_move_magnitude > 0.1) {
+						// The diagonal jump smoke art faces left by default; flip so it matches travel direction.
+						_jump_smoke_xscale = (input_move_direction > 90 && input_move_direction < 270) ? 1 : -1;
+					}
+					fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT);
 				}
 			}
-		}
 	#endregion
 	
 	#region Jump Hold (Variable Jump Height)

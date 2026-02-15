@@ -169,12 +169,20 @@ function player_gamestate_play(){
 					//Update Dash No Input Direction
 					dash_no_input_direction = _bump_dash_direction;
 					
-					//Bump Sprite
-					image_system_setup(sprite_bump,ANIMATION_FPS_DEFAULT,true,false,0,IMAGE_LOOP_FULL);
-				
-					if(_platform_crumble_dash_collision){
-						//Camera Shake
-						camera_shake_add(0.3,700,10,7,false,false,true,1.5,,false,100,);
+						//Bump Sprite
+						image_system_setup(sprite_bump,ANIMATION_FPS_DEFAULT,true,false,0,IMAGE_LOOP_FULL);
+						
+						// Bump impact FX (wall bumps only)
+						if (collision.x == 1) {
+							fx_spawn_sprite_once(bbox_right, y, "lyr_pfx_foreground", spr_smoke_bump_impact, -1, 1, 0, ANIMATION_FPS_DEFAULT);
+						}
+						else if (collision.x == -1) {
+							fx_spawn_sprite_once(bbox_left, y, "lyr_pfx_foreground", spr_smoke_bump_impact, 1, 1, 0, ANIMATION_FPS_DEFAULT);
+						}
+					
+						if(_platform_crumble_dash_collision){
+							//Camera Shake
+							camera_shake_add(0.3,700,10,7,false,false,true,1.5,,false,100,);
 					
 						//Freeze Frame
 						game_freeze(1);
