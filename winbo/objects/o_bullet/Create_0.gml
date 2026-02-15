@@ -1,6 +1,13 @@
 // Inherit the parent event
 event_inherited();
 
+// Projectiles should render above actors on `lyr_player`.
+// In GameMaker, lower depth draws in front.
+var _lyr_player = layer_get_id("lyr_player");
+if (_lyr_player != -1 && layer == _lyr_player) {
+	depth -= 1;
+}
+
 //Star with No Scale
 image_xscale = 0;
 image_yscale = 0;
