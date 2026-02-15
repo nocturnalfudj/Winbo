@@ -15,6 +15,14 @@ function bullet_state_death(){
 		if((death_anim_sprite != noone) && (!death_anim_suppressed)){
 			if(!death_anim_started){
 				death_anim_started = true;
+
+				// Missile explosion should be 20% smaller than the base bullet/missile scale.
+				if(death_anim_sprite == spr_missile_explosion){
+					var _t = transform[TransformType.anchor];
+					transform_set(_t, TransformValue.xscale, _t.value[TransformValue.xscale].current * 0.8, false);
+					transform_set(_t, TransformValue.yscale, _t.value[TransformValue.yscale].current * 0.8, false);
+				}
+
 				image_system_setup(death_anim_sprite,death_anim_fps,true,false,0,IMAGE_LOOP_FULL);
 				image_set_frame(image,0);
 				exit;

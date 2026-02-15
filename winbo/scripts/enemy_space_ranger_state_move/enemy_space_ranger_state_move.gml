@@ -1,15 +1,4 @@
 function enemy_space_ranger_state_move(){
-	// Lerp attack rotation back to 0 instead of snapping
-	if (attack_rotation_active) {
-		var _diff = angle_difference(0, attack_locked_draw_angle);
-		if (abs(_diff) < 1) {
-			attack_locked_draw_angle = 0;
-			attack_rotation_active = false;
-		} else {
-			attack_locked_draw_angle += _diff * attack_rotation_lerp_speed;
-		}
-	}
-
 	// Debug: periodic animation state logging
 	if (!variable_instance_exists(id, "_move_log_timer")) _move_log_timer = 0;
 	_move_log_timer++;

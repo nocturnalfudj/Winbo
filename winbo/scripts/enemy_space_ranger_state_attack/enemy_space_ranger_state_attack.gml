@@ -88,6 +88,11 @@ function enemy_space_ranger_state_attack(){
 		if(_trigger_recover){
 			__mcp_log("[ATK] -> RECOVER cnt=" + string(_atk_log_count) + " frm=" + string(sprite_current_frame));
 			_atk_log_count = 0;
+
+			// Rotation eases back to 0 during the attack animation recovery frames.
+			// Once we leave attack_active, normal draw resumes (no rotated draw in recover/move).
+			attack_locked_draw_angle = 0;
+			attack_rotation_active = false;
 			
 			// Go to Attack Recover State
 			state = EnemyState.attack_recover;

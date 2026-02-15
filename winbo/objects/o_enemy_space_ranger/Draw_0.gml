@@ -101,8 +101,8 @@ var _custom_draw = false;
 	}
 #endregion
 
-#region Attack / Recover — Rotated draw at locked aim angle
-	if(!_custom_draw && attack_rotation_active && (state == EnemyState.attack_active || state == EnemyState.attack_recover || state == EnemyState.move)){
+#region Attack — Rotated draw at locked aim angle, easing back during recovery frames
+	if(!_custom_draw && attack_rotation_active && state == EnemyState.attack_active){
 		_custom_draw = true;
 
 		// Ignore if Not Visible
@@ -111,13 +111,28 @@ var _custom_draw = false;
 
 		var _atk_xscale = image_xscale * face_horizontal * sprite_face_direction;
 
-		// Draw current sprite rotated to the locked attack angle
+		// Draw current sprite rotated to the locked attack angle, easing back to 0 over the configured recovery frames.
+		var _draw_angle = attack_locked_draw_angle;
+		var _start = attack_recovery_rotate_start_frame;
+		var _end = attack_recovery_rotate_end_frame;
+		if(image != noone){
+			_end = min(_end, image.sprite_number - 1);
+		}
+		if(sprite_current_frame >= _start){
+			var _range = max(1, _end - _start);
+			var t = clamp((sprite_current_frame - _start) / _range, 0, 1);
+			t = ease_quad_out(0, 1, false, t, 1);
+			var _diff = angle_difference(0, attack_locked_draw_angle);
+			_draw_angle = attack_locked_draw_angle + _diff * t;
+		}
+
+		// Draw sprite at computed angle
 		if(sprite_current != noone && sprite_current >= 0){
 			draw_sprite_ext(
 				sprite_current, sprite_current_frame,
 				x, y,
 				_atk_xscale, image_yscale,
-				attack_locked_draw_angle,
+				_draw_angle,
 				image_blend, image_alpha
 			);
 		}
@@ -125,7 +140,7 @@ var _custom_draw = false;
 		// Flash effect
 		if(flash_alpha > 0 && sprite_current != noone && sprite_current >= 0){
 			shader_set(sh_monochrome);
-			draw_sprite_ext(sprite_current, sprite_current_frame, x, y, _atk_xscale, image_yscale, attack_locked_draw_angle, flash_colour, flash_alpha);
+			draw_sprite_ext(sprite_current, sprite_current_frame, x, y, _atk_xscale, image_yscale, _draw_angle, flash_colour, flash_alpha);
 			shader_reset();
 		}
 

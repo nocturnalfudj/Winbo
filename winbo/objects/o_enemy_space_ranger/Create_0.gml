@@ -4,7 +4,7 @@ event_inherited();
 #region Sprites
 	sprite_idle				= spr_space_ranger_idle;
 	sprite_attack_telegraph	= spr_space_ranger_aim_body;
-	sprite_attack_active	= spr_space_ranger_attack;
+	sprite_attack_active	= spr_space_ranger_attack_OLD;
 	sprite_attack_recover	= spr_space_ranger_idle;
 
 	// Death sprites (two variations)
@@ -63,6 +63,10 @@ event_inherited();
 	attack_locked_draw_angle = 0;
 	attack_rotation_active = false;
 	attack_rotation_lerp_speed = 0.15;
+
+	// Attack sprite recovery window (subimage indices) to ease draw rotation back to 0 degrees.
+	attack_recovery_rotate_start_frame = 16;
+	attack_recovery_rotate_end_frame = 26;
 #endregion
 
 #region Combat - Space Ranger Overrides
