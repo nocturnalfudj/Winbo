@@ -3,8 +3,9 @@ event_inherited();
 
 #region Sprites
 	sprite_idle				= spr_space_ranger_idle;
-	sprite_attack_telegraph	= spr_space_ranger_aim_body;
-	sprite_attack_active	= spr_space_ranger_attack_OLD;
+	// Use the full attack sequence for aim-in (frames 0-6) then continue into the attack (7+)
+	sprite_attack_telegraph	= spr_space_ranger_attack;
+	sprite_attack_active	= spr_space_ranger_attack;
 	sprite_attack_recover	= spr_space_ranger_idle;
 
 	// Death sprites (two variations)
@@ -93,7 +94,8 @@ event_inherited();
 	missile_object = o_missile;
 	missile_spawn_offset_x = -201;  // Offset from sprite origin (741,400) to launcher barrel (540,238)
 	missile_spawn_offset_y = -162;
-	missile_spawn_frame = 0;        // Frame of attack animation when missile should spawn (0 = instant)
+	// spr_space_ranger_attack uses full frame numbering; firing starts at frame 7
+	missile_spawn_frame = 7;
 	missile_speed = 10;
 	missile_damage = 1;
 

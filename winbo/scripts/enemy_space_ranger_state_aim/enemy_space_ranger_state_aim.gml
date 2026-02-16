@@ -44,6 +44,17 @@ function enemy_space_ranger_state_aim(){
 		// Lock facing for attack
 		attack_face_lock_active = true;
 		attack_face_horizontal_lock = face_horizontal;
+
+		// Aim-in: if we're using the full attack sequence as the telegraph,
+		// play frames 0-6 once, then hold on frame 6 while continuing to rotate.
+		if(sprite_current == spr_space_ranger_attack){
+			if(sprite_current_frame >= 6){
+				if(image != noone){
+					image.animate = false;
+				}
+				image_set_frame(image, 6);
+			}
+		}
 		
 		// Run Telegraph Countdown
 		if(attack_telegraph_countdown > 0){
@@ -51,7 +62,8 @@ function enemy_space_ranger_state_aim(){
 		}
 		
 		// Progress to attack when countdown finishes
-		if(attack_telegraph_countdown <= 0){
+		// (Also require the aim-in frames to have completed so we don't cut early.)
+		if(attack_telegraph_countdown <= 0 && sprite_current_frame >= 6){
 			__mcp_log("[AIM] -> ACTIVE, cnt=" + string(_aim_log_count) + " flag_before=" + string(attack_active_attack_created));
 			_aim_log_count = 0;
 
@@ -73,8 +85,11 @@ function enemy_space_ranger_state_aim(){
 
 			__mcp_log("[AIM] flag_after=" + string(attack_active_attack_created));
 
-			// Update Sprite to attack sprite
-			image_system_setup(sprite_attack_active, ANIMATION_FPS_DEFAULT * animation_fps_multiplier, true, false, 0, IMAGE_LOOP_FULL);
+			// Resume the same attack sprite from frame 6 onward (do not reset the animation)
+			if(image != noone){
+				image.animate = true;
+				image.loop = false;
+			}
 		}
 	#endregion
 	

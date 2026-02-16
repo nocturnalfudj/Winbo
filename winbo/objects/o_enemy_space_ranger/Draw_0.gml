@@ -32,57 +32,70 @@ var _custom_draw = false;
 			_draw_angle = aim_angle + 180;
 		}
 
-		// Calculate how far the aim deviates from horizontal
-		var _horizontal_angle = (face_horizontal == 1) ? 0 : 180;
-		var _deviation = abs(angle_difference(aim_angle, _horizontal_angle));
-
-		if(_deviation <= aim_split_threshold){
-			// Within threshold: two-layer draw (body rotates, legs static)
-			if(sprite_aim_legs != noone){
-				draw_sprite_ext(
-					sprite_aim_legs, 0,
-					x + aim_legs_sprite_offset_x, y + aim_legs_sprite_offset_y,
-					_aim_xscale, image_yscale,
-					0,
-					image_blend, image_alpha
-				);
-			}
-			if(sprite_aim_body != noone){
-				draw_sprite_ext(
-					sprite_aim_body, sprite_current_frame,
-					x + aim_body_sprite_offset_x, y + aim_body_sprite_offset_y,
-					_aim_xscale, image_yscale,
-					_draw_angle,
-					image_blend, image_alpha
-				);
-			}
+		if(sprite_current == spr_space_ranger_attack){
+			// Aim-in uses the first frames of the full attack sequence.
+			// Draw the current frame rotated toward aim_angle (with face flip applied).
+			draw_sprite_ext(
+				sprite_current, sprite_current_frame,
+				x, y,
+				_aim_xscale, image_yscale,
+				_draw_angle,
+				image_blend, image_alpha
+			);
 		}
 		else{
-			// Beyond threshold: rotate entire sprite (both layers) to hide the split
-			if(sprite_aim_legs != noone){
-				draw_sprite_ext(
-					sprite_aim_legs, 0,
-					x + aim_legs_sprite_offset_x, y + aim_legs_sprite_offset_y,
-					_aim_xscale, image_yscale,
-					_draw_angle,
-					image_blend, image_alpha
-				);
+			// Calculate how far the aim deviates from horizontal
+			var _horizontal_angle = (face_horizontal == 1) ? 0 : 180;
+			var _deviation = abs(angle_difference(aim_angle, _horizontal_angle));
+
+			if(_deviation <= aim_split_threshold){
+				// Within threshold: two-layer draw (body rotates, legs static)
+				if(sprite_aim_legs != noone){
+					draw_sprite_ext(
+						sprite_aim_legs, 0,
+						x + aim_legs_sprite_offset_x, y + aim_legs_sprite_offset_y,
+						_aim_xscale, image_yscale,
+						0,
+						image_blend, image_alpha
+					);
+				}
+				if(sprite_aim_body != noone){
+					draw_sprite_ext(
+						sprite_aim_body, sprite_current_frame,
+						x + aim_body_sprite_offset_x, y + aim_body_sprite_offset_y,
+						_aim_xscale, image_yscale,
+						_draw_angle,
+						image_blend, image_alpha
+					);
+				}
 			}
-			if(sprite_aim_body != noone){
-				draw_sprite_ext(
-					sprite_aim_body, sprite_current_frame,
-					x + aim_body_sprite_offset_x, y + aim_body_sprite_offset_y,
-					_aim_xscale, image_yscale,
-					_draw_angle,
-					image_blend, image_alpha
-				);
+			else{
+				// Beyond threshold: rotate entire sprite (both layers) to hide the split
+				if(sprite_aim_legs != noone){
+					draw_sprite_ext(
+						sprite_aim_legs, 0,
+						x + aim_legs_sprite_offset_x, y + aim_legs_sprite_offset_y,
+						_aim_xscale, image_yscale,
+						_draw_angle,
+						image_blend, image_alpha
+					);
+				}
+				if(sprite_aim_body != noone){
+					draw_sprite_ext(
+						sprite_aim_body, sprite_current_frame,
+						x + aim_body_sprite_offset_x, y + aim_body_sprite_offset_y,
+						_aim_xscale, image_yscale,
+						_draw_angle,
+						image_blend, image_alpha
+					);
+				}
 			}
 		}
 
 		// Flash effect
 		if(flash_alpha > 0 && sprite_current != noone && sprite_current >= 0){
 			shader_set(sh_monochrome);
-			draw_sprite_ext(sprite_current, sprite_current_frame, x, y, image_xscale, image_yscale, image_angle, flash_colour, flash_alpha);
+			draw_sprite_ext(sprite_current, sprite_current_frame, x, y, _aim_xscale, image_yscale, _draw_angle, flash_colour, flash_alpha);
 			shader_reset();
 		}
 
