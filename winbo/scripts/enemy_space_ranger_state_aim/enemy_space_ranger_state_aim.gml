@@ -12,13 +12,6 @@ function enemy_space_ranger_state_aim(){
 	else
 		_delta_time = global.delta_time_factor;
 	
-	// Debug: Log every 30 frames in telegraph
-	if (!variable_instance_exists(id, "_aim_log_count")) _aim_log_count = 0;
-	_aim_log_count++;
-	if (_aim_log_count == 1 || _aim_log_count % 30 == 0) {
-		__mcp_log("[AIM] cd=" + string(round(attack_telegraph_countdown)) + " dt=" + string(_delta_time) + " cnt=" + string(_aim_log_count));
-	}
-	
 	#region Combat - Aiming
 		// Update Target
 		target_update(TargetType.attack);
@@ -70,9 +63,6 @@ function enemy_space_ranger_state_aim(){
 		// Progress to attack when countdown finishes
 		// (Also require the aim-in frames to have completed so we don't cut early.)
 		if(attack_telegraph_countdown <= 0 && sprite_current_frame >= 6){
-			__mcp_log("[AIM] -> ACTIVE, cnt=" + string(_aim_log_count) + " flag_before=" + string(attack_active_attack_created));
-			_aim_log_count = 0;
-
 			// Lock the current aim angle for the attack/recover animation rotation
 			attack_locked_angle = aim_angle;
 			attack_rotation_active = true;
@@ -88,8 +78,6 @@ function enemy_space_ranger_state_aim(){
 
 			// Reset attack created flag
 			attack_active_attack_created = false;
-
-			__mcp_log("[AIM] flag_after=" + string(attack_active_attack_created));
 
 			// Resume the same attack sprite from frame 6 onward (do not reset the animation)
 			if(image != noone){

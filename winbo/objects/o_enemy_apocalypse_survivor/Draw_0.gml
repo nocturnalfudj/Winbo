@@ -216,6 +216,9 @@ if(_sector != "out"){
 
 	var _clip_step = max(1, laser_clip_step_px);
 	var _clip_object = laser_clip_collision_object;
+	if(_clip_object == noone){
+		_clip_object = attack_los_collision_object;
+	}
 	var _steps = ceil(laser_length / _clip_step);
 
 	var _prev_x = _lx0;

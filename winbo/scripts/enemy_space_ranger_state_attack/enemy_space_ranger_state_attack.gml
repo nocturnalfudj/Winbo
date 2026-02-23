@@ -12,25 +12,17 @@ function enemy_space_ranger_state_attack(){
 	else
 		_delta_time = global.delta_time_factor;
 	
-	// Debug: Log entry
-	if (!variable_instance_exists(id, "_atk_log_count")) _atk_log_count = 0;
-	_atk_log_count++;
-	if (_atk_log_count == 1) {
-		__mcp_log("[ATK] ENTERED cd=" + string(round(attack_active_countdown)) + " created=" + string(attack_active_attack_created));
-	}
-	
 	#region Combat - Fire Missile
 		// Reset Attack Countdown (should only happen once, not every frame!)
-		if (_atk_log_count == 1) {
+		if (!variable_instance_exists(id, "_sr_attack_active_entered") || !_sr_attack_active_entered) {
 			attack_countdown = attack_countdown_max;
+			_sr_attack_active_entered = true;
 		}
 
 		// Create Missile (only once, on the correct animation frame)
 		if(!attack_active_attack_created && sprite_current_frame >= missile_spawn_frame){
 			// Fire in the locked aim direction (attack animation is rotated to match)
 			var _fire_direction = attack_locked_angle;
-
-			__mcp_log("[ATK] FIRING missile at frame " + string(sprite_current_frame) + ", dir=" + string(_fire_direction) + ", face=" + string(face_horizontal));
 
 			// Calculate spawn position — rotate the base offset by the locked draw angle
 			var _xscale_factor = face_horizontal * sprite_face_direction;
@@ -86,8 +78,7 @@ function enemy_space_ranger_state_attack(){
 		
 		// Trigger Recover
 		if(_trigger_recover){
-			__mcp_log("[ATK] -> RECOVER cnt=" + string(_atk_log_count) + " frm=" + string(sprite_current_frame));
-			_atk_log_count = 0;
+			_sr_attack_active_entered = false;
 
 			// Rotation eases back to 0 during the attack animation recovery frames.
 			// Once we leave attack_active, normal draw resumes (no rotated draw in recover/move).

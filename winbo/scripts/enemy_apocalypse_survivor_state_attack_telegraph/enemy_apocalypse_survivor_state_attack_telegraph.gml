@@ -1,9 +1,22 @@
 function enemy_apocalypse_survivor_state_attack_telegraph(){
 	// Track aim during telegraph
 	character_health();
+	var _dbg_enable = variable_instance_exists(id, "debug_attack_logs_enable") && debug_attack_logs_enable;
+
+	if(_dbg_enable && debug_attack_log_last_state != "telegraph"){
+		debug_attack_log_last_state = "telegraph";
+		__mcp_log(
+			"[ASDBG][STATE] telegraph enter"
+			+ " tel_cd=" + string(round(attack_telegraph_countdown))
+			+ " atk_cd=" + string(round(attack_countdown))
+		);
+	}
 
 	var _target_valid = target_update(TargetType.attack);
 	if(!_target_valid || target[TargetType.attack] == noone || !target[TargetType.attack].has_valid_target()){
+		if(_dbg_enable){
+			__mcp_log("[ASDBG][ABORT] telegraph no_target");
+		}
 		attack_face_lock_active = false;
 		state = EnemyState.move;
 		return;
@@ -23,5 +36,13 @@ function enemy_apocalypse_survivor_state_attack_telegraph(){
 	face_horizontal = (_target_x >= x) ? 1 : -1;
 
 	// Run telegraph countdown + transition using base behaviour
+	var _state_prev = state;
 	enemy_state_attack_telegraph();
+	if(_dbg_enable && _state_prev == EnemyState.attack_telegraph && state == EnemyState.attack_active){
+		__mcp_log(
+			"[ASDBG][TRANSITION] telegraph->active"
+			+ " tel_cd=" + string(round(attack_telegraph_countdown))
+			+ " act_cd=" + string(round(attack_active_countdown))
+		);
+	}
 }

@@ -135,11 +135,14 @@ event_inherited();
 	attack_countdown_max = SECOND * 2;
 	attack_countdown = 0; // Start at 0 so can attack immediately when in range
 
+	// Attack gating distances
+	target[TargetType.attack].set_distance_trigger(2500);
+
 	// Survivor uses a custom attack-start gate in enemy_apocalypse_survivor_state_move.
 	attack_start_in_move_enable = false;
 	attack_los_required_enable = true;
 	attack_los_collision_object = o_solid;
-	attack_vertical_tolerance = max(height, 420);
+	attack_vertical_tolerance = 2500;
 
 	// Telegraph (aiming phase)
 	attack_telegraph_progress_at_end_of_animation = false;
@@ -173,6 +176,13 @@ event_inherited();
 
 	// Grounded enemies should not walk off ledges during attacks
 	edge_guard_attack_enable = true;
+
+	// Focused debug logs for survivor attack gating (used for repro diagnostics).
+	debug_attack_logs_enable = true;
+	debug_attack_log_reason = "";
+	debug_attack_log_reason_cooldown = 0;
+	debug_attack_log_last_state = "";
+	debug_attack_log_shot_count = 0;
 #endregion
 
 #region Detection / Hostility

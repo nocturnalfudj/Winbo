@@ -46,7 +46,6 @@ function enemy_state_move(){
 			// Only play startled animation if it hasn't been played before
 			if(!has_played_startled){
 				has_played_startled = true;
-				__mcp_log("[COMMANDO] First aggro - playing startled animation");
 
 				//Play startled
 				var _startled_sprite;
@@ -64,10 +63,6 @@ function enemy_state_move(){
 
 				state = EnemyState.startled;
 				return;
-			}
-			else{
-				// Re-aggro after de-aggro - skip startled animation
-				__mcp_log("[COMMANDO] Re-aggro - skipping startled animation (already played)");
 			}
 		}
 	}
@@ -296,7 +291,6 @@ function enemy_state_move(){
 						}
 
 						if(_can_start_attack){
-							__mcp_log("[COMMANDO] Starting attack - distance to target: " + string(point_distance(x, y, target[TargetType.attack].x, target[TargetType.attack].y)));
 							//Go to Telegraph State
 							state = EnemyState.attack_telegraph;
 
@@ -346,7 +340,6 @@ function enemy_state_move(){
 
 				if(deaggro_timer >= deaggro_timer_max){
 					// De-aggro: transition to sheathe state
-					__mcp_log("[COMMANDO] De-aggro triggered - transitioning to sheathe state");
 					state = EnemyState.sheathe;
 					return;
 				}
@@ -376,11 +369,9 @@ function enemy_state_move(){
 			// Relaxed turn - use directional sprites if available, otherwise fall back to symmetric
 			if(sprite_direction_enable && (sprite_turn_relaxed_left != noone) && (sprite_turn_relaxed_right != noone)){
 				_turn_sprite = enemy_sprite_get_directional(sprite_turn_relaxed_left, sprite_turn_relaxed_right);
-				__mcp_log("[COMMANDO] Relaxed turn - using directional sprite (face_horizontal=" + string(face_horizontal) + ")");
 			}
 			else if(sprite_turn_relaxed != noone){
 				_turn_sprite = sprite_turn_relaxed;
-				__mcp_log("[COMMANDO] Relaxed turn - using symmetric sprite");
 			}
 		}
 

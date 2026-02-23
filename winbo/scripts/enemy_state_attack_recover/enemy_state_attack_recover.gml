@@ -1,13 +1,4 @@
 function enemy_state_attack_recover(){
-	// Debug: Log entry for Space Ranger
-	if (object_index == o_enemy_space_ranger) {
-		if (!variable_instance_exists(id, "_rec_log_count")) _rec_log_count = 0;
-		_rec_log_count++;
-		if (_rec_log_count == 1) {
-			__mcp_log("[REC] ENTERED cd=" + string(round(attack_recover_countdown)));
-		}
-	}
-
 	//Update Health
 	character_health();
 	
@@ -46,12 +37,6 @@ function enemy_state_attack_recover(){
 		
 		//Trigger Idle
 		if(_trigger_idle){
-			// Debug log
-			if (object_index == o_enemy_space_ranger) {
-				__mcp_log("[REC] -> MOVE cnt=" + string(_rec_log_count) + " frm=" + string(sprite_current_frame));
-				_rec_log_count = 0;
-			}
-			
 			// Unlock facing after the attack completes
 			attack_face_lock_active = false;
 			

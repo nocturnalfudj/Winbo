@@ -1,14 +1,4 @@
 function enemy_space_ranger_state_move(){
-	// Debug: periodic animation state logging
-	if (!variable_instance_exists(id, "_move_log_timer")) _move_log_timer = 0;
-	_move_log_timer++;
-	if (_move_log_timer >= 30) { // Log every 30 frames (~0.5 sec)
-		_move_log_timer = 0;
-		if (image != noone) {
-			__mcp_log("[MOVE] frame=" + string(sprite_current_frame) + " pos=" + string(image.position) + " loop=" + string(image.loop_start) + "-" + string(image.loop_end));
-		}
-	}
-
 	// Shared burst reset used at all deadlock-sensitive exits.
 	var _burst_reset = function(_reason, _replan_now){
 		burst_phase = 0;
@@ -27,9 +17,6 @@ function enemy_space_ranger_state_move(){
 			burst_pause_timer = random_range(burst_pause_duration_min, burst_pause_duration_max);
 		}
 
-		if(_reason != ""){
-			__mcp_log("[SR_BURST] reset=" + _reason + " replan=" + string(_replan_now));
-		}
 	};
 
 	// Backup path movement enable flag and disable it when hostile
@@ -302,7 +289,6 @@ function enemy_space_ranger_state_move(){
 					_loop_end = 10;
 				}
 
-				__mcp_log("[MOVE] Setting sprite with loop_start=" + string(_loop_start) + " loop_end=" + string(_loop_end));
 				image_system_setup(_target_sprite, ANIMATION_FPS_DEFAULT, true, true, _loop_start, _loop_end);
 
 				// Skip intro frames when changing direction mid-move

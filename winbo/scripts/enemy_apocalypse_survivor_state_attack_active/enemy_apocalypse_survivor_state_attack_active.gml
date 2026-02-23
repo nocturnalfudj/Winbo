@@ -1,17 +1,26 @@
 function enemy_apocalypse_survivor_state_attack_active(){
 	// Update Health
 	character_health();
+	var _dbg_enable = variable_instance_exists(id, "debug_attack_logs_enable") && debug_attack_logs_enable;
+
+	if(_dbg_enable && debug_attack_log_last_state != "active"){
+		debug_attack_log_last_state = "active";
+		__mcp_log(
+			"[ASDBG][STATE] active enter"
+			+ " act_cd=" + string(round(attack_active_countdown))
+			+ " atk_cd=" + string(round(attack_countdown))
+			+ " spawned=" + string(attack_active_attack_created ? 1 : 0)
+		);
+	}
 
 	var _delta_time = time_scale_enable ? global.delta_time_factor_scaled : global.delta_time_factor;
-
-	// Reset attack cooldown once (on entry)
-	if(!attack_active_attack_created){
-		attack_countdown = attack_countdown_max;
-	}
 
 	// Keep tracking aim while active
 	var _target_valid = target_update(TargetType.attack);
 	if(!_target_valid || target[TargetType.attack] == noone || !target[TargetType.attack].has_valid_target()){
+		if(_dbg_enable){
+			__mcp_log("[ASDBG][ABORT] active no_target");
+		}
 		attack_face_lock_active = false;
 		state = EnemyState.move;
 		return;
@@ -33,7 +42,29 @@ function enemy_apocalypse_survivor_state_attack_active(){
 	var _aim_data = apocalypse_survivor_get_aim_data();
 
 	// Fire once, at configured animation frame (or immediately if frame 0)
+	if(!camera_visible){
+		if(_dbg_enable && !variable_instance_exists(id, "_asdbg_active_offscreen_logged")){
+			_asdbg_active_offscreen_logged = false;
+		}
+		if(_dbg_enable && !_asdbg_active_offscreen_logged){
+			__mcp_log("[ASDBG][BLOCK] active offscreen fire_blocked");
+			_asdbg_active_offscreen_logged = true;
+		}
+	}
+	else{
+		if(variable_instance_exists(id, "_asdbg_active_offscreen_logged")){
+			_asdbg_active_offscreen_logged = false;
+		}
+	}
+
 	if(!attack_active_attack_created && sprite_current_frame >= attack_projectile_spawn_frame){
+		if(!camera_visible){
+			// Never fire while off-camera.
+		}
+		else{
+		// Start cooldown only when a shot is actually fired.
+		attack_countdown = attack_countdown_max;
+
 		var _b = instance_create_layer(_aim_data.muzzle_x, _aim_data.muzzle_y, "lyr_player", o_bullet);
 		with(_b){
 			team = other.team;
@@ -51,6 +82,17 @@ function enemy_apocalypse_survivor_state_attack_active(){
 		shell_timer = shell_timer_max;
 
 		attack_active_attack_created = true;
+
+		if(_dbg_enable){
+			debug_attack_log_shot_count += 1;
+			__mcp_log(
+				"[ASDBG][FIRE] shot=" + string(debug_attack_log_shot_count)
+				+ " frame=" + string(round(sprite_current_frame))
+				+ " atk_cd=" + string(round(attack_countdown))
+				+ " aim=" + string(round(aim_angle))
+			);
+		}
+		}
 	}
 
 	// Count down active
@@ -68,6 +110,13 @@ function enemy_apocalypse_survivor_state_attack_active(){
 	}
 
 	if(_trigger_recover){
+		if(_dbg_enable){
+			__mcp_log(
+				"[ASDBG][TRANSITION] active->recover"
+				+ " act_cd=" + string(round(attack_active_countdown))
+				+ " spawned=" + string(attack_active_attack_created ? 1 : 0)
+			);
+		}
 		state = EnemyState.attack_recover;
 		image_system_setup(sprite_attack_recover, ANIMATION_FPS_DEFAULT * animation_fps_multiplier, true, true, 0, IMAGE_LOOP_FULL);
 	}
