@@ -65,7 +65,8 @@ function enemy_apocalypse_survivor_state_move(){
 	aim_angle = point_direction(x, y, _target_aim_x, _target_aim_y);
 	face_horizontal = (_target_x >= x) ? 1 : -1;
 
-	if(!target[TargetType.attack].is_within_trigger_distance()){
+	var _h_dist = abs(_target_x - x);
+	if(_h_dist > target[TargetType.attack].distance_trigger){
 		return;
 	}
 
