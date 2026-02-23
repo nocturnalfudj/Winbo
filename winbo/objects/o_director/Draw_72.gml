@@ -49,6 +49,8 @@ else if(room != r_intro && room != r_loading_app){
 		var _layer = _back_layers[_i];
 		switch(_layer.mode){
 			case "normal":
+				var _repeat_x = !variable_struct_exists(_layer, "repeat_x") || _layer.repeat_x;
+				var _clamp_y = !variable_struct_exists(_layer, "clamp_y") || _layer.clamp_y;
 				director_draw_parallax_layer(
 					_layer.sprite,
 					_camera_x,
@@ -57,7 +59,9 @@ else if(room != r_intro && room != r_loading_app){
 					_camera_height,
 					_layer.parallax_x,
 					_layer.parallax_y,
-					_layer.offset_y
+					_layer.offset_y,
+					_repeat_x,
+					_clamp_y
 				);
 			break;
 			

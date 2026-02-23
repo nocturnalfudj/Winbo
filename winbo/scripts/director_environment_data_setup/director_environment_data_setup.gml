@@ -121,12 +121,19 @@ function director_environment_data_setup(){
 				{mode: "normal", sprite: spr_bg_l2_layer_7_sky, parallax_x: 1.00, parallax_y: _subtle_parallax_y(1.00), offset_y: _new_bg_offset_y},
 				{mode: "normal", sprite: spr_bg_l2_layer_6_mountains, parallax_x: 0.90, parallax_y: _subtle_parallax_y(0.90), offset_y: _new_bg_offset_y},
 				{mode: "normal", sprite: spr_bg_l2_layer_5_treeline_bg, parallax_x: 0.80, parallax_y: _subtle_parallax_y(0.80), offset_y: _new_bg_offset_y},
-				{mode: "variant_once", sprite_first: spr_bg_l2_layer_4a_forest_crane, sprite_loop: spr_bg_l2_layer_4b_forest_no_crane, parallax_x: 0.70, parallax_y: _subtle_parallax_y(0.70), offset_y: _new_bg_offset_y},
+				{mode: "normal", sprite: spr_bg_l2_layer_4a_forest_crane, parallax_x: 0.70, parallax_y: _subtle_parallax_y(0.70), offset_y: _new_bg_offset_y, repeat_x: false, clamp_y: false},
 				{mode: "normal", sprite: spr_bg_l2_layer_3_treeline_main, parallax_x: 0.60, parallax_y: _subtle_parallax_y(0.60), offset_y: _new_bg_offset_y},
-				{mode: "normal", sprite: spr_bg_l2_layer_2_shore, parallax_x: 0.50, parallax_y: _subtle_parallax_y(0.50), offset_y: _new_bg_offset_y}
+				{mode: "normal", sprite: spr_bg_l2_layer_2_shore, parallax_x: 0.50, parallax_y: _subtle_parallax_y(0.59), offset_y: _new_bg_offset_y}
 			],
 			[
-				{mode: "animated", sprite: spr_bg_l2_layer_1_river, parallax_x: 0.45, parallax_y: _subtle_parallax_y(0.45), offset_y: 0, fps: 30}
+				{
+					mode: "animated",
+					sprite: spr_bg_l2_layer_1_river,
+					parallax_x: 0.50,
+					parallax_y: _subtle_parallax_y(0.50),
+					offset_y: _new_bg_offset_y,
+					fps: 30
+				}
 			]
 		);
 		with(environment[_environment]){

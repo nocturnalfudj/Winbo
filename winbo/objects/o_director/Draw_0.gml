@@ -89,18 +89,22 @@ if(o_master.debug_navigation_grid_enable){
 			for(var _i = 0; _i < _front_layer_count; _i++){
 				var _layer = _front_layers[_i];
 				switch(_layer.mode){
-					case "normal":
-						director_draw_parallax_layer(
-							_layer.sprite,
-							_camera_x,
-							_camera_y,
-							_camera_width,
-							_camera_height,
-							_layer.parallax_x,
-							_layer.parallax_y,
-							_layer.offset_y
-						);
-					break;
+				case "normal":
+					var _repeat_x = !variable_struct_exists(_layer, "repeat_x") || _layer.repeat_x;
+					var _clamp_y = !variable_struct_exists(_layer, "clamp_y") || _layer.clamp_y;
+					director_draw_parallax_layer(
+						_layer.sprite,
+						_camera_x,
+						_camera_y,
+						_camera_width,
+						_camera_height,
+						_layer.parallax_x,
+						_layer.parallax_y,
+						_layer.offset_y,
+						_repeat_x,
+						_clamp_y
+					);
+				break;
 					
 					case "variant_once":
 						director_draw_parallax_layer_variant(

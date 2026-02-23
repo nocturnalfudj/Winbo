@@ -2,10 +2,10 @@
   "$GMSprite":"v2",
   "%Name":"spr_bg_l2_layer_2_shore",
   "bboxMode":0,
-  "bbox_bottom":4319,
+  "bbox_bottom":3872,
   "bbox_left":0,
   "bbox_right":7679,
-  "bbox_top":0,
+  "bbox_top":3327,
   "collisionKind":1,
   "collisionTolerance":0,
   "ConfigValues":{

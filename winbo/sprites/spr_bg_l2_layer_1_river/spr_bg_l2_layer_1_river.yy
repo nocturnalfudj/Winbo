@@ -2,10 +2,10 @@
   "$GMSprite":"v2",
   "%Name":"spr_bg_l2_layer_1_river",
   "bboxMode":0,
-  "bbox_bottom":858,
+  "bbox_bottom":4319,
   "bbox_left":0,
   "bbox_right":7679,
-  "bbox_top":364,
+  "bbox_top":3825,
   "collisionKind":1,
   "collisionTolerance":0,
   "ConfigValues":{
