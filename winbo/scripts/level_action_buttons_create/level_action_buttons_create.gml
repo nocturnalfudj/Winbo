@@ -10,7 +10,8 @@ function level_action_buttons_create(_y_start, _layer, _create_script, _anchor_c
 	var _level_count = array_length(_level_ids);
 	
 	var _y_spacing = 80;
-	var _col_spacing = 500;
+	var _col_spacing = 650;
+	var _unlock_width_max = 1300;
 	var _y = _y_start;
 	var _btn;
 	
@@ -21,6 +22,7 @@ function level_action_buttons_create(_y_start, _layer, _create_script, _anchor_c
 			state_script[UIState.create][UIStateStage.main] = _create_script;
 			level_id = "all";
 			action_type = "unlock_all";
+			width_max = _unlock_width_max;
 			text_string = "UNLOCK ALL";
 			state_script[UIState.active][UIStateStage.main] = btn_level_unlock_all_active_main;
 		}
@@ -42,6 +44,7 @@ function level_action_buttons_create(_y_start, _layer, _create_script, _anchor_c
 					state_script[UIState.create][UIStateStage.main] = _create_script;
 					level_id = _id;
 					action_type = "unlock";
+					width_max = _unlock_width_max;
 					text_string = "UNLOCK: " + string_upper(_level_data.name) + _status;
 					
 					var _transform = transform[TransformType.anchor];
