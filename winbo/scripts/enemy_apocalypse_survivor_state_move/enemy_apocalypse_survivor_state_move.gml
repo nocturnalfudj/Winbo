@@ -54,8 +54,15 @@ function enemy_apocalypse_survivor_state_move(){
 
 	var _target_x = target[TargetType.attack].x;
 	var _target_y = target[TargetType.attack].y;
+	var _target_aim_x = _target_x;
+	var _target_aim_y = _target_y;
+	var _target_instance = target[TargetType.attack].instance;
+	if(_target_instance != noone && instance_exists(_target_instance)){
+		_target_aim_x = (_target_instance.bbox_left + _target_instance.bbox_right) * 0.5;
+		_target_aim_y = _target_instance.bbox_top + (_target_instance.bbox_bottom - _target_instance.bbox_top) * 0.35;
+	}
 
-	aim_angle = point_direction(x, y, _target_x, _target_y);
+	aim_angle = point_direction(x, y, _target_aim_x, _target_aim_y);
 	face_horizontal = (_target_x >= x) ? 1 : -1;
 
 	if(!target[TargetType.attack].is_within_trigger_distance()){
@@ -72,8 +79,8 @@ function enemy_apocalypse_survivor_state_move(){
 	if(attack_los_required_enable && attack_los_collision_object != noone){
 		_los_blocked = collision_line(
 			_aim_data.muzzle_x, _aim_data.muzzle_y,
-			_target_x, _target_y,
-			attack_los_collision_object, false, true
+			_target_aim_x, _target_aim_y,
+			attack_los_collision_object, true, true
 		) != noone;
 	}
 
