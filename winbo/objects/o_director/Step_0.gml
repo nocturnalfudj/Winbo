@@ -1,4 +1,6 @@
 //Game State Switch
+bg_anim_time_seconds += delta_time / 1000000;
+
 switch(global.game_state){
 	case GameState.start:
 		if(room != r_game_level_presence){

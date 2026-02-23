@@ -132,6 +132,8 @@
 #region Environment
 	enum Environment{
 		default_environment,
+		level_1_environment,
+		level_2_environment,
 		
 		SIZE
 	}
@@ -250,6 +252,10 @@ status_effect_system_data_setup();
 #endregion
 
 #macro ANIMATION_FPS_DEFAULT 15
+
+#region Level Background Animation
+	bg_anim_time_seconds = 0;
+#endregion
 
 #region Menu Background Shader
 	// Shader uniforms

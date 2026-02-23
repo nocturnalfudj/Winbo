@@ -32,20 +32,73 @@ if(global.game_state == GameState.menu){
 	shader_reset();
 }
 else if(room != r_intro && room != r_loading_app){
-	//Offset
-	var _offset_y;
-	_offset_y = -2000;
+	var _environment_data;
+	_environment_data = environment[environment_current];
+	if(is_undefined(_environment_data)){
+		_environment_data = environment[Environment.default_environment];
+	}
 	
 	var _tex_filter_old = gpu_get_tex_filter();
 	gpu_set_tex_filter(false);
 	
-	// Draw all layers with their parallax factors
-	director_draw_parallax_layer(spr_bg_forest_layer_5, _camera_x, _camera_y, _camera_width, _camera_height, 1.0, 1.0, _offset_y);
-	director_draw_parallax_layer(spr_bg_forest_layer_4, _camera_x, _camera_y, _camera_width, _camera_height, 0.9, 0.9, _offset_y);
-	director_draw_parallax_layer(spr_bg_forest_layer_3, _camera_x, _camera_y, _camera_width, _camera_height, 0.8, 0.8, _offset_y);
-	director_draw_parallax_layer(spr_bg_forest_layer_2, _camera_x, _camera_y, _camera_width, _camera_height, 0.7, 0.7, _offset_y);
-	director_draw_parallax_layer(spr_bg_forest_layer_1, _camera_x, _camera_y, _camera_width, _camera_height, 0.6, 0.6, _offset_y);
-	director_draw_parallax_layer(spr_bg_forest_layer_0, _camera_x, _camera_y, _camera_width, _camera_height, 0.5, 0.5, _offset_y);
+	var _back_layers = _environment_data.background_back_layers;
+	if(is_undefined(_back_layers))
+		_back_layers = [];
+	var _back_layer_count = array_length(_back_layers);
+	for(var _i = 0; _i < _back_layer_count; _i++){
+		var _layer = _back_layers[_i];
+		switch(_layer.mode){
+			case "normal":
+				director_draw_parallax_layer(
+					_layer.sprite,
+					_camera_x,
+					_camera_y,
+					_camera_width,
+					_camera_height,
+					_layer.parallax_x,
+					_layer.parallax_y,
+					_layer.offset_y
+				);
+			break;
+			
+			case "variant_once":
+				director_draw_parallax_layer_variant(
+					_layer.sprite_first,
+					_layer.sprite_loop,
+					_camera_x,
+					_camera_y,
+					_camera_width,
+					_camera_height,
+					_layer.parallax_x,
+					_layer.parallax_y,
+					_layer.offset_y
+				);
+			break;
+			
+			case "animated":
+				var _frame_count = sprite_get_number(_layer.sprite);
+				var _frame = 0;
+				if(_frame_count > 1){
+					var _fps = variable_struct_exists(_layer, "fps") ? _layer.fps : ANIMATION_FPS_DEFAULT;
+					_frame = floor(bg_anim_time_seconds * _fps) mod _frame_count;
+				}
+				
+				var _anchor_bottom = variable_struct_exists(_layer, "anchor_bottom") && _layer.anchor_bottom;
+				director_draw_parallax_layer_frame(
+					_layer.sprite,
+					_frame,
+					_camera_x,
+					_camera_y,
+					_camera_width,
+					_camera_height,
+					_layer.parallax_x,
+					_layer.parallax_y,
+					_layer.offset_y,
+					_anchor_bottom
+				);
+			break;
+		}
+	}
 	
 	gpu_set_tex_filter(_tex_filter_old);
 }

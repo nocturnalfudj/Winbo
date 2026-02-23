@@ -61,10 +61,92 @@ if(o_master.debug_navigation_grid_enable){
 			}
 		}
 	}
-#endregion
+	#endregion
+	
+	#region Parallax Foreground
+		var _environment_data;
+		_environment_data = environment[environment_current];
+		if(is_undefined(_environment_data)){
+			_environment_data = environment[Environment.default_environment];
+		}
+		
+		var _front_layers = _environment_data.background_front_layers;
+		if(is_undefined(_front_layers))
+			_front_layers = [];
+		var _front_layer_count = array_length(_front_layers);
+		if(_front_layer_count > 0){
+			var _camera_x, _camera_y, _camera_width, _camera_height;
+			with(o_camera){
+				_camera_x = start_x;
+				_camera_y = start_y;
+				_camera_width = width;
+				_camera_height = height;
+			}
+			
+			var _tex_filter_old = gpu_get_tex_filter();
+			gpu_set_tex_filter(false);
+			
+			for(var _i = 0; _i < _front_layer_count; _i++){
+				var _layer = _front_layers[_i];
+				switch(_layer.mode){
+					case "normal":
+						director_draw_parallax_layer(
+							_layer.sprite,
+							_camera_x,
+							_camera_y,
+							_camera_width,
+							_camera_height,
+							_layer.parallax_x,
+							_layer.parallax_y,
+							_layer.offset_y
+						);
+					break;
+					
+					case "variant_once":
+						director_draw_parallax_layer_variant(
+							_layer.sprite_first,
+							_layer.sprite_loop,
+							_camera_x,
+							_camera_y,
+							_camera_width,
+							_camera_height,
+							_layer.parallax_x,
+							_layer.parallax_y,
+							_layer.offset_y
+						);
+					break;
+					
+					case "animated":
+						var _frame_count = sprite_get_number(_layer.sprite);
+						var _frame = 0;
+						if(_frame_count > 1){
+							var _fps = variable_struct_exists(_layer, "fps") ? _layer.fps : ANIMATION_FPS_DEFAULT;
+							_frame = floor(bg_anim_time_seconds * _fps) mod _frame_count;
+						}
+						
+						var _anchor_bottom = variable_struct_exists(_layer, "anchor_bottom") && _layer.anchor_bottom;
+						director_draw_parallax_layer_frame(
+							_layer.sprite,
+							_frame,
+							_camera_x,
+							_camera_y,
+							_camera_width,
+							_camera_height,
+							_layer.parallax_x,
+							_layer.parallax_y,
+							_layer.offset_y,
+							_anchor_bottom
+						);
+					break;
+				}
+			}
+			
+			gpu_set_tex_filter(_tex_filter_old);
+		}
+	#endregion
 
-#region Foreground
-	if(environment_foreground_sprite != noone){
+	#region Foreground
+		if(environment_foreground_sprite != noone){
 		var _x,_y,_scale;
 		_x = 0;
 		_y = 0;

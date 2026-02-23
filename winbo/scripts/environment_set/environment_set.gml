@@ -9,12 +9,21 @@ function environment_set(_environment){
 	//Get Environment Data
 	var _environment_data,_environment_tile;
 	_environment_data = o_director.environment[_environment];
+	if(is_undefined(_environment_data)){
+		return;
+	}
 	
 	//Set Ground Tile
 	_environment_tile = _environment_data.ground_tile_sprite;
-	if(_environment_tile == noone)
-		_environment_tile = spr_environment_barren_lands_tile;
-	layer_background_sprite(layer_background_get_id(layer_get_id("lyr_background")),_environment_tile);
+	if(_environment_tile != noone){
+		var _layer_id = layer_get_id("lyr_background");
+		if(_layer_id != -1){
+			var _background_id = layer_background_get_id(_layer_id);
+			if(_background_id != -1){
+				layer_background_sprite(_background_id,_environment_tile);
+			}
+		}
+	}
 			
 	//Set Foreground Sprite
 	o_director.environment_foreground_sprite = _environment_data.foreground_sprite;
