@@ -1,7 +1,40 @@
 // Custom drawing for Apocalypse Survivor aiming (layered rotation + laser)
 // Falls back to inherited draw for non-aim states.
 
-// Only custom-draw when hostile AND kneeling (aiming states), NOT during startled/death
+// During death/destroy, force fallback to a full-body sprite.
+var _force_fallback_draw;
+_force_fallback_draw = (state == EnemyState.death)
+	|| (state == EnemyState.destroy);
+
+if(_force_fallback_draw){
+	var _fallback_sprite;
+	_fallback_sprite = sprite_idle;
+	
+	if((state == EnemyState.death) || (state == EnemyState.destroy)){
+		var _death_fallback;
+		_death_fallback = (is_kneeling && sprite_death_2 != noone) ? sprite_death_2 : sprite_death_1;
+		if(_death_fallback != noone){
+			_fallback_sprite = _death_fallback;
+		}
+	}
+	
+	var _is_layered_aim_sprite;
+	_is_layered_aim_sprite = (sprite_current == sprite_aim_side_body)
+		|| (sprite_current == sprite_aim_diag_body)
+		|| (sprite_current == sprite_aim_up_body)
+		|| (sprite_current == sprite_aim_up_mid)
+		|| (sprite_current == sprite_shoot_side_body)
+		|| (sprite_current == sprite_shoot_diag_body)
+		|| (sprite_current == sprite_shoot_up_body)
+		|| (sprite_current == sprite_shoot_up_mid);
+	
+	if(_fallback_sprite != noone && ((sprite_current == noone) || (sprite_current < 0) || _is_layered_aim_sprite)){
+		sprite_current = _fallback_sprite;
+		sprite_current_frame = clamp(sprite_current_frame, 0, max(0, sprite_get_number(_fallback_sprite) - 1));
+	}
+}
+
+// Only custom-draw when hostile AND kneeling (aiming states), NOT during startled/death.
 var _do_custom;
 _do_custom = aim_two_layer_enable
 	&& is_hostile
@@ -18,25 +51,22 @@ if(!camera_visible){
 	exit;
 }
 
-// Ensure we have a target
-if(!variable_instance_exists(id, "target") || target[TargetType.attack] == noone || !target[TargetType.attack].has_valid_target()){
-	event_inherited();
-	exit;
+// Update aim/facing from target when available.
+// If target is unavailable (common during/after gameover), keep the last visual aim state.
+if(variable_instance_exists(id, "target") && target[TargetType.attack] != noone && target[TargetType.attack].has_valid_target()){
+	var _tx = target[TargetType.attack].x;
+	var _ty = target[TargetType.attack].y;
+	var _target_aim_x = _tx;
+	var _target_aim_y = _ty;
+	var _target_instance = target[TargetType.attack].instance;
+	if(_target_instance != noone && instance_exists(_target_instance)){
+		_target_aim_x = (_target_instance.bbox_left + _target_instance.bbox_right) * 0.5;
+		_target_aim_y = _target_instance.bbox_top + (_target_instance.bbox_bottom - _target_instance.bbox_top) * 0.35;
+	}
+	
+	aim_angle = point_direction(x, y, _target_aim_x, _target_aim_y);
+	face_horizontal = (_tx >= x) ? 1 : -1;
 }
-
-// Determine aim angle and set facing
-var _tx = target[TargetType.attack].x;
-var _ty = target[TargetType.attack].y;
-var _target_aim_x = _tx;
-var _target_aim_y = _ty;
-var _target_instance = target[TargetType.attack].instance;
-if(_target_instance != noone && instance_exists(_target_instance)){
-	_target_aim_x = (_target_instance.bbox_left + _target_instance.bbox_right) * 0.5;
-	_target_aim_y = _target_instance.bbox_top + (_target_instance.bbox_bottom - _target_instance.bbox_top) * 0.35;
-}
-
-aim_angle = point_direction(x, y, _target_aim_x, _target_aim_y);
-face_horizontal = (_tx >= x) ? 1 : -1;
 
 var _aim_data = apocalypse_survivor_get_aim_data();
 var _sector = _aim_data.sector;

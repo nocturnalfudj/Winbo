@@ -13,11 +13,22 @@ switch(global.game_state){
 	break;
 
 	case GameState.gameover:
-		enemy_gamestate_gameover();
-	break;
-
 	case GameState.stop:
 	case GameState.menu:
-		enemy_gamestate_stop_game();
+		// Keep death/destroy progressing with survivor-specific death handling
+		// so fallback draw can render full sprites consistently.
+		switch(state){
+			case EnemyState.death:
+				enemy_apocalypse_survivor_state_death();
+			break;
+			
+			case EnemyState.destroy:
+				enemy_state_destroy();
+			break;
+		}
+		
+		// Match the base gameover/stop update flow.
+		movement_system_update();
+		transform_system_update();
 	break;
 }

@@ -7,6 +7,7 @@ function enemy_apocalypse_survivor_state_death(){
 
 	// Assign so base death state can detect a death sprite
 	sprite_death_left = _death_sprite;
+	sprite_death_right = _death_sprite;
 
 	// Ensure sprite is set once (do not loop)
 	if(sprite_current != _death_sprite){
