@@ -19,7 +19,7 @@ if(!camera_visible){
 }
 
 // Ensure we have a target
-if(!variable_instance_exists(id, "target") || !instance_exists(target[TargetType.attack].object)){
+if(!variable_instance_exists(id, "target") || target[TargetType.attack] == noone || !target[TargetType.attack].has_valid_target()){
 	event_inherited();
 	exit;
 }
@@ -30,16 +30,13 @@ var _ty = target[TargetType.attack].y;
 aim_angle = point_direction(x, y, _tx, _ty);
 face_horizontal = (_tx >= x) ? 1 : -1;
 
-// Sector selection (per Aiming Logic Diagram)
-// Note: GMS angles are 0=right, 90=up, 180=left, 270=down.
-var _sector;
-_sector = "none";
-if(aim_angle >= 315 || aim_angle < 45) _sector = "side";
-else if(aim_angle >= 45 && aim_angle < 85) _sector = "diag";
-else if(aim_angle >= 85 && aim_angle < 95) _sector = "up";
-else if(aim_angle >= 95 && aim_angle < 135) _sector = "diag_flip";
-else if(aim_angle >= 135 && aim_angle < 225) _sector = "side_flip";
-else _sector = "out"; // 225-315
+var _aim_data = apocalypse_survivor_get_aim_data();
+var _sector = _aim_data.sector;
+var _draw_angle = _aim_data.draw_angle;
+var _barrel_x = _aim_data.barrel_x;
+var _barrel_y = _aim_data.barrel_y;
+var _muzzle_x = _aim_data.muzzle_x;
+var _muzzle_y = _aim_data.muzzle_y;
 
 // Select sprite set based on sector AND state (aim vs shoot)
 // During attack_active, use animated shoot sprites; otherwise use static aim sprites
@@ -95,38 +92,6 @@ switch(_sector){
 // Compute draw xscale based on facing
 // Account for sprite_face_direction (sprites face left by default)
 var _aim_xscale = image_xscale * face_horizontal * sprite_face_direction;
-
-// Calculate rotation angle for the rotating layer
-// Each sprite set has a neutral angle; we rotate relative to that
-// The rotation amount is how far we deviate from the sector's neutral direction
-var _sector_neutral = 0;  // Neutral aim angle for this sprite set
-var _draw_angle = 0;
-
-switch(_sector){
-	case "side":
-		_sector_neutral = 2;  // Measured barrel direction from sprite artwork
-		_draw_angle = aim_angle - _sector_neutral;
-	break;
-	case "side_flip":
-		_sector_neutral = 178;
-		_draw_angle = aim_angle - _sector_neutral;
-	break;
-	case "diag":
-		_sector_neutral = 44.5;  // Measured barrel direction from sprite artwork
-		_draw_angle = aim_angle - _sector_neutral;
-	break;
-	case "diag_flip":
-		_sector_neutral = 135.5;
-		_draw_angle = aim_angle - _sector_neutral;
-	break;
-	case "up":
-		_sector_neutral = 90;  // Upward sprite aims straight up
-		_draw_angle = aim_angle - _sector_neutral;
-	break;
-	case "out":
-		_draw_angle = 0;  // No rotation for out-of-range
-	break;
-}
 
 // Get the body frame for animation
 var _body_frame = 0;
@@ -234,35 +199,38 @@ else{
 	}
 }
 
-// Select barrel offset for current sector
-var _barrel_x, _barrel_y;
-switch(_sector){
-	case "diag":
-	case "diag_flip":
-		_barrel_x = barrel_offset_x_diag;
-		_barrel_y = barrel_offset_y_diag;
-		break;
-	case "up":
-		_barrel_x = barrel_offset_x_up;
-		_barrel_y = barrel_offset_y_up;
-		break;
-	default: // side, side_flip, out
-		_barrel_x = barrel_offset_x_side;
-		_barrel_y = barrel_offset_y_side;
-		break;
-}
-
 // Laser sight (skip if out-of-sight sector)
 if(_sector != "out"){
-	// Rotate offset to match body sprite rotation
-	var _base_lx = _barrel_x * face_horizontal;
-	var _base_ly = _barrel_y;
-	var _off_dist = point_distance(0, 0, _base_lx, _base_ly);
-	var _off_dir = point_direction(0, 0, _base_lx, _base_ly);
-	var _lx0 = x + lengthdir_x(_off_dist, _off_dir + _draw_angle);
-	var _ly0 = y + lengthdir_y(_off_dist, _off_dir + _draw_angle);
-	var _lx1 = _lx0 + lengthdir_x(laser_length, aim_angle);
-	var _ly1 = _ly0 + lengthdir_y(laser_length, aim_angle);
+	var _lx0 = _muzzle_x;
+	var _ly0 = _muzzle_y;
+	var _lx1 = _lx0;
+	var _ly1 = _ly0;
+
+	var _clip_step = max(1, laser_clip_step_px);
+	var _clip_object = laser_clip_collision_object;
+	var _steps = ceil(laser_length / _clip_step);
+
+	var _prev_x = _lx0;
+	var _prev_y = _ly0;
+	for(var _i = 1; _i <= _steps; _i++){
+		var _distance = min(laser_length, _i * _clip_step);
+		var _next_x = _lx0 + lengthdir_x(_distance, aim_angle);
+		var _next_y = _ly0 + lengthdir_y(_distance, aim_angle);
+
+		var _hit = false;
+		if(_clip_object != noone){
+			_hit = collision_line(_prev_x, _prev_y, _next_x, _next_y, _clip_object, false, true) != noone;
+		}
+
+		if(_hit){
+			break;
+		}
+
+		_lx1 = _next_x;
+		_ly1 = _next_y;
+		_prev_x = _next_x;
+		_prev_y = _next_y;
+	}
 
 	draw_set_alpha(laser_alpha);
 	draw_set_color(laser_color);

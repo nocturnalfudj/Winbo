@@ -11,8 +11,8 @@
   "name":"o_fx_sprite_once",
   "overriddenProperties":[],
   "parent":{
-    "name":"winbo",
-    "path":"winbo.yyp",
+    "name":"FX",
+    "path":"folders/Actors/FX.yy",
   },
   "parentObjectId":{
     "name":"o_actor",

@@ -39,12 +39,18 @@ function player_collisions(){
 				// Check if player is dashing/recently dashed - deflect bullet instead of damage
 				// Uses bump_allow for 0.1s leniency window (same as wall bumps)
 				if(other.bump_allow){
-					if(death_anim_suppress_on_deflect){
-						death_anim_suppressed = true;
+					if(deflect_flyoff_enable){
+						var _flyoff_direction = point_direction(other.x, other.y, x, y);
+						bullet_begin_deflect_flyoff(_flyoff_direction);
 					}
-					
-					// Bullet destroyed (no damage to player)
-					state = BulletState.death;
+					else{
+						if(death_anim_suppress_on_deflect){
+							death_anim_suppressed = true;
+						}
+						
+						// Bullet destroyed (no damage to player)
+						state = BulletState.death;
+					}
 
 					// Trigger bump bounce if not already triggered this dash
 					if(!other.bump_triggered){

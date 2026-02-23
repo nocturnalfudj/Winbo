@@ -10,56 +10,23 @@ function enemy_apocalypse_survivor_state_attack_active(){
 	}
 
 	// Keep tracking aim while active
-	target_update(TargetType.attack);
-	aim_angle = point_direction(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
-	face_horizontal = (target[TargetType.attack].x >= x) ? 1 : -1;
+	var _target_valid = target_update(TargetType.attack);
+	if(!_target_valid || target[TargetType.attack] == noone || !target[TargetType.attack].has_valid_target()){
+		attack_face_lock_active = false;
+		state = EnemyState.move;
+		return;
+	}
+
+	var _target_x = target[TargetType.attack].x;
+	var _target_y = target[TargetType.attack].y;
+	aim_angle = point_direction(x, y, _target_x, _target_y);
+	face_horizontal = (_target_x >= x) ? 1 : -1;
+
+	var _aim_data = apocalypse_survivor_get_aim_data();
 
 	// Fire once, at configured animation frame (or immediately if frame 0)
 	if(!attack_active_attack_created && sprite_current_frame >= attack_projectile_spawn_frame){
-		// Compute body sprite draw angle and select barrel offset (mirrors Draw_0.gml sector/rotation logic)
-		var _draw_angle = 0;
-		var _barrel_x, _barrel_y;
-		var _a = aim_angle;
-		if(_a >= 315 || _a < 45){
-			_draw_angle = _a - 2;       // side (measured neutral = 2°)
-			_barrel_x = barrel_offset_x_side;
-			_barrel_y = barrel_offset_y_side;
-		}
-		else if(_a >= 45 && _a < 85){
-			_draw_angle = _a - 44.5;    // diag (measured neutral = 44.5°)
-			_barrel_x = barrel_offset_x_diag;
-			_barrel_y = barrel_offset_y_diag;
-		}
-		else if(_a >= 85 && _a < 95){
-			_draw_angle = _a - 90;      // up
-			_barrel_x = barrel_offset_x_up;
-			_barrel_y = barrel_offset_y_up;
-		}
-		else if(_a >= 95 && _a < 135){
-			_draw_angle = _a - 135.5;   // diag_flip (measured neutral = 135.5°)
-			_barrel_x = barrel_offset_x_diag;
-			_barrel_y = barrel_offset_y_diag;
-		}
-		else if(_a >= 135 && _a < 225){
-			_draw_angle = _a - 178;     // side_flip (measured neutral = 178°)
-			_barrel_x = barrel_offset_x_side;
-			_barrel_y = barrel_offset_y_side;
-		}
-		else{
-			// 225-315: "out" sector, no rotation, use side offset
-			_barrel_x = barrel_offset_x_side;
-			_barrel_y = barrel_offset_y_side;
-		}
-
-		// Rotate spawn offset to match body sprite rotation
-		var _base_x = _barrel_x * face_horizontal;
-		var _base_y = _barrel_y;
-		var _off_dist = point_distance(0, 0, _base_x, _base_y);
-		var _off_dir = point_direction(0, 0, _base_x, _base_y);
-		var _spawn_x = x + lengthdir_x(_off_dist, _off_dir + _draw_angle);
-		var _spawn_y = y + lengthdir_y(_off_dist, _off_dir + _draw_angle);
-
-		var _b = instance_create_layer(_spawn_x, _spawn_y, "lyr_player", o_bullet);
+		var _b = instance_create_layer(_aim_data.muzzle_x, _aim_data.muzzle_y, "lyr_player", o_bullet);
 		with(_b){
 			team = other.team;
 			damage = other.attack_projectile_damage;

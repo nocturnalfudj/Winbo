@@ -166,6 +166,9 @@ death_smoke_delay_steps = 2;
 	
 	// Require facing target to start an attack (optional; useful for melee)
 	attack_requires_facing_target_enable = false;
+
+	// Allow subclasses to opt out and implement custom attack-start checks.
+	attack_start_in_move_enable = true;
 	
 	// Patrol behaviour (optional)
 	patrol_turn_after_walk_loops_enable = false;

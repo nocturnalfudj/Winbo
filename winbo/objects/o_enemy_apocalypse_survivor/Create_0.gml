@@ -126,12 +126,20 @@ event_inherited();
 	laser_width = 2;
 	laser_alpha = 1.0;
 	laser_color = c_red;
+	laser_clip_collision_object = o_solid;
+	laser_clip_step_px = 4;
 #endregion
 
 #region Combat - Apocalypse Survivor Overrides
 	// Attack timing (mirrors Space Ranger for now)
 	attack_countdown_max = SECOND * 2;
 	attack_countdown = 0; // Start at 0 so can attack immediately when in range
+
+	// Survivor uses a custom attack-start gate in enemy_apocalypse_survivor_state_move.
+	attack_start_in_move_enable = false;
+	attack_los_required_enable = true;
+	attack_los_collision_object = o_solid;
+	attack_vertical_tolerance = max(height, 420);
 
 	// Telegraph (aiming phase)
 	attack_telegraph_progress_at_end_of_animation = false;

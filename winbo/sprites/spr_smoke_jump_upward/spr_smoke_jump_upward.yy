@@ -35,8 +35,8 @@
   "nineSlice":null,
   "origin":9,
   "parent":{
-    "name":"winbo",
-    "path":"winbo.yyp",
+    "name":"Smoke",
+    "path":"folders/Actors/FX/Smoke.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

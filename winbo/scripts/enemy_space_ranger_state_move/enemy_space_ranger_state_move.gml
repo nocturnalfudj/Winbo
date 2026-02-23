@@ -57,14 +57,19 @@ function enemy_space_ranger_state_move(){
 		if(state == EnemyState.attack_telegraph){
 			target_update(TargetType.attack);
 			if(target[TargetType.attack] != noone){
-				aim_angle = point_direction(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
-
 				// Set face_horizontal based on target position
 				if(target[TargetType.attack].x > x){
 					face_horizontal = 1;
 				}
 				else{
 					face_horizontal = -1;
+				}
+
+				// Initialize aim using the same clamp used in telegraph state.
+				aim_angle = point_direction(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
+				if(aim_angle_clamp_enable){
+					var _aim_center = (face_horizontal == 1) ? 0 : 180;
+					aim_angle = angle_clamp_around(aim_angle, _aim_center, aim_angle_clamp_max_deviation);
 				}
 			}
 		}

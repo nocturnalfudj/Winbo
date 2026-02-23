@@ -47,6 +47,15 @@ function bullet_state_move(){
 
 	//Update Velocity
 	movement_velocity_update(_delta_time,false);
+
+	// Deflected fly-off projectiles should despawn once they leave the room bounds.
+	if(deflect_flyoff_active){
+		var _margin = max(0, deflect_flyoff_margin);
+		if((x < -_margin) || (x > room_width + _margin) || (y < -_margin) || (y > room_height + _margin)){
+			instance_destroy();
+			exit;
+		}
+	}
 	
 	#region Handle Solid Collision6
 		if(_collision){			

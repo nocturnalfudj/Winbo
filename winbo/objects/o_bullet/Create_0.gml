@@ -88,6 +88,13 @@ owner = noone;
 		death_anim_started = false;
 		death_anim_suppressed = false;
 		death_anim_suppress_on_deflect = false;
+
+		// Deflect fly-off (disabled by default; missiles override this to true)
+		deflect_flyoff_enable = false;
+		deflect_flyoff_active = false;
+		deflect_flyoff_speed = 42;
+		deflect_flyoff_margin = 128;
+		deflect_flyoff_lifetime = 1.5 * SECOND;
 	#endregion
 
 //Create

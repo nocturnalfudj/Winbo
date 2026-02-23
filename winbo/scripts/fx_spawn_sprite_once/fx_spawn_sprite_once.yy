@@ -1,13 +1,13 @@
 {
-  "$GMScript": "v1",
-  "%Name": "fx_spawn_sprite_once",
-  "isCompatibility": false,
-  "isDnD": false,
-  "name": "fx_spawn_sprite_once",
-  "parent": {
-    "name": "winbo",
-    "path": "winbo.yyp",
+  "$GMScript":"v1",
+  "%Name":"fx_spawn_sprite_once",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"fx_spawn_sprite_once",
+  "parent":{
+    "name":"Smoke",
+    "path":"folders/Actors/FX/Smoke.yy",
   },
-  "resourceType": "GMScript",
-  "resourceVersion": "2.0",
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

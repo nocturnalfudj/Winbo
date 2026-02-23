@@ -1,11 +1,32 @@
 function enemy_apocalypse_survivor_state_attack_telegraph(){
 	// Track aim during telegraph
 	character_health();
-	var _delta_time = time_scale_enable ? global.delta_time_factor_scaled : global.delta_time_factor;
 
-	target_update(TargetType.attack);
-	aim_angle = point_direction(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
-	face_horizontal = (target[TargetType.attack].x >= x) ? 1 : -1;
+	var _target_valid = target_update(TargetType.attack);
+	if(!_target_valid || target[TargetType.attack] == noone || !target[TargetType.attack].has_valid_target()){
+		attack_face_lock_active = false;
+		state = EnemyState.move;
+		return;
+	}
+
+	var _target_x = target[TargetType.attack].x;
+	var _target_y = target[TargetType.attack].y;
+	aim_angle = point_direction(x, y, _target_x, _target_y);
+	face_horizontal = (_target_x >= x) ? 1 : -1;
+
+	var _aim_data = apocalypse_survivor_get_aim_data();
+	if(attack_los_required_enable && attack_los_collision_object != noone){
+		var _los_blocked = collision_line(
+			_aim_data.muzzle_x, _aim_data.muzzle_y,
+			_target_x, _target_y,
+			attack_los_collision_object, false, true
+		) != noone;
+		if(_los_blocked){
+			attack_face_lock_active = false;
+			state = EnemyState.move;
+			return;
+		}
+	}
 
 	// Run telegraph countdown + transition using base behaviour
 	enemy_state_attack_telegraph();

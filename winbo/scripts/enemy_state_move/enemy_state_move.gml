@@ -266,8 +266,8 @@ function enemy_state_move(){
 	#endregion
 
 	#region Combat
-		// Only attack when hostile
-		if(is_hostile){
+		// Only attack when hostile (unless subclass overrides with custom move-state attack logic)
+		if(is_hostile && attack_start_in_move_enable){
 			//Update Target
 			target_update(TargetType.attack);
 

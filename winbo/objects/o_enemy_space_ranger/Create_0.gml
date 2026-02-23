@@ -59,6 +59,10 @@ event_inherited();
 	// Hybrid rotation: two-layer draw within threshold, whole-sprite rotation beyond
 	aim_split_threshold = 25;
 
+	// Clamp how far the ranger can rotate around the horizontal facing.
+	aim_angle_clamp_enable = true;
+	aim_angle_clamp_max_deviation = 45;
+
 	// Locked rotation for attack/recover (set when transitioning from aim to attack)
 	attack_locked_angle = 0;
 	attack_locked_draw_angle = 0;

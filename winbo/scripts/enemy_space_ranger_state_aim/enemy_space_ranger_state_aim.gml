@@ -31,7 +31,6 @@ function enemy_space_ranger_state_aim(){
 		}
 		var _target_x = target[TargetType.attack].x;
 		var _target_y = target[TargetType.attack].y;
-		aim_angle = point_direction(x, y, _target_x, _target_y);
 
 		// Update face direction based on target (standard logic)
 		if(_target_x > x){
@@ -39,6 +38,13 @@ function enemy_space_ranger_state_aim(){
 		}
 		else{
 			face_horizontal = -1;
+		}
+
+		// Aim toward target, then clamp around the current horizontal facing to prevent flipping.
+		aim_angle = point_direction(x, y, _target_x, _target_y);
+		if(aim_angle_clamp_enable){
+			var _aim_center = (face_horizontal == 1) ? 0 : 180;
+			aim_angle = angle_clamp_around(aim_angle, _aim_center, aim_angle_clamp_max_deviation);
 		}
 		
 		// Lock facing for attack
