@@ -145,7 +145,6 @@
     {"$GMFolder":"","%Name":"Forest","folderPath":"folders/Control/Director/Environment/Background/Forest.yy","name":"Forest","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Level 1","folderPath":"folders/Control/Director/Environment/Background/Level 1.yy","name":"Level 1","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Level 2","folderPath":"folders/Control/Director/Environment/Background/Level 2.yy","name":"Level 2","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"Animated","folderPath":"folders/Control/Director/Environment/Background/Level 2/Animated.yy","name":"Animated","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Control","folderPath":"folders/Control.yy","name":"Control","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Audio","folderPath":"folders/Control/Audio.yy","name":"Audio","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Music","folderPath":"folders/Control/Audio/Music.yy","name":"Music","resourceType":"GMFolder","resourceVersion":"2.0",},

@@ -5,7 +5,7 @@
   "bbox_bottom":858,
   "bbox_left":0,
   "bbox_right":7679,
-  "bbox_top":0,
+  "bbox_top":364,
   "collisionKind":1,
   "collisionTolerance":0,
   "ConfigValues":{
@@ -56,7 +56,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":859,
+  "height":4320,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"95decc69b8194bf18f59cb8ada585e53","blendMode":0,"displayName":"default","isLocked":false,"name":"95decc69b8194bf18f59cb8ada585e53","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
@@ -65,8 +65,8 @@
   "nineSlice":null,
   "origin":0,
   "parent":{
-    "name":"Animated",
-    "path":"folders/Control/Director/Environment/Background/Level 2/Animated.yy",
+    "name":"Level 2",
+    "path":"folders/Control/Director/Environment/Background/Level 2.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

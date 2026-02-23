@@ -126,7 +126,7 @@ function director_environment_data_setup(){
 				{mode: "normal", sprite: spr_bg_l2_layer_2_shore, parallax_x: 0.50, parallax_y: _subtle_parallax_y(0.50), offset_y: _new_bg_offset_y}
 			],
 			[
-				{mode: "animated", sprite: spr_bg_l2_layer_1_river, parallax_x: 0.45, parallax_y: 0.02, offset_y: 0, fps: 30, anchor_bottom: true}
+				{mode: "animated", sprite: spr_bg_l2_layer_1_river, parallax_x: 0.45, parallax_y: _subtle_parallax_y(0.45), offset_y: 0, fps: 30}
 			]
 		);
 		with(environment[_environment]){

@@ -124,7 +124,6 @@ if(o_master.debug_navigation_grid_enable){
 							_frame = floor(bg_anim_time_seconds * _fps) mod _frame_count;
 						}
 						
-						var _anchor_bottom = variable_struct_exists(_layer, "anchor_bottom") && _layer.anchor_bottom;
 						director_draw_parallax_layer_frame(
 							_layer.sprite,
 							_frame,
@@ -134,8 +133,7 @@ if(o_master.debug_navigation_grid_enable){
 							_camera_height,
 							_layer.parallax_x,
 							_layer.parallax_y,
-							_layer.offset_y,
-							_anchor_bottom
+							_layer.offset_y
 						);
 					break;
 				}
