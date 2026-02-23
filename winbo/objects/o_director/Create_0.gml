@@ -230,7 +230,7 @@ status_effect_system_data_setup();
 
 #region Levels
 	//Next Level
-	next_level = r_game_level_test;	//This is the FIRST level after the presence level
+	next_level = r_game_level_0;	//This is the FIRST level after the presence level
 	
 	// Flag to prevent life deduction during level transitions
 	level_transitioning = false;

@@ -24,7 +24,7 @@ function master_game_state_gameover() {
 			o_director.resource[Resource.cash][Team.player] = 0;
 			
 			// Reset Next Level
-			o_director.next_level = r_game_level_test;
+			o_director.next_level = r_game_level_0;
 			
 			// Reset level timer
 			o_director.level_timer = 0;

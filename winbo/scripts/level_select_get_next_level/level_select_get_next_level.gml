@@ -21,6 +21,6 @@ function level_select_get_next_level(_current_identifier) {
 		_key = ds_map_find_next(o_director.level_registry, _key);
 	}
 	
-	// No next level found - loop back to first level (level_test)
-	return level_select_get_data("level_test");
+	// No next level found - loop back to first playable level (level_0)
+	return level_select_get_data("level_0");
 }

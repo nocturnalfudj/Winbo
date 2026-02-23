@@ -23,9 +23,9 @@ prev_game_state = global.game_state;
 	room_music_map = ds_map_create();
 	room_music_loop_start_map = ds_map_create();
 	
-	// Define music for r_game_level_test
-	ds_map_add(room_music_map, "r_game_level_test", music_level_test);
-	ds_map_add(room_music_loop_start_map, "r_game_level_test", 3.97);
+	// Define music for r_game_level_0
+	ds_map_add(room_music_map, "r_game_level_0", music_level_test);
+	ds_map_add(room_music_loop_start_map, "r_game_level_0", 3.97);
 	
 	// Track current room to detect changes
 	current_room_for_music = room_get_name(room);

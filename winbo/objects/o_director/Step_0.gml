@@ -119,7 +119,7 @@ switch(global.game_state){
 					//resource[Resource.cash][Team.player] = 0;
 					
 					//Reset Next Level
-					next_level = r_game_level_test;
+					next_level = r_game_level_0;
 				}
 			}
 		#endregion

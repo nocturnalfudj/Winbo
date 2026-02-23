@@ -10,5 +10,5 @@ function level_select_get_next_room(_current_room) {
 	}
 	
 	// Fallback to test level if not found
-	return r_game_level_test;
+	return r_game_level_0;
 }
