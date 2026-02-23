@@ -117,6 +117,7 @@ is_player = true;
 	acceleration_sway_enable = false;
 	acceleration_sway_max = 5;
 	acceleration_sway_lerp_val = 0.3;
+	quick_smoke_fx_enable = false;
 	
 	//Float
 	float_countdown_max = SECOND * 1;

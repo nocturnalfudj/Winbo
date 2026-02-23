@@ -212,14 +212,16 @@ function player_state_move(){
 						}
 					}
 					
-					// Jumping smoke FX (ground puff)
-					var _jump_smoke_sprite = (input_move_magnitude > 0.1) ? spr_smoke_jump_diagonal : spr_smoke_jump_upward;
-					var _jump_smoke_xscale = 1;
-					if (input_move_magnitude > 0.1) {
-						// The diagonal jump smoke art faces left by default; flip so it matches travel direction.
-						_jump_smoke_xscale = (input_move_direction > 90 && input_move_direction < 270) ? 1 : -1;
-					}
-					fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT);
+						if(quick_smoke_fx_enable){
+							// Jumping smoke FX (ground puff)
+							var _jump_smoke_sprite = (input_move_magnitude > 0.1) ? spr_smoke_jump_diagonal : spr_smoke_jump_upward;
+							var _jump_smoke_xscale = 1;
+							if (input_move_magnitude > 0.1) {
+								// The diagonal jump smoke art faces left by default; flip so it matches travel direction.
+								_jump_smoke_xscale = (input_move_direction > 90 && input_move_direction < 270) ? 1 : -1;
+							}
+							fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT);
+						}
 				}
 			}
 	#endregion
@@ -282,8 +284,10 @@ function player_state_move(){
 		//Add walking direction change transition to front of queue
 		image_system_queue_add_to_front(sprite_transition_walk_to_walk_other_direction, ANIMATION_FPS_DEFAULT);
 		
-		// Sharp movement FX (snap direction change)
-		fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", spr_smoke_sharp_movement, face_horizontal, 1, 0, ANIMATION_FPS_DEFAULT);
+		if(quick_smoke_fx_enable){
+			// Sharp movement FX (snap direction change)
+			fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", spr_smoke_sharp_movement, face_horizontal, 1, 0, ANIMATION_FPS_DEFAULT);
+		}
 	}
 	
 	//Dash

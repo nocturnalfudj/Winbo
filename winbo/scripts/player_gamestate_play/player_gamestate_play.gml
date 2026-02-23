@@ -172,13 +172,15 @@ function player_gamestate_play(){
 						//Bump Sprite
 						image_system_setup(sprite_bump,ANIMATION_FPS_DEFAULT,true,false,0,IMAGE_LOOP_FULL);
 						
-						// Bump impact FX (wall bumps only)
-						if (collision.x == 1) {
-							fx_spawn_sprite_once(bbox_right, y, "lyr_pfx_foreground", spr_smoke_bump_impact, -1, 1, 0, ANIMATION_FPS_DEFAULT);
-						}
-						else if (collision.x == -1) {
-							fx_spawn_sprite_once(bbox_left, y, "lyr_pfx_foreground", spr_smoke_bump_impact, 1, 1, 0, ANIMATION_FPS_DEFAULT);
-						}
+							if(quick_smoke_fx_enable){
+								// Bump impact FX (wall bumps only)
+								if (collision.x == 1) {
+									fx_spawn_sprite_once(bbox_right, y, "lyr_pfx_foreground", spr_smoke_bump_impact, -1, 1, 0, ANIMATION_FPS_DEFAULT);
+								}
+								else if (collision.x == -1) {
+									fx_spawn_sprite_once(bbox_left, y, "lyr_pfx_foreground", spr_smoke_bump_impact, 1, 1, 0, ANIMATION_FPS_DEFAULT);
+								}
+							}
 					
 						if(_platform_crumble_dash_collision){
 							//Camera Shake
