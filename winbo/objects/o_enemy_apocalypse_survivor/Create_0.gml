@@ -193,7 +193,7 @@ event_inherited();
 	// Enable detection to aggro when player gets close
 	hostility_detection_enable = true;
 	hostility_detection_range = 1000; // Horizontal detection distance
-	hostility_detection_y_threshold = 200; // Vertical detection distance
+	hostility_detection_y_threshold = 1000; // Vertical detection distance
 
 	// De-aggro disabled for now (handled in later tasks)
 	deaggro_enable = false;
