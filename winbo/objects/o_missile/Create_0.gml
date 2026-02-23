@@ -19,6 +19,7 @@ deflect_flyoff_active = false;
 deflect_flyoff_speed = 50;
 deflect_flyoff_margin = 192;
 deflect_flyoff_lifetime = 1.25 * SECOND;
+deflect_flyoff_sprite_spin_speed = 18;
 
 // Rotate to velocity direction
 rotate_to_velocity_direction = true;

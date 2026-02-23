@@ -1,6 +1,11 @@
 {
   "$GMMacOptions":"",
   "%Name":"macOS",
+  "ConfigValues":{
+    "desktop":{
+      "option_mac_texture_page":"8192x8192",
+    },
+  },
   "name":"macOS",
   "option_mac_allow_fullscreen":false,
   "option_mac_allow_incoming_network":false,

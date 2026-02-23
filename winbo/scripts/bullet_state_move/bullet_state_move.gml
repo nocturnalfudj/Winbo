@@ -78,10 +78,17 @@ function bullet_state_move(){
 	}
 	
 	#region Update Angle
-		//Set Direction to Velocity Dir (with optional sprite offset for backwards-facing sprites)
-		if(rotate_to_velocity_direction){
-			if(state == BulletState.move)
+		if(state == BulletState.move){
+			// Deflected fly-off uses sprite spin instead of velocity-facing.
+			if(deflect_flyoff_active){
+				if(deflect_flyoff_sprite_spin_speed != 0){
+					transform_set(transform[TransformType.anchor],TransformValue.angle,deflect_flyoff_sprite_spin_speed * _delta_time,true);
+				}
+			}
+			// Set direction to velocity (with optional sprite offset for backwards-facing sprites).
+			else if(rotate_to_velocity_direction){
 				transform_set(transform[TransformType.anchor],TransformValue.angle,velocity_dir + sprite_angle_offset,false);
+			}
 		}
 	#endregion
 	

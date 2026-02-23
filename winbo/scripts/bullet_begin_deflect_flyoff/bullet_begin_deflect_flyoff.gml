@@ -9,11 +9,10 @@ function bullet_begin_deflect_flyoff(_direction){
 	deflect_flyoff_active = true;
 	state = BulletState.move;
 
-	// Fly-off projectiles should not home or collide with solids.
+	// Fly-off projectiles should stop homing.
 	homing_enable = false;
 	homing_target = noone;
 	homing_delay = 0;
-	move_collision_object = noone;
 
 	// Make deflected projectile harmless.
 	damage = 0;
