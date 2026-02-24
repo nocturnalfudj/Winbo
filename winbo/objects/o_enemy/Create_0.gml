@@ -179,6 +179,18 @@ death_smoke_delay_steps = 2;
 	
 	// Edge response while hostile in move state (optional; avoids jitter when chasing toward an off-ledge target)
 	hostile_stop_at_edges_enable = false;
+
+	// Ground obstacle reversal (objects + spikes)
+	obstacle_turn_lookahead_extra_px = 6;
+	obstacle_turn_ground_probe_y_offset = 2;
+	obstacle_turn_body_probe_y_offset = 0;
+	obstacle_turn_block_spikes_enable = true;
+	obstacle_turn_spike_active_scale_min = 0.15;
+
+	// Hostile obstacle reversal lock (keeps opposite direction briefly after turning)
+	hostile_obstacle_reverse_lock_time_max = SECOND * 0.35;
+	hostile_obstacle_reverse_lock_time = 0;
+	hostile_obstacle_reverse_direction = 0;
 #endregion
 
 #region Hostility / Detection

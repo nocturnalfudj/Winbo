@@ -23,49 +23,53 @@ function enemy_state_move(){
 	}
 
 	//Detection / Startled
-	if((!is_hostile) && (hostility_detection_enable)){
-		target_update(TargetType.attack);
+		if((!is_hostile) && (hostility_detection_enable)){
+			target_update(TargetType.attack);
 
-		// Check both total distance AND vertical distance for aggro
-		var _within_range = target[TargetType.attack].is_within_distance(hostility_detection_range);
-		var _within_y_range = abs(target[TargetType.attack].y - y) <= hostility_detection_y_threshold;
+			// Check both total distance AND vertical distance for aggro
+			var _within_range = target[TargetType.attack].is_within_distance(hostility_detection_range);
+			var _within_y_range = abs(target[TargetType.attack].y - y) <= hostility_detection_y_threshold;
 
-		if(_within_range && _within_y_range){
-			// Become hostile
-			is_hostile = true;
-			hostility_detection_enable = false;
+			if(_within_range && _within_y_range){
+				// Become hostile
+				is_hostile = true;
+				hostility_detection_enable = false;
 
-			//Face player
-			if(target[TargetType.attack].x > x){
-				face_horizontal = 1;
-			}
-			else{
-				face_horizontal = -1;
-			}
-
-			// Only play startled animation if it hasn't been played before
-			if(!has_played_startled){
-				has_played_startled = true;
-
-				//Play startled
-				var _startled_sprite;
-				_startled_sprite = sprite_startled_left;
-				if(sprite_direction_enable && (sprite_startled_left != noone) && (sprite_startled_right != noone)){
-					_startled_sprite = enemy_sprite_get_directional(sprite_startled_left,sprite_startled_right);
+				//Face player
+				if(target[TargetType.attack].x > x){
+					face_horizontal = 1;
+				}
+				else{
+					face_horizontal = -1;
 				}
 
-				if(_startled_sprite != noone){
-					image_system_setup(_startled_sprite,ANIMATION_FPS_DEFAULT * animation_fps_multiplier,true,false,0,IMAGE_LOOP_FULL);
-					if(sprite_startled_start_frame > 0){
-						image_set_frame(image, sprite_startled_start_frame);
+				// Only play startled animation if it hasn't been played before
+				if(!has_played_startled){
+					has_played_startled = true;
+
+					//Play startled
+					var _startled_sprite;
+					_startled_sprite = sprite_startled_left;
+					if(sprite_direction_enable && (sprite_startled_left != noone) && (sprite_startled_right != noone)){
+						_startled_sprite = enemy_sprite_get_directional(sprite_startled_left,sprite_startled_right);
 					}
-				}
 
-				state = EnemyState.startled;
-				return;
+					if(_startled_sprite != noone){
+						image_system_setup(_startled_sprite,ANIMATION_FPS_DEFAULT * animation_fps_multiplier,true,false,0,IMAGE_LOOP_FULL);
+						if(sprite_startled_start_frame > 0){
+							image_set_frame(image, sprite_startled_start_frame);
+						}
+					}
+
+					state = EnemyState.startled;
+					return;
+				}
+				else{
+					// Re-aggro after de-aggro: allow immediate attack eligibility.
+					attack_countdown = 0;
+				}
 			}
 		}
-	}
 
 	#region Input
 		// If a queued animation (turn transition) is playing, don't apply movement this step.
@@ -104,10 +108,24 @@ function enemy_state_move(){
 			}
 		}
 		else if(move_grounded){
-			// Hostile follow: steer toward player X
+			//Detla Time Factor
+			var _delta_time;
+			if(time_scale_enable)
+				_delta_time = global.delta_time_factor_scaled;
+			else
+				_delta_time = global.delta_time_factor;
+
+			// Hostile follow: steer toward player X unless a recent object/spike reversal
+			// is holding movement in the opposite direction for a short time.
 			if(is_hostile){
-				target_update(TargetType.attack);
-				input_aim_direction = (target[TargetType.attack].x >= x) ? 0 : 180;
+				if(hostile_obstacle_reverse_lock_time > 0){
+					hostile_obstacle_reverse_lock_time = max(0, hostile_obstacle_reverse_lock_time - _delta_time);
+					input_aim_direction = hostile_obstacle_reverse_direction;
+				}
+				else{
+					target_update(TargetType.attack);
+					input_aim_direction = (target[TargetType.attack].x >= x) ? 0 : 180;
+				}
 			}
 
 			// Patrol: after N walk loops, flip direction (this will trigger the queued turn animation later)
@@ -134,39 +152,69 @@ function enemy_state_move(){
 				}
 			}
 
-			//Detla Time Factor
-			var _delta_time;
-			if(time_scale_enable)
-				_delta_time = global.delta_time_factor_scaled;
-			else
-				_delta_time = global.delta_time_factor;
-
 			// Compute displacement magnitude (distance) but use intended direction
 			var _acceleration_multiplier = 0.5 * _delta_time;
 			var _disp_mag = abs((velocity.x + acceleration.x * _acceleration_multiplier) * _delta_time);
 
-			// Use sprite-based lookahead distance for reliable edge detection
-			var _lookahead = max(_disp_mag, sprite_width/2 + 4);
+			// Use sprite-based lookahead distance for reliable blocker detection
+			var _lookahead_extra = obstacle_turn_lookahead_extra_px;
+			_lookahead_extra ??= 6;
+			var _lookahead = max(_disp_mag, sprite_width/2 + _lookahead_extra);
 			var _next_x = x + _lookahead * lengthdir_x(1, input_aim_direction);
 
-			var _collision_check = place_meeting(_next_x, y + 2, move_collision_object);
+			var _ground_probe_y = obstacle_turn_ground_probe_y_offset;
+			_ground_probe_y ??= 2;
+			var _body_probe_y = obstacle_turn_body_probe_y_offset;
+			_body_probe_y ??= 0;
 
-			//Check if Still Grounded if Moving in Input Direction
-			if(!_collision_check || (collision.x != 0)){
-				if(is_hostile && hostile_stop_at_edges_enable){
-					// Hostile: stop at edge/wall (keep tracking, but don't flip away)
-					input_move_magnitude = 0;
-					velocity.x = 0;
-					acceleration.x = 0;
+			var _ground_ahead = place_meeting(_next_x, y + _ground_probe_y, move_collision_object);
+			var _solid_ahead = place_meeting(_next_x, y + _body_probe_y, move_collision_object) || (collision.x != 0);
+
+			var _spike_ahead = false;
+			if(obstacle_turn_block_spikes_enable){
+				var _spike_instance = instance_place(_next_x, y + _body_probe_y, o_spikes);
+				if(_spike_instance != noone){
+					var _spike_blocks = true;
+					if(variable_instance_exists(_spike_instance, "retractable_enable") && _spike_instance.retractable_enable){
+						_spike_blocks = false;
+
+						var _spike_scale = 1;
+						if(variable_instance_exists(_spike_instance, "transform")){
+							var _spike_anchor = _spike_instance.transform[TransformType.anchor];
+							if(_spike_anchor != noone){
+								_spike_scale = abs(_spike_anchor.value[TransformValue.yscale].current);
+							}
+						}
+
+						_spike_blocks = (_spike_scale > obstacle_turn_spike_active_scale_min);
+					}
+
+					_spike_ahead = _spike_blocks;
 				}
-				else{
-					// Relaxed/patrol (and default): flip direction at edge/wall
+			}
+
+			var _blocked_by_object = _solid_ahead || _spike_ahead;
+			var _blocked_by_edge = (!_ground_ahead && !_blocked_by_object);
+
+			if(_blocked_by_object || _blocked_by_edge){
+				// Objects/spikes always reverse. Edges preserve hostile stop-at-edge behavior.
+				var _reverse_direction = _blocked_by_object || !(is_hostile && hostile_stop_at_edges_enable);
+
+				// Stop before blocker/edge.
+				velocity.x = 0;
+				acceleration.x = 0;
+				input_move_magnitude = 0;
+
+				if(_reverse_direction){
 					input_aim_direction = (input_aim_direction == 0) ? 180 : 0;
 					face_horizontal = (input_aim_direction == 0) ? 1 : -1;
-					velocity.x = 0;
-					input_move_magnitude = 0; // Reset so animation switches to idle during turn
 
-					// If patrol auto-turn is enabled, reset the loop counter when we turn due to an edge/wall.
+					if(is_hostile && _blocked_by_object){
+						hostile_obstacle_reverse_direction = input_aim_direction;
+						hostile_obstacle_reverse_lock_time = hostile_obstacle_reverse_lock_time_max;
+					}
+
+					// If patrol auto-turn is enabled, reset the loop counter when we turn due to an edge/blocker.
 					if(!is_hostile && patrol_turn_after_walk_loops_enable){
 						patrol_walk_loops_count = 0;
 						patrol_pending_turn = false;
@@ -176,17 +224,28 @@ function enemy_state_move(){
 
 					// Queue turn sprite immediately (do not rely on later face-change detection)
 					if(!image.is_playing_queued){
-						var _edge_turn_sprite = noone;
-						if(sprite_direction_enable && (sprite_turn_relaxed_left != noone) && (sprite_turn_relaxed_right != noone)){
-							_edge_turn_sprite = enemy_sprite_get_directional(sprite_turn_relaxed_left, sprite_turn_relaxed_right);
+						var _turn_sprite = noone;
+						if(is_hostile){
+							if(sprite_direction_enable && (sprite_turn_hostile_left != noone) && (sprite_turn_hostile_right != noone)){
+								_turn_sprite = enemy_sprite_get_directional(sprite_turn_hostile_left, sprite_turn_hostile_right);
+							}
 						}
-						else if(sprite_turn_relaxed != noone){
-							_edge_turn_sprite = sprite_turn_relaxed;
+						else{
+							if(sprite_direction_enable && (sprite_turn_relaxed_left != noone) && (sprite_turn_relaxed_right != noone)){
+								_turn_sprite = enemy_sprite_get_directional(sprite_turn_relaxed_left, sprite_turn_relaxed_right);
+							}
+							else if(sprite_turn_relaxed != noone){
+								_turn_sprite = sprite_turn_relaxed;
+							}
 						}
-						if(_edge_turn_sprite != noone){
-							image_system_queue_add_to_front(_edge_turn_sprite, ANIMATION_FPS_DEFAULT * animation_fps_multiplier);
+						if(_turn_sprite != noone){
+							image_system_queue_add_to_front(_turn_sprite, ANIMATION_FPS_DEFAULT * animation_fps_multiplier);
 						}
 					}
+				}
+				else{
+					// Hostile edge-stop: keep tracking target, but do not flip away.
+					input_move_magnitude = 0;
 				}
 			}
 			else{
@@ -326,16 +385,23 @@ function enemy_state_move(){
 	#endregion
 
 	#region De-aggro Detection
-		// When hostile and de-aggro is enabled, track if player is out of vertical range
+		// When hostile and de-aggro is enabled, track if player is out of range.
 		if(is_hostile && deaggro_enable){
-			target_update(TargetType.attack);
+			var _target_exists;
+			_target_exists = target_update(TargetType.attack);
 
-			// Check vertical distance to target
-			var _v_dist;
-			_v_dist = abs(target[TargetType.attack].y - y);
+			var _out_of_range;
+			_out_of_range = true;
 
-			if(_v_dist > deaggro_y_distance_threshold){
-				// Player is out of vertical range - increment timer
+			if(_target_exists){
+				// Reuse existing threshold as a radius for this lean patch.
+				var _distance_to_target;
+				_distance_to_target = point_distance(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
+				_out_of_range = _distance_to_target > deaggro_y_distance_threshold;
+			}
+
+			if(_out_of_range){
+				// Player is out of range - increment timer.
 				deaggro_timer += global.delta_time_factor;
 
 				if(deaggro_timer >= deaggro_timer_max){
@@ -345,7 +411,7 @@ function enemy_state_move(){
 				}
 			}
 			else{
-				// Player is within range - reset timer
+				// Player is within range - reset timer.
 				deaggro_timer = 0;
 			}
 		}

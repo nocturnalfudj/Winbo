@@ -195,8 +195,10 @@ event_inherited();
 	hostility_detection_range = 1000; // Horizontal detection distance
 	hostility_detection_y_threshold = 1000; // Vertical detection distance
 
-	// De-aggro disabled for now (handled in later tasks)
-	deaggro_enable = false;
+	// De-aggro tuning
+	deaggro_enable = true;
+	deaggro_timer_max = SECOND * 1.5;
+	deaggro_y_distance_threshold = 1600;
 #endregion
 
 #region Movement - Patrol Defaults

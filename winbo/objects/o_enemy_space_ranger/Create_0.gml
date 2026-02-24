@@ -125,9 +125,9 @@ event_inherited();
 
 	// De-aggro when player escapes range (Space Ranger uses custom deaggro logic for both X and Y)
 	deaggro_enable = false; // Disable base deaggro (only checks Y distance)
-	deaggro_timer_max = SECOND * 4;
-	deaggro_x_distance_threshold = 1500; // Horizontal escape distance
-	deaggro_y_distance_threshold = 1500; // Vertical escape distance
+	deaggro_timer_max = SECOND * 1.5;
+	deaggro_x_distance_threshold = 1600; // Horizontal escape distance
+	deaggro_y_distance_threshold = 1600; // Vertical escape distance
 	deaggro_timer = 0; // Custom timer for Space Ranger
 #endregion
 

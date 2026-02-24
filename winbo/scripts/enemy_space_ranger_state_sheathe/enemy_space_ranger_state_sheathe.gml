@@ -42,6 +42,7 @@ function enemy_space_ranger_state_sheathe(){
 		is_hostile = false;
 		hostility_detection_enable = true;
 		deaggro_timer = 0;
+		attack_countdown = 0;
 
 		// Reset movement speed to patrol speed
 		movement_input_move_acceleration_factor_set(1.0);

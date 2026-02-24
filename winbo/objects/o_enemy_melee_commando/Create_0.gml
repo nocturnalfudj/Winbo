@@ -55,7 +55,7 @@ event_inherited();
 	patrol_turn_after_walk_loops_enable = true;
 	patrol_walk_loops_before_turn = 5;
 	
-	// Hostile follow: stop at edges/walls instead of flipping away from the target
+	// Hostile follow: stop at edges; reverse on physical blockers/spikes
 	hostile_stop_at_edges_enable = true;
 	
 	// Turn transitions
@@ -100,10 +100,10 @@ event_inherited();
 	hostility_detection_range = 600;
 	hostility_detection_y_threshold = 200; // only aggro if player is within vertical range
 
-	// De-aggro: sheathe weapon when player is out of vertical range for too long
+	// De-aggro: sheathe weapon when player is out of range for too long
 	deaggro_enable = true;
-	deaggro_timer_max = SECOND * 3;
-	deaggro_y_distance_threshold = 200;
+	deaggro_timer_max = SECOND * 1.5;
+	deaggro_y_distance_threshold = 1200;
 	
 	// Scale down (and set rest scale)
 	var _scale;
