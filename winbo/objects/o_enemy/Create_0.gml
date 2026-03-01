@@ -201,11 +201,12 @@ death_smoke_delay_steps = 2;
 	hostility_detection_y_threshold = 9999; // max vertical distance for aggro (large default = no restriction)
 
 	// De-aggro system: enemy sheathes weapon and returns to relaxed state
-	// when player is out of vertical range for too long
+	// when player is out of radial range for too long.
 	deaggro_enable = false;
 	deaggro_timer = 0;
 	deaggro_timer_max = SECOND * 3;
-	deaggro_y_distance_threshold = 200; // vertical distance to trigger de-aggro countdown
+	deaggro_distance_threshold = 200; // radial distance to trigger de-aggro countdown
+	deaggro_y_distance_threshold = deaggro_distance_threshold; // legacy alias (kept for compatibility)
 
 	// Startled animation tracking - only plays once per enemy lifetime
 	has_played_startled = false;

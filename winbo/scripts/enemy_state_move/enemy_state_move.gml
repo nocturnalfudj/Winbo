@@ -394,15 +394,30 @@ function enemy_state_move(){
 			_out_of_range = true;
 
 			if(_target_exists){
-				// Reuse existing threshold as a radius for this lean patch.
 				var _distance_to_target;
 				_distance_to_target = point_distance(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
-				_out_of_range = _distance_to_target > deaggro_y_distance_threshold;
+
+				// De-aggro uses a radial distance threshold.
+				var _deaggro_distance_threshold;
+				if(variable_instance_exists(id, "deaggro_distance_threshold")){
+					_deaggro_distance_threshold = deaggro_distance_threshold;
+				}
+				else{
+					// Legacy fallback for older objects that still set the old variable.
+					_deaggro_distance_threshold = deaggro_y_distance_threshold;
+				}
+
+				// Keep legacy alias in sync while old content still references it.
+				if(variable_instance_exists(id, "deaggro_y_distance_threshold")){
+					deaggro_y_distance_threshold = _deaggro_distance_threshold;
+				}
+
+				_out_of_range = _distance_to_target > _deaggro_distance_threshold;
 			}
 
 			if(_out_of_range){
 				// Player is out of range - increment timer.
-				deaggro_timer += global.delta_time_factor;
+				deaggro_timer += global.delta_time_factor_scaled;
 
 				if(deaggro_timer >= deaggro_timer_max){
 					// De-aggro: transition to sheathe state

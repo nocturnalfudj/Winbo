@@ -198,7 +198,8 @@ event_inherited();
 	// De-aggro tuning
 	deaggro_enable = true;
 	deaggro_timer_max = SECOND * 1.5;
-	deaggro_y_distance_threshold = 1600;
+	deaggro_distance_threshold = 1600;
+	deaggro_y_distance_threshold = deaggro_distance_threshold; // legacy alias (kept for compatibility)
 #endregion
 
 #region Movement - Patrol Defaults

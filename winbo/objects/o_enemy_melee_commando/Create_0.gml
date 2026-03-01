@@ -103,7 +103,8 @@ event_inherited();
 	// De-aggro: sheathe weapon when player is out of range for too long
 	deaggro_enable = true;
 	deaggro_timer_max = SECOND * 1.5;
-	deaggro_y_distance_threshold = 1200;
+	deaggro_distance_threshold = 1200;
+	deaggro_y_distance_threshold = deaggro_distance_threshold; // legacy alias (kept for compatibility)
 	
 	// Scale down (and set rest scale)
 	var _scale;
