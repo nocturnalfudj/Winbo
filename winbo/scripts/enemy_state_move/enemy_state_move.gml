@@ -1,3 +1,43 @@
+function enemy_spike_is_active(_spike_instance, _active_scale_min){
+	if(_spike_instance == noone || !instance_exists(_spike_instance)){
+		return false;
+	}
+
+	_active_scale_min ??= 0.15;
+
+	// Stationary spikes (or any non-retractable variant) always block.
+	if(!(variable_instance_exists(_spike_instance, "retractable_enable") && _spike_instance.retractable_enable)){
+		return true;
+	}
+
+	// Retractable spikes only block while visibly out.
+	var _spike_scale = 1;
+	if(variable_instance_exists(_spike_instance, "transform")){
+		var _spike_anchor = _spike_instance.transform[TransformType.anchor];
+		if(_spike_anchor != noone){
+			_spike_scale = abs(_spike_anchor.value[TransformValue.yscale].current);
+		}
+	}
+	else if(variable_instance_exists(_spike_instance, "image_yscale")){
+		_spike_scale = abs(_spike_instance.image_yscale);
+	}
+
+	return (_spike_scale > _active_scale_min);
+}
+
+function enemy_spike_contact_kill_check(){
+	var _active_scale_min = obstacle_turn_spike_active_scale_min;
+	_active_scale_min ??= 0.15;
+
+	var _spike_instance = instance_place(x, y, o_spikes);
+	if(enemy_spike_is_active(_spike_instance, _active_scale_min)){
+		character_kill();
+		return true;
+	}
+
+	return false;
+}
+
 function enemy_state_move(){
 	//Update Health
 	character_health();
@@ -173,32 +213,45 @@ function enemy_state_move(){
 			var _spike_ahead = false;
 			if(obstacle_turn_block_spikes_enable){
 				var _spike_instance = instance_place(_next_x, y + _body_probe_y, o_spikes);
-				if(_spike_instance != noone){
-					var _spike_blocks = true;
-					if(variable_instance_exists(_spike_instance, "retractable_enable") && _spike_instance.retractable_enable){
-						_spike_blocks = false;
-
-						var _spike_scale = 1;
-						if(variable_instance_exists(_spike_instance, "transform")){
-							var _spike_anchor = _spike_instance.transform[TransformType.anchor];
-							if(_spike_anchor != noone){
-								_spike_scale = abs(_spike_anchor.value[TransformValue.yscale].current);
-							}
-						}
-
-						_spike_blocks = (_spike_scale > obstacle_turn_spike_active_scale_min);
-					}
-
-					_spike_ahead = _spike_blocks;
-				}
+				_spike_ahead = enemy_spike_is_active(_spike_instance, obstacle_turn_spike_active_scale_min);
 			}
 
-			var _blocked_by_object = _solid_ahead || _spike_ahead;
+			var _blocked_by_solid = _solid_ahead;
+			var _blocked_by_spike = _spike_ahead;
+			var _blocked_by_object = _blocked_by_solid || _blocked_by_spike;
 			var _blocked_by_edge = (!_ground_ahead && !_blocked_by_object);
 
 			if(_blocked_by_object || _blocked_by_edge){
-				// Objects/spikes always reverse. Edges preserve hostile stop-at-edge behavior.
+				// Default behaviour: blockers reverse, edges preserve hostile stop-at-edge behaviour.
 				var _reverse_direction = _blocked_by_object || !(is_hostile && hostile_stop_at_edges_enable);
+
+				// Spike-specific hostile handling:
+				// - melee: de-aggro
+				// - ranged: stop/park
+				// - fallback: reverse
+				// Solid blocking behaviour stays unchanged.
+				if(is_hostile && _blocked_by_spike && !_blocked_by_solid){
+					switch(hostile_spike_response){
+						case HostileSpikeResponse.deaggro:
+							velocity.x = 0;
+							acceleration.x = 0;
+							input_move_magnitude = 0;
+							hostile_obstacle_reverse_lock_time = 0;
+							hostile_obstacle_reverse_direction = input_aim_direction;
+							state = EnemyState.sheathe;
+							return;
+
+						case HostileSpikeResponse.stop:
+							_reverse_direction = false;
+							hostile_obstacle_reverse_lock_time = 0;
+						break;
+
+						case HostileSpikeResponse.reverse:
+						default:
+							_reverse_direction = true;
+						break;
+					}
+				}
 
 				// Stop before blocker/edge.
 				velocity.x = 0;

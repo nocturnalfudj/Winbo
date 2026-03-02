@@ -77,6 +77,11 @@ function enemy_gamestate_play(){
 		}
 	#endregion
 
+	// Retractable spikes can pop up under enemies and kill them.
+	if((state != EnemyState.death) && (state != EnemyState.destroy)){
+		enemy_spike_contact_kill_check();
+	}
+
 	//Image Update
 	image_system_update();
 

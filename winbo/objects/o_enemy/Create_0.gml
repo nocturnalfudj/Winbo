@@ -141,6 +141,16 @@ death_smoke_delay_steps = 2;
 		SIZE
 	}
 	attack_type = AttackType.ranged;
+
+	// Hostile response when a spike blocks movement
+	enum HostileSpikeResponse{
+		reverse,
+		stop,
+		deaggro,
+
+		SIZE
+	}
+	hostile_spike_response = HostileSpikeResponse.reverse;
 	
 	//Ranged Attack
 	attack_ranged_can_aim_downward = false;
