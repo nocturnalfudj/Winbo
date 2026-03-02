@@ -141,4 +141,39 @@ function director_environment_data_setup(){
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
+	
+	#region Bonus Room
+		_environment = Environment.bonus_room_environment;
+		_environment_name = "Bonus Room";
+		_environment_tile = noone;
+		_environment_foreground = noone;
+		environment[_environment] = new EnvironmentData(
+			_environment,
+			_environment_name,
+			_environment_tile,
+			_environment_foreground,
+			[
+				{mode: "normal", sprite: spr_bg_bonus_layer_4_environment, parallax_x: 1.00, parallax_y: _subtle_parallax_y(1.00), offset_y: _new_bg_offset_y},
+				{mode: "normal", sprite: spr_bg_bonus_layer_3_wall_paintings_stained_glass, parallax_x: 0.82, parallax_y: _subtle_parallax_y(0.82), offset_y: _new_bg_offset_y},
+				{mode: "normal", sprite: spr_bg_bonus_layer_2_pillars_arches, parallax_x: 0.68, parallax_y: _subtle_parallax_y(0.68), offset_y: _new_bg_offset_y},
+				{
+					mode: "anchored_animated_overlay",
+					base_sprite: spr_bg_bonus_chandelier_base,
+					animated_sprite: spr_bg_bonus_chandelier_candles_anim,
+					parallax_x: 0.62,
+					parallax_y: _subtle_parallax_y(0.62),
+					offset_y: _new_bg_offset_y,
+					fps: 15,
+					loop_width: 7680,
+					anchor_x: [960, 3840, 6720]
+				},
+				{mode: "normal", sprite: spr_bg_bonus_layer_1_front_bridge_ceiling, parallax_x: 0.55, parallax_y: _subtle_parallax_y(0.55), offset_y: _new_bg_offset_y}
+			],
+			[]
+		);
+		with(environment[_environment]){
+			texture_group = "default_environment";
+		}
+		_apply_default_vfx(environment[_environment]);
+	#endregion
 }

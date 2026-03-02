@@ -140,6 +140,31 @@ if(o_master.debug_navigation_grid_enable){
 							_layer.offset_y
 						);
 					break;
+					
+					case "anchored_animated_overlay":
+						var _overlay_frame_count = sprite_get_number(_layer.animated_sprite);
+						var _overlay_frame = 0;
+						if(_overlay_frame_count > 1){
+							var _overlay_fps = variable_struct_exists(_layer, "fps") ? _layer.fps : ANIMATION_FPS_DEFAULT;
+							_overlay_frame = floor(bg_anim_time_seconds * _overlay_fps) mod _overlay_frame_count;
+						}
+						
+						var _loop_width = variable_struct_exists(_layer, "loop_width") ? _layer.loop_width : sprite_get_width(_layer.base_sprite);
+						director_draw_parallax_layer_anchored_animated(
+							_layer.base_sprite,
+							_layer.animated_sprite,
+							_overlay_frame,
+							_camera_x,
+							_camera_y,
+							_camera_width,
+							_camera_height,
+							_layer.parallax_x,
+							_layer.parallax_y,
+							_layer.offset_y,
+							_loop_width,
+							_layer.anchor_x
+						);
+					break;
 				}
 			}
 			

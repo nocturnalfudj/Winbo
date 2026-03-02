@@ -134,6 +134,7 @@
 		default_environment,
 		level_1_environment,
 		level_2_environment,
+		bonus_room_environment,
 		
 		SIZE
 	}
