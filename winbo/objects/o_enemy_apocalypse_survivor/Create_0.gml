@@ -11,8 +11,10 @@ event_inherited();
 
 	// Core sprites
 	sprite_idle = spr_apocalypse_survivor_idle;
-	sprite_startled_left = spr_apocalypse_survivor_startle;
-	sprite_startled_right = spr_apocalypse_survivor_startle;
+	sprite_startled_left = spr_apocalypse_survivor_startle_standing;
+	sprite_startled_right = spr_apocalypse_survivor_startle_standing;
+	sprite_sheathe_left = spr_apocalypse_survivor_deaggro;
+	sprite_sheathe_right = spr_apocalypse_survivor_deaggro;
 
 	// Walk (relaxed + hostile use same cycle for now)
 	// Walk sprite layout per Trello:
@@ -50,10 +52,10 @@ event_inherited();
 	sprite_animation_extended_enable = true;
 	animation_fps_multiplier = 1;
 
-	// Attack sprites (side-facing placeholders; multi-direction swaps will be handled later)
-	sprite_attack_telegraph = spr_apocalypse_survivor_aim_side_body;
-	sprite_attack_active = spr_apocalypse_survivor_shoot_side_body;
-	sprite_attack_recover = spr_apocalypse_survivor_idle;
+	// Attack sprites are refreshed from the current aim sector/posture before each attack phase.
+	sprite_attack_telegraph = spr_apocalypse_survivor_aim_standing_side_body;
+	sprite_attack_active = spr_apocalypse_survivor_shoot_standing_side_body;
+	sprite_attack_recover = spr_apocalypse_survivor_aim_standing_side_body;
 
 	// Death sprites (standing vs kneeling)
 	sprite_death_1 = spr_apocalypse_survivor_death_standing;
@@ -77,6 +79,14 @@ event_inherited();
 	sprite_aim_body = sprite_aim_side_body;
 	sprite_aim_legs = sprite_aim_side_legs;
 
+	// Standing aim sprites
+	sprite_aim_standing_side_body = spr_apocalypse_survivor_aim_standing_side_body;
+	sprite_aim_standing_side_legs = spr_apocalypse_survivor_aim_standing_side_legs;
+	sprite_aim_standing_diag_body = spr_apocalypse_survivor_aim_standing_diagonal_body;
+	sprite_aim_standing_diag_legs = spr_apocalypse_survivor_aim_standing_diagonal_legs;
+	sprite_aim_standing_up_body = spr_apocalypse_survivor_aim_standing_up_body;
+	sprite_aim_standing_up_legs = spr_apocalypse_survivor_aim_standing_up_legs;
+
 	// Two-layer SHOOT sprites for each sector (used during attack_active)
 	// SIDE sector
 	sprite_shoot_side_body = spr_apocalypse_survivor_shoot_side_body;
@@ -89,7 +99,20 @@ event_inherited();
 	// UPWARD sector - 3 layers
 	sprite_shoot_up_body = spr_apocalypse_survivor_shoot_up_body;
 	sprite_shoot_up_mid = spr_apocalypse_survivor_shoot_up_mid;
-	sprite_shoot_up_legs = spr_apocalypse_survivor_shoot_up_legs
+	sprite_shoot_up_legs = spr_apocalypse_survivor_shoot_up_legs;
+
+	// Standing shoot sprites
+	sprite_shoot_standing_side_body = spr_apocalypse_survivor_shoot_standing_side_body;
+	sprite_shoot_standing_side_legs = spr_apocalypse_survivor_shoot_standing_side_legs;
+	sprite_shoot_standing_diag_body = spr_apocalypse_survivor_shoot_standing_diagonal_body;
+	sprite_shoot_standing_diag_legs = spr_apocalypse_survivor_shoot_standing_diagonal_legs;
+	sprite_shoot_standing_up_body = spr_apocalypse_survivor_shoot_standing_up_body;
+	sprite_shoot_standing_up_legs = spr_apocalypse_survivor_shoot_standing_up_legs;
+
+	// Survivor-specific posture/de-aggro transitions
+	sprite_transition_crouch_to_stand = spr_apocalypse_survivor_transition_crouch_to_stand;
+	sprite_transition_stand_to_crouch = spr_apocalypse_survivor_transition_stand_to_crouch;
+	sprite_deaggro = spr_apocalypse_survivor_deaggro;
 
 	// Initial sprite
 	image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
@@ -186,9 +209,28 @@ event_inherited();
 #endregion
 
 #region Detection / Hostility
-	// Start non-hostile (patrol mode)
+	enum SurvivorPosture{
+		standing,
+		crouched
+	}
+
+	enum SurvivorTransition{
+		none,
+		startle_to_standing,
+		stand_to_crouch,
+		crouch_to_stand,
+		deaggro
+	}
+
+	// Variant toggle: child objects can lock this enemy to standing only.
+	survivor_allow_crouch = true;
+
+	// Start non-hostile (patrol mode) in standing posture.
 	is_hostile = false;
-	is_kneeling = false; // posture flag (set true when kneeling)
+	survivor_posture = SurvivorPosture.standing;
+	survivor_desired_posture = SurvivorPosture.standing;
+	survivor_transition = SurvivorTransition.none;
+	is_kneeling = false; // Compatibility alias; synced from survivor_posture each step.
 
 	// Enable detection to aggro when player gets close
 	hostility_detection_enable = true;

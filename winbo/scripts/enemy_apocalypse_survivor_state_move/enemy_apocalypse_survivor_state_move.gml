@@ -1,4 +1,41 @@
 function enemy_apocalypse_survivor_state_move(){
+	enemy_apocalypse_survivor_posture_sync();
+
+	if(!is_hostile){
+		survivor_desired_posture = SurvivorPosture.standing;
+		if(survivor_posture != SurvivorPosture.standing){
+			enemy_apocalypse_survivor_set_posture(SurvivorPosture.standing);
+		}
+		survivor_transition = SurvivorTransition.none;
+	}
+	else{
+		var _hostile_target = target_update(TargetType.attack);
+		if(_hostile_target && target[TargetType.attack].has_valid_target()){
+			aim_angle = point_direction(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
+		}
+
+		if(survivor_transition == SurvivorTransition.none && survivor_desired_posture != survivor_posture){
+			var _posture_transition = SurvivorTransition.crouch_to_stand;
+			if(survivor_desired_posture == SurvivorPosture.crouched){
+				_posture_transition = SurvivorTransition.stand_to_crouch;
+			}
+			enemy_apocalypse_survivor_start_transition(_posture_transition);
+		}
+	}
+
+	if((survivor_transition == SurvivorTransition.stand_to_crouch) || (survivor_transition == SurvivorTransition.crouch_to_stand)){
+		character_health();
+		velocity.x = 0;
+		acceleration.x = 0;
+		input_move_magnitude = 0;
+
+		if(sprite_current_frame >= (image.sprite_number - 1)){
+			enemy_apocalypse_survivor_finish_transition();
+			enemy_apocalypse_survivor_refresh_attack_sprites();
+		}
+		return;
+	}
+
 	// Relaxed patrol pause logic
 	if(!is_hostile){
 		if(patrol_pause_cooldown > 0){
@@ -15,22 +52,14 @@ function enemy_apocalypse_survivor_state_move(){
 		}
 	}
 	else{
-		// Hostile posture: kneel/aim and hold position (no chase movement)
-		is_kneeling = true;
-
-		// Track aim angle continuously while hostile.
+		// Hostile posture: hold position and track aim continuously.
 		var _has_target = target_update(TargetType.attack);
 		if(_has_target && target[TargetType.attack].has_valid_target()){
 			aim_angle = point_direction(x, y, target[TargetType.attack].x, target[TargetType.attack].y);
 		}
 	}
 
-	// If de-aggro resets hostility, clear kneel flag
-	if(!is_hostile && is_kneeling){
-		is_kneeling = false;
-	}
-
-	// Run shared move logic. While hostile, keep this enemy in place (kneel/aim).
+	// Run shared move logic. While hostile, keep this enemy in place (layered aim/hold).
 	if(is_hostile){
 		var _move_grounded_prev = move_grounded;
 		move_grounded = false;
@@ -43,6 +72,10 @@ function enemy_apocalypse_survivor_state_move(){
 
 	// If shared logic transitioned state (idle/startled/telegraph/etc.), stop here.
 	if(state != EnemyState.move || !is_hostile){
+		if(state == EnemyState.startled){
+			survivor_desired_posture = SurvivorPosture.standing;
+			survivor_transition = SurvivorTransition.startle_to_standing;
+		}
 		return;
 	}
 
@@ -180,6 +213,7 @@ function enemy_apocalypse_survivor_state_move(){
 
 	// Start telegraph state (mirrors base enemy_state_move attack transition).
 	state = EnemyState.attack_telegraph;
+	enemy_apocalypse_survivor_refresh_attack_sprites();
 
 	var _attack_sprite = sprite_attack_telegraph;
 	if(sprite_direction_enable && (sprite_attack_left != noone) && (sprite_attack_right != noone)){
@@ -193,6 +227,6 @@ function enemy_apocalypse_survivor_state_move(){
 
 	attack_active_attack_created = false;
 	attack_telegraph_countdown = attack_telegraph_countdown_max;
-	attack_active_countdown = attack_telegraph_countdown_max;
-	attack_recover_countdown = attack_telegraph_countdown_max;
+	attack_active_countdown = attack_active_countdown_max;
+	attack_recover_countdown = attack_recover_countdown_max;
 }

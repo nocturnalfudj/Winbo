@@ -1,6 +1,8 @@
 function enemy_apocalypse_survivor_gamestate_play(){
 	var _delta_time_scaled;
 	_delta_time_scaled = global.delta_time_factor_scaled;
+
+	enemy_apocalypse_survivor_posture_sync();
 	
 	#region Countdowns
 		// Attack
@@ -27,7 +29,7 @@ function enemy_apocalypse_survivor_gamestate_play(){
 		break;
 
 		case EnemyState.sheathe:
-			enemy_state_sheathe();
+			enemy_apocalypse_survivor_state_sheathe();
 		break;
 
 		case EnemyState.startled:
@@ -43,7 +45,7 @@ function enemy_apocalypse_survivor_gamestate_play(){
 		break;
 		
 		case EnemyState.attack_recover:
-			enemy_state_attack_recover();
+			enemy_apocalypse_survivor_state_attack_recover();
 		break;
 
 		case EnemyState.death:

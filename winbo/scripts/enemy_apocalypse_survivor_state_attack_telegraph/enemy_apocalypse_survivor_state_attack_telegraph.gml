@@ -1,4 +1,6 @@
 function enemy_apocalypse_survivor_state_attack_telegraph(){
+	enemy_apocalypse_survivor_posture_sync();
+
 	// Track aim during telegraph
 	character_health();
 	var _dbg_enable = variable_instance_exists(id, "debug_attack_logs_enable") && debug_attack_logs_enable;
@@ -34,6 +36,7 @@ function enemy_apocalypse_survivor_state_attack_telegraph(){
 
 	aim_angle = point_direction(x, y, _target_aim_x, _target_aim_y);
 	face_horizontal = (_target_x >= x) ? 1 : -1;
+	enemy_apocalypse_survivor_refresh_attack_sprites();
 
 	// Run telegraph countdown + transition using base behaviour
 	var _state_prev = state;

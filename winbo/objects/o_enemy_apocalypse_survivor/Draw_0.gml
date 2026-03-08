@@ -23,10 +23,16 @@ if(_force_fallback_draw){
 		|| (sprite_current == sprite_aim_diag_body)
 		|| (sprite_current == sprite_aim_up_body)
 		|| (sprite_current == sprite_aim_up_mid)
+		|| (sprite_current == sprite_aim_standing_side_body)
+		|| (sprite_current == sprite_aim_standing_diag_body)
+		|| (sprite_current == sprite_aim_standing_up_body)
 		|| (sprite_current == sprite_shoot_side_body)
 		|| (sprite_current == sprite_shoot_diag_body)
 		|| (sprite_current == sprite_shoot_up_body)
-		|| (sprite_current == sprite_shoot_up_mid);
+		|| (sprite_current == sprite_shoot_up_mid)
+		|| (sprite_current == sprite_shoot_standing_side_body)
+		|| (sprite_current == sprite_shoot_standing_diag_body)
+		|| (sprite_current == sprite_shoot_standing_up_body);
 	
 	if(_fallback_sprite != noone && ((sprite_current == noone) || (sprite_current < 0) || _is_layered_aim_sprite)){
 		sprite_current = _fallback_sprite;
@@ -34,11 +40,11 @@ if(_force_fallback_draw){
 	}
 }
 
-// Only custom-draw when hostile AND kneeling (aiming states), NOT during startled/death.
+// Only custom-draw when using the layered hostile aim/shoot sets.
 var _do_custom;
 _do_custom = aim_two_layer_enable
 	&& is_hostile
-	&& is_kneeling
+	&& (survivor_transition == SurvivorTransition.none)
 	&& (state == EnemyState.move || state == EnemyState.attack_telegraph || state == EnemyState.attack_active || state == EnemyState.attack_recover);
 
 if(!_do_custom){
@@ -76,56 +82,11 @@ var _barrel_y = _aim_data.barrel_y;
 var _muzzle_x = _aim_data.muzzle_x;
 var _muzzle_y = _aim_data.muzzle_y;
 
-// Select sprite set based on sector AND state (aim vs shoot)
-// During attack_active, use animated shoot sprites; otherwise use static aim sprites
-var _spr_legs = sprite_aim_side_legs;
-var _spr_body = sprite_aim_side_body;
 var _is_shooting = (state == EnemyState.attack_active);
-
-switch(_sector){
-	case "side":
-	case "side_flip":
-		if(_is_shooting){
-			_spr_legs = sprite_shoot_side_legs;
-			_spr_body = sprite_shoot_side_body;
-		}else{
-			_spr_legs = sprite_aim_side_legs;
-			_spr_body = sprite_aim_side_body;
-		}
-	break;
-
-	case "diag":
-	case "diag_flip":
-		if(_is_shooting){
-			_spr_legs = sprite_shoot_diag_legs;
-			_spr_body = sprite_shoot_diag_body;
-		}else{
-			_spr_legs = sprite_aim_diag_legs;
-			_spr_body = sprite_aim_diag_body;
-		}
-	break;
-
-	case "up":
-		if(_is_shooting){
-			_spr_legs = sprite_shoot_up_legs;
-			_spr_body = sprite_shoot_up_body;
-		}else{
-			_spr_legs = sprite_aim_up_legs;
-			_spr_body = sprite_aim_up_body;
-		}
-	break;
-
-	case "out":
-		// Behind the character - don't draw aim, fall back to side
-		if(_is_shooting){
-			_spr_legs = sprite_shoot_side_legs;
-			_spr_body = sprite_shoot_side_body;
-		}else{
-			_spr_legs = sprite_aim_side_legs;
-			_spr_body = sprite_aim_side_body;
-		}
-	break;
-}
+var _layers = enemy_apocalypse_survivor_get_layered_sprites(_sector, _is_shooting);
+var _spr_legs = _layers.legs;
+var _spr_mid = _layers.mid;
+var _spr_body = _layers.body;
 
 // Compute draw xscale based on facing
 // Account for sprite_face_direction (sprites face left by default)
@@ -137,26 +98,21 @@ if(_is_shooting){
 	_body_frame = sprite_current_frame;
 }
 
-// UPWARD sector uses 3 layers (legs/bottom, mid/rotating, body/top)
-if(_sector == "up"){
-	// Get upward sprite sets
-	var _spr_up_legs = _is_shooting ? sprite_shoot_up_legs : sprite_aim_up_legs;
-	var _spr_up_mid = _is_shooting ? sprite_shoot_up_mid : sprite_aim_up_mid;
-	var _spr_up_body = _is_shooting ? sprite_shoot_up_body : sprite_aim_up_body;
-
+// Crouched upward sector uses 3 layers (legs/bottom, mid/rotating, body/top).
+if(_layers.use_three_layers){
 	// Frame handling for shooting
 	var _legs_frame = 0;
 	var _mid_frame = 0;
 	if(_is_shooting){
-		if(_spr_up_legs != noone) _legs_frame = min(sprite_current_frame, sprite_get_number(_spr_up_legs) - 1);
-		if(_spr_up_mid != noone) _mid_frame = min(sprite_current_frame, sprite_get_number(_spr_up_mid) - 1);
-		_body_frame = min(sprite_current_frame, sprite_get_number(_spr_up_body) - 1);
+		if(_spr_legs != noone) _legs_frame = min(sprite_current_frame, sprite_get_number(_spr_legs) - 1);
+		if(_spr_mid != noone) _mid_frame = min(sprite_current_frame, sprite_get_number(_spr_mid) - 1);
+		_body_frame = min(sprite_current_frame, sprite_get_number(_spr_body) - 1);
 	}
 
 	// Draw layer 1: Bottom (legs/body part) - STATIC
-	if(_spr_up_legs != noone){
+	if(_spr_legs != noone){
 		draw_sprite_ext(
-			_spr_up_legs,
+			_spr_legs,
 			_legs_frame,
 			x + aim_legs_sprite_offset_x,
 			y + aim_legs_sprite_offset_y,
@@ -169,9 +125,9 @@ if(_sector == "up"){
 	}
 
 	// Draw layer 2: Middle (rotating torso/arm) - ROTATES
-	if(_spr_up_mid != noone){
+	if(_spr_mid != noone){
 		draw_sprite_ext(
-			_spr_up_mid,
+			_spr_mid,
 			_mid_frame,
 			x + aim_body_sprite_offset_x,
 			y + aim_body_sprite_offset_y,
@@ -184,9 +140,9 @@ if(_sector == "up"){
 	}
 
 	// Draw layer 3: Top (front knee) - STATIC
-	if(_spr_up_body != noone){
+	if(_spr_body != noone){
 		draw_sprite_ext(
-			_spr_up_body,
+			_spr_body,
 			_body_frame,
 			x + aim_body_sprite_offset_x,
 			y + aim_body_sprite_offset_y,
