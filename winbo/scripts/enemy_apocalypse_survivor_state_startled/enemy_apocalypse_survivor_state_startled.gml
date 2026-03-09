@@ -23,7 +23,16 @@ function enemy_apocalypse_survivor_state_startled(){
 		survivor_transition = SurvivorTransition.startle_to_standing;
 		enemy_apocalypse_survivor_finish_transition();
 		survivor_desired_posture = _hostile_posture;
-		enemy_apocalypse_survivor_refresh_attack_sprites();
 		state = EnemyState.move;
+
+		if(enemy_apocalypse_survivor_crouch_allowed() && _hostile_posture == SurvivorPosture.crouched){
+			enemy_apocalypse_survivor_start_transition(SurvivorTransition.stand_to_crouch);
+			velocity.x = 0;
+			acceleration.x = 0;
+			input_move_magnitude = 0;
+			return;
+		}
+
+		enemy_apocalypse_survivor_refresh_attack_sprites();
 	}
 }

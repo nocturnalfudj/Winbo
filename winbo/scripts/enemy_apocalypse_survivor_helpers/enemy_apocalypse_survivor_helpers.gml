@@ -296,6 +296,9 @@ function enemy_apocalypse_survivor_start_transition(_transition){
 	var _transition_sprite = enemy_apocalypse_survivor_get_transition_sprite(_transition);
 	if(_transition_sprite != noone && sprite_current != _transition_sprite){
 		image_system_setup(_transition_sprite, ANIMATION_FPS_DEFAULT * animation_fps_multiplier, true, false, 0, IMAGE_LOOP_FULL);
+		// Reset frame state so the move step doesn't immediately finish a fresh transition
+		// using the previous animation's sprite_current_frame value.
+		image_set_frame(image, 0);
 	}
 }
 
