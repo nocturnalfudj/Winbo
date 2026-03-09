@@ -35,84 +35,6 @@ function enemy_apocalypse_survivor_set_posture(_posture){
 	enemy_apocalypse_survivor_posture_sync();
 }
 
-function enemy_apocalypse_survivor_debug_log_aim_resolution(_target_x, _target_y, _face, _candidates, _best){
-	if(!(variable_instance_exists(id, "debug_attack_logs_enable") && debug_attack_logs_enable)){
-		return;
-	}
-
-	if(!(variable_instance_exists(id, "survivor_posture") && survivor_posture == SurvivorPosture.standing)){
-		return;
-	}
-
-	if(!variable_instance_exists(id, "debug_aim_log_cooldown")){
-		debug_aim_log_cooldown = 0;
-	}
-
-	if(!variable_instance_exists(id, "debug_aim_log_last_signature")){
-		debug_aim_log_last_signature = "";
-	}
-
-	var _delta_time = time_scale_enable ? global.delta_time_factor_scaled : global.delta_time_factor;
-	if(debug_aim_log_cooldown > 0){
-		debug_aim_log_cooldown -= _delta_time;
-	}
-
-	var _expected_side_sector = (_face == 1) ? "side" : "side_flip";
-	var _close_x = abs(_target_x - x) <= (standing_close_fire_origin_distance + 250);
-	var _suspicious = _close_x
-		|| _best.close_range_fallback
-		|| (_best.aim_angle > 0)
-		|| (_best.sector != _expected_side_sector);
-
-	if(!_suspicious){
-		return;
-	}
-
-	var _signature = _best.sector
-		+ "|" + string(round(_best.aim_angle))
-		+ "|" + string(round(_target_x - x))
-		+ "|" + string(round(_target_y - y))
-		+ "|" + string(_best.close_range_fallback ? 1 : 0);
-
-	if(debug_aim_log_cooldown > 0 && debug_aim_log_last_signature == _signature){
-		return;
-	}
-
-	debug_aim_log_last_signature = _signature;
-	debug_aim_log_cooldown = SECOND * 0.25;
-
-	var _candidate_text = "";
-	for(var _i = 0; _i < array_length(_candidates); _i++){
-		var _candidate = _candidates[_i];
-		if(_i > 0){
-			_candidate_text += " ";
-		}
-
-		_candidate_text += _candidate.sector
-			+ "(a=" + string(round(_candidate.aim_angle))
-			+ " e=" + string(round(_candidate.error))
-			+ " fb=" + string(_candidate.close_range_fallback ? 1 : 0)
-			+ " bh=" + string(_candidate.target_behind_muzzle ? 1 : 0)
-			+ " my=" + string(round(_candidate.muzzle_y - y))
-			+ " fy=" + string(round(_candidate.fire_y - y))
-			+ ")";
-	}
-
-	__mcp_log(
-		"[ASDBG][AIM]"
-		+ " t=(" + string(round(_target_x - x)) + "," + string(round(_target_y - y)) + ")"
-		+ " root_dir=" + string(round(point_direction(x, y, _target_x, _target_y)))
-		+ " best=" + _best.sector
-		+ " aim=" + string(round(_best.aim_angle))
-		+ " err=" + string(round(_best.error))
-		+ " fb=" + string(_best.close_range_fallback ? 1 : 0)
-		+ " bh=" + string(_best.target_behind_muzzle ? 1 : 0)
-		+ " dy_m=" + string(round(_target_y - _best.muzzle_y))
-		+ " dy_f=" + string(round(_target_y - _best.fire_y))
-		+ " cand=" + _candidate_text
-	);
-}
-
 function enemy_apocalypse_survivor_clamp_angle_to_sector(_angle, _sector, _target_y = undefined){
 	var _target_above = !is_undefined(_target_y) && (_target_y < y);
 
@@ -309,21 +231,18 @@ function enemy_apocalypse_survivor_resolve_aim_data(_target_x, _target_y){
 	if(variable_instance_exists(id, "survivor_posture") && survivor_posture == SurvivorPosture.standing){
 		var _best = undefined;
 		var _target_above = (_target_y < y);
-		var _candidates = [];
 		var _sectors = (_face == 1)
 			? (_target_above ? ["side", "diag", "up"] : ["side"])
 			: (_target_above ? ["side_flip", "diag_flip", "up"] : ["side_flip"]);
 
 		for(var _i = 0; _i < array_length(_sectors); _i++){
 			var _candidate = enemy_apocalypse_survivor_resolve_sector_candidate(_target_x, _target_y, _face, _sectors[_i]);
-			_candidates[array_length(_candidates)] = _candidate;
 
 			if(is_undefined(_best) || (_candidate.error < _best.error)){
 				_best = _candidate;
 			}
 		}
 
-		enemy_apocalypse_survivor_debug_log_aim_resolution(_target_x, _target_y, _face, _candidates, _best);
 		return _best;
 	}
 

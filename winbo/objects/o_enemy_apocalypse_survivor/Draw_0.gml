@@ -71,6 +71,8 @@ if(variable_instance_exists(id, "target") && target[TargetType.attack] != noone 
 var _aim_data = apocalypse_survivor_get_aim_data();
 var _sector = _aim_data.sector;
 var _draw_angle = _aim_data.draw_angle;
+var _body_draw_x = _aim_data.body_draw_x;
+var _body_draw_y = _aim_data.body_draw_y;
 var _barrel_x = _aim_data.barrel_x;
 var _barrel_y = _aim_data.barrel_y;
 var _muzzle_x = _aim_data.muzzle_x;
@@ -123,8 +125,8 @@ if(_layers.use_three_layers){
 		draw_sprite_ext(
 			_spr_mid,
 			_mid_frame,
-			x + aim_body_sprite_offset_x,
-			y + aim_body_sprite_offset_y,
+			_body_draw_x,
+			_body_draw_y,
 			_aim_xscale,
 			image_yscale,
 			_draw_angle,
@@ -176,8 +178,8 @@ else{
 		draw_sprite_ext(
 			_spr_body,
 			_body_frame,
-			x + aim_body_sprite_offset_x,
-			y + aim_body_sprite_offset_y,
+			_body_draw_x,
+			_body_draw_y,
 			_aim_xscale,
 			image_yscale,
 			_draw_angle,
@@ -231,13 +233,9 @@ else{
 }
 
 // Muzzle flash + shell (optional; uses string asset lookup so it won't crash if missing)
-// Shared rotation for FX offsets
-var _fx_base_x = _barrel_x * face_horizontal;
-var _fx_base_y = _barrel_y;
-var _fx_dist = point_distance(0, 0, _fx_base_x, _fx_base_y);
-var _fx_dir = point_direction(0, 0, _fx_base_x, _fx_base_y);
-var _fx_x = x + lengthdir_x(_fx_dist, _fx_dir + _draw_angle);
-var _fx_y = y + lengthdir_y(_fx_dist, _fx_dir + _draw_angle);
+// Share the corrected standing pivot transform with visual FX.
+var _fx_x = _muzzle_x;
+var _fx_y = _muzzle_y;
 
 if(muzzle_flash_timer > 0){
 	var _spr_flash = asset_get_index("spr_muzzle_flash_rifle");
@@ -251,12 +249,16 @@ if(shell_timer > 0){
 	var _spr_shell = asset_get_index("spr_bullet_shell_empty");
 	if(_spr_shell >= 0){
 		// Shell ejects slightly behind the barrel
-		var _shell_base_x = (_barrel_x - 20) * face_horizontal;
-		var _shell_base_y = _barrel_y + 10;
-		var _s_dist = point_distance(0, 0, _shell_base_x, _shell_base_y);
-		var _s_dir = point_direction(0, 0, _shell_base_x, _shell_base_y);
-		var _sx = x + lengthdir_x(_s_dist, _s_dir + _draw_angle);
-		var _sy = y + lengthdir_y(_s_dist, _s_dir + _draw_angle);
+		var _shell_pos = apocalypse_survivor_transform_local_point(
+			_body_draw_x,
+			_body_draw_y,
+			_barrel_x - 20,
+			_barrel_y + 10,
+			_draw_angle,
+			_aim_data.face_horizontal
+		);
+		var _sx = _shell_pos.x;
+		var _sy = _shell_pos.y;
 		draw_sprite_ext(_spr_shell, 0, _sx, _sy, 1, 1, 0, c_white, shell_timer / shell_timer_max);
 	}
 }

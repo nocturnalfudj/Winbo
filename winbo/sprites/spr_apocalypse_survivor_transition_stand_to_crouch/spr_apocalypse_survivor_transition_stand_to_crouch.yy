@@ -31,8 +31,8 @@
   "nineSlice":null,
   "origin":0,
   "parent":{
-    "name":"Sprites",
-    "path":"folders/Actors/Characters/Enemies/Ranged/ApocalypseSurvivor/Sprites.yy",
+    "name":"Standing",
+    "path":"folders/Actors/Characters/Enemies/Ranged/ApocalypseSurvivor/Sprites/Standing.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

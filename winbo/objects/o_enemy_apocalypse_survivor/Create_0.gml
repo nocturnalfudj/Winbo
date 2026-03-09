@@ -59,21 +59,21 @@ event_inherited();
 
 	// Death sprites (standing vs kneeling)
 	sprite_death_1 = spr_apocalypse_survivor_death_standing;
-	sprite_death_2 = spr_apocalypse_survivor_death_kneeling;
+	sprite_death_2 = spr_apocalypse_survivor_death_crouch;
 
 	// Two-layer aim sprites for each sector
 	// SIDE sector (0-45°, 315-360° and mirrored 135-225°)
-	sprite_aim_side_body = spr_apocalypse_survivor_aim_side_body;
-	sprite_aim_side_legs = spr_apocalypse_survivor_aim_side_legs;
+	sprite_aim_side_body = spr_apocalypse_survivor_aim_crouch_side_body;
+	sprite_aim_side_legs = spr_apocalypse_survivor_aim_crouch_side_legs;
 
 	// DIAGONAL sector (45-85° and mirrored 95-135°)
-	sprite_aim_diag_body = spr_apocalypse_survivor_aim_diagonal_body;
-	sprite_aim_diag_legs = spr_apocalypse_survivor_aim_diagonal_legs;
+	sprite_aim_diag_body = spr_apocalypse_survivor_aim_crouch_diagonal_body;
+	sprite_aim_diag_legs = spr_apocalypse_survivor_aim_crouch_diagonal_legs;
 
 	// UPWARD sector (85-95°) - 3 layers: body (top), mid (rotating), legs (bottom)
-	sprite_aim_up_body = spr_apocalypse_survivor_aim_up_body;
-	sprite_aim_up_mid = spr_apocalypse_survivor_aim_up_mid;
-	sprite_aim_up_legs = spr_apocalypse_survivor_aim_up_legs;
+	sprite_aim_up_body = spr_apocalypse_survivor_aim_crouch_up_body;
+	sprite_aim_up_mid = spr_apocalypse_survivor_aim_crouch_up_mid;
+	sprite_aim_up_legs = spr_apocalypse_survivor_aim_crouch_up_legs;
 
 	// Default aim sprites (backwards compatibility)
 	sprite_aim_body = sprite_aim_side_body;
@@ -89,17 +89,17 @@ event_inherited();
 
 	// Two-layer SHOOT sprites for each sector (used during attack_active)
 	// SIDE sector
-	sprite_shoot_side_body = spr_apocalypse_survivor_shoot_side_body;
-	sprite_shoot_side_legs = spr_apocalypse_survivor_shoot_side_legs;
+	sprite_shoot_side_body = spr_apocalypse_survivor_shoot_crouch_side_body;
+	sprite_shoot_side_legs = spr_apocalypse_survivor_shoot_crouch_side_legs;
 
 	// DIAGONAL sector
-	sprite_shoot_diag_body = spr_apocalypse_survivor_shoot_diagonal_body;
-	sprite_shoot_diag_legs = spr_apocalypse_survivor_shoot_diagonal_legs;
+	sprite_shoot_diag_body = spr_apocalypse_survivor_shoot_crouch_diagonal_body;
+	sprite_shoot_diag_legs = spr_apocalypse_survivor_shoot_crouch_diagonal_legs;
 
 	// UPWARD sector - 3 layers
-	sprite_shoot_up_body = spr_apocalypse_survivor_shoot_up_body;
-	sprite_shoot_up_mid = spr_apocalypse_survivor_shoot_up_mid;
-	sprite_shoot_up_legs = spr_apocalypse_survivor_shoot_up_legs;
+	sprite_shoot_up_body = spr_apocalypse_survivor_shoot_crouch_up_body;
+	sprite_shoot_up_mid = spr_apocalypse_survivor_shoot_crouch_up_mid;
+	sprite_shoot_up_legs = spr_apocalypse_survivor_shoot_crouch_up_legs;
 
 	// Standing shoot sprites
 	sprite_shoot_standing_side_body = spr_apocalypse_survivor_shoot_standing_side_body;
@@ -159,6 +159,14 @@ event_inherited();
 	standing_draw_angle_offset_diag = 44.022351;
 	standing_draw_angle_offset_diag_flip = 135.977649;
 	standing_draw_angle_offset_up = 90;
+	// Standing upper-body layers need their own rotation pivot because the actor origin
+	// sits below the aiming torso. Values are pre-scaled to match the 0.75 sprite scale.
+	standing_body_pivot_x_side = -10;
+	standing_body_pivot_y_side = -91;
+	standing_body_pivot_x_diag = -10;
+	standing_body_pivot_y_diag = -95;
+	standing_body_pivot_x_up = 3;
+	standing_body_pivot_y_up = 21;
 	standing_close_fire_origin_distance = 96;
 	standing_close_target_margin = 8;
 
@@ -216,13 +224,6 @@ event_inherited();
 
 	// Grounded enemies should not walk off ledges during attacks
 	edge_guard_attack_enable = true;
-
-	// Focused debug logs for survivor attack gating (used for repro diagnostics).
-	debug_attack_logs_enable = true;
-	debug_attack_log_reason = "";
-	debug_attack_log_reason_cooldown = 0;
-	debug_attack_log_last_state = "";
-	debug_attack_log_shot_count = 0;
 #endregion
 
 #region Detection / Hostility
@@ -241,6 +242,7 @@ event_inherited();
 
 	// Variant toggle: child objects can lock this enemy to standing only.
 	survivor_allow_crouch = true;
+	survivor_hostile_posture = SurvivorPosture.standing;
 
 	// Start non-hostile (patrol mode) in standing posture.
 	is_hostile = false;

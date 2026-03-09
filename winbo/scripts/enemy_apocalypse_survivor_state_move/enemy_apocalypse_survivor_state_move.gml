@@ -1,5 +1,6 @@
 function enemy_apocalypse_survivor_state_move(){
 	enemy_apocalypse_survivor_posture_sync();
+	var _was_hostile = is_hostile;
 
 	if(!is_hostile){
 		survivor_desired_posture = SurvivorPosture.standing;
@@ -70,6 +71,27 @@ function enemy_apocalypse_survivor_state_move(){
 		enemy_state_move();
 	}
 
+	// Base re-aggro skips the startled state after the first encounter,
+	// so restore this variant's intended hostile posture here.
+	if(!_was_hostile && is_hostile && state == EnemyState.move){
+		survivor_desired_posture = variable_instance_exists(id, "survivor_hostile_posture")
+			? survivor_hostile_posture
+			: SurvivorPosture.standing;
+
+		if(survivor_transition == SurvivorTransition.none && survivor_desired_posture != survivor_posture){
+			var _reaggro_transition = SurvivorTransition.crouch_to_stand;
+			if(survivor_desired_posture == SurvivorPosture.crouched){
+				_reaggro_transition = SurvivorTransition.stand_to_crouch;
+			}
+
+			enemy_apocalypse_survivor_start_transition(_reaggro_transition);
+			velocity.x = 0;
+			acceleration.x = 0;
+			input_move_magnitude = 0;
+			return;
+		}
+	}
+
 	// If shared logic transitioned state (idle/startled/telegraph/etc.), stop here.
 	if(state != EnemyState.move || !is_hostile){
 		if(state == EnemyState.startled){
@@ -79,43 +101,11 @@ function enemy_apocalypse_survivor_state_move(){
 		return;
 	}
 
-	var _dbg_enable = variable_instance_exists(id, "debug_attack_logs_enable") && debug_attack_logs_enable;
 	var _trigger_dist = target[TargetType.attack].distance_trigger;
-
-	if(_dbg_enable){
-		if(debug_attack_log_last_state != "move"){
-			__mcp_log("[ASDBG][STATE] move enter atk_cd=" + string(round(attack_countdown)));
-			debug_attack_log_last_state = "move";
-			debug_attack_log_reason = "";
-			debug_attack_log_reason_cooldown = 0;
-		}
-	}
-
-	var _dbg_log_gate = function(_reason, _h_dist, _h_trig, _v_dist, _v_tol, _los_blocked, _atk_cd){
-		if(!(variable_instance_exists(id, "debug_attack_logs_enable") && debug_attack_logs_enable)) return;
-
-		var _delta_time = time_scale_enable ? global.delta_time_factor_scaled : global.delta_time_factor;
-		if(debug_attack_log_reason_cooldown > 0){
-			debug_attack_log_reason_cooldown -= _delta_time;
-		}
-
-		if(debug_attack_log_reason != _reason || debug_attack_log_reason_cooldown <= 0){
-			debug_attack_log_reason = _reason;
-			debug_attack_log_reason_cooldown = SECOND * 0.75;
-			__mcp_log(
-				"[ASDBG][GATE] reason=" + _reason
-				+ " h=" + string(round(_h_dist)) + "/" + string(round(_h_trig))
-				+ " v=" + string(round(_v_dist)) + "/" + string(round(_v_tol))
-				+ " los=" + string(_los_blocked ? 1 : 0)
-				+ " atk_cd=" + string(round(_atk_cd))
-			);
-		}
-	};
 
 	// Custom deterministic attack-start gate for apocalypse survivor.
 	var _target_valid = target_update(TargetType.attack);
 	if(!_target_valid || target[TargetType.attack] == noone || !target[TargetType.attack].has_valid_target()){
-		_dbg_log_gate("no_target", -1, _trigger_dist, -1, attack_vertical_tolerance, false, attack_countdown);
 		return;
 	}
 
@@ -134,18 +124,15 @@ function enemy_apocalypse_survivor_state_move(){
 	var _v_dist = abs(_target_aim_y - _aim_data.fire_y);
 
 	if(_h_dist > _trigger_dist){
-		_dbg_log_gate("range_x", _h_dist, _trigger_dist, _v_dist, attack_vertical_tolerance, false, attack_countdown);
 		return;
 	}
 
 	if(_v_dist > attack_vertical_tolerance){
-		_dbg_log_gate("range_y", _h_dist, _trigger_dist, _v_dist, attack_vertical_tolerance, false, attack_countdown);
 		return;
 	}
 
 	// Never begin a shot sequence while off-camera.
 	if(!camera_visible){
-		_dbg_log_gate("offscreen", _h_dist, _trigger_dist, _v_dist, attack_vertical_tolerance, false, attack_countdown);
 		return;
 	}
 	var _los_blocked = false;
@@ -186,24 +173,11 @@ function enemy_apocalypse_survivor_state_move(){
 	}
 
 	if(_los_blocked){
-		_dbg_log_gate("los_blocked", _h_dist, _trigger_dist, _v_dist, attack_vertical_tolerance, true, attack_countdown);
 		return;
 	}
 
 	if(attack_countdown > 0){
-		_dbg_log_gate("cooldown", _h_dist, _trigger_dist, _v_dist, attack_vertical_tolerance, false, attack_countdown);
 		return;
-	}
-
-	if(_dbg_enable){
-		debug_attack_log_reason = "";
-		debug_attack_log_reason_cooldown = 0;
-		__mcp_log(
-			"[ASDBG][ATTACK] start_telegraph"
-			+ " h=" + string(round(_h_dist)) + "/" + string(round(_trigger_dist))
-			+ " v=" + string(round(_v_dist)) + "/" + string(round(attack_vertical_tolerance))
-			+ " atk_cd=" + string(round(attack_countdown))
-		);
 	}
 
 	// Start telegraph state (mirrors base enemy_state_move attack transition).
