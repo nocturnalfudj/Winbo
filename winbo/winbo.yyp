@@ -191,6 +191,7 @@
     {"$GMFolder":"","%Name":"Director","folderPath":"folders/Control/Director.yy","name":"Director","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Environment","folderPath":"folders/Control/Director/Environment.yy","name":"Environment","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Background","folderPath":"folders/Control/Director/Environment/Background.yy","name":"Background","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Bonus","folderPath":"folders/Control/Director/Environment/Background/Bonus.yy","name":"Bonus","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Forest","folderPath":"folders/Control/Director/Environment/Background/Forest.yy","name":"Forest","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Level 1","folderPath":"folders/Control/Director/Environment/Background/Level 1.yy","name":"Level 1","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Level 2","folderPath":"folders/Control/Director/Environment/Background/Level 2.yy","name":"Level 2","resourceType":"GMFolder","resourceVersion":"2.0",},

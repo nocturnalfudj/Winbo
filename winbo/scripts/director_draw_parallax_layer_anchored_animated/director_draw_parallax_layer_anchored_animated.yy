@@ -5,8 +5,8 @@
   "isDnD": false,
   "name": "director_draw_parallax_layer_anchored_animated",
   "parent": {
-    "name": "winbo",
-    "path": "winbo.yyp",
+    "name": "Director",
+    "path": "folders/Control/Director.yy",
   },
   "resourceType": "GMScript",
   "resourceVersion": "2.0",

@@ -25,8 +25,8 @@
   "nineSlice":null,
   "origin":0,
   "parent":{
-    "name":"winbo",
-    "path":"winbo.yyp",
+    "name":"Bonus",
+    "path":"folders/Control/Director/Environment/Background/Bonus.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",
