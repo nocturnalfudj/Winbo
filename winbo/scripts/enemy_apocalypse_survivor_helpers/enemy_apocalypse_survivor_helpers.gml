@@ -35,6 +35,27 @@ function enemy_apocalypse_survivor_set_posture(_posture){
 	enemy_apocalypse_survivor_posture_sync();
 }
 
+function enemy_apocalypse_survivor_resolve_aim_angle(_target_x, _target_y){
+	var _face = (_target_x >= x) ? 1 : -1;
+	var _resolved_angle = point_direction(x, y, _target_x, _target_y);
+
+	if(variable_instance_exists(id, "survivor_posture") && survivor_posture == SurvivorPosture.standing){
+		// Standing muzzle is offset well above the actor origin, so solve the
+		// visual aim direction from the muzzle position instead of from x/y.
+		for(var _i = 0; _i < 3; _i++){
+			var _aim_data = apocalypse_survivor_get_aim_data(_resolved_angle, _face);
+			_resolved_angle = point_direction(_aim_data.muzzle_x, _aim_data.muzzle_y, _target_x, _target_y);
+		}
+	}
+
+	return _resolved_angle;
+}
+
+function enemy_apocalypse_survivor_set_target_aim(_target_x, _target_y){
+	face_horizontal = (_target_x >= x) ? 1 : -1;
+	aim_angle = enemy_apocalypse_survivor_resolve_aim_angle(_target_x, _target_y);
+}
+
 function enemy_apocalypse_survivor_get_transition_sprite(_transition){
 	switch(_transition){
 		case SurvivorTransition.stand_to_crouch:

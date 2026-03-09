@@ -145,6 +145,20 @@ event_inherited();
 	barrel_offset_x_up = 13;
 	barrel_offset_y_up = -278;
 
+	// Standing posture uses a different rifle placement from the crouched set.
+	// These are derived from artist-supplied barrel tip coordinates, scaled to 0.75.
+	barrel_offset_standing_x_side = 290;
+	barrel_offset_standing_y_side = -114;
+	barrel_offset_standing_x_diag = 199;
+	barrel_offset_standing_y_diag = -307;
+	barrel_offset_standing_x_up = 116;
+	barrel_offset_standing_y_up = -266;
+	standing_draw_angle_offset_side = 0.824343;
+	standing_draw_angle_offset_side_flip = 179.175657;
+	standing_draw_angle_offset_diag = 44.022351;
+	standing_draw_angle_offset_diag_flip = 135.977649;
+	standing_draw_angle_offset_up = 90;
+
 	laser_length = 2000;
 	laser_width = 2;
 	laser_alpha = 1.0;
