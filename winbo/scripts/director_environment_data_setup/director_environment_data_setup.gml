@@ -156,17 +156,19 @@ function director_environment_data_setup(){
 				{mode: "normal", sprite: spr_bg_bonus_layer_4_environment, parallax_x: 1.00, parallax_y: _subtle_parallax_y(1.00), offset_y: _new_bg_offset_y},
 				{mode: "normal", sprite: spr_bg_bonus_layer_3_wall_paintings_stained_glass, parallax_x: 0.82, parallax_y: _subtle_parallax_y(0.82), offset_y: _new_bg_offset_y},
 				{mode: "normal", sprite: spr_bg_bonus_layer_2_pillars_arches, parallax_x: 0.68, parallax_y: _subtle_parallax_y(0.68), offset_y: _new_bg_offset_y},
-				{
-					mode: "anchored_animated_overlay",
-					base_sprite: spr_bg_bonus_chandelier_base,
-					animated_sprite: spr_bg_bonus_chandelier_candles_anim,
-					parallax_x: 0.62,
-					parallax_y: _subtle_parallax_y(0.62),
-					offset_y: _new_bg_offset_y,
-					fps: 15,
-					loop_width: 7680,
-					anchor_x: [960, 3840, 6720]
-				},
+					{
+						mode: "anchored_animated_overlay",
+						base_sprite: spr_bg_bonus_chandelier_base,
+						animated_sprite: spr_bg_bonus_chandelier_candles_anim,
+						parallax_x: 0.55,
+						parallax_y: _subtle_parallax_y(0.45),
+						offset_y: _new_bg_offset_y,
+						fps: 15,
+						loop_width: 7680,
+						anchor_x: [960, 3840, 6720],
+						anchor_sprite_x: 298,
+						clamp_y: false
+					},
 				{mode: "normal", sprite: spr_bg_bonus_layer_1_front_bridge_ceiling, parallax_x: 0.55, parallax_y: _subtle_parallax_y(0.55), offset_y: _new_bg_offset_y}
 			],
 			[]

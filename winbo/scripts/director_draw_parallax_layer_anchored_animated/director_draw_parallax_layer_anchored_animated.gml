@@ -12,6 +12,8 @@
 /// @param {Real} _offset_y Additional Y offset.
 /// @param {Real} _loop_width Width of one repeat cycle in world space.
 /// @param {array} _anchor_x Anchor X positions inside each loop cycle.
+/// @param {Real} [_anchor_sprite_x=0] Sprite-space X offset to align each anchor to.
+/// @param {Bool} [_clamp_y=true] Apply camera-relative Y clamping.
 function director_draw_parallax_layer_anchored_animated(
 	_base_sprite,
 	_animated_sprite,
@@ -24,7 +26,9 @@ function director_draw_parallax_layer_anchored_animated(
 	_parallax_y,
 	_offset_y,
 	_loop_width,
-	_anchor_x
+	_anchor_x,
+	_anchor_sprite_x = 0,
+	_clamp_y = true
 ) {
 	if(_loop_width <= 0){
 		return;
@@ -41,10 +45,12 @@ function director_draw_parallax_layer_anchored_animated(
 	var _base_x = _camera_x * _parallax_x;
 	var _base_y = (_camera_y * _parallax_y) + _offset_y;
 	
-	// Match the same camera-relative clamping used by existing parallax helpers.
-	var _y_min = _camera_y;
-	var _y_max = (_camera_y + _camera_height) - _sprite_height;
-	_base_y = clamp(_base_y, _y_max, _y_min);
+	if(_clamp_y){
+		// Match the same camera-relative clamping used by existing parallax helpers.
+		var _y_min = _camera_y;
+		var _y_max = (_camera_y + _camera_height) - _sprite_height;
+		_base_y = clamp(_base_y, _y_max, _y_min);
+	}
 	
 	var _camera_right = _camera_x + _camera_width;
 	var _loop_start = floor((_camera_x - _base_x) / _loop_width) - 1;
@@ -54,7 +60,7 @@ function director_draw_parallax_layer_anchored_animated(
 		var _loop_offset_x = _base_x + (_loop_index * _loop_width);
 		
 		for(var _anchor_i = 0; _anchor_i < _anchor_count; _anchor_i++){
-			var _draw_x = _loop_offset_x + _anchor_x[_anchor_i];
+			var _draw_x = _loop_offset_x + _anchor_x[_anchor_i] - _anchor_sprite_x;
 			if(_draw_x + _sprite_width < _camera_x || _draw_x > _camera_right){
 				continue;
 			}
