@@ -187,12 +187,12 @@ else{
 	}
 }
 
-// Laser sight (skip if out-of-sight sector)
-if(_sector != "out"){
-	var _lx0 = _muzzle_x;
-	var _ly0 = _muzzle_y;
-	var _lx1 = _lx0;
-	var _ly1 = _ly0;
+	// Laser sight (skip if out-of-sight sector)
+	if(_sector != "out"){
+		var _lx0 = _muzzle_x;
+		var _ly0 = _muzzle_y;
+		var _lx1 = _lx0;
+		var _ly1 = _ly0;
 
 	var _clip_step = max(1, laser_clip_step_px);
 	var _clip_object = laser_clip_collision_object;

@@ -62,7 +62,7 @@ function enemy_apocalypse_survivor_state_attack_active(){
 		// Start cooldown only when a shot is actually fired.
 		attack_countdown = attack_countdown_max;
 
-		var _b = instance_create_layer(_aim_data.muzzle_x, _aim_data.muzzle_y, "lyr_player", o_bullet);
+			var _b = instance_create_layer(_aim_data.fire_x, _aim_data.fire_y, "lyr_player", o_bullet);
 		with(_b){
 			team = other.team;
 			damage = other.attack_projectile_damage;
@@ -80,17 +80,23 @@ function enemy_apocalypse_survivor_state_attack_active(){
 
 		attack_active_attack_created = true;
 
-		if(_dbg_enable){
-			debug_attack_log_shot_count += 1;
-			__mcp_log(
-				"[ASDBG][FIRE] shot=" + string(debug_attack_log_shot_count)
-				+ " frame=" + string(round(sprite_current_frame))
-				+ " atk_cd=" + string(round(attack_countdown))
-				+ " aim=" + string(round(aim_angle))
-			);
+			if(_dbg_enable){
+				debug_attack_log_shot_count += 1;
+				__mcp_log(
+					"[ASDBG][FIRE] shot=" + string(debug_attack_log_shot_count)
+					+ " frame=" + string(round(sprite_current_frame))
+					+ " atk_cd=" + string(round(attack_countdown))
+					+ " aim=" + string(round(aim_angle))
+					+ " sector=" + _aim_data.sector
+					+ " fb=" + string(_aim_data.close_range_fallback ? 1 : 0)
+					+ " bh=" + string(_aim_data.target_behind_muzzle ? 1 : 0)
+					+ " t=(" + string(round(_target_aim_x - x)) + "," + string(round(_target_aim_y - y)) + ")"
+					+ " dy_m=" + string(round(_target_aim_y - _aim_data.muzzle_y))
+					+ " dy_f=" + string(round(_target_aim_y - _aim_data.fire_y))
+				);
+			}
+			}
 		}
-		}
-	}
 
 	// Count down active
 	if(attack_active_countdown > 0){

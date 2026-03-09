@@ -1,16 +1,16 @@
-/// @function apocalypse_survivor_get_aim_data
-/// @summary Returns current aim sector, draw angle, barrel offset, and muzzle position.
-/// @returns {struct}
-function apocalypse_survivor_get_aim_data(_aim_angle_override = undefined, _face_horizontal_override = undefined){
-	var _aim_angle = is_undefined(_aim_angle_override) ? aim_angle : _aim_angle_override;
-	var _face_horizontal = is_undefined(_face_horizontal_override) ? face_horizontal : _face_horizontal_override;
-	var _sector = "out";
-	if(_aim_angle >= 315 || _aim_angle < 45) _sector = "side";
-	else if(_aim_angle >= 45 && _aim_angle < 85) _sector = "diag";
-	else if(_aim_angle >= 85 && _aim_angle < 95) _sector = "up";
-	else if(_aim_angle >= 95 && _aim_angle < 135) _sector = "diag_flip";
-	else if(_aim_angle >= 135 && _aim_angle < 225) _sector = "side_flip";
+function apocalypse_survivor_get_aim_sector(_aim_angle){
+	_aim_angle = ((_aim_angle mod 360) + 360) mod 360;
 
+	if(_aim_angle >= 315 || _aim_angle < 45) return "side";
+	if(_aim_angle >= 45 && _aim_angle < 85) return "diag";
+	if(_aim_angle >= 85 && _aim_angle < 95) return "up";
+	if(_aim_angle >= 95 && _aim_angle < 135) return "diag_flip";
+	if(_aim_angle >= 135 && _aim_angle < 225) return "side_flip";
+
+	return "out";
+}
+
+function apocalypse_survivor_build_aim_data(_sector, _aim_angle, _face_horizontal){
 	var _standing = variable_instance_exists(id, "survivor_posture")
 		&& (survivor_posture == SurvivorPosture.standing);
 	var _draw_angle = 0;
@@ -59,10 +59,40 @@ function apocalypse_survivor_get_aim_data(_aim_angle_override = undefined, _face
 
 	return {
 		sector: _sector,
+		aim_angle: _aim_angle,
+		face_horizontal: _face_horizontal,
 		draw_angle: _draw_angle,
 		barrel_x: _barrel_x,
 		barrel_y: _barrel_y,
 		muzzle_x: _muzzle_x,
-		muzzle_y: _muzzle_y
+		muzzle_y: _muzzle_y,
+		fire_x: _muzzle_x,
+		fire_y: _muzzle_y,
+		close_range_fallback: false
 	};
+}
+
+/// @function apocalypse_survivor_get_aim_data
+/// @summary Returns current aim sector, draw angle, barrel offset, and muzzle position.
+/// @returns {struct}
+function apocalypse_survivor_get_aim_data(_aim_angle_override = undefined, _face_horizontal_override = undefined, _sector_override = undefined){
+	var _aim_angle = is_undefined(_aim_angle_override) ? aim_angle : _aim_angle_override;
+	var _face_horizontal = is_undefined(_face_horizontal_override) ? face_horizontal : _face_horizontal_override;
+
+	if(is_undefined(_aim_angle_override)
+	&& is_undefined(_face_horizontal_override)
+	&& is_undefined(_sector_override)
+	&& variable_instance_exists(id, "survivor_resolved_aim_data")
+	&& !is_undefined(survivor_resolved_aim_data)){
+		var _cached = survivor_resolved_aim_data;
+		if(_cached.aim_angle == _aim_angle && _cached.face_horizontal == _face_horizontal){
+			return _cached;
+		}
+	}
+
+	var _sector = is_undefined(_sector_override)
+		? apocalypse_survivor_get_aim_sector(_aim_angle)
+		: _sector_override;
+
+	return apocalypse_survivor_build_aim_data(_sector, _aim_angle, _face_horizontal);
 }

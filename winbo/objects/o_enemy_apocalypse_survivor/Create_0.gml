@@ -132,6 +132,7 @@ event_inherited();
 #region Two-Layer Aim System
 	aim_angle = 0;
 	aim_two_layer_enable = true;
+	survivor_resolved_aim_data = undefined;
 	aim_body_sprite_offset_x = 0;
 	aim_body_sprite_offset_y = 0;
 	aim_legs_sprite_offset_x = 0;
@@ -158,6 +159,8 @@ event_inherited();
 	standing_draw_angle_offset_diag = 44.022351;
 	standing_draw_angle_offset_diag_flip = 135.977649;
 	standing_draw_angle_offset_up = 90;
+	standing_close_fire_origin_distance = 96;
+	standing_close_target_margin = 8;
 
 	laser_length = 2000;
 	laser_width = 2;

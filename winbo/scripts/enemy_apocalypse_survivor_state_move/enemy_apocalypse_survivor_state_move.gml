@@ -130,8 +130,8 @@ function enemy_apocalypse_survivor_state_move(){
 	// Use muzzle-space distances for gating so trigger range matches what the
 	// enemy can actually aim/shoot/see from.
 	var _aim_data = apocalypse_survivor_get_aim_data();
-	var _h_dist = abs(_target_aim_x - _aim_data.muzzle_x);
-	var _v_dist = abs(_target_aim_y - _aim_data.muzzle_y);
+	var _h_dist = abs(_target_aim_x - _aim_data.fire_x);
+	var _v_dist = abs(_target_aim_y - _aim_data.fire_y);
 
 	if(_h_dist > _trigger_dist){
 		_dbg_log_gate("range_x", _h_dist, _trigger_dist, _v_dist, attack_vertical_tolerance, false, attack_countdown);
@@ -165,7 +165,7 @@ function enemy_apocalypse_survivor_state_move(){
 				var _sample_y = lerp(_sample_y_min, _sample_y_max, _sample_t);
 
 				var _sample_blocked = collision_line(
-					_aim_data.muzzle_x, _aim_data.muzzle_y,
+						_aim_data.fire_x, _aim_data.fire_y,
 					_sample_x, _sample_y,
 					attack_los_collision_object, true, true
 				) != noone;
@@ -178,7 +178,7 @@ function enemy_apocalypse_survivor_state_move(){
 		}
 		else{
 			_los_blocked = collision_line(
-				_aim_data.muzzle_x, _aim_data.muzzle_y,
+				_aim_data.fire_x, _aim_data.fire_y,
 				_target_aim_x, _target_aim_y,
 				attack_los_collision_object, true, true
 			) != noone;
