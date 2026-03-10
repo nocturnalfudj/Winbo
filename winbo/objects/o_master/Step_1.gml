@@ -300,16 +300,25 @@ freeze_countdown.Update();
 			
 				// Check for mouse click to continue
 				if(mouse_check_button_pressed(mb_left)){
+					level_end_transition_data = noone;
+					
 					// Store target room before transition
 					with(o_door){
 						if(level_end_character_enable && level_end_character_triggered){
-							// Determine target room
-							if(room == r_game_level_presence){
-								o_master.level_end_target_room = o_director.next_level;
+							var _transition = level_select_build_transition(room);
+							if (!is_undefined(_transition)) {
+								o_master.level_end_transition_data = _transition;
+								o_master.level_end_target_room = _transition.target_room;
 							}
 							else{
-								o_director.next_level = room_target;
-								o_master.level_end_target_room = r_game_level_presence;
+								// Preserve existing behavior for unregistered rooms.
+								if(room == r_game_level_presence){
+									o_master.level_end_target_room = o_director.next_level;
+								}
+								else{
+									o_director.next_level = room_target;
+									o_master.level_end_target_room = r_game_level_presence;
+								}
 							}
 						}
 					}
@@ -334,22 +343,24 @@ freeze_countdown.Update();
 		
 				// When fade complete, transition to next room
 				if(level_end_fade_countdown.trigger_active){
-					if(level_end_target_room != noone){
+					if(level_end_transition_data != noone){
 						// Reset level timer
 						o_director.level_timer = 0;
-			
-						// Set flag to prevent life deduction on spawn
+						level_select_apply_transition(level_end_transition_data, true);
+						level_end_transition_data = noone;
+						level_end_target_room = noone;
+						
+						// Reset fade
+						level_end_fade_alpha = 0;
+					}
+					else if(level_end_target_room != noone){
+						// Preserve legacy fallback behavior for any room not in the level registry.
+						o_director.level_timer = 0;
 						o_director.level_transitioning = true;
-			
-						// Set game state to play directly (must be immediate for audio system)
 						global.game_state = GameState.play;
 						global.game_state_target = noone;
-			
-						// Go to target room
 						room_goto(level_end_target_room);
 						level_end_target_room = noone;
-			
-						// Reset fade
 						level_end_fade_alpha = 0;
 					}
 				}

@@ -122,6 +122,7 @@ randomise();
 	level_end_fade_alpha = 0;
 	level_end_fade_countdown = new Countdown(1*SECOND, 1*SECOND, true, COUNTDOWN_RESET_COUNT_NEVER, noone);
 	level_end_target_room = noone; // Store which room to transition to
+	level_end_transition_data = noone;
 #endregion
 
 #region Boot

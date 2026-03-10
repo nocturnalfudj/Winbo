@@ -336,18 +336,20 @@ function player_collisions(){
 				}
 			}
 				else{
-					// Normal door behavior - immediate room transition
-					//Check if In Presence Room
-					if(room == r_game_level_presence){
-						room_goto(o_director.next_level);
+					// Normal door behavior follows the campaign progression metadata.
+					var _transition = level_select_build_transition(room);
+					if (!is_undefined(_transition)) {
+						level_select_apply_transition(_transition, false);
 					}
-					//In Level Room
 					else{
-						//Update Director Next Level
-						o_director.next_level = room_target;
-								
-						//Go to Presence Room
-						room_goto(r_game_level_presence);
+						// Fallback for unregistered rooms.
+						if(room == r_game_level_presence){
+							room_goto(o_director.next_level);
+						}
+						else{
+							o_director.next_level = room_target;
+							room_goto(r_game_level_presence);
+						}
 					}
 							
 					//Reset Level Timer

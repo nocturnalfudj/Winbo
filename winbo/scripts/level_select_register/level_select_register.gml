@@ -3,11 +3,22 @@
 /// @param {string} _id Unique level identifier
 /// @param {asset.GMRoom} _level_room Room asset
 /// @param {string} _name Display name
-/// @param {real} _order Order in sequence
+/// @param {real} _menu_order Order in the level select menu
+/// @param {string} _next_level_id Next campaign level identifier
+/// @param {string} _transition_style Transition style after completion
+/// @param {bool} _start_unlocked Whether the level starts unlocked in a fresh session
 /// @returns {void}
-function level_select_register(_id, _level_room, _name, _order) {
+function level_select_register(_id, _level_room, _name, _menu_order, _next_level_id, _transition_style, _start_unlocked) {
 	// Create and store level data
-	var _level_data = new LevelData(_id, _level_room, _name, _order);
+	var _level_data = new LevelData(
+		_id,
+		_level_room,
+		_name,
+		_menu_order,
+		_next_level_id,
+		_transition_style,
+		_start_unlocked
+	);
 	ds_map_add(o_director.level_registry, _id, _level_data);
 	ds_list_add(o_director.level_order, _id);
 	

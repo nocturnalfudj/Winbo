@@ -15,8 +15,15 @@ function level_select_start(_level_id) {
 		return false;
 	}
 	
-	// Set the next level in director (for door transitions within the level)
-	o_director.next_level = _level_data.level_room;
+	var _next_level = level_select_get_next_level(_level_id);
+	
+	// Set the presence exit target when this room routes back through the hub.
+	if (!is_undefined(_next_level)) {
+		o_director.next_level = _next_level.level_room;
+	}
+	else {
+		o_director.next_level = _level_data.level_room;
+	}
 	
 	// Set flag to prevent life deduction during transition
 	o_director.level_transitioning = true;

@@ -230,8 +230,11 @@
 status_effect_system_data_setup();
 
 #region Levels
+	// Campaign entry point used by Start Game from the main menu.
+	campaign_entry_room = r_opening_cutscene;
+	
 	//Next Level
-	next_level = r_game_level_0;	//This is the FIRST level after the presence level
+	next_level = r_game_level_0;	// Default presence exit target before progression overwrites it
 	
 	// Flag to prevent life deduction during level transitions
 	level_transitioning = false;
