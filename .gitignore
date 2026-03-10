@@ -19,3 +19,12 @@ winbo/.cursor/
 winbo/.codex/
 winbo/mcp-configs/
 winbo/output/
+
+# Local MCP client config (machine-specific)
+**/.mcp.json
+**/.claude-plugin/
+**/.codex/
+**/.cursor/mcp.json
+**/mcp-configs/
+**/.gms_mcp/
+**/.gms-mcp.json
