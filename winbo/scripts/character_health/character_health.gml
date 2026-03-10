@@ -88,7 +88,7 @@ function character_health(){
 					}
 				
 					//Countdown Complete
-					if(hp_regen_passive_countdown <= 0){
+					if(hp_decay_passive_countdown <= 0){
 						//Apply Decay
 						if(hp > hp_decay_passive_min){
 							_decay_amount = hp_decay_passive_rate;
