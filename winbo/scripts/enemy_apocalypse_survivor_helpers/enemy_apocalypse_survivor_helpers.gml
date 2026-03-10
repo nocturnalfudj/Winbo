@@ -9,6 +9,14 @@ function enemy_apocalypse_survivor_crouch_allowed(){
 	return survivor_allow_crouch;
 }
 
+function enemy_apocalypse_survivor_movement_allowed(){
+	if(!variable_instance_exists(id, "survivor_allow_movement")){
+		survivor_allow_movement = true;
+	}
+
+	return survivor_allow_movement;
+}
+
 function enemy_apocalypse_survivor_posture_sync(){
 	if(!variable_instance_exists(id, "survivor_posture")){
 		return;

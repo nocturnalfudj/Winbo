@@ -242,6 +242,7 @@ event_inherited();
 
 	// Variant toggle: child objects can lock this enemy to standing only.
 	survivor_allow_crouch = true;
+	survivor_allow_movement = true;
 	survivor_hostile_posture = SurvivorPosture.standing;
 
 	// Start non-hostile (patrol mode) in standing posture.

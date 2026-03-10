@@ -1,5 +1,6 @@
 function enemy_apocalypse_survivor_state_move(){
 	enemy_apocalypse_survivor_posture_sync();
+	var _movement_allowed = enemy_apocalypse_survivor_movement_allowed();
 	var _was_hostile = is_hostile;
 
 	if(!is_hostile){
@@ -38,7 +39,7 @@ function enemy_apocalypse_survivor_state_move(){
 	}
 
 	// Relaxed patrol pause logic
-	if(!is_hostile){
+	if(!is_hostile && _movement_allowed){
 		if(patrol_pause_cooldown > 0){
 			patrol_pause_cooldown -= (time_scale_enable ? global.delta_time_factor_scaled : global.delta_time_factor);
 		}
@@ -60,12 +61,24 @@ function enemy_apocalypse_survivor_state_move(){
 		}
 	}
 
-	// Run shared move logic. While hostile, keep this enemy in place (layered aim/hold).
-	if(is_hostile){
+	// Run shared move logic. While hostile, or when a standing variant is locked in place,
+	// keep this enemy stationary but still allow shared detection/state changes.
+	var _force_stationary = is_hostile || !_movement_allowed;
+	if(_force_stationary){
+		velocity.x = 0;
+		acceleration.x = 0;
+		input_move_magnitude = 0;
+
 		var _move_grounded_prev = move_grounded;
 		move_grounded = false;
 		enemy_state_move();
 		move_grounded = _move_grounded_prev;
+
+		if(!is_hostile && !_movement_allowed && state == EnemyState.move){
+			velocity.x = 0;
+			acceleration.x = 0;
+			input_move_magnitude = 0;
+		}
 	}
 	else{
 		enemy_state_move();
