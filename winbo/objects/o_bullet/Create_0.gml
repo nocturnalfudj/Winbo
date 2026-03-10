@@ -96,6 +96,7 @@ owner = noone;
 		deflect_flyoff_margin = 128;
 		deflect_flyoff_lifetime = 1.5 * SECOND;
 		deflect_flyoff_sprite_spin_speed = 0;
+		deflect_flyoff_sprite = noone;
 	#endregion
 
 //Create

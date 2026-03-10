@@ -14,6 +14,12 @@ function bullet_begin_deflect_flyoff(_direction){
 	homing_target = noone;
 	homing_delay = 0;
 
+	if(deflect_flyoff_sprite != noone){
+		sprite_current = deflect_flyoff_sprite;
+		sprite_index = deflect_flyoff_sprite;
+		image_system_setup(sprite_current, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+	}
+
 	// Make deflected projectile harmless.
 	damage = 0;
 	team = Team.player;

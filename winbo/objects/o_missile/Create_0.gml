@@ -16,10 +16,11 @@ death_anim_fps = ANIMATION_FPS_DEFAULT;
 death_anim_suppress_on_deflect = true;
 deflect_flyoff_enable = true;
 deflect_flyoff_active = false;
-deflect_flyoff_speed = 50;
+deflect_flyoff_sprite = spr_missile_deflect;
+deflect_flyoff_speed = 25;
 deflect_flyoff_margin = 192;
 deflect_flyoff_lifetime = 1.25 * SECOND;
-deflect_flyoff_sprite_spin_speed = 18;
+deflect_flyoff_sprite_spin_speed = 9;
 
 // Rotate to velocity direction
 rotate_to_velocity_direction = true;
