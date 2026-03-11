@@ -2,10 +2,10 @@
   "$GMSprite":"v2",
   "%Name":"spr_apocalypse_survivor_shoot_standing_diagonal_body",
   "bboxMode":0,
-  "bbox_bottom":1461,
-  "bbox_left":0,
-  "bbox_right":1469,
-  "bbox_top":0,
+  "bbox_bottom":704,
+  "bbox_left":193,
+  "bbox_right":887,
+  "bbox_top":51,
   "collisionKind":1,
   "collisionTolerance":0,
   "DynamicTexturePage":false,
@@ -61,6 +61,7 @@
     "backdropXOffset":0.0,
     "backdropYOffset":0.0,
     "events":{
+      "$KeyframeStore<MessageEventKeyframe>":"",
       "Keyframes":[],
       "resourceType":"KeyframeStore<MessageEventKeyframe>",
       "resourceVersion":"2.0",
@@ -70,6 +71,7 @@
     "length":20.0,
     "lockOrigin":false,
     "moments":{
+      "$KeyframeStore<MomentsEventKeyframe>":"",
       "Keyframes":[],
       "resourceType":"KeyframeStore<MomentsEventKeyframe>",
       "resourceVersion":"2.0",
@@ -84,27 +86,67 @@
     "showBackdropImage":false,
     "timeUnits":1,
     "tracks":[
-      {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"Keyframes":[
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"c8325cdc3ff5424abaa7f68866cb8397","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"56bdcd97df76452586f30a3c48eb3658","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"6757556372ae44d090271ee1808ee0ec","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"917cef52e7694110b45c1bdf65b641e9","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"b14cbea53e804c52aa66d55d54a7bf90","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"15d0baf3464245ccbb9e5cd95749dbed","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"1bb0b37ac4914140a489f96ae83bbc82","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"0db9b8e04a1845738efda8289ecbb9fb","IsCreationKey":false,"Key":3.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"1b6591a097b949a9bcdbc0090c37dae8","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"2132de298f604efd9f598b11e24d29cc","IsCreationKey":false,"Key":4.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"6e744cdc548441e59d87033934045ae2","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"725de3a83e6d4f92ae1291b7ced091f6","IsCreationKey":false,"Key":5.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"6ae17e0817c54af3a36e152af463eb7c","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"076605903a84474a94c0579965a9dc5d","IsCreationKey":false,"Key":6.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"f6eee8e9b7384fb695f891401916ff70","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"60bc783914ca46ebadbafe10705e5e49","IsCreationKey":false,"Key":7.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"e6fcb7b102034cbea28552b230d88b64","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"d7d31cd8711c42ee84b297d5a480a75a","IsCreationKey":false,"Key":8.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"7e73f1ddebd9478fbe6eb54e753fd65e","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"e6a57d43509a41028ea4667fa5c425c9","IsCreationKey":false,"Key":9.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"a67735030cc44cb08435e4d045fc75ce","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"0e004d8b76b84383955a6f62f4689093","IsCreationKey":false,"Key":10.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"be670693dd6640c890307a36d7a8960c","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"67a39500779a494ea0711a077073af21","IsCreationKey":false,"Key":11.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"2fc22074d31f43c0a80232268d3e1200","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"3e5477ef58034bd7bd83e078fef60d72","IsCreationKey":false,"Key":12.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"60aa8890fb794ac0a32bca10f590a60e","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"ba694843ca0c42e486553a1b52ea7bf5","IsCreationKey":false,"Key":13.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"53d5b9b30cad4da098b566502982aac0","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"d046e9d418094de08629988c067b4ac6","IsCreationKey":false,"Key":14.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"3dea6292af5c4fd3bf787147dc95b956","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"42d7a380ef3641cb81ca868a385598a4","IsCreationKey":false,"Key":15.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"7580fbf958cc4e5e84d3282f8e24b4e1","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"5c59f733af7449528636a399745813a3","IsCreationKey":false,"Key":16.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"fae908157ed44099b937ac4aba5843b2","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"3e1ff6d4d97d4f25b1c8d6733dc6dc4d","IsCreationKey":false,"Key":17.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"336d1131f4d7473cbc4b4d85aead0293","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"c3a0b456e2ea4c73a52d5bb1f758d75a","IsCreationKey":false,"Key":18.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"d2be09e5acfb4d3aa361b0dfd6aacd04","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"53abe4aa464c435e856acd8da2108f27","IsCreationKey":false,"Key":19.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+      {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"c8325cdc3ff5424abaa7f68866cb8397","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"56bdcd97-df76-4525-86f3-0a3c48eb3658","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"6757556372ae44d090271ee1808ee0ec","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"917cef52-e769-4110-b45c-1bdf65b641e9","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"b14cbea53e804c52aa66d55d54a7bf90","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"15d0baf3-4642-45cc-bb9e-5cd95749dbed","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"1bb0b37ac4914140a489f96ae83bbc82","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"0db9b8e0-4a18-4573-8efd-a8289ecbb9fb","IsCreationKey":false,"Key":3.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"1b6591a097b949a9bcdbc0090c37dae8","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"2132de29-8f60-4efd-9f59-8b11e24d29cc","IsCreationKey":false,"Key":4.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"6e744cdc548441e59d87033934045ae2","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"725de3a8-3e6d-4f92-ae12-91b7ced091f6","IsCreationKey":false,"Key":5.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"6ae17e0817c54af3a36e152af463eb7c","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"07660590-3a84-474a-94c0-579965a9dc5d","IsCreationKey":false,"Key":6.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"f6eee8e9b7384fb695f891401916ff70","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"60bc7839-14ca-46eb-adba-fe10705e5e49","IsCreationKey":false,"Key":7.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"e6fcb7b102034cbea28552b230d88b64","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"d7d31cd8-711c-42ee-84b2-97d5a480a75a","IsCreationKey":false,"Key":8.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"7e73f1ddebd9478fbe6eb54e753fd65e","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"e6a57d43-509a-4102-8ea4-667fa5c425c9","IsCreationKey":false,"Key":9.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"a67735030cc44cb08435e4d045fc75ce","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"0e004d8b-76b8-4383-955a-6f62f4689093","IsCreationKey":false,"Key":10.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"be670693dd6640c890307a36d7a8960c","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"67a39500-779a-494e-a071-1a077073af21","IsCreationKey":false,"Key":11.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"2fc22074d31f43c0a80232268d3e1200","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"3e5477ef-5803-4bd7-bd83-e078fef60d72","IsCreationKey":false,"Key":12.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"60aa8890fb794ac0a32bca10f590a60e","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"ba694843-ca0c-42e4-8655-3a1b52ea7bf5","IsCreationKey":false,"Key":13.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"53d5b9b30cad4da098b566502982aac0","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"d046e9d4-1809-4de0-8629-988c067b4ac6","IsCreationKey":false,"Key":14.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"3dea6292af5c4fd3bf787147dc95b956","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"42d7a380-ef36-41cb-81ca-868a385598a4","IsCreationKey":false,"Key":15.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"7580fbf958cc4e5e84d3282f8e24b4e1","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"5c59f733-af74-4952-8636-a399745813a3","IsCreationKey":false,"Key":16.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"fae908157ed44099b937ac4aba5843b2","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"3e1ff6d4-d97d-4f25-b1c8-d6733dc6dc4d","IsCreationKey":false,"Key":17.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"336d1131f4d7473cbc4b4d85aead0293","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"c3a0b456-e2ea-4c73-a52d-5bb1f758d75a","IsCreationKey":false,"Key":18.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"d2be09e5acfb4d3aa361b0dfd6aacd04","path":"sprites/spr_apocalypse_survivor_shoot_standing_diagonal_body/spr_apocalypse_survivor_shoot_standing_diagonal_body.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"53abe4aa-464c-435e-856a-cd8da2108f27","IsCreationKey":false,"Key":19.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -115,8 +157,8 @@
   "swatchColours":null,
   "swfPrecision":2.525,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"game",
+    "path":"texturegroups/game",
   },
   "type":0,
   "VTile":false,
