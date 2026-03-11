@@ -22,11 +22,15 @@ function master_game_state_boot() {
 		
 		}
 		else{
-			//Go to Intro Room
-			room_goto(r_intro);
+			_boot_finished = texturegroup_load_ags("intro",_boot_finished);
+			
+			if(_boot_finished){
+				//Go to Intro Room
+				room_goto(r_intro);
 
-			//Game State to Intro
-			game_state_set_target(GameState.intro);
+				//Game State to Intro
+				game_state_set_target(GameState.intro);
+			}
 		}
 	}
 }

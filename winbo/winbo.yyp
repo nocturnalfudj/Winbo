@@ -2433,35 +2433,35 @@
         "desktop":{
           "compressFormat":"bz2",
           "groupParent":"null",
-          "loadType":"default",
+          "loadType":"dynamicpages",
         },
       },"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"dynamicpages","mipsToGenerate":0,"name":"fonts","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
     {"$GMTextureGroup":"","%Name":"intro","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{
         "desktop":{
           "compressFormat":"bz2",
           "groupParent":"null",
-          "loadType":"default",
+          "loadType":"dynamicpages",
         },
       },"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"dynamicpages","mipsToGenerate":0,"name":"intro","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
     {"$GMTextureGroup":"","%Name":"main_menu","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{
         "desktop":{
           "compressFormat":"bz2",
           "groupParent":"null",
-          "loadType":"default",
+          "loadType":"dynamicpages",
         },
       },"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"dynamicpages","mipsToGenerate":0,"name":"main_menu","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
     {"$GMTextureGroup":"","%Name":"menu","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{
         "desktop":{
           "compressFormat":"bz2",
           "groupParent":"null",
-          "loadType":"default",
+          "loadType":"dynamicpages",
         },
       },"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"dynamicpages","mipsToGenerate":0,"name":"menu","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
     {"$GMTextureGroup":"","%Name":"hud","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{
         "desktop":{
           "compressFormat":"bz2",
           "groupParent":"null",
-          "loadType":"default",
+          "loadType":"dynamicpages",
         },
       },"customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"dynamicpages","mipsToGenerate":0,"name":"hud","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
     {"$GMTextureGroup":"","%Name":"game","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{

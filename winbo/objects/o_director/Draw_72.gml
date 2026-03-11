@@ -11,6 +11,9 @@ with(o_camera){
 var _draw_menu_background;
 _draw_menu_background = (global.game_state == GameState.menu || global.game_state == GameState.start);
 
+var _draw_environment_background;
+_draw_environment_background = room != r_boot && room != r_intro && room != r_loading_app;
+
 // Draw fluid gradient background for main menu
 if(_draw_menu_background){
 	// Update time for animation
@@ -35,7 +38,7 @@ if(_draw_menu_background){
 	
 	shader_reset();
 }
-else if(room != r_intro && room != r_loading_app){
+else if(_draw_environment_background){
 	var _environment_data;
 	_environment_data = environment[environment_current];
 	if(is_undefined(_environment_data)){

@@ -1475,7 +1475,10 @@
   "sdfSpread":8,
   "size":64.0,
   "styleName":"Regular",
-  "textureGroupId":null,
+  "textureGroupId": {
+    "name": "fonts",
+    "path": "texturegroups/fonts",
+  },
   "TTFName":"C:\\Users\\callu\\Documents\\Ampersand\\Clients\\Winbo\\Winbo\\winbo\\fonts\\fnt_default_64\\AlteHaasGroteskBold.ttf",
   "usesSDF":true,
 }
