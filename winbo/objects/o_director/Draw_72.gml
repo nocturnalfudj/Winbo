@@ -9,7 +9,16 @@ with(o_camera){
 
 // Keep the menu background alive through the menu->start fade-out.
 var _draw_menu_background;
-_draw_menu_background = (global.game_state == GameState.menu || global.game_state == GameState.start);
+var _draw_menu_transition_background;
+_draw_menu_transition_background =
+	room == r_game
+	&& instance_exists(o_fade_intro_to_menu)
+	&& (global.game_state == GameState.loading_app || global.game_state_target == GameState.menu);
+
+_draw_menu_background =
+	global.game_state == GameState.menu
+	|| global.game_state == GameState.start
+	|| _draw_menu_transition_background;
 
 var _draw_environment_background;
 _draw_environment_background = room != r_boot && room != r_intro && room != r_loading_app;
