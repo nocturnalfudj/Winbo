@@ -33,6 +33,7 @@
 	//Specific Nothing Game States
 	game_state_operate[GameState.boot]				= UIGameStateOperate.nothing;
 	game_state_operate[GameState.loading_app]		= UIGameStateOperate.nothing;
+	game_state_operate[GameState.loading]			= UIGameStateOperate.nothing;
 	game_state_operate[GameState.os_paused]			= UIGameStateOperate.nothing;
 	game_state_operate[GameState.freeze]			= UIGameStateOperate.nothing;
 	game_state_operate[GameState.stop]				= UIGameStateOperate.nothing;

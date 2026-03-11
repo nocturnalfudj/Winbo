@@ -1,6 +1,10 @@
 /// @function director_room_path_finding_grid_setup
 /// @summary Build the pathfinding grid for the current room.
 function director_room_path_finding_grid_setup(){
+	if(global.path_finding_grid != noone){
+		mp_grid_destroy(global.path_finding_grid);
+	}
+	
 	var _cells_horizontal,_cells_vertical;
 	_cells_horizontal = ceil(room_width/CELL_WIDTH) + 1;
 	_cells_vertical = ceil(room_height/CELL_HEIGHT);

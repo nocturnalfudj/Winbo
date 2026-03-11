@@ -337,26 +337,29 @@ function player_collisions(){
 			}
 				else{
 					// Normal door behavior follows the campaign progression metadata.
-					var _transition = level_select_build_transition(room);
-					if (!is_undefined(_transition)) {
-						level_select_apply_transition(_transition, false);
-					}
-					else{
-						// Fallback for unregistered rooms.
-						if(room == r_game_level_presence){
-							room_goto(o_director.next_level);
+						var _transition = level_select_build_transition(room);
+						if (!is_undefined(_transition)) {
+							level_select_apply_transition(_transition, false);
 						}
 						else{
-							o_director.next_level = room_target;
-							room_goto(r_game_level_presence);
+							// Fallback for unregistered rooms.
+							if(room == r_game_level_presence){
+								director_gameplay_transition_request(
+									o_director.next_level,
+									director_gameplay_transition_options_build(o_director.next_level, true, true, false)
+								);
+							}
+							else{
+								o_director.next_level = room_target;
+								director_gameplay_transition_request(
+									r_game_level_presence,
+									director_gameplay_transition_options_build(r_game_level_presence, true, true, false)
+								);
+							}
 						}
 					}
-							
-					//Reset Level Timer
-					o_director.level_timer = 0;
 				}
-			}
-		#endregion
+			#endregion
 				
 		#region Liquids
 			//Default to Gravity Factor of 1

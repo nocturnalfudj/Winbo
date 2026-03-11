@@ -29,27 +29,10 @@ function master_game_state_gameover() {
 			// Reset level timer
 			o_director.level_timer = 0;
 			
-			// Restore UI anchors before transitioning
-			with(o_ui){
-				//Add HUD
-				ui_anchor_create(o_anchor_hud,"lyr_hud");
-			
-				//Add Game
-				ui_anchor_create(o_anchor_game,"lyr_pfx_midground");
-			
-				//Remove Gameover
-				ui_anchor_remove(o_anchor_gameover);
+			director_gameplay_transition_request(
+				r_game_level_presence,
+				director_gameplay_transition_options_build(r_game_level_presence, true, true, false)
+			);
 			}
-		
-			// Set flag to prevent life deduction on spawn
-			o_director.level_transitioning = true;
-		
-			// Set game state to play directly
-			global.game_state = GameState.play;
-			global.game_state_target = noone;
-		
-			// Go back to start room
-			room_goto(r_game_level_presence);
 		}
 	}
-}

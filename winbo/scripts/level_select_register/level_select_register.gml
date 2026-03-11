@@ -7,8 +7,10 @@
 /// @param {string} _next_level_id Next campaign level identifier
 /// @param {string} _transition_style Transition style after completion
 /// @param {bool} _start_unlocked Whether the level starts unlocked in a fresh session
+/// @param {real} _environment_id Environment enum used for this room
+/// @param {array} _load_groups Gameplay texture groups required by this room
 /// @returns {void}
-function level_select_register(_id, _level_room, _name, _menu_order, _next_level_id, _transition_style, _start_unlocked) {
+function level_select_register(_id, _level_room, _name, _menu_order, _next_level_id, _transition_style, _start_unlocked, _environment_id, _load_groups) {
 	// Create and store level data
 	var _level_data = new LevelData(
 		_id,
@@ -17,7 +19,9 @@ function level_select_register(_id, _level_room, _name, _menu_order, _next_level
 		_menu_order,
 		_next_level_id,
 		_transition_style,
-		_start_unlocked
+		_start_unlocked,
+		_environment_id,
+		_load_groups
 	);
 	ds_map_add(o_director.level_registry, _id, _level_data);
 	ds_list_add(o_director.level_order, _id);

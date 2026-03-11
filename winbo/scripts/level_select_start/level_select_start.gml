@@ -21,21 +21,24 @@ function level_select_start(_level_id) {
 	if (!is_undefined(_next_level)) {
 		o_director.next_level = _next_level.level_room;
 	}
-	else {
-		o_director.next_level = _level_data.level_room;
+		else {
+			o_director.next_level = _level_data.level_room;
+		}
+		
+		if(global.game_state == GameState.menu){
+			director_game_session_start_prepare();
+		}
+		
+		var _started;
+		_started = director_gameplay_transition_request(
+			_level_data.level_room,
+			director_gameplay_transition_options_build(_level_data.level_room, true, true, false)
+		);
+		if(!_started){
+			return false;
+		}
+		
+		sdm("Starting level: " + _level_data.name + " (" + _level_id + ")", LOG_COLOUR_COMMAND_SUCCESS);
+		
+		return _started;
 	}
-	
-	// Set flag to prevent life deduction during transition
-	o_director.level_transitioning = true;
-	
-	// Go directly to the level room (bypass presence)
-	room_goto(_level_data.level_room);
-	
-	// Set game state to play
-	global.game_state = GameState.play;
-	global.game_state_target = noone;
-	
-	sdm("Starting level: " + _level_data.name + " (" + _level_id + ")", LOG_COLOUR_COMMAND_SUCCESS);
-	
-	return true;
-}

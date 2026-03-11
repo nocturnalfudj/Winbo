@@ -31,17 +31,12 @@ function bonus_room_transition(_target_room) {
 		else {
 			sdm("Transitioning between bonus rooms", LOG_COLOUR_COMMAND_SUCCESS);
 		}
+		}
+		
+		director_gameplay_transition_request(
+			_target_room,
+			director_gameplay_transition_options_build(_target_room, false, false, false)
+		);
+		
+		// DO NOT reset level timer (bonus room is part of the level)
 	}
-	
-	// Set transitioning flag to prevent life deduction
-	o_director.level_transitioning = true;
-	
-	// Direct room transition (NO presence room)
-	room_goto(_target_room);
-	
-	// Keep game state as play
-	global.game_state = GameState.play;
-	global.game_state_target = noone;
-	
-	// DO NOT reset level timer (bonus room is part of the level)
-}

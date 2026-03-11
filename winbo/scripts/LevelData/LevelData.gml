@@ -11,8 +11,10 @@
 /// @param {string} _next_level_id Next campaign level identifier.
 /// @param {string} _transition_style How this room exits into the campaign flow.
 /// @param {bool} _start_unlocked Whether this room starts unlocked in a fresh session.
+/// @param {real} _environment_id Environment enum used for this room.
+/// @param {array} _load_groups Gameplay texture groups required by this room.
 /// @returns {struct} Level data struct
-function LevelData(_id, _level_room, _name, _menu_order, _next_level_id, _transition_style, _start_unlocked) constructor {
+function LevelData(_id, _level_room, _name, _menu_order, _next_level_id, _transition_style, _start_unlocked, _environment_id, _load_groups) constructor {
 	id = _id;
 	level_room = _level_room;
 	name = _name;
@@ -21,4 +23,6 @@ function LevelData(_id, _level_room, _name, _menu_order, _next_level_id, _transi
 	transition_style = _transition_style;
 	unlocked = _start_unlocked;
 	completed = false;
+	environment_id = _environment_id;
+	load_groups = _load_groups;
 }

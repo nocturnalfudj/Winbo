@@ -3,6 +3,12 @@
 /// @param {Asset.GMRoom} _room Room asset.
 /// @returns {real} Environment enum value.
 function director_environment_resolve_room(_room) {
+	var _level_data;
+	_level_data = level_select_get_data(_room);
+	if(!is_undefined(_level_data)){
+		return _level_data.environment_id;
+	}
+	
 	// Bonus rooms use their own shared environment profile.
 	if (
 		_room == r_game_level_0_bonus_a

@@ -108,26 +108,61 @@ randomise();
 	gameover_countdown = gameover_countdown_max;
 #endregion
 
-#region Level End
-	// Celebration mode enum
-	enum LevelEndCelebrationMode {
-		countdown,
-		animation
+	#region Level End
+		// Celebration mode enum
+		enum LevelEndCelebrationMode {
+			countdown,
+			animation
 	}
 	
 	level_end_flash_countdown = new Countdown(1.5*SECOND, 1.5*SECOND, true, COUNTDOWN_RESET_COUNT_NEVER, noone);
 	level_end_flash_alpha = 0;
 	level_end_celebration_countdown = new Countdown(2*SECOND, 2*SECOND, true, COUNTDOWN_RESET_COUNT_NEVER, noone);
 	level_end_celebration_mode = LevelEndCelebrationMode.countdown;
-	level_end_fade_alpha = 0;
-	level_end_fade_countdown = new Countdown(1*SECOND, 1*SECOND, true, COUNTDOWN_RESET_COUNT_NEVER, noone);
-	level_end_target_room = noone; // Store which room to transition to
-	level_end_transition_data = noone;
-#endregion
+		level_end_target_room = noone; // Store which room to transition to
+		level_end_transition_data = noone;
+	#endregion
+	
+	#region Screen Fade
+		#macro SCREEN_FADE_GAMEPLAY_TO_BLACK_TIME SECOND * 0.5
+		#macro SCREEN_FADE_GAMEPLAY_FROM_BLACK_TIME SECOND * 0.5
+		
+		screen_fade_alpha = 0;
+		screen_fade_from_alpha = 0;
+		screen_fade_to_alpha = 0;
+		screen_fade_active = false;
+		screen_fade_countdown = new Countdown(0, SCREEN_FADE_GAMEPLAY_TO_BLACK_TIME, false, COUNTDOWN_RESET_COUNT_NEVER, noone);
+	#endregion
 
-#region Boot
-	boot_finished_camera = false;
-#endregion
+		#region Gameplay Loading
+			enum GameplayLoadingPhase {
+				transition_in,
+				resolve_target,
+				teardown_current_room,
+				load_assets,
+				goto_target_room,
+				wait_target_room,
+				setup_target_room,
+				enter_target_state,
+				wait_for_player,
+				wait_for_camera,
+				finalize_target_room,
+				unload_previous_assets,
+				garbage_collect,
+				transition_out,
+			
+				finished
+			}
+			
+			gameplay_loading_request = noone;
+			gameplay_loading_phase = GameplayLoadingPhase.finished;
+			gameplay_loading_groups_current = [];
+			gameplay_loading_active = false;
+		#endregion
+	
+	#region Boot
+		boot_finished_camera = false;
+	#endregion
 
 #region Intro
 	#macro INTRO_SKIP		false

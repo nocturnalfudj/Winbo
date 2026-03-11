@@ -194,12 +194,12 @@ freeze_countdown.Update();
 			#endregion
 		break;
 		
-		case GameState.start:
-			master_game_state_start();
-		break;
-		
-		case GameState.loading:
-		break;
+			case GameState.start:
+				master_game_state_start();
+			break;
+			
+			case GameState.loading:
+			break;
 		
 		case GameState.pre_game:
 		break;
@@ -325,7 +325,6 @@ freeze_countdown.Update();
 				
 					// Start fade to black
 					game_state_set_target(GameState.level_end_fade);
-					level_end_fade_countdown.Reset();
 				
 					// Reset score data for next level
 					o_director.level_results_score_data = noone;
@@ -335,39 +334,39 @@ freeze_countdown.Update();
 
 		case GameState.level_end_fade:
 			#region Level End Fade
-				// Animate fade to black
-				level_end_fade_countdown.Update();
-		
-				var _progress = 1 - (level_end_fade_countdown.time / level_end_fade_countdown.time_max);
-				level_end_fade_alpha = _progress; // 0 to 1 over 1 second
-		
-				// When fade complete, transition to next room
-				if(level_end_fade_countdown.trigger_active){
+				if(!global.game_state_one_step_complete){
+					master_screen_fade_begin(screen_fade_alpha, 1, SCREEN_FADE_GAMEPLAY_TO_BLACK_TIME);
+				}
+				
+				if(!screen_fade_active && screen_fade_alpha >= 1){
 					if(level_end_transition_data != noone){
-						// Reset level timer
-						o_director.level_timer = 0;
-						level_select_apply_transition(level_end_transition_data, true);
-						level_end_transition_data = noone;
-						level_end_target_room = noone;
-						
-						// Reset fade
-						level_end_fade_alpha = 0;
+						if (director_gameplay_transition_request(
+							level_end_transition_data.target_room,
+							director_gameplay_transition_options_build(level_end_transition_data.target_room, true, true, true)
+						)) {
+							level_end_transition_data = noone;
+							level_end_target_room = noone;
+						}
 					}
 					else if(level_end_target_room != noone){
-						// Preserve legacy fallback behavior for any room not in the level registry.
-						o_director.level_timer = 0;
-						o_director.level_transitioning = true;
-						global.game_state = GameState.play;
-						global.game_state_target = noone;
-						room_goto(level_end_target_room);
-						level_end_target_room = noone;
-						level_end_fade_alpha = 0;
+						if (director_gameplay_transition_request(
+							level_end_target_room,
+							director_gameplay_transition_options_build(level_end_target_room, true, true, true)
+						)) {
+							level_end_target_room = noone;
+						}
 					}
 				}
 			#endregion
 		break;
 	}
 #endregion
+
+if(gameplay_loading_active || gameplay_loading_request != noone){
+	master_game_state_loading();
+}
+
+master_screen_fade_update();
 
 #region Dev Mode
 	if(keyboard_check_pressed(vk_f3)){

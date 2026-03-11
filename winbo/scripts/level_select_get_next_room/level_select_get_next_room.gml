@@ -57,15 +57,8 @@ function level_select_apply_transition(_transition, _safe_transition) {
 		return false;
 	}
 	
-	if (
-		_safe_transition
-		|| _transition.current_data.transition_style == LEVEL_SELECT_TRANSITION_DIRECT
-	) {
-		o_director.level_transitioning = true;
-		global.game_state = GameState.play;
-		global.game_state_target = noone;
-	}
-	
-	room_goto(_transition.target_room);
-	return true;
+	return director_gameplay_transition_request(
+		_transition.target_room,
+		director_gameplay_transition_options_build(_transition.target_room, true, true, false)
+	);
 }
