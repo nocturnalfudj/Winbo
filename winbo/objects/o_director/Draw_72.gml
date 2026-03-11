@@ -7,8 +7,12 @@ with(o_camera){
 	_camera_height = height;
 }
 
+// Keep the menu background alive through the menu->start fade-out.
+var _draw_menu_background;
+_draw_menu_background = (global.game_state == GameState.menu || global.game_state == GameState.start);
+
 // Draw fluid gradient background for main menu
-if(global.game_state == GameState.menu){
+if(_draw_menu_background){
 	// Update time for animation
 	menu_bg_time += delta_time / 1000000;
 	
