@@ -153,7 +153,6 @@ function director_environment_data_setup(){
 			_environment_tile,
 			_environment_foreground,
 			[
-				{mode: "normal", sprite: spr_bg_bonus_layer_4_environment, parallax_x: 1.00, parallax_y: _subtle_parallax_y(1.00), offset_y: _new_bg_offset_y},
 				{mode: "normal", sprite: spr_bg_bonus_layer_3_wall_paintings_stained_glass, parallax_x: 0.82, parallax_y: _subtle_parallax_y(0.82), offset_y: _new_bg_offset_y},
 				{mode: "normal", sprite: spr_bg_bonus_layer_2_pillars_arches, parallax_x: 0.68, parallax_y: _subtle_parallax_y(0.68), offset_y: _new_bg_offset_y},
 					{
