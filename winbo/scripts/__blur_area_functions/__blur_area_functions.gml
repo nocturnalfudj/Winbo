@@ -45,53 +45,65 @@ function blur_area_exists(blur_id) {
 	return is_struct(blur_id);
 }
 
+function __blur_apply_gaussian(ping, pong, w, h, radius) {
+	shader_set(__ba_sh_blur_gaussian);
+	shader_set_uniform_f(__blur_sh_uni.blur_gaussian_size_radius, w, h, radius);
+	
+	surface_set_target(pong);
+	draw_surface(ping, 0, 0);
+	surface_reset_target();
+	
+	surface_set_target(ping);
+	draw_surface(pong, 0, 0);
+	surface_reset_target();
+	shader_reset();
+}
 
-global.__blur_type = [
-	//BLUR_TYPE.GAUSSIAN;
-	function(ping, pong, w, h, radius) {
-		shader_set(__ba_sh_blur_gaussian);
-		shader_set_uniform_f(__blur_sh_uni.blur_gaussian_size_radius, w, h, radius);
+function __blur_apply_noise(ping, pong, w, h, radius) {
+	shader_set(__ba_sh_blur_noise);
+	shader_set_uniform_f(__blur_sh_uni.blur_noise_radius, radius);
+	
+	surface_set_target(pong);
+	draw_surface(ping, 0, 0);
+	surface_reset_target();
+	
+	surface_set_target(ping);
+	draw_surface(pong, 0, 0);
+	surface_reset_target();
+	shader_reset();
+}
+
+function __blur_apply_baked(ping, pong, w, h, radius) {
+	shader_set(__ba_sh_blur_baked);
+	shader_set_uniform_f(__blur_sh_uni.blur_baked_size_radius, w, h, radius);
+	shader_set_uniform_f(__blur_sh_uni.blur_baked_direction, 1, 0);
+	
+	surface_set_target(pong);
+	draw_surface(ping, 0, 0);
+	surface_reset_target();
+	
+	shader_set_uniform_f(__blur_sh_uni.blur_baked_direction, 0, 1);
+	surface_set_target(ping);
+	draw_surface(pong, 0, 0);
+	surface_reset_target();
+	shader_reset();
+}
+
+function __blur_apply(blur_type, ping, pong, w, h, radius) {
+	switch (blur_type) {
+		case BLUR_TYPE.GAUSSIAN:
+			__blur_apply_gaussian(ping, pong, w, h, radius);
+			break;
 		
-		surface_set_target(pong);
-		draw_surface(ping, 0, 0);
-		surface_reset_target();
+		case BLUR_TYPE.NOISE:
+			__blur_apply_noise(ping, pong, w, h, radius);
+			break;
 		
-		surface_set_target(ping);
-		draw_surface(pong, 0, 0);
-		surface_reset_target();
-		shader_reset();
-	},
-	//BLUR_TYPE.NOISE;
-	function(ping, pong, w, h, radius) {
-		shader_set(__ba_sh_blur_noise);
-		shader_set_uniform_f(__blur_sh_uni.blur_noise_radius, radius);
-		
-		surface_set_target(pong);
-		draw_surface(ping, 0, 0);
-		surface_reset_target();
-		
-		surface_set_target(ping);
-		draw_surface(pong, 0, 0);
-		surface_reset_target();
-		shader_reset();
-	},
-	//BLUR_TYPE.BAKED;
-	function(ping, pong, w, h, radius) {
-		shader_set(__ba_sh_blur_baked);
-		shader_set_uniform_f(__blur_sh_uni.blur_baked_size_radius, w, h, radius);
-		shader_set_uniform_f(__blur_sh_uni.blur_baked_direction, 1, 0);
-		
-		surface_set_target(pong);
-		draw_surface(ping, 0, 0);
-		surface_reset_target();
-		
-		shader_set_uniform_f(__blur_sh_uni.blur_baked_direction, 0, 1);
-		surface_set_target(ping);
-		draw_surface(pong, 0, 0);
-		surface_reset_target();
-		shader_reset();
-	},
-];
+		case BLUR_TYPE.BAKED:
+			__blur_apply_baked(ping, pong, w, h, radius);
+			break;
+	}
+}
 
 
 function blur_area_draw(blur_id, surface, blur_type, x, y, w, h, x_offset, y_offset, radius, downscale=0.5, id_return=false, color=c_white, alpha=1) {
@@ -118,7 +130,7 @@ function blur_area_draw(blur_id, surface, blur_type, x, y, w, h, x_offset, y_off
 	surface_reset_target();
 	
 	// apply blur shader
-	global.__blur_type[blur_type](blur_id._surf_ping, blur_id._surf_pong, w, h, radius);
+	__blur_apply(blur_type, blur_id._surf_ping, blur_id._surf_pong, w, h, radius);
 	
 	// draw blur
 	if (id_return) {
@@ -177,7 +189,7 @@ function blur_sprite_create(sprite, subimg, blur_type, w, h, radius, downscale=0
 	surface_reset_target();
 	
 	// apply blur shader
-	global.__blur_type[blur_type](_surf_ping, _surf_pong, w, h, radius);
+	__blur_apply(blur_type, _surf_ping, _surf_pong, w, h, radius);
 	
 	// draw blur
 	var _surf_full = surface_create(w, h);
