@@ -15,7 +15,3 @@ for(var _i=0;_i<AudioChannel.SIZE;_i++){
 		ds_map_destroy(_map);
 	}	
 #endregion
-
-// Clean up room music maps
-ds_map_destroy(room_music_map);
-ds_map_destroy(room_music_loop_start_map);

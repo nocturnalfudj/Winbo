@@ -197,7 +197,15 @@ function master_game_state_loading() {
 		break;
 		
 		case GameplayLoadingPhase.enter_target_state:
-			_force_game_state(_get_target_game_state(_request));
+			var _target_game_state;
+			_target_game_state = _get_target_game_state(_request);
+			_force_game_state(_target_game_state);
+			
+			if(_target_game_state == GameState.play || _target_game_state == GameState.start){
+				with(o_audio){
+					audio_gameplay_music_apply(_request.target_room);
+				}
+			}
 			gameplay_loading_phase = GameplayLoadingPhase.wait_for_player;
 		break;
 

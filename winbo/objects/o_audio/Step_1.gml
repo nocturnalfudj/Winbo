@@ -41,49 +41,8 @@
 	}
 #endregion
 
-#region Room-Specific Music Handling
-	var _room_name = room_get_name(room);
-	
-	// Detect room change
-	if (current_room_for_music != _room_name) {
-		current_room_for_music = _room_name;
-		
-		// Check if this room has music defined
-		if (ds_map_exists(room_music_map, _room_name)) {
-			var _new_music = room_music_map[? _room_name];
-			var _new_loop_start = room_music_loop_start_map[? _room_name];
-			
-			// If different music, switch tracks
-			if (_new_music != music_game) {
-				// Stop current music
-				if (music_snd_id_game != noone) {
-					audio_stop_sound(music_snd_id_game);
-					music_snd_id_game = noone;
-				}
-				
-				// Set new music
-				music_game = _new_music;
-				music_game_loop_start = _new_loop_start;
-				
-				// Start if in gameplay
-				if (global.game_state == GameState.play || global.game_state == GameState.start) {
-					music_snd_id_game = audio_sound_play(music_game, AudioChannel.music, false, 0, 1, false, 1, 1);
-				}
-			}
-		}
-		else {
-			// Room has no defined music - stop current music
-			if (music_snd_id_game != noone) {
-				audio_stop_sound(music_snd_id_game);
-				music_snd_id_game = noone;
-			}
-			music_game = noone;
-			music_game_loop_start = 0;
-		}
-	}
-	
-	// Handle custom loop point
-	if (music_snd_id_game != noone && audio_is_playing(music_snd_id_game) && music_game_loop_start > 0) {
+#region Gameplay Music Loop Maintenance
+	if (global.game_state != GameState.pause && music_snd_id_game != noone && audio_is_playing(music_snd_id_game) && music_game_loop_start > 0) {
 		var _track_length = audio_sound_length(music_game);
 		var _track_position = audio_sound_get_track_position(music_snd_id_game);
 		
@@ -93,4 +52,3 @@
 		}
 	}
 #endregion
-

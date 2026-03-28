@@ -18,18 +18,7 @@ volume_master_ini = volume_master;
 // Track previous game state so we can handle cross-state audio transitions robustly
 prev_game_state = global.game_state;
 
-#region Music - Room Specific Configuration
-	// Map to store music tracks for each room (keys are room name strings)
-	room_music_map = ds_map_create();
-	room_music_loop_start_map = ds_map_create();
-	
-	// Define music for r_game_level_0
-	ds_map_add(room_music_map, "r_game_level_0", music_level_test);
-	ds_map_add(room_music_loop_start_map, "r_game_level_0", 3.97);
-	
-	// Track current room to detect changes
-	current_room_for_music = room_get_name(room);
-	
+#region Gameplay Music
 	// Variable to store current music's loop point
 	music_game_loop_start = 0;
 #endregion
