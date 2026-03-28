@@ -1,13 +1,13 @@
 {
-  "$GMScript": "v1",
-  "%Name": "director_room_exit_gameplay",
-  "isCompatibility": false,
-  "isDnD": false,
-  "name": "director_room_exit_gameplay",
-  "parent": {
-    "name": "winbo",
-    "path": "winbo.yyp",
+  "$GMScript":"v1",
+  "%Name":"director_room_exit_gameplay",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"director_room_exit_gameplay",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Control/Director/Scripts.yy",
   },
-  "resourceType": "GMScript",
-  "resourceVersion": "2.0",
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

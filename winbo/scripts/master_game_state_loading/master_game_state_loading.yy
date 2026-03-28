@@ -1,13 +1,13 @@
 {
-  "$GMScript": "v1",
-  "%Name": "master_game_state_loading",
-  "isCompatibility": false,
-  "isDnD": false,
-  "name": "master_game_state_loading",
-  "parent": {
-    "name": "winbo",
-    "path": "winbo.yyp",
+  "$GMScript":"v1",
+  "%Name":"master_game_state_loading",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"master_game_state_loading",
+  "parent":{
+    "name":"GameState",
+    "path":"folders/Control/Master/Scripts/GameState.yy",
   },
-  "resourceType": "GMScript",
-  "resourceVersion": "2.0",
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }
