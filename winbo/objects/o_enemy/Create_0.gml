@@ -220,6 +220,14 @@ death_smoke_delay_steps = 2;
 
 	// Startled animation tracking - only plays once per enemy lifetime
 	has_played_startled = false;
+
+	// Enemy VO
+	voice_snd_id = noone;
+	voice_death_played = false;
+	voice_death_sounds = [];
+	voice_on_first_aggro = undefined;
+	voice_on_aggro = undefined;
+	voice_on_attack_start = undefined;
 #endregion
 
 #region Lighting

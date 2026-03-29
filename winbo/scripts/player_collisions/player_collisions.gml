@@ -211,6 +211,7 @@ function player_collisions(){
 				checkpoint_active = true;
 				image_system_setup(sprite_jump,ANIMATION_FPS_DEFAULT,true,true,16,IMAGE_LOOP_FULL);
 				sprite_current_frame = 0;
+				audio_checkpoint_activate_play();
 				//transform_animate_from_current(transform[TransformType.anchor],TransformValue.colour,c_white,0,SECOND * 0.2,ease_quad_out);
 				//transform_animate_from_current(transform[TransformType.anchor],TransformValue.xscale,1,0,SECOND * 0.2,ease_back_out);
 				//transform_animate_from_current(transform[TransformType.anchor],TransformValue.yscale,1,0,SECOND * 0.2,ease_back_out);

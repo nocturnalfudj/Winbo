@@ -57,6 +57,7 @@ function enemy_space_ranger_state_attack(){
 
 			// Attack Created
 			attack_active_attack_created = true;
+			enemy_voice_space_ranger_on_missile_fire(id);
 		}
 		
 		// Run Active Countdown

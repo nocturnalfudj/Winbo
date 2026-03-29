@@ -136,3 +136,17 @@ event_inherited();
 	// This is the distance at which the enemy will initiate the attack sequence
 	target[TargetType.attack].set_distance_trigger(1000);
 #endregion
+
+#region Enemy Voice
+	voice_melee_followup_pending = noone;
+	voice_melee_gasp_sounds = [snd_enemy_melee_gasp_1, snd_enemy_melee_gasp_2];
+	voice_melee_attack_sounds = [
+		snd_enemy_melee_attack_die_winbo_1,
+		snd_enemy_melee_attack_thrust_1,
+		snd_enemy_melee_attack_thrust_2,
+		snd_enemy_melee_attack_eat_knife_1
+	];
+	voice_death_sounds = [snd_enemy_melee_death_1, snd_enemy_melee_death_2];
+	voice_on_first_aggro = enemy_voice_melee_commando_on_first_aggro;
+	voice_on_attack_start = enemy_voice_melee_commando_on_attack_start;
+#endregion

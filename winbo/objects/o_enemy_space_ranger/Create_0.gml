@@ -161,3 +161,16 @@ event_inherited();
 	burst_stuck_min_speed = 0.2;
 	burst_velocity_retention_base = velocity_retention_default;
 #endregion
+
+#region Enemy Voice
+	voice_flying_aggro_sounds = [snd_enemy_flying_aggro_1, snd_enemy_flying_aggro_2];
+	voice_flying_fire_sounds = [snd_enemy_flying_fire_1, snd_enemy_flying_fire_2];
+	voice_flying_slippery_sounds = [snd_enemy_flying_slippery_1, snd_enemy_flying_slippery_2];
+	voice_flying_cant_hit_sounds = [snd_enemy_flying_cant_hit_1, snd_enemy_flying_cant_hit_2];
+	voice_death_sounds = [snd_enemy_flying_death_1, snd_enemy_flying_death_2];
+	voice_flying_fire_count_this_aggro = 0;
+	voice_flying_missiles_this_aggro = 0;
+	voice_flying_slippery_played = false;
+	voice_flying_cant_hit_played = false;
+	voice_on_aggro = enemy_voice_space_ranger_on_aggro;
+#endregion

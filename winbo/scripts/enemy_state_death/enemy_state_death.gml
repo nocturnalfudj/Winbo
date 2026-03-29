@@ -1,4 +1,14 @@
 function enemy_state_death(){
+	if(!voice_death_played){
+		var _voice_sound = enemy_voice_choose(voice_death_sounds);
+
+		if(_voice_sound != noone){
+			enemy_voice_play(id, _voice_sound, true);
+		}
+
+		voice_death_played = true;
+	}
+
 	// Winbo stomp-kill smoke: delay a couple steps so the death sprite is visible briefly.
 	if (death_smoke_enable && !death_smoke_spawned) {
 		death_smoke_step_count++;

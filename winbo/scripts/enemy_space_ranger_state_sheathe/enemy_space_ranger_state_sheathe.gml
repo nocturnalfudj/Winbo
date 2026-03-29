@@ -39,6 +39,7 @@ function enemy_space_ranger_state_sheathe(){
 	}
 	else{
 		// Arrived at origin - return to non-hostile patrol state
+		enemy_voice_space_ranger_reset_aggro(id);
 		is_hostile = false;
 		hostility_detection_enable = true;
 		deaggro_timer = 0;

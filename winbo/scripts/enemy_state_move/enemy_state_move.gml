@@ -87,6 +87,10 @@ function enemy_state_move(){
 				if(!has_played_startled){
 					has_played_startled = true;
 
+					if(!is_undefined(voice_on_first_aggro)){
+						voice_on_first_aggro(id);
+					}
+
 					//Play startled
 					var _startled_sprite;
 					_startled_sprite = sprite_startled_left;
@@ -107,6 +111,10 @@ function enemy_state_move(){
 				else{
 					// Re-aggro after de-aggro: allow immediate attack eligibility.
 					attack_countdown = 0;
+
+					if(!is_undefined(voice_on_aggro)){
+						voice_on_aggro(id);
+					}
 				}
 			}
 		}
@@ -427,6 +435,10 @@ function enemy_state_move(){
 							attack_telegraph_countdown = attack_telegraph_countdown_max;
 							attack_active_countdown = attack_telegraph_countdown_max;
 							attack_recover_countdown = attack_telegraph_countdown_max;
+
+							if(!is_undefined(voice_on_attack_start)){
+								voice_on_attack_start(id);
+							}
 
 							// Stop processing move logic this step (prevents face/turn updates after entering attack state)
 							return;
