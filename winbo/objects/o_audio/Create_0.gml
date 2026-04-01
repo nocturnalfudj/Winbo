@@ -6,6 +6,9 @@ enum AudioAlarm{
 volume_master = 1;
 volume_master_ini = volume_master;
 
+// Quick global balance control for SFX mix testing.
+sfx_multiplier = 2;
+
 #region Music
 	music_snd_id_game = noone;
 	music_snd_id_menu = noone;

@@ -34,6 +34,8 @@ function audio_sound_play(_sound,_channel,_loop,_priority,_gain_time,_mute_check
 	with(o_audio){
 		var _volume,_volume_is_muted;
 		_volume = channel[_channel][AudioChannelProperty.volume] * volume_master;
+		if(_channel == AudioChannel.sfx)
+			_volume *= sfx_multiplier;
 	
 		if(_volume <= 0){
 			_volume_is_muted = true;

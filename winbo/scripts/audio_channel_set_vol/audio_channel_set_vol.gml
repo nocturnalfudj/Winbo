@@ -12,6 +12,8 @@ function audio_channel_set_vol(_channel,_vol,_t) {
 	with(o_audio){
 		channel[@ _channel][AudioChannelProperty.volume] = _vol;
 		_vol = _vol * volume_master;
+		if(_channel == AudioChannel.sfx)
+			_vol *= sfx_multiplier;
 		_snd_lst = channel[_channel][AudioChannelProperty.sound_list];
 		_snd_lst_sz = ds_list_size(_snd_lst);
 	}
