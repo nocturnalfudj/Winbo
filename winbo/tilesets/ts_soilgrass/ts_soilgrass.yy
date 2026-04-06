@@ -1,8 +1,8 @@
 {
   "$GMTileSet":"v1",
-  "%Name":"ts_mossystone1",
+  "%Name":"ts_soilgrass",
   "autoTileSets":[
-    {"$GMAutoTileSet":"","%Name":"mossystone1","closed_edge":false,"name":"mossystone1","resourceType":"GMAutoTileSet","resourceVersion":"2.0","tiles":[
+    {"$GMAutoTileSet":"","%Name":"ts_soilgrass","closed_edge":false,"name":"ts_soilgrass","resourceType":"GMAutoTileSet","resourceVersion":"2.0","tiles":[
         1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,
         38,39,40,41,42,43,44,45,46,47,
       ],},
@@ -12,19 +12,19 @@
     "SerialiseWidth":0,
     "TileSerialiseData":[],
   },
-  "name":"ts_mossystone1",
+  "name":"ts_soilgrass",
   "out_columns":7,
   "out_tilehborder":2,
   "out_tilevborder":2,
   "parent":{
-    "name":"Stone",
-    "path":"folders/Tilesets/Stone.yy",
+    "name":"Grass and Dirt",
+    "path":"folders/Tilesets/Grass and Dirt.yy",
   },
   "resourceType":"GMTileSet",
   "resourceVersion":"2.0",
   "spriteId":{
-    "name":"spr_mossystone1",
-    "path":"sprites/spr_mossystone1/spr_mossystone1.yy",
+    "name":"spr_soilgrass",
+    "path":"sprites/spr_soilgrass/spr_soilgrass.yy",
   },
   "spriteNoExport":false,
   "textureGroupId":{
