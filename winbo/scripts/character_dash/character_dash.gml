@@ -102,6 +102,8 @@ function character_dash(){
 				
 				//Dash Sprite
 				image_system_setup(sprite_dash,ANIMATION_FPS_DEFAULT,true,false,0,IMAGE_LOOP_FULL);
+
+				audio_player_air_dash_play();
 			}
 		
 			#region Effects

@@ -135,6 +135,9 @@
 		level_1_environment,
 		level_2_environment,
 		bonus_room_environment,
+		opening_cutscene_environment,
+		tutorial_environment,
+		presence_environment,
 		
 		SIZE
 	}

@@ -33,6 +33,7 @@ function enemy_state_death(){
 			if (!death_smoke_spawned && (death_smoke_step_count > death_smoke_delay_steps)) {
 				death_smoke_spawned = true;
 				fx_spawn_sprite_once(x, y, "lyr_pfx_foreground", spr_smoke_explosion_large, 1, 1, 0, ANIMATION_FPS_DEFAULT);
+				audio_enemy_stomp_poof_play();
 				transform_animate_from_current_shrink_and_fade();
 				state = EnemyState.destroy;
 			}
@@ -59,6 +60,7 @@ function enemy_state_death(){
 	if (death_smoke_enable && !death_smoke_spawned && (death_smoke_step_count > death_smoke_delay_steps)) {
 		death_smoke_spawned = true;
 		fx_spawn_sprite_once(x, y, "lyr_pfx_foreground", spr_smoke_explosion_large, 1, 1, 0, ANIMATION_FPS_DEFAULT);
+		audio_enemy_stomp_poof_play();
 		transform_animate_from_current_shrink_and_fade();
 		state = EnemyState.destroy;
 		exit;

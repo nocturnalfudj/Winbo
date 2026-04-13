@@ -171,6 +171,10 @@ function player_gamestate_play(){
 					
 						//Bump Sprite
 						image_system_setup(sprite_bump,ANIMATION_FPS_DEFAULT,true,false,0,IMAGE_LOOP_FULL);
+
+							if(!_platform_crumble_dash_collision){
+								audio_player_bump_play();
+							}
 						
 							if(quick_smoke_fx_enable){
 								// Bump impact FX (wall bumps only)

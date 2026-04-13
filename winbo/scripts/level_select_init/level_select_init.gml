@@ -21,7 +21,7 @@ function level_select_init() {
 			"tutorial",
 			LEVEL_SELECT_TRANSITION_DIRECT,
 			true,
-			Environment.default_environment,
+			Environment.opening_cutscene_environment,
 			["game"]
 		);
 		level_select_register(
@@ -29,10 +29,10 @@ function level_select_init() {
 			r_tutorial,
 		"Tutorial",
 		1,
-			"level_0",
+		"level_0",
 			LEVEL_SELECT_TRANSITION_VIA_PRESENCE_HUB,
 			false,
-			Environment.default_environment,
+			Environment.tutorial_environment,
 			["game"]
 		);
 		level_select_register(
@@ -40,10 +40,10 @@ function level_select_init() {
 			r_game_level_presence,
 		"Presence",
 		2,
-			"level_0",
+		"level_0",
 			LEVEL_SELECT_TRANSITION_VIA_PRESENCE_HUB,
 			false,
-			Environment.default_environment,
+			Environment.presence_environment,
 			["game"]
 		);
 	
