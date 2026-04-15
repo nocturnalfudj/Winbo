@@ -197,13 +197,13 @@ function director_environment_data_setup(){
 			_environment_tile,
 			_environment_foreground,
 			[
-				{mode: "normal", sprite: spr_bg_opening_layer_4, parallax_x: 0.35, parallax_y: 0.0, offset_y: 0, repeat_x: false, clamp_y: false},
-				{mode: "normal", sprite: spr_bg_opening_layer_3, parallax_x: 0.50, parallax_y: 0.0, offset_y: 0, repeat_x: false, clamp_y: false},
-				{mode: "normal", sprite: spr_bg_opening_layer_2, parallax_x: 0.65, parallax_y: 0.0, offset_y: 0, repeat_x: false, clamp_y: false},
-				{mode: "normal", sprite: spr_bg_opening_layer_1, parallax_x: 0.80, parallax_y: 0.0, offset_y: 0, repeat_x: false, clamp_y: false}
+				{mode: "normal", sprite: spr_bg_opening_layer_4, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false},
+				{mode: "normal", sprite: spr_bg_opening_layer_3, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false},
+				{mode: "normal", sprite: spr_bg_opening_layer_2, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false},
+				{mode: "normal", sprite: spr_bg_opening_layer_1, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false}
 			],
 			[
-				{mode: "normal", sprite: spr_bg_opening_layer_0_foreground, parallax_x: 0.95, parallax_y: 0.0, offset_y: 0, repeat_x: false, clamp_y: false}
+				{mode: "normal", sprite: spr_bg_opening_layer_0_foreground, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false}
 			]
 		);
 		with(environment[_environment]){
@@ -247,25 +247,17 @@ function director_environment_data_setup(){
 			_environment_tile,
 			_environment_foreground,
 			[
-				{mode: "normal", sprite: spr_bg_presence_layer_4, parallax_x: 0.35, parallax_y: 0.0, offset_y: 0, repeat_x: false, clamp_y: false},
-				{mode: "normal", sprite: spr_bg_presence_layer_3, parallax_x: 0.55, parallax_y: 0.0, offset_y: 0, repeat_x: false, clamp_y: false},
-				{mode: "normal", sprite: spr_bg_presence_layer_2, parallax_x: 0.80, parallax_y: 0.0, offset_y: 0, repeat_x: false, clamp_y: false}
+				{mode: "normal", sprite: spr_bg_presence_layer_4, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false},
+				{mode: "normal", sprite: spr_bg_presence_layer_3, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false},
+				{mode: "normal", sprite: spr_bg_presence_layer_2, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false}
 			],
 			[
-				{mode: "normal", sprite: spr_bg_presence_layer_1_foreground, parallax_x: 0.95, parallax_y: 0.0, offset_y: 0, repeat_x: false, clamp_y: false}
+				{mode: "normal", sprite: spr_bg_presence_layer_1_foreground, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false}
 			]
 		);
-		_apply_default_vfx(environment[_environment]);
 		with(environment[_environment]){
 			texture_group = "game";
-			with(vfx_scheme){
-				lighting_light_intensity = 0.35;
-				lighting_image[LightingImage.brightness] = -0.10;
-				lighting_image[LightingImage.pop_strength] = 0.0;
-				vignette_circle_inner = 1.8;
-				vignette_circle_outer = 4.5;
-				noise_strength = 0;
-			}
 		}
+		_apply_default_vfx(environment[_environment]);
 	#endregion
 }
