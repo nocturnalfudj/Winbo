@@ -1,10 +1,17 @@
 function player_state_float(){
 	#region Sprite Update
-		var _bump_block
+		var _bump_block;
+		var _air_spin_playing;
 		_bump_block = (sprite_current == sprite_bump) && (sprite_current_frame == (image.sprite_number - 1));
+		_air_spin_playing = player_air_spin_update_state();
 	
+		if(_air_spin_playing){
+			if(sprite_current != sprite_air_spin){
+				player_air_spin_begin_sprite();
+			}
+		}
 		//Not Bumping and Not Playing Queued Animation
-		if(!_bump_block && !image.is_playing_queued){
+		else if(!_bump_block && !image.is_playing_queued){
 			//Float Sprite
 			if(sprite_current != sprite_float)
 				image_system_setup(sprite_float,ANIMATION_FPS_DEFAULT,true,true,5,IMAGE_LOOP_FULL);
@@ -192,4 +199,8 @@ function player_state_float(){
 	
 	//Movement Update
 	player_movement_update();
+
+	if(move_grounded){
+		player_air_spin_clear();
+	}
 }

@@ -36,6 +36,7 @@ is_player = true;
 	sprite_fall_sideways	= spr_player_fall_sideways;	//director_get_custom_sprite(sprite_fall_sideways);
 	sprite_jump				= spr_player_jump;			//director_get_custom_sprite(spr_player_jump);
 	sprite_jump_sideways	= spr_player_jump_sideways;	//director_get_custom_sprite(spr_player_jump_sideways);
+	sprite_air_spin			= spr_player_air_spin;
 	sprite_land				= spr_player_land;			//director_get_custom_sprite(spr_player_land);
 	sprite_land_sideways	= spr_player_land_sideways;	//director_get_custom_sprite(spr_player_land_sideways);
 	sprite_float			= spr_player_float;			//director_get_custom_sprite(spr_player_float);
@@ -161,6 +162,9 @@ is_player = true;
 	frolic_ramp_time = 0;
 	frolic_ramp_time_max = (SECOND * 4) / ANIMATION_FPS_DEFAULT;
 	frolic_acceleration_factor = 2;
+
+	//Air Spin
+	air_spin_active = false;
 #endregion
 
 #region Dash

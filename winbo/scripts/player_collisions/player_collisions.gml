@@ -165,6 +165,8 @@ function player_collisions(){
 								
 						//Start with Rise Gravity
 						move_gravity.Copy(move_gravity_rise);
+
+						player_air_spin_start();
 						
 						//Refill Dash Stamina
 						dash_stamina = dash_stamina_max;
@@ -240,6 +242,8 @@ function player_collisions(){
 						
 			//Start with Rise Gravity
 			move_gravity.Copy(move_gravity_rise);
+
+			player_air_spin_start();
 			
 			//Refill Dash Stamina
 			dash_stamina = dash_stamina_max;

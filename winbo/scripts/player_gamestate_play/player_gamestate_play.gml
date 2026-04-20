@@ -64,6 +64,10 @@ function player_gamestate_play(){
 		player_frolic_clear();
 	}
 
+	if((state != PlayerState.move) && (state != PlayerState.float)){
+		player_air_spin_clear();
+	}
+
 	//Status Effects
 	status_effect_system_update();
 	
