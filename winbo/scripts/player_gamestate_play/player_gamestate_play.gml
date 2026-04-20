@@ -59,6 +59,11 @@ function player_gamestate_play(){
 		break;
 	}
 
+	if(state != PlayerState.move){
+		player_secret_idle_cancel(false);
+		player_frolic_clear();
+	}
+
 	//Status Effects
 	status_effect_system_update();
 	

@@ -41,9 +41,25 @@ is_player = true;
 	sprite_float			= spr_player_float;			//director_get_custom_sprite(spr_player_float);
 	sprite_bump				= spr_player_bump;			//director_get_custom_sprite(spr_player_bump);
 	sprite_sitdown			= spr_player_sitdown;		//director_get_custom_sprite(spr_player_sitdown);
+	sprite_frolic			= spr_player_frolic;
+	sprite_secret_idle		= spr_player_secret_idle;
+	sprite_secret_idle_bubble_out = spr_player_secret_idle_bubble_out;
 	sprite_take_damage_0	= spr_player_take_damage_0;	//director_get_custom_sprite(spr_player_take_damage_0);
 	sprite_take_damage_1	= spr_player_take_damage_1;	//director_get_custom_sprite(spr_player_take_damage_1);
 	sprite_death			= spr_player_death;			//director_get_custom_sprite(spr_player_death);
+
+	secret_idle_thought_sprites = [
+		spr_player_secret_idle_thought_1,
+		spr_player_secret_idle_thought_2,
+		spr_player_secret_idle_thought_3,
+		spr_player_secret_idle_thought_4,
+		spr_player_secret_idle_thought_5,
+		spr_player_secret_idle_thought_6,
+		spr_player_secret_idle_thought_7,
+		spr_player_secret_idle_thought_8,
+		spr_player_secret_idle_thought_9,
+		spr_player_secret_idle_thought_10
+	];
 	
 	//Transition Sprites
 	sprite_transition_walk_to_walk_other_direction		= spr_player_transition_walk_to_walk_other_direction;
@@ -125,6 +141,26 @@ is_player = true;
 	
 	//Liquid Collision
 	liquid_collision_instance = noone;
+
+	//Idle
+	stationary = true;
+	stationary_time = 0;
+
+	secret_idle_inputless_time = 0;
+	secret_idle_phase = 0;
+	secret_idle_thought_fx = noone;
+	secret_idle_thought_index = -1;
+	secret_idle_activation_time = SECOND * 5;
+	secret_idle_thought_fade_speed = 1 / (SECOND * 0.2);
+	secret_idle_fx_layer = "lyr_pfx_foreground";
+	secret_idle_thought_offset_x = 4;
+	secret_idle_thought_offset_y = -430;
+
+	//Run
+	frolic_active = false;
+	frolic_ramp_time = 0;
+	frolic_ramp_time_max = (SECOND * 4) / ANIMATION_FPS_DEFAULT;
+	frolic_acceleration_factor = 2;
 #endregion
 
 #region Dash

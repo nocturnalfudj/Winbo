@@ -1,6 +1,11 @@
 //Inherit Actor
 event_inherited();
 
+if(global.game_state != GameState.play){
+	player_secret_idle_cancel(false);
+	player_frolic_clear();
+}
+
 //Game State Switch
 switch(global.game_state){
 	case GameState.play:

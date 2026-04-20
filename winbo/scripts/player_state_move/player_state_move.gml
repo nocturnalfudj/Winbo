@@ -1,307 +1,561 @@
 function player_state_move(){
+	var _delta_time_scaled;
+	_delta_time_scaled = global.delta_time_factor_scaled;
+
+	//Input
+	player_input();
+
+	var _bump_block, _landing_block;
+	_bump_block = (sprite_current == sprite_bump) && (sprite_current_frame < (image.sprite_number - 1));
+	_landing_block = ((sprite_current == sprite_land) || (sprite_current == sprite_land_sideways)) && (sprite_current_frame < (image.sprite_number - 1));
+
+	var _secret_idle_gate_open, _secret_idle_gameplay_input;
+	_secret_idle_gate_open = player_secret_idle_gate_open(_bump_block, _landing_block);
+	_secret_idle_gameplay_input = player_secret_idle_has_gameplay_input();
+
+	if(secret_idle_phase != PLAYER_SECRET_IDLE_PHASE_INACTIVE){
+		if(_secret_idle_gameplay_input || !_secret_idle_gate_open){
+			player_secret_idle_cancel(true);
+		}
+		else{
+			switch(secret_idle_phase){
+				case PLAYER_SECRET_IDLE_PHASE_SITDOWN:
+					if(sprite_current != sprite_sitdown){
+						image_system_setup(sprite_sitdown, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+						image_set_frame(image, 0);
+					}
+
+					if(sprite_current_frame >= (image.sprite_number - 1)){
+						player_secret_idle_begin_body();
+					}
+				break;
+
+				case PLAYER_SECRET_IDLE_PHASE_INTRO:
+					if(sprite_current != sprite_secret_idle){
+						player_secret_idle_begin_body();
+					}
+					else if(sprite_current_frame >= 7){
+						player_secret_idle_begin_loop();
+					}
+				break;
+
+				case PLAYER_SECRET_IDLE_PHASE_LOOP:
+					if(sprite_current != sprite_secret_idle){
+						image_system_setup(sprite_secret_idle, ANIMATION_FPS_DEFAULT, true, true, 7, 17);
+						image_set_frame(image, 7);
+					}
+				break;
+			}
+		}
+	}
+	else if(_secret_idle_gate_open && !_secret_idle_gameplay_input){
+		secret_idle_inputless_time += _delta_time_scaled;
+
+		if(secret_idle_inputless_time >= secret_idle_activation_time){
+			player_secret_idle_start();
+		}
+	}
+	else{
+		secret_idle_inputless_time = 0;
+	}
+
+	var _frolic_allowed;
+	_frolic_allowed = player_frolic_can_activate(_bump_block, _landing_block);
+	player_frolic_update(_frolic_allowed);
+
 	#region Sprite Update
-		var _bump_block, _landing_block;
-		_bump_block = (sprite_current == sprite_bump) && (sprite_current_frame < (image.sprite_number - 1));
-		
-		// Block sprite changes while landing animation is playing and not complete
-		_landing_block = ((sprite_current == sprite_land) || (sprite_current == sprite_land_sideways)) && (sprite_current_frame < (image.sprite_number - 1));
-		
-		//Not Bumping and Not Landing and Not Playing Queued Animation
 		if(!_bump_block && !_landing_block && !image.is_playing_queued){
 			if(move_grounded){
-				if(stationary){
-					//Idle Sprite
-					if(sprite_current != sprite_idle)
-						image_system_setup(sprite_idle,ANIMATION_FPS_DEFAULT,true,true,0,IMAGE_LOOP_FULL);
-				}
-				else{
-					//Walk Sprite
-					if(sprite_current != sprite_walk){
-						//Landing Sideways
-						if(sprite_current == sprite_land_sideways){
-							image_system_setup(sprite_walk,ANIMATION_FPS_DEFAULT,true,true,4,IMAGE_LOOP_FULL);
-							var _frame;
-							_frame = 1;
-							with(image){
-								position = _frame;
-								frame = _frame;
+				switch(secret_idle_phase){
+					case PLAYER_SECRET_IDLE_PHASE_SITDOWN:
+						if(sprite_current != sprite_sitdown){
+							image_system_setup(sprite_sitdown, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+							image_set_frame(image, 0);
+						}
+					break;
+
+					case PLAYER_SECRET_IDLE_PHASE_INTRO:
+						if(sprite_current != sprite_secret_idle){
+							player_secret_idle_begin_body();
+						}
+					break;
+
+					case PLAYER_SECRET_IDLE_PHASE_LOOP:
+						if(sprite_current != sprite_secret_idle){
+							image_system_setup(sprite_secret_idle, ANIMATION_FPS_DEFAULT, true, true, 7, 17);
+							image_set_frame(image, 7);
+						}
+					break;
+
+					default:
+						if(stationary){
+							if(sprite_current != sprite_idle){
+								image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
 							}
-							sprite_current_frame = _frame;
+						}
+						else if(frolic_active){
+							if(sprite_current != sprite_frolic){
+								player_frolic_begin_sprite();
+							}
 						}
 						else{
-							image_system_setup(sprite_walk,ANIMATION_FPS_DEFAULT,true,true,4,IMAGE_LOOP_FULL);
+							if(sprite_current != sprite_walk){
+								if(sprite_current == sprite_land_sideways){
+									image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
+									image_set_frame(image, 1);
+								}
+								else if(sprite_current == sprite_frolic){
+									player_frolic_end_to_walk();
+								}
+								else{
+									image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
+								}
+							}
 						}
-					}
+					break;
 				}
 			}
 			else{
+				player_frolic_clear();
+
 				if((acceleration.y < 0) || (velocity.y < 0)){
-					//Jumping Sprite - Choose between normal and sideways jump
-					if(sprite_current != sprite_jump && sprite_current != sprite_jump_sideways){
-					    // Determine which jump sprite to use based on horizontal velocity
-					    var _use_sideways_jump = (abs(velocity.x) > 5);
-					    var _target_sprite = _use_sideways_jump ? sprite_jump_sideways : sprite_jump;
-    
-					    image_system_setup(_target_sprite,ANIMATION_FPS_DEFAULT, true, false,0,IMAGE_LOOP_FULL);
+					if((sprite_current != sprite_jump) && (sprite_current != sprite_jump_sideways)){
+						var _use_sideways_jump, _target_jump_sprite;
+						_use_sideways_jump = (abs(velocity.x) > 5);
+						_target_jump_sprite = _use_sideways_jump ? sprite_jump_sideways : sprite_jump;
+
+						image_system_setup(_target_jump_sprite, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 					}
 					else{
-					    // Already in a jump sprite - check if we need to switch between them
-					    var _should_use_sideways = (abs(velocity.x) > 5);
-					    var _current_is_sideways = (sprite_current == sprite_jump_sideways);
-    
-					    if(_should_use_sideways != _current_is_sideways){
-					        // Need to switch jump sprites while preserving frame position
-					        var _current_frame = image.frame;
-					        var _target_sprite = _should_use_sideways ? sprite_jump_sideways : sprite_jump;
-        
-					        // Use image_set_sprite with position_reset = false to preserve frame
-					        image_set_sprite(image, _target_sprite, false);
-					    }
+						var _should_use_sideways_jump, _current_jump_is_sideways;
+						_should_use_sideways_jump = (abs(velocity.x) > 5);
+						_current_jump_is_sideways = (sprite_current == sprite_jump_sideways);
+
+						if(_should_use_sideways_jump != _current_jump_is_sideways){
+							var _target_jump_sprite;
+							_target_jump_sprite = _should_use_sideways_jump ? sprite_jump_sideways : sprite_jump;
+							image_set_sprite(image, _target_jump_sprite, false);
+						}
 					}
-				
 				}
-				//Falling
 				else{
-					//Currently Playing Jumping Animation
-					if(((sprite_current == sprite_jump) || (sprite_current == sprite_jump_sideways)) && (sprite_current_frame < image.sprite_number-1)){
+					if(((sprite_current == sprite_jump) || (sprite_current == sprite_jump_sideways)) && (sprite_current_frame < image.sprite_number - 1)){
 					}
-					//Falling Sprite
 					else{
-						//Fall Sprite - Choose between normal and sideways fall
-						if(sprite_current != sprite_fall && sprite_current != sprite_fall_sideways){
-						    // Determine which fall sprite to use based on horizontal velocity
-						    var _use_sideways_fall = (abs(velocity.x) > 5);
-						    var _target_sprite = _use_sideways_fall ? sprite_fall_sideways : sprite_fall;
-    
-						    //Transition Animations Based on Current Sprite
-						    if(sprite_current == sprite_float){
-						        // Float to Fall transition (only if not already playing a queued animation)
-						        if(!image.is_playing_queued){
-						            var _transition_sprite = _use_sideways_fall ? sprite_transition_float_to_fall_sideways : sprite_transition_float_to_fall;
-						            image_system_setup(_target_sprite,ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
-						            image_system_queue_add_to_front(_transition_sprite, ANIMATION_FPS_DEFAULT);
-						        }
-						    }
+						if((sprite_current != sprite_fall) && (sprite_current != sprite_fall_sideways)){
+							var _use_sideways_fall, _target_fall_sprite;
+							_use_sideways_fall = (abs(velocity.x) > 5);
+							_target_fall_sprite = _use_sideways_fall ? sprite_fall_sideways : sprite_fall;
+
+							if(sprite_current == sprite_float){
+								if(!image.is_playing_queued){
+									var _float_transition_sprite;
+									_float_transition_sprite = _use_sideways_fall ? sprite_transition_float_to_fall_sideways : sprite_transition_float_to_fall;
+									image_system_setup(_target_fall_sprite, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+									image_system_queue_add_to_front(_float_transition_sprite, ANIMATION_FPS_DEFAULT);
+								}
+							}
 							else if(sprite_current == sprite_bump){
-						        // Float to Fall transition (only if not already playing a queued animation)
-						        if(!image.is_playing_queued){
-						            var _transition_sprite = _use_sideways_fall ? sprite_transition_bump_to_fall_sideways : sprite_transition_bump_to_fall;
-						            image_system_setup(_target_sprite,ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
-						            image_system_queue_add_to_front(_transition_sprite, ANIMATION_FPS_DEFAULT);
-						        }
-						    }
-						    else if(sprite_current == sprite_jump_sideways && _use_sideways_fall){
-						        // Jump Sideways to Fall Sideways transition (only if not already playing a queued animation)
-						        if(!image.is_playing_queued){
-						            image_system_setup(_target_sprite,ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
-						            image_system_queue_add_to_front(sprite_transition_jump_sideways_to_fall_sideways, ANIMATION_FPS_DEFAULT);
-						        }
-						    }
-						    else{
-						        // No transition needed for other cases
-						        image_system_setup(_target_sprite,ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
-						    }
+								if(!image.is_playing_queued){
+									var _bump_transition_sprite;
+									_bump_transition_sprite = _use_sideways_fall ? sprite_transition_bump_to_fall_sideways : sprite_transition_bump_to_fall;
+									image_system_setup(_target_fall_sprite, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+									image_system_queue_add_to_front(_bump_transition_sprite, ANIMATION_FPS_DEFAULT);
+								}
+							}
+							else if((sprite_current == sprite_jump_sideways) && _use_sideways_fall){
+								if(!image.is_playing_queued){
+									image_system_setup(_target_fall_sprite, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+									image_system_queue_add_to_front(sprite_transition_jump_sideways_to_fall_sideways, ANIMATION_FPS_DEFAULT);
+								}
+							}
+							else{
+								image_system_setup(_target_fall_sprite, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+							}
 						}
 						else{
-						    // Already in a fall sprite - check if we need to switch between them
-						    var _should_use_sideways = (abs(velocity.x) > 5);
-						    var _current_is_sideways = (sprite_current == sprite_fall_sideways);
-    
-						    if(_should_use_sideways != _current_is_sideways){
-						        // Need to switch fall sprites while preserving frame position
-						        var _current_frame = image.frame;
-						        var _target_sprite = _should_use_sideways ? sprite_fall_sideways : sprite_fall;
-        
-						        // Use image_set_sprite with position_reset = false to preserve frame
-						        image_set_sprite(image, _target_sprite, false);
-						    }
+							var _should_use_sideways_fall, _current_fall_is_sideways;
+							_should_use_sideways_fall = (abs(velocity.x) > 5);
+							_current_fall_is_sideways = (sprite_current == sprite_fall_sideways);
+
+							if(_should_use_sideways_fall != _current_fall_is_sideways){
+								var _target_fall_sprite;
+								_target_fall_sprite = _should_use_sideways_fall ? sprite_fall_sideways : sprite_fall;
+								image_set_sprite(image, _target_fall_sprite, false);
+							}
 						}
 					}
 				}
 			}
 		}
 	#endregion
-	
+
 	//Update Health
 	character_health();
-	
-	//Input
-	player_input();
-	acceleration.AddMagnitudeDirection(INPUT_MOVE_ACCELERATION*input_move_magnitude,input_move_direction);
-	
+
+	acceleration.AddMagnitudeDirection(INPUT_MOVE_ACCELERATION * input_move_magnitude, input_move_direction);
+
 	#region Arrow Input
-		//Jump
 		if(keyboard_check(vk_up)){
 			input_current[UserControl.jump] = true;
 		}
-		
-		//Down
+
 		if(keyboard_check_pressed(vk_down)){
 			input_current[UserControl.down] = true;
 		}
-		
-		//Dash
-		var _left_key,_right_key;
+
+		var _left_key, _right_key;
 		_left_key = keyboard_check_pressed(vk_left);
 		_right_key = keyboard_check_pressed(vk_right);
-	
+
 		if(_left_key || _right_key){
-			//Dash
 			input_current[UserControl.dash] = true;
-		
-			if(_left_key)
+
+			if(_left_key){
 				input_move_direction = 180;
-			else if(_right_key)
+			}
+			else if(_right_key){
 				input_move_direction = 0;
-			
+			}
+
 			input_move_magnitude = 1;
-			
 			input_aim_direction = input_move_direction;
 		}
-		
-		//Float
+
 		if((input_current[UserControl.float]) || (keyboard_check(vk_up))){
 			if((float_countdown > 0) && (!move_grounded)){
 				if((acceleration.y >= 0) && (velocity.y >= 0)){
-					//Go to Float State
+					player_frolic_clear();
 					state = PlayerState.float;
 				}
 			}
 		}
 	#endregion
-	
-	//Update Dash No Input Direction
+
 	if(input_move_magnitude > 0){
 		dash_no_input_direction = input_move_direction;
 	}
-	
+
 	#region Jump
-		//Input Pressed
 		if((input_current[UserControl.jump]) && (!input_previous[UserControl.jump])){
 			var _close_enough_to_jump;
 			_close_enough_to_jump = false;
+
 			if(move_grounded_close){
-				//Moving Down
 				if(velocity.y > 0){
 					_close_enough_to_jump = true;
 				}
 			}
-			
-			//Bump Jump
-			//OR
-			//Grounded
+
 			if((bump_jump_count) || (move_grounded) || (_close_enough_to_jump)){
-				//Accelerate Upward
-				acceleration.AddMagnitudeDirection(input_move_acceleration_jump,90);
-				
-				//Reset Jump Hold Countdown for Variable Jump
+				player_frolic_clear();
+
+				acceleration.AddMagnitudeDirection(input_move_acceleration_jump, 90);
 				jump_hold_allow_countdown = jump_hold_allow_countdown_max;
-			
-				//Start with Rise Gravity
-				move_gravity.Copy(move_gravity_rise);	
-				
-				//Reduce Bump Jump
+				move_gravity.Copy(move_gravity_rise);
+
 				if(bump_jump_count > 0){
 					bump_jump_count--;
 				}
-				
-				// Tell camera to dampen vertical follow during jump
-					with(o_camera){
-						if(follow_jump_dampening_enable){
-							follow_jump_dampening_factor = 0;
-						}
+
+				with(o_camera){
+					if(follow_jump_dampening_enable){
+						follow_jump_dampening_factor = 0;
 					}
-					
-						if(quick_smoke_fx_enable){
-							// Jumping smoke FX (ground puff)
-							var _jump_smoke_sprite = (input_move_magnitude > 0.1) ? spr_smoke_jump_diagonal : spr_smoke_jump_upward;
-							var _jump_smoke_xscale = 1;
-							if (input_move_magnitude > 0.1) {
-								// The diagonal jump smoke art faces left by default; flip so it matches travel direction.
-								_jump_smoke_xscale = (input_move_direction > 90 && input_move_direction < 270) ? 1 : -1;
-							}
-							fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT);
-						}
+				}
+
+				if(quick_smoke_fx_enable){
+					var _jump_smoke_sprite, _jump_smoke_xscale;
+					_jump_smoke_sprite = (input_move_magnitude > 0.1) ? spr_smoke_jump_diagonal : spr_smoke_jump_upward;
+					_jump_smoke_xscale = 1;
+
+					if(input_move_magnitude > 0.1){
+						_jump_smoke_xscale = (input_move_direction > 90 && input_move_direction < 270) ? 1 : -1;
+					}
+
+					fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT);
 				}
 			}
+		}
 	#endregion
-	
+
 	#region Jump Hold (Variable Jump Height)
-		//Can Jump Hold
 		if(jump_hold_enable && !move_grounded){
-			//If Jump Input Ever Released
 			if(!input_current[UserControl.jump]){
-				//Stop variable jump
 				jump_hold_allow_countdown = 0;
 			}
-			
-			//Jump Input Held and countdown still active
+
 			if(input_current[UserControl.jump] && jump_hold_allow_countdown > 0){
-				//Add Additional Jump Acceleration
 				acceleration.AddMagnitudeDirection(input_move_acceleration_jump * 0.08, 90);
 			}
 		}
 	#endregion
-	
+
 	#region Grounded
 		if(move_grounded){
-			//Refill Dash Stamina
 			dash_stamina = dash_stamina_max;
 			dash_stamina_depleted = false;
-			
-			//Reset Float Countdown
 			float_countdown = float_countdown_max;
 		}
 	#endregion
-	
+
 	#region Drop Through
-		// Check if player wants to drop through a platform they're standing on
 		if(move_grounded && move_grounded_instance != noone){
 			if(move_grounded_instance.drop_through_enabled){
-				// Check for down input
 				if(input_current[UserControl.down]){
-					// Track this platform instance to ignore for collision
+					player_frolic_clear();
+
 					move_drop_through_instance = move_grounded_instance;
-					
-					// Force player to no longer be grounded
 					move_grounded = false;
 					move_grounded_instance = noone;
-					
-					//Mov Downward
+
 					y += 10;
-					transform_set(transform[TransformType.anchor],TransformValue.y,10,true);
+					transform_set(transform[TransformType.anchor], TransformValue.y, 10, true);
 				}
 			}
 		}
 	#endregion
-	
-	//Face
-	var _face_horizontal_prev = face_horizontal;
+
+	var _face_horizontal_prev;
+	_face_horizontal_prev = face_horizontal;
 	character_face(false);
-	
-	//Check for face direction change while grounded and walking
-	if(move_grounded && !stationary && (_face_horizontal_prev != face_horizontal)){
-		//Add walking direction change transition to front of queue
+
+	if(move_grounded && !stationary && !frolic_active && (secret_idle_phase == PLAYER_SECRET_IDLE_PHASE_INACTIVE) && (_face_horizontal_prev != face_horizontal)){
 		image_system_queue_add_to_front(sprite_transition_walk_to_walk_other_direction, ANIMATION_FPS_DEFAULT);
-		
+
 		if(quick_smoke_fx_enable){
-			// Sharp movement FX (snap direction change)
 			fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", spr_smoke_sharp_movement, face_horizontal, 1, 0, ANIMATION_FPS_DEFAULT);
 		}
 	}
-	
-	//Dash
+
 	character_dash();
-	
+
 	#region Out of Room
 		if((x < 0) || (x > room_width) || (y < 0) || (y > room_height)){
 			character_kill();
 		}
 	#endregion
-	
-	//Collision Situations
+
 	player_collisions();
-	
-	//Movement Update
 	player_movement_update();
+
+	if(!move_grounded){
+		player_frolic_clear();
+	}
+
+	if((secret_idle_phase != PLAYER_SECRET_IDLE_PHASE_INACTIVE) && (!move_grounded || !stationary)){
+		player_secret_idle_cancel(true);
+	}
 }
+
+function player_secret_idle_has_gameplay_input(){
+	if(input_move_magnitude > 0){
+		return true;
+	}
+
+	if(
+		input_current[UserControl.up] ||
+		input_current[UserControl.down] ||
+		input_current[UserControl.left] ||
+		input_current[UserControl.right] ||
+		input_current[UserControl.jump] ||
+		input_current[UserControl.dash] ||
+		input_current[UserControl.attack] ||
+		input_current[UserControl.interact] ||
+		input_current[UserControl.interact_equip] ||
+		input_current[UserControl.float] ||
+		input_current[UserControl.run]
+	){
+		return true;
+	}
+
+	return keyboard_check(vk_up)
+		|| keyboard_check_pressed(vk_down)
+		|| keyboard_check_pressed(vk_left)
+		|| keyboard_check_pressed(vk_right);
+}
+
+function player_secret_idle_gate_open(_bump_block, _landing_block){
+	return (global.game_state == GameState.play)
+		&& (state == PlayerState.move)
+		&& move_grounded
+		&& stationary
+		&& !_bump_block
+		&& !_landing_block
+		&& !image.is_playing_queued;
+}
+
+function player_secret_idle_start(){
+	player_frolic_clear();
+
+	if(secret_idle_thought_fx != noone){
+		with(secret_idle_thought_fx){
+			instance_destroy();
+		}
+
+		secret_idle_thought_fx = noone;
+	}
+
+	secret_idle_inputless_time = secret_idle_activation_time;
+	secret_idle_phase = PLAYER_SECRET_IDLE_PHASE_SITDOWN;
+	secret_idle_thought_index = -1;
+
+	image_system_setup(sprite_sitdown, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+	image_set_frame(image, 0);
+}
+
+function player_secret_idle_begin_body(){
+	secret_idle_phase = PLAYER_SECRET_IDLE_PHASE_INTRO;
+	image_system_setup(sprite_secret_idle, ANIMATION_FPS_DEFAULT, true, true, 7, 17);
+	image_set_frame(image, 0);
+}
+
+function player_secret_idle_begin_loop(){
+	if(secret_idle_phase == PLAYER_SECRET_IDLE_PHASE_LOOP){
+		return;
+	}
+
+	secret_idle_phase = PLAYER_SECRET_IDLE_PHASE_LOOP;
+
+	if(secret_idle_thought_index < 0){
+		secret_idle_thought_index = irandom(array_length(secret_idle_thought_sprites) - 1);
+	}
+
+	if(secret_idle_thought_fx != noone){
+		with(secret_idle_thought_fx){
+			instance_destroy();
+		}
+	}
+
+	secret_idle_thought_fx = instance_create_layer(x + secret_idle_thought_offset_x, y + secret_idle_thought_offset_y, secret_idle_fx_layer, o_fx_player_secret_idle);
+
+	with(secret_idle_thought_fx){
+		fx_sprite = other.secret_idle_thought_sprites[other.secret_idle_thought_index];
+		fx_fps = ANIMATION_FPS_DEFAULT;
+		fx_owner = other.id;
+		fx_offset_x = other.secret_idle_thought_offset_x;
+		fx_offset_y = other.secret_idle_thought_offset_y;
+		fx_follow_owner = true;
+		fx_destroy_on_end = false;
+		fx_fade_target = 1;
+		fx_fade_speed = other.secret_idle_thought_fade_speed;
+		image_alpha = 0;
+	}
+}
+
+function player_secret_idle_cancel(_spawn_bubble_out = true){
+	var _bubble_visible, _bubble_x, _bubble_y;
+	_bubble_visible = (secret_idle_phase == PLAYER_SECRET_IDLE_PHASE_LOOP) || (secret_idle_thought_fx != noone);
+	_bubble_x = x + secret_idle_thought_offset_x;
+	_bubble_y = y + secret_idle_thought_offset_y;
+
+	if(secret_idle_thought_fx != noone){
+		_bubble_x = secret_idle_thought_fx.x;
+		_bubble_y = secret_idle_thought_fx.y;
+
+		with(secret_idle_thought_fx){
+			instance_destroy();
+		}
+
+		secret_idle_thought_fx = noone;
+	}
+
+	if(_spawn_bubble_out && _bubble_visible){
+		with(instance_create_layer(_bubble_x, _bubble_y, secret_idle_fx_layer, o_fx_player_secret_idle)){
+			fx_sprite = other.sprite_secret_idle_bubble_out;
+			fx_fps = ANIMATION_FPS_DEFAULT;
+			fx_destroy_on_end = true;
+			image_alpha = 1;
+		}
+	}
+
+	secret_idle_inputless_time = 0;
+	secret_idle_phase = PLAYER_SECRET_IDLE_PHASE_INACTIVE;
+	secret_idle_thought_index = -1;
+}
+
+function player_frolic_can_activate(_bump_block, _landing_block){
+	return (state == PlayerState.move)
+		&& (secret_idle_phase == PLAYER_SECRET_IDLE_PHASE_INACTIVE)
+		&& move_grounded
+		&& (input_move_magnitude > 0)
+		&& !stationary
+		&& input_current[UserControl.run]
+		&& !_bump_block
+		&& !_landing_block
+		&& !image.is_playing_queued;
+}
+
+function player_frolic_clear(){
+	frolic_active = false;
+	frolic_ramp_time = 0;
+	movement_input_move_acceleration_factor_set(1);
+}
+
+function player_frolic_update(_frolic_allowed){
+	if(!_frolic_allowed){
+		player_frolic_clear();
+		return;
+	}
+
+	if(!frolic_active){
+		frolic_active = true;
+		frolic_ramp_time = 0;
+	}
+
+	if(frolic_ramp_time < frolic_ramp_time_max){
+		frolic_ramp_time = min(frolic_ramp_time_max, frolic_ramp_time + global.delta_time_factor_scaled);
+	}
+
+	var _frolic_progress, _frolic_factor;
+	_frolic_progress = 1;
+	if(frolic_ramp_time_max > 0){
+		_frolic_progress = clamp(frolic_ramp_time / frolic_ramp_time_max, 0, 1);
+	}
+
+	_frolic_factor = lerp(1, frolic_acceleration_factor, _frolic_progress);
+	movement_input_move_acceleration_factor_set(_frolic_factor);
+}
+
+function player_animation_frame_transfer(_target_sprite){
+	var _source_sprite, _source_frame_max, _target_frame_max;
+	_source_sprite = sprite_current;
+
+	if((_source_sprite == noone) || (_target_sprite == noone)){
+		return 0;
+	}
+
+	_source_frame_max = max(1, sprite_get_number(_source_sprite) - 1);
+	_target_frame_max = max(1, sprite_get_number(_target_sprite) - 1);
+
+	return round(clamp(floor(sprite_current_frame), 0, _source_frame_max) / _source_frame_max * _target_frame_max);
+}
+
+function player_frolic_begin_sprite(){
+	var _target_frame;
+	_target_frame = 0;
+
+	if(sprite_current == sprite_walk){
+		_target_frame = player_animation_frame_transfer(sprite_frolic);
+	}
+
+	image_system_setup(sprite_frolic, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+	image_set_frame(image, _target_frame);
+}
+
+function player_frolic_end_to_walk(){
+	var _target_frame;
+	_target_frame = 0;
+
+	if(sprite_current == sprite_frolic){
+		_target_frame = player_animation_frame_transfer(sprite_walk);
+	}
+
+	image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
+	image_set_frame(image, _target_frame);
+}
+
+#macro PLAYER_SECRET_IDLE_PHASE_INACTIVE 0
+#macro PLAYER_SECRET_IDLE_PHASE_SITDOWN 1
+#macro PLAYER_SECRET_IDLE_PHASE_INTRO 2
+#macro PLAYER_SECRET_IDLE_PHASE_LOOP 3

@@ -65,6 +65,7 @@
 		interact		= 7,
 		interact_equip  = 8,
 		float			= 9,
+		run				= 10,
 		
 		SIZE
 	}
@@ -253,6 +254,15 @@
 				_name = new Text(TextGroup.ui,119);//"FLOAT"
 				_key_gamepad = gp_padu;
 				_key_mouse_and_keyboard = ds_list_find_index(_kb_kc_list,"W");
+				_key_mouse = noone;
+				_key_keyboard = _key_mouse_and_keyboard;
+				control[_control] = new Control(_control,_name,_key_gamepad,_key_mouse_and_keyboard,_key_mouse,_key_keyboard);
+
+				//Run
+				_control = UserControl.run;
+				_name = new Text(TextGroup.ui,120);//"RUN"
+				_key_gamepad = gp_shoulderlb;
+				_key_mouse_and_keyboard = ds_list_find_index(_kb_kc_list,"Ctrl (left)");
 				_key_mouse = noone;
 				_key_keyboard = _key_mouse_and_keyboard;
 				control[_control] = new Control(_control,_name,_key_gamepad,_key_mouse_and_keyboard,_key_mouse,_key_keyboard);

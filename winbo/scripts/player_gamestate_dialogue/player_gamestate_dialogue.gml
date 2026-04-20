@@ -85,7 +85,7 @@ function player_gamestate_dialogue(){
 			if(!_bump_block && !_landing_block){
 				if(move_grounded){
 					if(sprite_current != sprite_sitdown){
-						image_system_setup(sprite_sitdown,ANIMATION_FPS_DEFAULT, true, true, 17, IMAGE_LOOP_FULL);
+						image_system_setup(sprite_sitdown,ANIMATION_FPS_DEFAULT, true, true, 14, IMAGE_LOOP_FULL);
 					}
 				}
 			}
