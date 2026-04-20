@@ -10,8 +10,8 @@ with(path_point[0]){
 //End Point
 with(path_point[1]){
 	//Target Position
-	x = 0;
-	y = 1500;
+	x = 5045;
+	y = 4800;
 	
 	//Time to Get to End Point
 	forward.time = SECOND * 5;
