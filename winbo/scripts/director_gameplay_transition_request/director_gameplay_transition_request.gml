@@ -28,6 +28,7 @@ function director_gameplay_transition_request(_target_room, _options) {
 		reset_level_stats: _options.reset_level_stats,
 		start_black: _options.start_black,
 		target_game_state: _options.target_game_state,
+		player_spawn_context: _options.player_spawn_context,
 		resolve_script: _options.resolve_script,
 		teardown_script: _options.teardown_script,
 		setup_script: _options.setup_script,

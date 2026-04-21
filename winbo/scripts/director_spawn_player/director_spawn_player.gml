@@ -3,8 +3,9 @@
 /// @param _user The user struct to spawn a player for.
 /// @param _x Optional x position to spawn at.
 /// @param _y Optional y position to spawn at.
+/// @param _spawn_context Optional room-entry spawn context.
 /// @returns {id} The created player instance.
-function director_spawn_player(_user,_x,_y){
+function director_spawn_player(_user,_x,_y,_spawn_context = PlayerSpawnContext.none){
 	//Check if Player Already Exists
 	with(o_player){
 		if(user_id == _user.user_id)
@@ -48,6 +49,7 @@ function director_spawn_player(_user,_x,_y){
 	_player_instance = instance_create_layer(_x,_y,"lyr_player",o_player);
 	with(_player_instance){
 		player_user_setup(_user.user_id);
+		spawn_context = _spawn_context;
 	}
 	
 	with(_player_instance){

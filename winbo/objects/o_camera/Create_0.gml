@@ -314,6 +314,7 @@ transform_system_relative_enable();
 	
 	follow_method = CameraFollowMethod.lerp_to_targ;
 	follow_method_previous = follow_method;
+	game_state_previous = global.game_state;
 	
 	#macro CAMERA_FOLLOW_TARG_CURVE_TIME_MAX_X SECOND
 	#macro CAMERA_FOLLOW_TARG_CURVE_TIME_MAX_Y SECOND

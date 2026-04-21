@@ -59,6 +59,13 @@ function level_select_apply_transition(_transition, _safe_transition) {
 	
 	return director_gameplay_transition_request(
 		_transition.target_room,
-		director_gameplay_transition_options_build(_transition.target_room, true, true, false)
+		director_gameplay_transition_options_build(
+			_transition.target_room,
+			true,
+			true,
+			false,
+			GameState.play,
+			director_player_spawn_context_for_room_entry(_transition.target_room)
+		)
 	);
 }

@@ -1,9 +1,81 @@
 /// @function player_state_create
 /// @summary Initialize the player instance and default state.
 function player_state_create(){
+	if(spawn_context != PlayerSpawnContext.none){
+		player_stage_entrance_begin();
+		state = PlayerState.stage_entrance;
+		return;
+	}
+
 	//Grow & Appear
 	transform_animate_grow_and_appear();
 	
 	//State to Idle
 	state = PlayerState.idle;
+}
+
+function player_stage_entrance_begin(){
+	var _transform;
+	_transform = transform[TransformType.anchor];
+
+	transform_set(_transform, TransformValue.xscale, 1, false);
+	transform_set(_transform, TransformValue.yscale, 1, false);
+	transform_set(_transform, TransformValue.alpha, 1, false);
+
+	draw_adjustment_y = stage_entrance_draw_adjustment_y;
+
+	velocity.x = 0;
+	velocity.y = 0;
+	acceleration.x = 0;
+	acceleration.y = 0;
+
+	stage_entrance_hp_vulnerable_previous = hp_vulnerable;
+	stage_entrance_user_hp_vulnerable_previous = user.hp_vulnerable;
+	hp_vulnerable = false;
+	user.hp_vulnerable = false;
+
+	image_system_setup(sprite_stage_entrance, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+	image_set_frame(image, 0);
+}
+
+function player_state_stage_entrance(){
+	draw_adjustment_y = stage_entrance_draw_adjustment_y;
+
+	velocity.x = 0;
+	velocity.y = 0;
+	acceleration.x = 0;
+	acceleration.y = 0;
+
+	if(sprite_current != sprite_stage_entrance){
+		image_system_setup(sprite_stage_entrance, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+		image_set_frame(image, 0);
+	}
+
+	if(sprite_current_frame >= (image.sprite_number - 1)){
+		player_stage_entrance_finish();
+	}
+}
+
+function player_stage_entrance_finish(){
+	draw_adjustment_y = 0;
+
+	hp_vulnerable = stage_entrance_hp_vulnerable_previous;
+	user.hp_vulnerable = stage_entrance_user_hp_vulnerable_previous;
+	spawn_context = PlayerSpawnContext.none;
+
+	move_grounded = place_meeting(x, y + 1, move_collision_object);
+	if(move_grounded){
+		move_grounded_instance = instance_place(x, y + 1, move_collision_object);
+		move_grounded_close = true;
+		move_grounded_close_instance = move_grounded_instance;
+	}
+	else{
+		move_grounded_instance = noone;
+		move_grounded_close = false;
+		move_grounded_close_instance = noone;
+	}
+
+	image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+	image_set_frame(image, 0);
+	state = PlayerState.move;
 }

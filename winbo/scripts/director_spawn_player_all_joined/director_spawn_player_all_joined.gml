@@ -1,6 +1,6 @@
 /// @function director_spawn_player_all_joined
 /// @summary Spawn player instances for all joined users.
-function director_spawn_player_all_joined(){
+function director_spawn_player_all_joined(_spawn_context = PlayerSpawnContext.none){
 	//If Player Doesn't Exist
 	if(instance_number(o_player) == 0){
 		#region Spawn Player/s
@@ -15,7 +15,7 @@ function director_spawn_player_all_joined(){
 				if(_user.joined){
 					//_user.alive = true;
 					
-					_player_instance = director_spawn_player(_user);
+					_player_instance = director_spawn_player(_user, undefined, undefined, _spawn_context);
 				}
 			}
 		#endregion

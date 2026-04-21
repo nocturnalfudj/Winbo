@@ -31,7 +31,14 @@ function master_game_state_gameover() {
 			
 			director_gameplay_transition_request(
 				r_game_level_presence,
-				director_gameplay_transition_options_build(r_game_level_presence, true, true, false)
+				director_gameplay_transition_options_build(
+					r_game_level_presence,
+					true,
+					true,
+					false,
+					GameState.play,
+					PlayerSpawnContext.presence_start
+				)
 			);
 			}
 		}

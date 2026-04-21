@@ -4,6 +4,7 @@ event_inherited();
 #region State
 	enum PlayerState{
 		create,
+		stage_entrance,
 		idle,
 		move,
 		dash,
@@ -42,6 +43,7 @@ is_player = true;
 	sprite_float			= spr_player_float;			//director_get_custom_sprite(spr_player_float);
 	sprite_bump				= spr_player_bump;			//director_get_custom_sprite(spr_player_bump);
 	sprite_sitdown			= spr_player_sitdown;		//director_get_custom_sprite(spr_player_sitdown);
+	sprite_stage_entrance	= spr_player_stage_entrance;
 	sprite_frolic			= spr_player_frolic;
 	sprite_secret_idle		= spr_player_secret_idle;
 	sprite_secret_idle_bubble_out = spr_player_secret_idle_bubble_out;
@@ -146,6 +148,10 @@ is_player = true;
 	//Idle
 	stationary = true;
 	stationary_time = 0;
+	spawn_context = PlayerSpawnContext.none;
+	stage_entrance_hp_vulnerable_previous = true;
+	stage_entrance_user_hp_vulnerable_previous = true;
+	stage_entrance_draw_adjustment_y = 0;
 
 	secret_idle_inputless_time = 0;
 	secret_idle_phase = 0;

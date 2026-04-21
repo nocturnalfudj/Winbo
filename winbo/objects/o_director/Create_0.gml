@@ -70,6 +70,12 @@
 	
 	// Level results score data
 	level_results_score_data = noone;
+
+	enum PlayerSpawnContext {
+		none,
+		level_start,
+		presence_start
+	}
 #endregion
 
 #region Talismans

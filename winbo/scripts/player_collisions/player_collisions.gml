@@ -351,14 +351,28 @@ function player_collisions(){
 							if(room == r_game_level_presence){
 								director_gameplay_transition_request(
 									o_director.next_level,
-									director_gameplay_transition_options_build(o_director.next_level, true, true, false)
+									director_gameplay_transition_options_build(
+										o_director.next_level,
+										true,
+										true,
+										false,
+										GameState.play,
+										PlayerSpawnContext.level_start
+									)
 								);
 							}
 							else{
 								o_director.next_level = room_target;
 								director_gameplay_transition_request(
 									r_game_level_presence,
-									director_gameplay_transition_options_build(r_game_level_presence, true, true, false)
+									director_gameplay_transition_options_build(
+										r_game_level_presence,
+										true,
+										true,
+										false,
+										GameState.play,
+										PlayerSpawnContext.presence_start
+									)
 								);
 							}
 						}

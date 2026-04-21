@@ -7,6 +7,7 @@
 //GameState Switch
 switch(global.game_state){
 	case GameState.menu:
+	case GameState.pre_game:
 	case GameState.play:
 		camera_game_state_default();
 	break;
@@ -27,6 +28,8 @@ switch(global.game_state){
 		glitch_shader_update = true;
 	break;
 }
+
+game_state_previous = global.game_state;
 
 #region VFX
 	#region Lighting

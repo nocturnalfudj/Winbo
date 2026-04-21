@@ -342,7 +342,14 @@ freeze_countdown.Update();
 					if(level_end_transition_data != noone){
 						if (director_gameplay_transition_request(
 							level_end_transition_data.target_room,
-							director_gameplay_transition_options_build(level_end_transition_data.target_room, true, true, true)
+							director_gameplay_transition_options_build(
+								level_end_transition_data.target_room,
+								true,
+								true,
+								true,
+								GameState.play,
+								director_player_spawn_context_for_room_entry(level_end_transition_data.target_room)
+							)
 						)) {
 							level_end_transition_data = noone;
 							level_end_target_room = noone;
@@ -351,7 +358,14 @@ freeze_countdown.Update();
 					else if(level_end_target_room != noone){
 						if (director_gameplay_transition_request(
 							level_end_target_room,
-							director_gameplay_transition_options_build(level_end_target_room, true, true, true)
+							director_gameplay_transition_options_build(
+								level_end_target_room,
+								true,
+								true,
+								true,
+								GameState.play,
+								director_player_spawn_context_for_room_entry(level_end_target_room)
+							)
 						)) {
 							level_end_target_room = noone;
 						}

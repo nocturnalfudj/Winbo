@@ -2347,6 +2347,7 @@
     {"id":{"name":"spr_player_secret_idle_thought_9","path":"sprites/spr_player_secret_idle_thought_9/spr_player_secret_idle_thought_9.yy",},},
     {"id":{"name":"spr_player_secret_idle","path":"sprites/spr_player_secret_idle/spr_player_secret_idle.yy",},},
     {"id":{"name":"spr_player_sitdown","path":"sprites/spr_player_sitdown/spr_player_sitdown.yy",},},
+    {"id":{"name":"spr_player_stage_entrance","path":"sprites/spr_player_stage_entrance/spr_player_stage_entrance.yy",},},
     {"id":{"name":"spr_player_start","path":"sprites/spr_player_start/spr_player_start.yy",},},
     {"id":{"name":"spr_player_take_damage_0","path":"sprites/spr_player_take_damage_0/spr_player_take_damage_0.yy",},},
     {"id":{"name":"spr_player_take_damage_1","path":"sprites/spr_player_take_damage_1/spr_player_take_damage_1.yy",},},

@@ -30,6 +30,10 @@ function player_gamestate_play(){
 			player_state_create();
 		break;
 
+		case PlayerState.stage_entrance:
+			player_state_stage_entrance();
+		break;
+
 		case PlayerState.idle:
 			player_state_idle();
 		break;

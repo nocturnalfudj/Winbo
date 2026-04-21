@@ -20,7 +20,7 @@ function director_room_enter_gameplay(_request) {
 			}
 		}
 		
-		director_spawn_player_all_joined();
+		director_spawn_player_all_joined(_request.player_spawn_context);
 		
 		with(o_player){
 			hp = PLAYER_HP_MAX_DEFAULT;

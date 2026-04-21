@@ -32,7 +32,14 @@ function level_select_start(_level_id) {
 		var _started;
 		_started = director_gameplay_transition_request(
 			_level_data.level_room,
-			director_gameplay_transition_options_build(_level_data.level_room, true, true, false)
+			director_gameplay_transition_options_build(
+				_level_data.level_room,
+				true,
+				true,
+				false,
+				GameState.play,
+				director_player_spawn_context_for_room_entry(_level_data.level_room)
+			)
 		);
 		if(!_started){
 			return false;

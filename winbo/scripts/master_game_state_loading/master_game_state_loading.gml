@@ -34,6 +34,20 @@ function master_game_state_loading() {
 		return _target_game_state;
 	};
 
+	var _get_loading_game_state;
+	_get_loading_game_state = function(_request) {
+		var _target_game_state;
+		_target_game_state = _request.target_game_state;
+		if(is_undefined(_target_game_state)){
+			_target_game_state = GameState.play;
+		}
+		if(_target_game_state == GameState.play){
+			return GameState.pre_game;
+		}
+
+		return _target_game_state;
+	};
+
 	var _get_origin_game_state;
 	_get_origin_game_state = function(_request) {
 		var _origin_game_state;
@@ -199,7 +213,7 @@ function master_game_state_loading() {
 		case GameplayLoadingPhase.enter_target_state:
 			var _target_game_state;
 			_target_game_state = _get_target_game_state(_request);
-			_force_game_state(_target_game_state);
+			_force_game_state(_get_loading_game_state(_request));
 			
 			if(_target_game_state == GameState.play || _target_game_state == GameState.start){
 				with(o_audio){
@@ -271,6 +285,7 @@ function master_game_state_loading() {
 		break;
 		
 		case GameplayLoadingPhase.finished:
+			_force_game_state(_get_target_game_state(_request));
 			gameplay_loading_request = noone;
 			master_screen_fade_set_immediate(0);
 			gameplay_loading_active = false;
