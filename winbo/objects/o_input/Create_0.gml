@@ -262,7 +262,7 @@
 				_control = UserControl.run;
 				_name = new Text(TextGroup.ui,120);//"RUN"
 				_key_gamepad = gp_shoulderlb;
-				_key_mouse_and_keyboard = ds_list_find_index(_kb_kc_list,"Ctrl (left)");
+				_key_mouse_and_keyboard = ds_list_find_index(_kb_kc_list,"Space");
 				_key_mouse = noone;
 				_key_keyboard = _key_mouse_and_keyboard;
 				control[_control] = new Control(_control,_name,_key_gamepad,_key_mouse_and_keyboard,_key_mouse,_key_keyboard);
