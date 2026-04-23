@@ -1,10 +1,23 @@
 /// @function bonus_room_transition
 /// @summary Handle direct room transition for bonus rooms (bypasses presence room)
 /// @param {asset.GMRoom} _target_room The room to transition to
-/// @returns {void}
+/// @returns {bool} True if the transition request was accepted.
 function bonus_room_transition(_target_room) {
+	var _was_bonus_room_active;
+	_was_bonus_room_active = o_director.bonus_room_active;
+	
+	var _bonus_room_origin;
+	_bonus_room_origin = o_director.bonus_room_origin;
+	
+	if(!director_gameplay_transition_request(
+		_target_room,
+		director_gameplay_transition_options_build(_target_room, false, false, false)
+	)){
+		return false;
+	}
+	
 	// If we're NOT currently in a bonus room, store origin
-	if (!o_director.bonus_room_active) {
+	if (!_was_bonus_room_active) {
 		// Store current room as origin (for return trip)
 		o_director.bonus_room_origin = room;
 		o_director.bonus_room_active = true;
@@ -20,7 +33,7 @@ function bonus_room_transition(_target_room) {
 	else {
 		// We're leaving a bonus room
 		// Check if target is our origin (returning to main level)
-		if (_target_room == o_director.bonus_room_origin) {
+		if (_target_room == _bonus_room_origin) {
 			o_director.bonus_room_origin = noone;
 			o_director.bonus_room_active = false;
 			// Keep entry position - cleared after player spawns
@@ -31,12 +44,8 @@ function bonus_room_transition(_target_room) {
 		else {
 			sdm("Transitioning between bonus rooms", LOG_COLOUR_COMMAND_SUCCESS);
 		}
-		}
-		
-		director_gameplay_transition_request(
-			_target_room,
-			director_gameplay_transition_options_build(_target_room, false, false, false)
-		);
-		
-		// DO NOT reset level timer (bonus room is part of the level)
 	}
+	
+	// DO NOT reset level timer (bonus room is part of the level)
+	return true;
+}

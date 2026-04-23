@@ -23,7 +23,7 @@ bonus_door_player_overlapping = _player_in_range;
 if (_player_in_range && _player_instance != noone) {
 	with (_player_instance) {
 		// Player must be grounded
-		if (move_grounded) {
+		if (move_grounded && state == PlayerState.move) {
 			// Check for Up key pressed (W key or vk_up arrow)
 			var _up_pressed = false;
 			
@@ -50,6 +50,9 @@ if (_player_in_range && _player_instance != noone) {
 if (bonus_door_input_pressed) {
 	bonus_door_input_pressed = false;
 	
-	// Execute bonus room transition
-	bonus_room_transition(room_target);
+	if (_player_instance != noone) {
+		with (_player_instance) {
+			player_bonus_room_enter_begin(other.room_target, other.x, y);
+		}
+	}
 }

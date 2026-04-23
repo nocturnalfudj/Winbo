@@ -34,6 +34,10 @@ function player_gamestate_play(){
 			player_state_stage_entrance();
 		break;
 
+		case PlayerState.bonus_room_enter:
+			player_state_bonus_room_enter();
+		break;
+
 		case PlayerState.idle:
 			player_state_idle();
 		break;

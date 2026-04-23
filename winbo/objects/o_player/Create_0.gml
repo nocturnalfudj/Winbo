@@ -5,6 +5,7 @@ event_inherited();
 	enum PlayerState{
 		create,
 		stage_entrance,
+		bonus_room_enter,
 		idle,
 		move,
 		dash,
@@ -44,6 +45,7 @@ is_player = true;
 	sprite_bump				= spr_player_bump;			//director_get_custom_sprite(spr_player_bump);
 	sprite_sitdown			= spr_player_sitdown;		//director_get_custom_sprite(spr_player_sitdown);
 	sprite_stage_entrance	= spr_player_stage_entrance;
+	sprite_bonus_room_enter	= spr_player_bonus_room_enter;
 	sprite_frolic			= spr_player_frolic;
 	sprite_secret_idle		= spr_player_secret_idle;
 	sprite_secret_idle_bubble_out = spr_player_secret_idle_bubble_out;
@@ -152,6 +154,14 @@ is_player = true;
 	stage_entrance_hp_vulnerable_previous = true;
 	stage_entrance_user_hp_vulnerable_previous = true;
 	stage_entrance_draw_adjustment_y = 0;
+	bonus_room_enter_target_room = noone;
+	bonus_room_enter_start_x = 0;
+	bonus_room_enter_start_y = 0;
+	bonus_room_enter_target_x = 0;
+	bonus_room_enter_target_y = 0;
+	bonus_room_enter_transition_requested = false;
+	bonus_room_enter_hp_vulnerable_previous = true;
+	bonus_room_enter_user_hp_vulnerable_previous = true;
 
 	secret_idle_inputless_time = 0;
 	secret_idle_phase = 0;
