@@ -2325,6 +2325,8 @@
     {"id":{"name":"spr_player_bump","path":"sprites/spr_player_bump/spr_player_bump.yy",},},
     {"id":{"name":"spr_player_dash","path":"sprites/spr_player_dash/spr_player_dash.yy",},},
     {"id":{"name":"spr_player_death","path":"sprites/spr_player_death/spr_player_death.yy",},},
+    {"id":{"name":"spr_player_dive_spring_fail","path":"sprites/spr_player_dive_spring_fail/spr_player_dive_spring_fail.yy",},},
+    {"id":{"name":"spr_player_dive_spring","path":"sprites/spr_player_dive_spring/spr_player_dive_spring.yy",},},
     {"id":{"name":"spr_player_fall_sideways","path":"sprites/spr_player_fall_sideways/spr_player_fall_sideways.yy",},},
     {"id":{"name":"spr_player_fall","path":"sprites/spr_player_fall/spr_player_fall.yy",},},
     {"id":{"name":"spr_player_float","path":"sprites/spr_player_float/spr_player_float.yy",},},

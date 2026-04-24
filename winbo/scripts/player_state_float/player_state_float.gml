@@ -67,6 +67,10 @@ function player_state_float(){
 			state = PlayerState.move;
 		}
 	#endregion
+
+	if(player_dive_spring_try_start()){
+		return;
+	}
 	
 	//Update Dash No Input Direction
 	if(input_move_magnitude > 0){

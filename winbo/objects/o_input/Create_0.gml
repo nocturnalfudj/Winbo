@@ -180,7 +180,7 @@
 				//Down
 				_control = UserControl.down;
 				_name = new Text(TextGroup.ui,111);//"DOWN"
-				_key_gamepad = gp_padu;
+				_key_gamepad = gp_padd;
 				_key_mouse_and_keyboard = ds_list_find_index(_kb_kc_list,"S");
 				_key_mouse = noone;
 				_key_keyboard = _key_mouse_and_keyboard;

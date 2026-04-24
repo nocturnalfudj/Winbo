@@ -53,6 +53,10 @@ function player_gamestate_play(){
 		case PlayerState.float:
 			player_state_float();
 		break;
+
+		case PlayerState.dive_spring:
+			player_state_dive_spring();
+		break;
 		
 		case PlayerState.hit:
 			player_state_hit();
@@ -70,6 +74,10 @@ function player_gamestate_play(){
 	if(state != PlayerState.move){
 		player_secret_idle_cancel(false);
 		player_frolic_clear();
+	}
+
+	if(state != PlayerState.dive_spring){
+		player_dive_spring_restore_movement();
 	}
 
 	if((state != PlayerState.move) && (state != PlayerState.float)){

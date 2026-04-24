@@ -10,6 +10,7 @@ event_inherited();
 		move,
 		dash,
 		float,
+		dive_spring,
 		hit,
 		death,
 		destroy
@@ -43,6 +44,8 @@ is_player = true;
 	sprite_land_sideways	= spr_player_land_sideways;	//director_get_custom_sprite(spr_player_land_sideways);
 	sprite_float			= spr_player_float;			//director_get_custom_sprite(spr_player_float);
 	sprite_bump				= spr_player_bump;			//director_get_custom_sprite(spr_player_bump);
+	sprite_dive_spring		= spr_player_dive_spring;
+	sprite_dive_spring_fail	= spr_player_dive_spring_fail;
 	sprite_sitdown			= spr_player_sitdown;		//director_get_custom_sprite(spr_player_sitdown);
 	sprite_stage_entrance	= spr_player_stage_entrance;
 	sprite_bonus_room_enter	= spr_player_bonus_room_enter;
@@ -181,6 +184,26 @@ is_player = true;
 
 	//Air Spin
 	air_spin_active = false;
+
+	//Dive Spring
+	enum DiveSpringPhase{
+		dive,
+		impact,
+		spring,
+		transition,
+		fail
+	}
+
+	dive_spring_phase = DiveSpringPhase.dive;
+	dive_spring_input_window_countdown = 0;
+	dive_spring_input_window_max = 8;
+	dive_spring_dive_speed = 48;
+	dive_spring_dive_acceleration = 24;
+	dive_spring_jump_acceleration_factor = 5.34;
+	dive_spring_velocity_retention_aerial = 1;
+	dive_spring_velocity_retention_aerial_previous = velocity_retention_aerial;
+	dive_spring_movement_override_active = false;
+	dive_spring_enemy_impact = false;
 #endregion
 
 #region Dash

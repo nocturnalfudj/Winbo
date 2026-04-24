@@ -132,6 +132,32 @@ function player_collisions(){
 				//Ignore if Enemy is Dead
 				if((state == EnemyState.death) || (state == EnemyState.destroy))
 					break;
+
+				if((other.state == PlayerState.dive_spring) && (other.dive_spring_phase == DiveSpringPhase.dive)){
+					death_smoke_enable = true;
+					death_smoke_spawned = false;
+					death_smoke_step_count = 0;
+
+					character_kill();
+
+					if(object_is_ancestor(object_index, o_enemy_melee_parent)){
+						level_stat_add(LevelStat.enemies_defeated_melee);
+					}
+					else if(object_is_ancestor(object_index, o_enemy_ranged_flying_parent)){
+						level_stat_add(LevelStat.enemies_defeated_flying);
+					}
+					else if(object_is_ancestor(object_index, o_enemy_ranged_parent)){
+						level_stat_add(LevelStat.enemies_defeated_ranged);
+					}
+
+					flash_alpha = 1;
+
+					with(other){
+						player_dive_spring_register_impact();
+					}
+
+					break;
+				}
 						
 				//Enemy Top Was Below Player Last Frame
 				if(bbox_top > other.yprevious){
@@ -231,7 +257,16 @@ function player_collisions(){
 		var _spring_collision_instance;
 		_spring_collision_instance = instance_place(x,y,o_spring);
 		// Trigger for o_spring or o_spring_vertical, but NOT o_spring_horizontal
-		if((_spring_collision_instance != noone) && (_spring_collision_instance.object_index != o_spring_horizontal) && (spring_countdown <= 0) && (velocity.y > 0)){
+		if((state == PlayerState.dive_spring) && (dive_spring_phase == DiveSpringPhase.dive) && (_spring_collision_instance != noone) && (_spring_collision_instance.object_index != o_spring_horizontal)){
+			spring_countdown = SPRING_COUNTDOWN_MAX;
+
+			with(_spring_collision_instance){
+				image_system_setup(sprite_active,ANIMATION_FPS_DEFAULT,true,false,0,IMAGE_LOOP_FULL);
+			}
+
+			player_dive_spring_begin_spring();
+		}
+		else if((state != PlayerState.dive_spring) && (_spring_collision_instance != noone) && (_spring_collision_instance.object_index != o_spring_horizontal) && (spring_countdown <= 0) && (velocity.y > 0)){
 			//Reset Countdown
 			spring_countdown = SPRING_COUNTDOWN_MAX;
 					
@@ -260,7 +295,7 @@ function player_collisions(){
 	#region Spring Horizontal
 		var _spring_horizontal_collision_instance;
 		_spring_horizontal_collision_instance = instance_place(x,y,o_spring_horizontal);
-		if((_spring_horizontal_collision_instance != noone) && (spring_countdown <= 0) && (abs(velocity.x) > 0.1)){
+		if((state != PlayerState.dive_spring) && (_spring_horizontal_collision_instance != noone) && (spring_countdown <= 0) && (abs(velocity.x) > 0.1)){
 			// Determine bounce direction based on velocity
 			// Moving right bounces left, moving left bounces right (opposite direction)
 			var _bounce_direction;

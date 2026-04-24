@@ -5,6 +5,7 @@ if(global.game_state != GameState.play){
 	player_secret_idle_cancel(false);
 	player_frolic_clear();
 	player_air_spin_clear();
+	player_dive_spring_reset();
 }
 
 //Game State Switch
