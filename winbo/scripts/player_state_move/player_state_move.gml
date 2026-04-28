@@ -584,6 +584,7 @@ function player_dive_spring_try_start(){
 	dive_spring_phase = DiveSpringPhase.dive;
 	dive_spring_input_window_countdown = 0;
 	dive_spring_enemy_impact = false;
+	dive_spring_momentum_x = velocity.x;
 	dive_spring_velocity_retention_aerial_previous = velocity_retention_aerial;
 	dive_spring_movement_override_active = true;
 	velocity_retention_aerial = dive_spring_velocity_retention_aerial;
@@ -631,6 +632,9 @@ function player_dive_spring_state_dive(){
 		image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, true, 2, 4);
 		image_set_frame(image, 0);
 	}
+
+	velocity.x = dive_spring_momentum_x;
+	acceleration.x = 0;
 
 	if(velocity.y < dive_spring_dive_speed){
 		velocity.y = dive_spring_dive_speed;

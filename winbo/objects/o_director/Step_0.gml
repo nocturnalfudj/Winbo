@@ -12,7 +12,7 @@ bg_anim_time_seconds += delta_time / 1000000;
 				// Check if this is a level transition (don't deduct life)
 				if(level_transitioning){
 					// Just respawn player without deducting life
-					director_spawn_player_all_joined();
+					director_spawn_player_all_joined(director_player_spawn_context_for_room_entry(room));
 					
 					// Reset User Health
 					var _hp;

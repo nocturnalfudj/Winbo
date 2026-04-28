@@ -200,6 +200,7 @@ is_player = true;
 	dive_spring_dive_speed = 48;
 	dive_spring_dive_acceleration = 24;
 	dive_spring_jump_acceleration_factor = 5.34;
+	dive_spring_momentum_x = 0;
 	dive_spring_velocity_retention_aerial = 1;
 	dive_spring_velocity_retention_aerial_previous = velocity_retention_aerial;
 	dive_spring_movement_override_active = false;

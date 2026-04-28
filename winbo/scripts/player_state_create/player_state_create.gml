@@ -42,16 +42,19 @@ function player_state_stage_entrance(){
 	draw_adjustment_y = stage_entrance_draw_adjustment_y;
 
 	velocity.x = 0;
-	velocity.y = 0;
 	acceleration.x = 0;
-	acceleration.y = 0;
+
+	player_movement_update();
+
+	velocity.x = 0;
+	acceleration.x = 0;
 
 	if(sprite_current != sprite_stage_entrance){
 		image_system_setup(sprite_stage_entrance, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 		image_set_frame(image, 0);
 	}
 
-	if(sprite_current_frame >= (image.sprite_number - 1)){
+	if((sprite_current_frame >= (image.sprite_number - 1)) && move_grounded){
 		player_stage_entrance_finish();
 	}
 }

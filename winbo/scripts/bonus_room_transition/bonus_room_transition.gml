@@ -11,7 +11,7 @@ function bonus_room_transition(_target_room) {
 	
 	if(!director_gameplay_transition_request(
 		_target_room,
-		director_gameplay_transition_options_build(_target_room, false, false, false)
+		director_gameplay_transition_options_build(_target_room, false, false, false, GameState.play, PlayerSpawnContext.none)
 	)){
 		return false;
 	}

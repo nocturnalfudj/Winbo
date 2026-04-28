@@ -4,9 +4,9 @@
 /// @param {bool} _reset_level_stats Whether to reset level stats after entering the room.
 /// @param {bool} [_start_black=false] Whether the loading overlay should begin fully black.
 /// @param {real} [_target_game_state=GameState.play] Game state to enter when loading finishes.
-/// @param {real} [_player_spawn_context=PlayerSpawnContext.none] Player spawn context to apply after room entry.
+/// @param {real} [_player_spawn_context] Player spawn context to apply after room entry.
 /// @returns {struct} Canonical gameplay transition options struct.
-function director_gameplay_transition_options_build(_target_room, _reset_level_timer, _reset_level_stats, _start_black = false, _target_game_state = GameState.play, _player_spawn_context = PlayerSpawnContext.none) {
+function director_gameplay_transition_options_build(_target_room, _reset_level_timer, _reset_level_stats, _start_black = false, _target_game_state = GameState.play, _player_spawn_context = undefined) {
 	var _level_data;
 	_level_data = level_select_get_data(_target_room);
 	
@@ -37,6 +37,12 @@ function director_gameplay_transition_options_build(_target_room, _reset_level_t
 	_load_groups_clean = array_create(array_length(_load_groups));
 	for(var _i = 0; _i < array_length(_load_groups); _i++){
 		_load_groups_clean[_i] = string(_load_groups[_i]);
+	}
+
+	if(is_undefined(_player_spawn_context)){
+		_player_spawn_context = (_target_game_state == GameState.play)
+			? director_player_spawn_context_for_room_entry(_target_room)
+			: PlayerSpawnContext.none;
 	}
 	
 	return {
