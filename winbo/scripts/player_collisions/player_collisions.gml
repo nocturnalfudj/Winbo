@@ -187,7 +187,7 @@ function player_collisions(){
 						acceleration.Set(0,0);
 						velocity.Set(0,0);
 								
-						acceleration.AddMagnitudeDirection(input_move_acceleration_jump/2,90);
+						acceleration.AddMagnitudeDirection(input_move_acceleration_jump * enemy_bounce_acceleration_factor,90);
 								
 						//Start with Rise Gravity
 						move_gravity.Copy(move_gravity_rise);

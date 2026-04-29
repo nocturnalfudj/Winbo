@@ -436,8 +436,16 @@ function player_secret_idle_begin_loop(){
 	secret_idle_phase = PLAYER_SECRET_IDLE_PHASE_LOOP;
 
 	if(secret_idle_thought_index < 0){
-		secret_idle_thought_index = irandom(array_length(secret_idle_thought_sprites) - 1);
+		var _thought_count;
+		_thought_count = array_length(secret_idle_thought_sprites);
+		secret_idle_thought_index = irandom(_thought_count - 1);
+
+		if((_thought_count > 1) && (secret_idle_thought_index == secret_idle_thought_previous_index)){
+			secret_idle_thought_index = (secret_idle_thought_index + 1 + irandom(_thought_count - 2)) mod _thought_count;
+		}
 	}
+
+	secret_idle_thought_previous_index = secret_idle_thought_index;
 
 	if(secret_idle_thought_fx != noone){
 		with(secret_idle_thought_fx){

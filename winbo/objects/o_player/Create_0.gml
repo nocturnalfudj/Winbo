@@ -60,7 +60,6 @@ is_player = true;
 		spr_player_secret_idle_thought_1,
 		spr_player_secret_idle_thought_2,
 		spr_player_secret_idle_thought_3,
-		spr_player_secret_idle_thought_4,
 		spr_player_secret_idle_thought_5,
 		spr_player_secret_idle_thought_6,
 		spr_player_secret_idle_thought_7,
@@ -170,6 +169,7 @@ is_player = true;
 	secret_idle_phase = 0;
 	secret_idle_thought_fx = noone;
 	secret_idle_thought_index = -1;
+	secret_idle_thought_previous_index = -1;
 	secret_idle_activation_time = SECOND * 5;
 	secret_idle_thought_fade_speed = 1 / (SECOND * 0.2);
 	secret_idle_fx_layer = "lyr_pfx_foreground";
@@ -179,8 +179,9 @@ is_player = true;
 	//Run
 	frolic_active = false;
 	frolic_ramp_time = 0;
-	frolic_ramp_time_max = (SECOND * 4) / ANIMATION_FPS_DEFAULT;
+	frolic_ramp_time_max = SECOND;
 	frolic_acceleration_factor = 2;
+	enemy_bounce_acceleration_factor = 2;
 
 	//Air Spin
 	air_spin_active = false;
