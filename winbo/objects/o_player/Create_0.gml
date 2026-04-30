@@ -196,8 +196,9 @@ is_player = true;
 	}
 
 	dive_spring_phase = DiveSpringPhase.dive;
-	dive_spring_input_window_countdown = 0;
-	dive_spring_input_window_max = 8;
+	dive_spring_impact_timer = 0;
+	dive_spring_fail_window_max = SECOND * 0.5;
+	dive_spring_success_window_max = SECOND * 0.5;
 	dive_spring_dive_speed = 48;
 	dive_spring_dive_acceleration = 24;
 	dive_spring_jump_acceleration_factor = 5.34;

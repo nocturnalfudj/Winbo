@@ -590,7 +590,7 @@ function player_dive_spring_try_start(){
 
 	state = PlayerState.dive_spring;
 	dive_spring_phase = DiveSpringPhase.dive;
-	dive_spring_input_window_countdown = 0;
+	dive_spring_impact_timer = 0;
 	dive_spring_enemy_impact = false;
 	dive_spring_momentum_x = velocity.x;
 	dive_spring_velocity_retention_aerial_previous = velocity_retention_aerial;
@@ -663,11 +663,16 @@ function player_dive_spring_state_dive(){
 }
 
 function player_dive_spring_state_impact(){
-	var _up_pressed;
-	_up_pressed = (input_current[UserControl.up] && !input_previous[UserControl.up]) || keyboard_check_pressed(vk_up);
+	var _delta_time_scaled, _jump_pressed, _wrong_input_pressed, _success_window_start, _success_window_end;
+	_delta_time_scaled = global.delta_time_factor_scaled;
+	_jump_pressed = player_dive_spring_jump_pressed();
+	_wrong_input_pressed = player_dive_spring_wrong_input_pressed();
+	_success_window_start = dive_spring_fail_window_max;
+	_success_window_end = _success_window_start + dive_spring_success_window_max;
 
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
+	dive_spring_impact_timer += _delta_time_scaled;
 
 	if(sprite_current != sprite_dive_spring){
 		image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, false, false, 0, IMAGE_LOOP_FULL);
@@ -675,15 +680,70 @@ function player_dive_spring_state_impact(){
 
 	image_set_frame(image, 4);
 
-	if(_up_pressed){
-		player_dive_spring_begin_spring();
+	if(_wrong_input_pressed){
+		player_dive_spring_begin_fail();
 		return;
 	}
 
-	dive_spring_input_window_countdown -= global.delta_time_factor_scaled;
-	if(dive_spring_input_window_countdown <= 0){
+	if(_jump_pressed){
+		if((dive_spring_impact_timer >= _success_window_start) && (dive_spring_impact_timer < _success_window_end)){
+			player_dive_spring_begin_spring();
+		}
+		else{
+			player_dive_spring_begin_fail();
+		}
+		return;
+	}
+
+	if(dive_spring_impact_timer >= _success_window_end){
 		player_dive_spring_begin_fail();
 	}
+}
+
+function player_dive_spring_jump_pressed(){
+	return ((input_current[UserControl.jump] && !input_previous[UserControl.jump])
+		|| (input_current[UserControl.up] && !input_previous[UserControl.up])
+		|| keyboard_check_pressed(vk_up));
+}
+
+function player_dive_spring_wrong_input_pressed(){
+	if((input_current[UserControl.down] && !input_previous[UserControl.down]) || keyboard_check_pressed(vk_down)){
+		return true;
+	}
+
+	if((input_current[UserControl.left] && !input_previous[UserControl.left]) || keyboard_check_pressed(vk_left)){
+		return true;
+	}
+
+	if((input_current[UserControl.right] && !input_previous[UserControl.right]) || keyboard_check_pressed(vk_right)){
+		return true;
+	}
+
+	if(input_current[UserControl.dash] && !input_previous[UserControl.dash]){
+		return true;
+	}
+
+	if(input_current[UserControl.float] && !input_previous[UserControl.float]){
+		return true;
+	}
+
+	if(input_current[UserControl.attack] && !input_previous[UserControl.attack]){
+		return true;
+	}
+
+	if(input_current[UserControl.interact] && !input_previous[UserControl.interact]){
+		return true;
+	}
+
+	if(input_current[UserControl.interact_equip] && !input_previous[UserControl.interact_equip]){
+		return true;
+	}
+
+	if(input_current[UserControl.run] && !input_previous[UserControl.run]){
+		return true;
+	}
+
+	return false;
 }
 
 function player_dive_spring_state_spring(){
@@ -745,7 +805,7 @@ function player_dive_spring_state_fail(){
 
 function player_dive_spring_begin_impact(){
 	dive_spring_phase = DiveSpringPhase.impact;
-	dive_spring_input_window_countdown = dive_spring_input_window_max;
+	dive_spring_impact_timer = 0;
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
 	image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, false, false, 0, IMAGE_LOOP_FULL);
@@ -754,7 +814,7 @@ function player_dive_spring_begin_impact(){
 
 function player_dive_spring_begin_spring(){
 	dive_spring_phase = DiveSpringPhase.spring;
-	dive_spring_input_window_countdown = 0;
+	dive_spring_impact_timer = 0;
 	player_dive_spring_restore_movement();
 	move_grounded = false;
 	move_grounded_instance = noone;
@@ -791,7 +851,7 @@ function player_dive_spring_restore_movement(){
 function player_dive_spring_reset(){
 	player_dive_spring_restore_movement();
 	dive_spring_phase = DiveSpringPhase.dive;
-	dive_spring_input_window_countdown = 0;
+	dive_spring_impact_timer = 0;
 	dive_spring_enemy_impact = false;
 }
 
