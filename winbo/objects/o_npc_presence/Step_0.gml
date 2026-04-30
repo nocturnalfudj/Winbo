@@ -87,8 +87,33 @@ switch(presence_visual_state){
 			presence_visual_body_idle_frame = presence_visual_body_idle_start;
 		}
 
+		if(_player_dx <= -180){
+			presence_visual_head_direction = PresenceHeadDirection.left;
+		}
+		else if(_player_dx >= 180){
+			presence_visual_head_direction = PresenceHeadDirection.right;
+		}
+		else{
+			presence_visual_head_direction = PresenceHeadDirection.front;
+		}
+
+		var _head_idle_end;
+		switch(presence_visual_head_direction){
+			case PresenceHeadDirection.left:
+				_head_idle_end = presence_visual_head_left_idle_end;
+			break;
+
+			case PresenceHeadDirection.right:
+				_head_idle_end = presence_visual_head_right_idle_end;
+			break;
+
+			default:
+				_head_idle_end = presence_visual_head_front_idle_end;
+			break;
+		}
+
 		presence_visual_head_idle_frame += _frame_step;
-		if(presence_visual_head_idle_frame >= 10){
+		if(presence_visual_head_idle_frame >= (_head_idle_end + 1)){
 			presence_visual_head_idle_frame = 0;
 		}
 
@@ -100,16 +125,6 @@ switch(presence_visual_state){
 		}
 		else if(presence_visual_eyes_idle_frame >= 10){
 			presence_visual_eyes_idle_frame = 0;
-		}
-
-		if(_player_dx <= -180){
-			presence_visual_head_direction = PresenceHeadDirection.left;
-		}
-		else if(_player_dx >= 180){
-			presence_visual_head_direction = PresenceHeadDirection.right;
-		}
-		else{
-			presence_visual_head_direction = PresenceHeadDirection.front;
 		}
 
 		var _previous_eye_sprite;

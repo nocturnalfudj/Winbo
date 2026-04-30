@@ -42,8 +42,9 @@ switch(presence_visual_state){
 		_intro_eye_frame = round((max(0,presence_visual_intro_frame) / max(1,presence_visual_body_intro_end)) * presence_visual_front_eyes_intro_end);
 		_body_frame = _intro_frame;
 		_head_sprite = spr_npc_presence_head_intro;
-		_head_frame = _intro_frame;
+		_head_frame = round((max(0,presence_visual_intro_frame) / max(1,presence_visual_body_intro_end)) * presence_visual_head_intro_end);
 		_eyes_sprite = spr_npc_presence_eyes_front;
+		_head_frame = clamp(_head_frame,0,presence_visual_head_intro_end);
 		_eyes_frame = clamp(_intro_eye_frame,0,presence_visual_front_eyes_intro_end);
 	break;
 
@@ -64,7 +65,22 @@ switch(presence_visual_state){
 			break;
 		}
 
-		_head_frame = clamp(floor(presence_visual_head_idle_frame),0,9);
+		var _head_idle_end;
+		switch(presence_visual_head_direction){
+			case PresenceHeadDirection.left:
+				_head_idle_end = presence_visual_head_left_idle_end;
+			break;
+
+			case PresenceHeadDirection.right:
+				_head_idle_end = presence_visual_head_right_idle_end;
+			break;
+
+			default:
+				_head_idle_end = presence_visual_head_front_idle_end;
+			break;
+		}
+
+		_head_frame = clamp(floor(presence_visual_head_idle_frame),0,_head_idle_end);
 
 		if(_eyes_sprite == spr_npc_presence_eyes_front){
 			_eyes_frame = clamp(floor(presence_visual_eyes_idle_frame),presence_visual_front_eyes_idle_start,presence_visual_front_eyes_idle_end);
@@ -81,8 +97,9 @@ switch(presence_visual_state){
 		_outro_eye_frame = round((max(0,presence_visual_intro_frame) / max(1,presence_visual_body_intro_end)) * presence_visual_front_eyes_intro_end);
 		_body_frame = _outro_frame;
 		_head_sprite = spr_npc_presence_head_intro;
-		_head_frame = _outro_frame;
+		_head_frame = round((max(0,presence_visual_intro_frame) / max(1,presence_visual_body_intro_end)) * presence_visual_head_intro_end);
 		_eyes_sprite = spr_npc_presence_eyes_front;
+		_head_frame = clamp(_head_frame,0,presence_visual_head_intro_end);
 		_eyes_frame = clamp(_outro_eye_frame,0,presence_visual_front_eyes_intro_end);
 	break;
 }
