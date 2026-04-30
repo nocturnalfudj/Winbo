@@ -591,16 +591,16 @@ function player_dive_spring_try_start(){
 	state = PlayerState.dive_spring;
 	dive_spring_phase = DiveSpringPhase.dive;
 	dive_spring_impact_timer = 0;
+	dive_spring_jump_buffered = false;
 	dive_spring_move_input_previous = input_move_magnitude;
+	dive_spring_dive_timer = 0;
 	dive_spring_enemy_impact = false;
 	dive_spring_momentum_x = velocity.x;
 	dive_spring_velocity_retention_aerial_previous = velocity_retention_aerial;
 	dive_spring_movement_override_active = true;
 	velocity_retention_aerial = dive_spring_velocity_retention_aerial;
 
-	if(velocity.y < dive_spring_dive_speed){
-		velocity.y = dive_spring_dive_speed;
-	}
+	velocity.y = dive_spring_initial_speed;
 
 	image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, true, 2, 4);
 	image_set_frame(image, 0);
@@ -635,6 +635,9 @@ function player_state_dive_spring(){
 }
 
 function player_dive_spring_state_dive(){
+	var _delta_time_scaled, _gravity_enable_previous;
+	_delta_time_scaled = global.delta_time_factor_scaled;
+	dive_spring_dive_timer += _delta_time_scaled;
 	dive_spring_enemy_impact = false;
 
 	if(sprite_current != sprite_dive_spring){
@@ -645,13 +648,25 @@ function player_dive_spring_state_dive(){
 	velocity.x = dive_spring_momentum_x;
 	acceleration.x = 0;
 
-	if(velocity.y < dive_spring_dive_speed){
-		velocity.y = dive_spring_dive_speed;
+	if(velocity.y < dive_spring_initial_speed){
+		velocity.y = dive_spring_initial_speed;
 	}
 
-	acceleration.y = max(acceleration.y, dive_spring_dive_acceleration);
+	if(dive_spring_dive_timer < dive_spring_acceleration_delay){
+		velocity.y = min(velocity.y, dive_spring_initial_speed);
+		acceleration.y = 0;
+	}
+	else{
+		var _max_acceleration;
+		_max_acceleration = max(0, (dive_spring_max_speed - velocity.y) / max(0.001, _delta_time_scaled));
+		acceleration.y = min(dive_spring_dive_acceleration, _max_acceleration);
+	}
 
+	_gravity_enable_previous = move_gravity_enable;
+	move_gravity_enable = false;
 	player_movement_update();
+	move_gravity_enable = _gravity_enable_previous;
+	velocity.y = min(velocity.y, dive_spring_max_speed);
 	player_collisions();
 
 	if((state != PlayerState.dive_spring) || (dive_spring_phase != DiveSpringPhase.dive)){
@@ -664,9 +679,10 @@ function player_dive_spring_state_dive(){
 }
 
 function player_dive_spring_state_impact(){
-	var _delta_time_scaled, _jump_pressed, _wrong_input_pressed, _success_window_start, _success_window_end;
+	var _delta_time_scaled, _jump_pressed, _jump_active, _wrong_input_pressed, _success_window_start, _success_window_end;
 	_delta_time_scaled = global.delta_time_factor_scaled;
 	_jump_pressed = player_dive_spring_jump_pressed();
+	_jump_active = player_dive_spring_jump_active();
 	_wrong_input_pressed = player_dive_spring_wrong_input_pressed();
 	_success_window_start = dive_spring_fail_window_max;
 	_success_window_end = _success_window_start + dive_spring_success_window_max;
@@ -687,11 +703,12 @@ function player_dive_spring_state_impact(){
 	}
 
 	if(_jump_pressed){
-		if((dive_spring_impact_timer >= _success_window_start) && (dive_spring_impact_timer < _success_window_end)){
+		dive_spring_jump_buffered = true;
+	}
+
+	if((dive_spring_impact_timer >= _success_window_start) && (dive_spring_impact_timer < _success_window_end)){
+		if(dive_spring_jump_buffered || _jump_active){
 			player_dive_spring_begin_spring();
-		}
-		else{
-			player_dive_spring_begin_fail();
 		}
 		return;
 	}
@@ -705,6 +722,12 @@ function player_dive_spring_jump_pressed(){
 	return ((input_current[UserControl.jump] && !input_previous[UserControl.jump])
 		|| (input_current[UserControl.up] && !input_previous[UserControl.up])
 		|| keyboard_check_pressed(vk_up));
+}
+
+function player_dive_spring_jump_active(){
+	return input_current[UserControl.jump]
+		|| input_current[UserControl.up]
+		|| keyboard_check(vk_up);
 }
 
 function player_dive_spring_wrong_input_pressed(){
@@ -733,7 +756,7 @@ function player_dive_spring_wrong_input_pressed(){
 		return true;
 	}
 
-	if(input_current[UserControl.float] && !input_previous[UserControl.float]){
+	if((input_current[UserControl.float] && !input_previous[UserControl.float]) && !player_dive_spring_jump_active()){
 		return true;
 	}
 
@@ -816,7 +839,9 @@ function player_dive_spring_state_fail(){
 function player_dive_spring_begin_impact(){
 	dive_spring_phase = DiveSpringPhase.impact;
 	dive_spring_impact_timer = 0;
+	dive_spring_jump_buffered = false;
 	dive_spring_move_input_previous = input_move_magnitude;
+	dive_spring_dive_timer = 0;
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
 	image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, false, false, 0, IMAGE_LOOP_FULL);
@@ -826,7 +851,9 @@ function player_dive_spring_begin_impact(){
 function player_dive_spring_begin_spring(){
 	dive_spring_phase = DiveSpringPhase.spring;
 	dive_spring_impact_timer = 0;
+	dive_spring_jump_buffered = false;
 	dive_spring_move_input_previous = 0;
+	dive_spring_dive_timer = 0;
 	player_dive_spring_restore_movement();
 	move_grounded = false;
 	move_grounded_instance = noone;
@@ -843,7 +870,9 @@ function player_dive_spring_begin_spring(){
 
 function player_dive_spring_begin_fail(){
 	dive_spring_phase = DiveSpringPhase.fail;
+	dive_spring_jump_buffered = false;
 	dive_spring_move_input_previous = 0;
+	dive_spring_dive_timer = 0;
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
 	image_system_setup(sprite_dive_spring_fail, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
@@ -865,7 +894,9 @@ function player_dive_spring_reset(){
 	player_dive_spring_restore_movement();
 	dive_spring_phase = DiveSpringPhase.dive;
 	dive_spring_impact_timer = 0;
+	dive_spring_jump_buffered = false;
 	dive_spring_move_input_previous = 0;
+	dive_spring_dive_timer = 0;
 	dive_spring_enemy_impact = false;
 }
 
