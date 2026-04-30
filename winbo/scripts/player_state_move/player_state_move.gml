@@ -797,10 +797,15 @@ function player_dive_spring_state_spring(){
 		dive_spring_phase = DiveSpringPhase.transition;
 		image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 		image_set_frame(image, 12);
+		player_dive_spring_float_interrupt_try();
 	}
 }
 
 function player_dive_spring_state_transition(){
+	if(player_dive_spring_float_interrupt_try()){
+		return;
+	}
+
 	player_movement_update();
 	player_collisions();
 
@@ -813,6 +818,20 @@ function player_dive_spring_state_transition(){
 		state = PlayerState.move;
 		image_system_setup(sprite_fall_sideways, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
 	}
+}
+
+function player_dive_spring_float_interrupt_try(){
+	var _float_input;
+	_float_input = input_current[UserControl.float] || keyboard_check(vk_up);
+
+	if(!_float_input || (float_countdown <= 0) || move_grounded || (velocity.y < 0)){
+		return false;
+	}
+
+	player_dive_spring_restore_movement();
+	state = PlayerState.float;
+	image_system_setup(sprite_float, ANIMATION_FPS_DEFAULT, true, true, 5, IMAGE_LOOP_FULL);
+	return true;
 }
 
 function player_dive_spring_state_fail(){
