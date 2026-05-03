@@ -43,7 +43,7 @@ event_inherited();
 	presence_visual_body_idle_end = 73;
 	presence_visual_head_intro_end = 29;
 	presence_visual_head_front_idle_end = 8;
-	presence_visual_head_left_idle_end = 74;
+	presence_visual_head_left_idle_end = 9;
 	presence_visual_head_right_idle_end = 8;
 	presence_visual_front_eyes_intro_end = 20;
 	presence_visual_front_eyes_idle_start = 30;
