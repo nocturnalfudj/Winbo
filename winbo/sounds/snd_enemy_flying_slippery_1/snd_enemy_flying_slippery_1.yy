@@ -10,7 +10,7 @@
   "compression": 0,
   "compressionQuality": 4,
   "conversionMode": 0,
-  "duration": 1.0,
+  "duration": 2.612245,
   "exportDir": "",
   "name": "snd_enemy_flying_slippery_1",
   "parent": {

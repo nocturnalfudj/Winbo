@@ -10,7 +10,7 @@
   "compression": 0,
   "compressionQuality": 4,
   "conversionMode": 0,
-  "duration": 1.0,
+  "duration": 1.38449,
   "exportDir": "",
   "name": "snd_enemy_flying_death_2",
   "parent": {

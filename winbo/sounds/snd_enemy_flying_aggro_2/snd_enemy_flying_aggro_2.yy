@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":1.7502041,
+  "duration": 1.854694,
   "exportDir":"",
   "name":"snd_enemy_flying_aggro_2",
   "parent":{
