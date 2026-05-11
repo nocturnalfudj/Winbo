@@ -448,7 +448,7 @@ function player_collisions(){
 	#region Landed on Crumble Platform
 		if(move_grounded_instance != noone){
 			with(move_grounded_instance){
-				if(object_index == o_platform_crumble){
+				if((object_index == o_platform_crumble) || object_is_ancestor(object_index, o_platform_crumble)){
 					if(!crumble_trigger_active){
 						crumble_trigger_active = true;
 								

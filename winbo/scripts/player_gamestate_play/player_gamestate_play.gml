@@ -104,7 +104,7 @@ function player_gamestate_play(){
 				var _platform_crumble_dash_collision;
 				_platform_crumble_dash_collision = false;
 				with(move_collision_object_instance){
-					if(object_index == o_platform_crumble_dash){
+					if((object_index == o_platform_crumble_dash) || object_is_ancestor(object_index, o_platform_crumble_dash)){
 						_platform_crumble_dash_collision = true;
 						_bump_acceleration = 150;
 						_bump_acceleration_direction_additional = 15;
