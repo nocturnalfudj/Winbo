@@ -1,4 +1,8 @@
+event_inherited();
+
 if(global.game_state == GameState.play){
+	image_angle += (360 * 5 / SECOND) * global.delta_time_factor_scaled;
+	
 	var _path_point_current_data = saw_path_point[saw_path_point_current];
 	
 	if(saw_path_direction == 1){

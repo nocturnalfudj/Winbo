@@ -2,9 +2,9 @@
   "$GMSprite": "v2",
   "%Name": "spr_bonus_door_ornate",
   "bboxMode": 0,
-  "bbox_bottom": 127,
+  "bbox_bottom": 619,
   "bbox_left": 0,
-  "bbox_right": 95,
+  "bbox_right": 593,
   "bbox_top": 0,
   "collisionKind": 1,
   "collisionTolerance": 0,
@@ -22,7 +22,7 @@
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 128,
+  "height": 620,
   "HTile": false,
   "layers": [
     {
@@ -140,5 +140,5 @@
   },
   "type": 0,
   "VTile": false,
-  "width": 96,
+  "width": 594,
 }

@@ -2,9 +2,9 @@
   "$GMSprite": "v2",
   "%Name": "spr_saw_blade",
   "bboxMode": 0,
-  "bbox_bottom": 63,
+  "bbox_bottom": 505,
   "bbox_left": 0,
-  "bbox_right": 63,
+  "bbox_right": 507,
   "bbox_top": 0,
   "collisionKind": 1,
   "collisionTolerance": 0,
@@ -43,7 +43,7 @@
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 64,
+  "height": 506,
   "HTile": false,
   "layers": [
     {
@@ -61,7 +61,7 @@
   ],
   "name": "spr_saw_blade",
   "nineSlice": null,
-  "origin": 0,
+  "origin": 4,
   "parent": {
     "name": "Parent",
     "path": "folders/Actors/Hazard/Parent.yy",
@@ -216,8 +216,8 @@
     ],
     "visibleRange": null,
     "volume": 1.0,
-    "xorigin": 0,
-    "yorigin": 0,
+    "xorigin": 254,
+    "yorigin": 253,
   },
   "swatchColours": null,
   "swfPrecision": 2.525,
@@ -227,5 +227,5 @@
   },
   "type": 0,
   "VTile": false,
-  "width": 64,
+  "width": 508,
 }

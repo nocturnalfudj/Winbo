@@ -10916,6 +10916,18 @@
     },
     {
       "id": {
+        "name": "spr_bonus_door_ornate_open",
+        "path": "sprites/spr_bonus_door_ornate_open/spr_bonus_door_ornate_open.yy",
+      },
+    },
+    {
+      "id": {
+        "name": "spr_bonus_door_ornate_portal",
+        "path": "sprites/spr_bonus_door_ornate_portal/spr_bonus_door_ornate_portal.yy",
+      },
+    },
+    {
+      "id": {
         "name": "spr_breakable_wall_molten",
         "path": "sprites/spr_breakable_wall_molten/spr_breakable_wall_molten.yy",
       },
@@ -10958,8 +10970,20 @@
     },
     {
       "id": {
+        "name": "spr_saw_track",
+        "path": "sprites/spr_saw_track/spr_saw_track.yy",
+      },
+    },
+    {
+      "id": {
         "name": "spr_shifting_wall",
         "path": "sprites/spr_shifting_wall/spr_shifting_wall.yy",
+      },
+    },
+    {
+      "id": {
+        "name": "spr_shifting_wall_gear",
+        "path": "sprites/spr_shifting_wall_gear/spr_shifting_wall_gear.yy",
       },
     },
     {

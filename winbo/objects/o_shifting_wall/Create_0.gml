@@ -16,7 +16,7 @@ with(path_point[0]){
 
 with(path_point[1]){
 	x = 0;
-	y = -192;
+	y = -320;
 	forward.time = SECOND * 1.25;
 	backward.time = SECOND * 1.25;
 }

@@ -2,9 +2,9 @@
   "$GMSprite": "v2",
   "%Name": "spr_shifting_wall",
   "bboxMode": 0,
-  "bbox_bottom": 191,
+  "bbox_bottom": 639,
   "bbox_left": 0,
-  "bbox_right": 63,
+  "bbox_right": 279,
   "bbox_top": 0,
   "collisionKind": 1,
   "collisionTolerance": 0,
@@ -22,7 +22,7 @@
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 192,
+  "height": 640,
   "HTile": false,
   "layers": [
     {
@@ -140,5 +140,5 @@
   },
   "type": 0,
   "VTile": false,
-  "width": 64,
+  "width": 280,
 }

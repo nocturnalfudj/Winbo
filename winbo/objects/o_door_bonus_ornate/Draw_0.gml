@@ -1,0 +1,24 @@
+// Draw_0.gml event
+//Ignore if Not Visible
+if(!camera_visible)
+	exit;
+	
+//Only Operate In Normal Draw Event
+if(o_director.depth_grid_draw_event_state != 1)
+	exit;
+
+draw_sprite_ext(spr_bonus_door_ornate_back,0,x,y,image_xscale,image_yscale,0,image_blend,image_alpha);
+
+if(bonus_door_player_overlapping){
+	var _portal_frame = floor((current_time / 1000) * 30) mod sprite_get_number(spr_bonus_door_ornate_portal);
+	var _door_frame = min(sprite_get_number(spr_bonus_door_ornate_open) - 1,floor((current_time / 1000) * 18) mod sprite_get_number(spr_bonus_door_ornate_open));
+	draw_sprite_ext(spr_bonus_door_ornate_portal,_portal_frame,x,y,image_xscale,image_yscale,0,image_blend,image_alpha);
+	draw_sprite_ext(spr_bonus_door_ornate_open,_door_frame,x,y,image_xscale,image_yscale,0,image_blend,image_alpha);
+}
+else{
+	draw_sprite_ext(sprite_current,0,x,y,image_xscale,image_yscale,0,image_blend,image_alpha);
+}
+	
+if(o_master.dev_mode){
+	draw_bounding_box();
+}
