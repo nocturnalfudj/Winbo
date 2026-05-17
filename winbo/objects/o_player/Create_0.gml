@@ -46,6 +46,7 @@ is_player = true;
 	sprite_bump				= spr_player_bump;			//director_get_custom_sprite(spr_player_bump);
 	sprite_dive_spring		= spr_player_dive_spring;
 	sprite_dive_spring_fail	= spr_player_dive_spring_fail;
+	sprite_dive_spring_effect_lines = spr_player_dive_spring_effect_lines;
 	sprite_sitdown			= spr_player_sitdown;		//director_get_custom_sprite(spr_player_sitdown);
 	sprite_stage_entrance	= spr_player_stage_entrance;
 	sprite_bonus_room_enter	= spr_player_bonus_room_enter;
@@ -207,12 +208,24 @@ is_player = true;
 	dive_spring_acceleration_delay = SECOND * 0.35;
 	dive_spring_dive_acceleration = 0.75;
 	dive_spring_jump_acceleration_factor = 5.34;
-	dive_spring_rotor_fps = ANIMATION_FPS_DEFAULT * 0.8;
+	dive_spring_descent_loop_start_frame = 4;
+	dive_spring_descent_loop_end_frame = 6;
+	dive_spring_impact_start_frame = 6;
+	dive_spring_impact_loop_start_frame = 7;
+	dive_spring_impact_loop_end_frame = 8;
+	dive_spring_launch_frame = 8;
+	dive_spring_rotor_loop_start_frame = 9;
+	dive_spring_rotor_loop_end_frame = 15;
+	dive_spring_transition_start_frame = 15;
+	dive_spring_transition_end_frame = 16;
+	dive_spring_fail_start_frame = 5;
+	dive_spring_rotor_fps = ANIMATION_FPS_DEFAULT;
 	dive_spring_momentum_x = 0;
 	dive_spring_velocity_retention_aerial = 1;
 	dive_spring_velocity_retention_aerial_previous = velocity_retention_aerial;
 	dive_spring_movement_override_active = false;
 	dive_spring_enemy_impact = false;
+	dive_spring_float_release_required = false;
 #endregion
 
 #region Dash
