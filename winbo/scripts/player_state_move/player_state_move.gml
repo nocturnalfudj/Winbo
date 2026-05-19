@@ -72,53 +72,57 @@ function player_state_move(){
 	#region Sprite Update
 		if(!_bump_block && !_landing_block && !image.is_playing_queued){
 			if(move_grounded){
-				switch(secret_idle_phase){
-					case PLAYER_SECRET_IDLE_PHASE_SITDOWN:
-						if(sprite_current != sprite_sitdown){
-							image_system_setup(sprite_sitdown, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
-							image_set_frame(image, 0);
-						}
-					break;
-
-					case PLAYER_SECRET_IDLE_PHASE_INTRO:
-						if(sprite_current != sprite_secret_idle){
-							player_secret_idle_begin_body();
-						}
-					break;
-
-					case PLAYER_SECRET_IDLE_PHASE_LOOP:
-						if(sprite_current != sprite_secret_idle){
-							image_system_setup(sprite_secret_idle, ANIMATION_FPS_DEFAULT, true, true, 7, 17);
-							image_set_frame(image, 7);
-						}
-					break;
-
-					default:
-						if(stationary){
-							if(sprite_current != sprite_idle){
-								image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+				if(_dive_spring_animation_playing){
+				}
+				else{
+					switch(secret_idle_phase){
+						case PLAYER_SECRET_IDLE_PHASE_SITDOWN:
+							if(sprite_current != sprite_sitdown){
+								image_system_setup(sprite_sitdown, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+								image_set_frame(image, 0);
 							}
-						}
-						else if(frolic_active){
-							if(sprite_current != sprite_frolic){
-								player_frolic_begin_sprite();
+						break;
+
+						case PLAYER_SECRET_IDLE_PHASE_INTRO:
+							if(sprite_current != sprite_secret_idle){
+								player_secret_idle_begin_body();
 							}
-						}
-						else{
-							if(sprite_current != sprite_walk){
-								if(sprite_current == sprite_land_sideways){
-									image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
-									image_set_frame(image, 1);
-								}
-								else if(sprite_current == sprite_frolic){
-									player_frolic_end_to_walk();
-								}
-								else{
-									image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
+						break;
+
+						case PLAYER_SECRET_IDLE_PHASE_LOOP:
+							if(sprite_current != sprite_secret_idle){
+								image_system_setup(sprite_secret_idle, ANIMATION_FPS_DEFAULT, true, true, 7, 17);
+								image_set_frame(image, 7);
+							}
+						break;
+
+						default:
+							if(stationary){
+								if(sprite_current != sprite_idle){
+									image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
 								}
 							}
-						}
-					break;
+							else if(frolic_active){
+								if(sprite_current != sprite_frolic){
+									player_frolic_begin_sprite();
+								}
+							}
+							else{
+								if(sprite_current != sprite_walk){
+									if(sprite_current == sprite_land_sideways){
+										image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
+										image_set_frame(image, 1);
+									}
+									else if(sprite_current == sprite_frolic){
+										player_frolic_end_to_walk();
+									}
+									else{
+										image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
+									}
+								}
+							}
+						break;
+					}
 				}
 			}
 			else{
@@ -886,15 +890,13 @@ function player_dive_spring_float_input_active(){
 }
 
 function player_dive_spring_animation_update(){
-	if(move_grounded){
-		if((dive_spring_phase == DiveSpringPhase.spring) || (dive_spring_phase == DiveSpringPhase.transition)){
-			dive_spring_phase = DiveSpringPhase.dive;
-		}
-		return false;
-	}
-
 	switch(dive_spring_phase){
 		case DiveSpringPhase.spring:
+			if(sprite_current != sprite_dive_spring){
+				image_system_setup(sprite_dive_spring, dive_spring_rotor_fps, true, true, dive_spring_rotor_loop_start_frame, dive_spring_rotor_loop_end_frame);
+				image_set_frame(image, dive_spring_rotor_loop_start_frame);
+			}
+
 			if((acceleration.y >= 0) && (velocity.y >= 0)){
 				dive_spring_phase = DiveSpringPhase.transition;
 				move_gravity.Copy(move_gravity_fall);
@@ -904,6 +906,12 @@ function player_dive_spring_animation_update(){
 			return true;
 
 		case DiveSpringPhase.transition:
+			if(sprite_current != sprite_dive_spring){
+				image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+				image_set_frame(image, dive_spring_transition_start_frame);
+				return true;
+			}
+
 			if((sprite_current == sprite_dive_spring) && (image.position < (dive_spring_transition_end_frame + 1))){
 				return true;
 			}
@@ -930,15 +938,24 @@ function player_animation_frame_transfer(_target_sprite){
 }
 
 function player_frolic_begin_sprite(){
-	var _target_frame;
+	var _target_frame, _transition_sprite;
 	_target_frame = 0;
+	_transition_sprite = noone;
 
 	if(sprite_current == sprite_walk){
 		_target_frame = player_animation_frame_transfer(sprite_frolic);
+		_transition_sprite = sprite_transition_walk_to_frolic;
+	}
+	else if(sprite_current == sprite_idle){
+		_transition_sprite = sprite_transition_idle_to_frolic;
 	}
 
 	image_system_setup(sprite_frolic, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
 	image_set_frame(image, _target_frame);
+
+	if(_transition_sprite != noone){
+		image_system_queue_add_to_front(_transition_sprite, ANIMATION_FPS_DEFAULT);
+	}
 }
 
 function player_frolic_end_to_walk(){

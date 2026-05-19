@@ -9,8 +9,13 @@
   "channelFormat":0,
   "compression":0,
   "compressionQuality":4,
+  "ConfigValues":{
+    "desktop":{
+      "audioGroupId":"{ \"name\":\"audiogroup_default\", \"path\":\"audiogroups/audiogroup_default\" }",
+    },
+  },
   "conversionMode":0,
-  "duration": 1.854694,
+  "duration":1.8546939,
   "exportDir":"",
   "name":"snd_enemy_flying_aggro_2",
   "parent":{

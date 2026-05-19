@@ -12,8 +12,8 @@
     "path":"folders/Actors/Door/Bonus/Level 0.yy",
   },
   "parentObjectId":{
-    "name":"o_door_bonus",
-    "path":"objects/o_door_bonus/o_door_bonus.yy",
+    "name":"o_door_bonus_ornate",
+    "path":"objects/o_door_bonus_ornate/o_door_bonus_ornate.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,
@@ -33,8 +33,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_door",
-    "path":"sprites/spr_door/spr_door.yy",
+    "name":"spr_bonus_door_ornate",
+    "path":"sprites/spr_bonus_door_ornate/spr_bonus_door_ornate.yy",
   },
   "spriteMaskId":null,
   "visible":true,

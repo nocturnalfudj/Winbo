@@ -7,17 +7,19 @@ if(!camera_visible)
 if(o_director.depth_grid_draw_event_state != 1)
 	exit;
 
-draw_sprite_ext(
-	spr_saw_track,
-	0,
-	saw_start_x - sprite_get_xoffset(spr_saw_blade),
-	saw_start_y - sprite_get_yoffset(spr_saw_blade),
-	image_xscale,
-	image_yscale,
-	0,
-	image_blend,
-	image_alpha
-);
+if(saw_track_draw){
+	draw_sprite_ext(
+		spr_saw_track,
+		0,
+		saw_start_x - sprite_get_xoffset(spr_saw_blade),
+		saw_start_y - sprite_get_yoffset(spr_saw_blade),
+		saw_track_draw_width_scale,
+		saw_track_draw_height_scale,
+		0,
+		image_blend,
+		image_alpha
+	);
+}
 
 draw_sprite_ext(
 	sprite_current,

@@ -70,6 +70,17 @@ function level_select_init() {
 			Environment.level_2_environment,
 			["game"]
 		);
+		level_select_register(
+			"asset_test",
+			r_game_level_assets_test,
+			"Asset Test",
+			90,
+			"level_0",
+			LEVEL_SELECT_TRANSITION_DIRECT,
+			true,
+			Environment.level_1_environment,
+			["game"]
+		);
 	
 	// Bonus rooms are selectable from menus but kept off the main progression chain.
 	level_select_register(

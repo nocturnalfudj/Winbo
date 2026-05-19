@@ -71,6 +71,8 @@ is_player = true;
 	
 	//Transition Sprites
 	sprite_transition_walk_to_walk_other_direction		= spr_player_transition_walk_to_walk_other_direction;
+	sprite_transition_walk_to_frolic					= spr_player_transition_walk_to_frolic;
+	sprite_transition_idle_to_frolic					= spr_player_transition_idle_to_frolic;
 	sprite_transition_float_to_fall						= spr_player_transition_float_to_fall;
 	sprite_transition_float_to_fall_sideways			= spr_player_transition_float_to_fall_sideways;
 	sprite_transition_bump_to_fall						= spr_player_transition_bump_to_fall;
