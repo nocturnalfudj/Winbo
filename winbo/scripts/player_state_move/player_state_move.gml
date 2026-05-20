@@ -66,71 +66,62 @@ function player_state_move(){
 	var _air_spin_playing;
 	_air_spin_playing = player_air_spin_update_state();
 
-	var _dive_spring_animation_playing;
-	_dive_spring_animation_playing = player_dive_spring_animation_update();
-
 	#region Sprite Update
 		if(!_bump_block && !_landing_block && !image.is_playing_queued){
 			if(move_grounded){
-				if(_dive_spring_animation_playing){
-				}
-				else{
-					switch(secret_idle_phase){
-						case PLAYER_SECRET_IDLE_PHASE_SITDOWN:
-							if(sprite_current != sprite_sitdown){
-								image_system_setup(sprite_sitdown, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
-								image_set_frame(image, 0);
-							}
-						break;
+				switch(secret_idle_phase){
+					case PLAYER_SECRET_IDLE_PHASE_SITDOWN:
+						if(sprite_current != sprite_sitdown){
+							image_system_setup(sprite_sitdown, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+							image_set_frame(image, 0);
+						}
+					break;
 
-						case PLAYER_SECRET_IDLE_PHASE_INTRO:
-							if(sprite_current != sprite_secret_idle){
-								player_secret_idle_begin_body();
-							}
-						break;
+					case PLAYER_SECRET_IDLE_PHASE_INTRO:
+						if(sprite_current != sprite_secret_idle){
+							player_secret_idle_begin_body();
+						}
+					break;
 
-						case PLAYER_SECRET_IDLE_PHASE_LOOP:
-							if(sprite_current != sprite_secret_idle){
-								image_system_setup(sprite_secret_idle, ANIMATION_FPS_DEFAULT, true, true, 7, 17);
-								image_set_frame(image, 7);
-							}
-						break;
+					case PLAYER_SECRET_IDLE_PHASE_LOOP:
+						if(sprite_current != sprite_secret_idle){
+							image_system_setup(sprite_secret_idle, ANIMATION_FPS_DEFAULT, true, true, 7, 17);
+							image_set_frame(image, 7);
+						}
+					break;
 
-						default:
-							if(stationary){
-								if(sprite_current != sprite_idle){
-									image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+					default:
+						if(stationary){
+							if(sprite_current != sprite_idle){
+								image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+							}
+						}
+						else if(frolic_active){
+							if(sprite_current != sprite_frolic){
+								player_frolic_begin_sprite();
+							}
+						}
+						else{
+							if(sprite_current != sprite_walk){
+								if(sprite_current == sprite_land_sideways){
+									image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
+									image_set_frame(image, 1);
+								}
+								else if(sprite_current == sprite_frolic){
+									player_frolic_end_to_walk();
+								}
+								else{
+									image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
 								}
 							}
-							else if(frolic_active){
-								if(sprite_current != sprite_frolic){
-									player_frolic_begin_sprite();
-								}
-							}
-							else{
-								if(sprite_current != sprite_walk){
-									if(sprite_current == sprite_land_sideways){
-										image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
-										image_set_frame(image, 1);
-									}
-									else if(sprite_current == sprite_frolic){
-										player_frolic_end_to_walk();
-									}
-									else{
-										image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
-									}
-								}
-							}
-						break;
-					}
+						}
+					break;
 				}
 			}
 			else{
 				player_frolic_clear();
 
-				if(_dive_spring_animation_playing){
-				}
-				else if(_air_spin_playing){
+				if(_air_spin_playing){
 					if(sprite_current != sprite_air_spin){
 						player_air_spin_begin_sprite();
 					}
@@ -635,6 +626,14 @@ function player_state_dive_spring(){
 			player_dive_spring_state_impact();
 		break;
 
+		case DiveSpringPhase.spring:
+			player_dive_spring_state_spring();
+		break;
+
+		case DiveSpringPhase.transition:
+			player_dive_spring_state_transition();
+		break;
+
 		case DiveSpringPhase.fail:
 			player_dive_spring_state_fail();
 		break;
@@ -789,6 +788,74 @@ function player_dive_spring_wrong_input_pressed(){
 	return false;
 }
 
+function player_dive_spring_state_spring(){
+	if(sprite_current != sprite_dive_spring){
+		image_system_setup(sprite_dive_spring, dive_spring_rotor_fps, true, true, dive_spring_rotor_loop_start_frame, dive_spring_rotor_loop_end_frame);
+		image_set_frame(image, dive_spring_rotor_loop_start_frame);
+	}
+
+	move_gravity.Copy(move_gravity_rise);
+	player_movement_update();
+	player_collisions();
+
+	if(state != PlayerState.dive_spring){
+		return;
+	}
+
+	if(velocity.y >= 0){
+		dive_spring_phase = DiveSpringPhase.transition;
+		velocity.y = 0;
+		acceleration.Set(0, 0);
+		image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+		image_set_frame(image, dive_spring_transition_start_frame);
+		player_dive_spring_float_interrupt_try();
+	}
+}
+
+function player_dive_spring_state_transition(){
+	if(player_dive_spring_float_interrupt_try()){
+		return;
+	}
+
+	velocity.y = 0;
+	acceleration.Set(0, 0);
+
+	if(state != PlayerState.dive_spring){
+		return;
+	}
+
+	if(!image.animate){
+		var _target_fall_sprite;
+		_target_fall_sprite = (abs(velocity.x) > 5) ? sprite_fall_sideways : sprite_fall;
+
+		player_dive_spring_restore_movement();
+		move_gravity.Copy(move_gravity_fall);
+		dive_spring_phase = DiveSpringPhase.dive;
+		state = PlayerState.move;
+		image_system_setup(_target_fall_sprite, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+	}
+}
+
+function player_dive_spring_float_interrupt_try(){
+	var _float_input;
+	_float_input = player_dive_spring_float_input_active();
+
+	if(!_float_input){
+		dive_spring_float_release_required = false;
+		return false;
+	}
+
+	if(dive_spring_float_release_required || (float_countdown <= 0) || move_grounded || (velocity.y < 0)){
+		return false;
+	}
+
+	player_dive_spring_restore_movement();
+	dive_spring_phase = DiveSpringPhase.dive;
+	state = PlayerState.float;
+	image_system_setup(sprite_float, ANIMATION_FPS_DEFAULT, true, true, 5, IMAGE_LOOP_FULL);
+	return true;
+}
+
 function player_dive_spring_state_fail(){
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
@@ -832,7 +899,6 @@ function player_dive_spring_begin_spring(){
 	dive_spring_move_input_previous = 0;
 	dive_spring_dive_timer = 0;
 	player_dive_spring_restore_movement();
-	state = PlayerState.move;
 	move_grounded = false;
 	move_grounded_instance = noone;
 	velocity.y = min(velocity.y, 0);
@@ -887,40 +953,6 @@ function player_dive_spring_reset(){
 
 function player_dive_spring_float_input_active(){
 	return input_current[UserControl.float] || keyboard_check(vk_up);
-}
-
-function player_dive_spring_animation_update(){
-	switch(dive_spring_phase){
-		case DiveSpringPhase.spring:
-			if(sprite_current != sprite_dive_spring){
-				image_system_setup(sprite_dive_spring, dive_spring_rotor_fps, true, true, dive_spring_rotor_loop_start_frame, dive_spring_rotor_loop_end_frame);
-				image_set_frame(image, dive_spring_rotor_loop_start_frame);
-			}
-
-			if((acceleration.y >= 0) && (velocity.y >= 0)){
-				dive_spring_phase = DiveSpringPhase.transition;
-				move_gravity.Copy(move_gravity_fall);
-				image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
-				image_set_frame(image, dive_spring_transition_start_frame);
-			}
-			return true;
-
-		case DiveSpringPhase.transition:
-			if(sprite_current != sprite_dive_spring){
-				image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
-				image_set_frame(image, dive_spring_transition_start_frame);
-				return true;
-			}
-
-			if((sprite_current == sprite_dive_spring) && (image.position < (dive_spring_transition_end_frame + 1))){
-				return true;
-			}
-
-			dive_spring_phase = DiveSpringPhase.dive;
-		break;
-	}
-
-	return false;
 }
 
 function player_animation_frame_transfer(_target_sprite){
