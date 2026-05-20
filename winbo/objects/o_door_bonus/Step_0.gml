@@ -7,6 +7,7 @@ if (global.game_state != GameState.play) {
 }
 
 // Check for player overlap
+var _player_was_overlapping = bonus_door_player_overlapping;
 var _player_in_range = false;
 var _player_instance = noone;
 
@@ -18,6 +19,21 @@ with (o_player) {
 }
 
 bonus_door_player_overlapping = _player_in_range;
+
+if (bonus_door_player_overlapping) {
+	if (!_player_was_overlapping) {
+		bonus_door_open_image_index = 0;
+		bonus_door_portal_image_index = 0;
+	}
+	else {
+		bonus_door_open_image_index += (bonus_door_open_animation_fps / SECOND) * global.delta_time_factor;
+		bonus_door_portal_image_index += (bonus_door_portal_animation_fps / SECOND) * global.delta_time_factor;
+	}
+}
+else {
+	bonus_door_open_image_index = 0;
+	bonus_door_portal_image_index = 0;
+}
 
 // Check for Up input while player is overlapping and grounded
 if (_player_in_range && _player_instance != noone) {

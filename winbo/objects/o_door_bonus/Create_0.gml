@@ -10,3 +10,7 @@ bonus_door_enable = true;
 // Interaction state tracking
 bonus_door_player_overlapping = false;
 bonus_door_input_pressed = false;
+bonus_door_open_image_index = 0;
+bonus_door_portal_image_index = 0;
+bonus_door_open_animation_fps = 18;
+bonus_door_portal_animation_fps = 30;
