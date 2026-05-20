@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_breakable_wall_molten",
   "bboxMode":0,
-  "bbox_bottom":95,
+  "bbox_bottom":596,
   "bbox_left":0,
-  "bbox_right":95,
+  "bbox_right":597,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -21,7 +21,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":96,
+  "height":597,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"438c230cdba840149d4343c93192a589","blendMode":0,"displayName":"default","isLocked":false,"name":"438c230cdba840149d4343c93192a589","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
@@ -91,5 +91,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":96,
+  "width":598,
 }

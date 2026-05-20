@@ -1,0 +1,15 @@
+source_sprite = noone;
+source_frame = 0;
+source_left = 0;
+source_top = 0;
+source_width = 1;
+source_height = 1;
+velocity_x = 0;
+velocity_y = 0;
+gravity = 0.25;
+lifetime = SECOND * 0.6;
+lifetime_max = lifetime;
+image_xscale = 1;
+image_yscale = 1;
+image_alpha = 1;
+image_blend = c_white;

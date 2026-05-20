@@ -45,6 +45,13 @@ respawn_countdown = respawn_countdown_max;
 // Respawn control
 respawn_enable = true;
 
+// Optional break FX. Child objects opt into this after inherited setup.
+break_fx_enable = false;
+break_fx_sprite = noone;
+break_fx_smoke_sprite = noone;
+break_fx_columns = 4;
+break_fx_rows = 3;
+
 // Collision mask storage for restoration
 original_mask = mask_index;
 

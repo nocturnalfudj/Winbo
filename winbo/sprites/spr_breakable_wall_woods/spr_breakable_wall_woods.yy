@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_breakable_wall_woods",
   "bboxMode":0,
-  "bbox_bottom":95,
+  "bbox_bottom":320,
   "bbox_left":0,
-  "bbox_right":95,
+  "bbox_right":321,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -21,7 +21,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":96,
+  "height":321,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"b4666f904dca4e31ac43367b1b0ac2ec","blendMode":0,"displayName":"default","isLocked":false,"name":"b4666f904dca4e31ac43367b1b0ac2ec","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
@@ -91,5 +91,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":96,
+  "width":322,
 }
