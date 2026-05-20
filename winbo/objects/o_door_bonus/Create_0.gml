@@ -12,5 +12,6 @@ bonus_door_player_overlapping = false;
 bonus_door_input_pressed = false;
 bonus_door_open_image_index = 0;
 bonus_door_portal_image_index = 0;
+bonus_door_open_last_image_index = 0;
 bonus_door_open_animation_fps = 18;
 bonus_door_portal_animation_fps = 30;
