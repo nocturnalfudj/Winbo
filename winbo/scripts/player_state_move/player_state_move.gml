@@ -601,6 +601,7 @@ function player_dive_spring_try_start(){
 	dive_spring_dive_timer = 0;
 	dive_spring_enemy_impact = false;
 	dive_spring_float_release_required = false;
+	dive_spring_dash_cancel_requested = false;
 	dive_spring_momentum_x = velocity.x;
 	dive_spring_velocity_retention_aerial_previous = velocity_retention_aerial;
 	dive_spring_movement_override_active = true;
@@ -806,29 +807,42 @@ function player_dive_spring_state_spring(){
 		return;
 	}
 
+	player_dive_spring_dash_cancel_update();
+
 	if(velocity.y >= 0){
 		dive_spring_phase = DiveSpringPhase.transition;
 		velocity.y = 0;
 		acceleration.Set(0, 0);
 		image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 		image_set_frame(image, dive_spring_transition_start_frame);
-		player_dive_spring_float_interrupt_try(false);
 	}
 }
 
 function player_dive_spring_state_transition(){
-	if(player_dive_spring_float_interrupt_try(false)){
-		return;
+	if(sprite_current != sprite_dive_spring){
+		image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+		image_set_frame(image, dive_spring_transition_start_frame);
 	}
 
-	velocity.y = 0;
-	acceleration.Set(0, 0);
+	player_dive_spring_float_release_update();
+	player_dive_spring_dash_cancel_update();
+	move_gravity.Copy(move_gravity_fall);
+	player_movement_update();
+	player_collisions();
 
 	if(state != PlayerState.dive_spring){
 		return;
 	}
 
-	if(!image.animate){
+	if(move_grounded || (image.position >= (dive_spring_transition_end_frame + 1))){
+		if(!move_grounded && player_dive_spring_dash_interrupt_try()){
+			return;
+		}
+
+		if(!move_grounded && player_dive_spring_float_interrupt_try(false)){
+			return;
+		}
+
 		var _target_fall_sprite;
 		_target_fall_sprite = (abs(velocity.x) > 5) ? sprite_fall_sideways : sprite_fall;
 
@@ -836,7 +850,93 @@ function player_dive_spring_state_transition(){
 		move_gravity.Copy(move_gravity_fall);
 		dive_spring_phase = DiveSpringPhase.dive;
 		state = PlayerState.move;
-		image_system_setup(_target_fall_sprite, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+
+		if(move_grounded){
+			if(stationary){
+				image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+			}
+			else{
+				image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
+			}
+		}
+		else{
+			image_system_setup(_target_fall_sprite, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+		}
+	}
+}
+
+function player_dive_spring_dash_cancel_update(){
+	var _left_key, _right_key;
+	_left_key = keyboard_check_pressed(vk_left);
+	_right_key = keyboard_check_pressed(vk_right);
+
+	if(_left_key || _right_key){
+		input_current[UserControl.dash] = true;
+		input_move_direction = _left_key ? 180 : 0;
+		input_move_magnitude = 1;
+		input_aim_direction = input_move_direction;
+	}
+
+	if((input_current[UserControl.dash] && !input_previous[UserControl.dash]) || _left_key || _right_key){
+		dive_spring_dash_cancel_requested = true;
+
+		if(input_move_magnitude > 0){
+			dash_no_input_direction = input_move_direction;
+		}
+	}
+}
+
+function player_dive_spring_dash_interrupt_try(){
+	if(!dive_spring_dash_cancel_requested || !dash_enable || dash_stamina_depleted || (dash_cooldown > 0) || (dash_stamina < dash_stamina_cost) || !camera_visible){
+		return false;
+	}
+
+	player_dive_spring_restore_movement();
+	dive_spring_phase = DiveSpringPhase.dive;
+	dive_spring_dash_cancel_requested = false;
+
+	state = dash_state;
+	dash_countdown = dash_countdown_max;
+	dash_cooldown = dash_cooldown_max;
+	dash_stamina -= dash_stamina_cost;
+
+	if(dash_stamina < dash_stamina_cost){
+		dash_stamina_depleted = true;
+		dash_icon_animation_start = dash_icon_scale;
+		dash_icon_animation_target = 1;
+		dash_icon_animation_time_current = 0;
+	}
+
+	dash_hold_check_countdown = dash_hold_check_countdown_max;
+	dash_hold_allow_countdown = dash_hold_allow_countdown_max;
+
+	velocity.MultiplyFactor(0.5);
+	acceleration.Set(0, 0);
+	velocity_retention = dash_velocity_retention;
+
+	if(input_move_magnitude <= 0){
+		input_move_direction = dash_no_input_direction;
+		input_aim_direction = input_move_direction;
+	}
+
+	face_horizontal = ((input_aim_direction > 90) && (input_aim_direction < 270)) ? -1 : 1;
+
+	speed_stretch_enable = true;
+	bump_triggered = false;
+	bump_jump_count = 0;
+	bump_allow = true;
+	bump_allow_countdown = bump_allow_countdown_max;
+	image_system_setup(sprite_dash, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+	audio_player_air_dash_play();
+
+	camera_shake(0.1 * SECOND, 2);
+	game_freeze(1);
+	return true;
+}
+
+function player_dive_spring_float_release_update(){
+	if(!player_dive_spring_float_input_active()){
+		dive_spring_float_release_required = false;
 	}
 }
 
@@ -932,6 +1032,7 @@ function player_dive_spring_begin_fail(){
 	dive_spring_move_input_previous = 0;
 	dive_spring_dive_timer = 0;
 	dive_spring_float_release_required = false;
+	dive_spring_dash_cancel_requested = false;
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
 	image_system_setup(sprite_dive_spring_fail, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
@@ -957,6 +1058,7 @@ function player_dive_spring_reset(){
 	dive_spring_dive_timer = 0;
 	dive_spring_enemy_impact = false;
 	dive_spring_float_release_required = false;
+	dive_spring_dash_cancel_requested = false;
 }
 
 function player_dive_spring_float_input_active(){

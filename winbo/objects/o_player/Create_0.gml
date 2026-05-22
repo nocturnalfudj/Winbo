@@ -219,7 +219,7 @@ is_player = true;
 	dive_spring_rotor_loop_start_frame = 9;
 	dive_spring_rotor_loop_end_frame = 15;
 	dive_spring_transition_start_frame = 15;
-	dive_spring_transition_end_frame = sprite_get_number(sprite_dive_spring) - 1;
+	dive_spring_transition_end_frame = 16;
 	dive_spring_fail_start_frame = 5;
 	dive_spring_rotor_fps = ANIMATION_FPS_DEFAULT;
 	dive_spring_momentum_x = 0;
@@ -228,6 +228,7 @@ is_player = true;
 	dive_spring_movement_override_active = false;
 	dive_spring_enemy_impact = false;
 	dive_spring_float_release_required = false;
+	dive_spring_dash_cancel_requested = false;
 #endregion
 
 #region Dash
