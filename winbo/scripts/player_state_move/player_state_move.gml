@@ -802,18 +802,22 @@ function player_dive_spring_state_spring(){
 		return;
 	}
 
+	if(player_dive_spring_float_interrupt_try(true)){
+		return;
+	}
+
 	if(velocity.y >= 0){
 		dive_spring_phase = DiveSpringPhase.transition;
 		velocity.y = 0;
 		acceleration.Set(0, 0);
 		image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 		image_set_frame(image, dive_spring_transition_start_frame);
-		player_dive_spring_float_interrupt_try();
+		player_dive_spring_float_interrupt_try(false);
 	}
 }
 
 function player_dive_spring_state_transition(){
-	if(player_dive_spring_float_interrupt_try()){
+	if(player_dive_spring_float_interrupt_try(false)){
 		return;
 	}
 
@@ -836,7 +840,7 @@ function player_dive_spring_state_transition(){
 	}
 }
 
-function player_dive_spring_float_interrupt_try(){
+function player_dive_spring_float_interrupt_try(_allow_rising){
 	var _float_input;
 	_float_input = player_dive_spring_float_input_active();
 
@@ -845,7 +849,11 @@ function player_dive_spring_float_interrupt_try(){
 		return false;
 	}
 
-	if(dive_spring_float_release_required || (float_countdown <= 0) || move_grounded || (velocity.y < 0)){
+	if(dive_spring_float_release_required || (float_countdown <= 0) || move_grounded){
+		return false;
+	}
+
+	if(!_allow_rising && (velocity.y < 0)){
 		return false;
 	}
 
@@ -970,12 +978,10 @@ function player_animation_frame_transfer(_target_sprite){
 }
 
 function player_frolic_begin_sprite(){
-	var _target_frame, _transition_sprite;
-	_target_frame = 0;
+	var _transition_sprite;
 	_transition_sprite = noone;
 
 	if(sprite_current == sprite_walk){
-		_target_frame = player_animation_frame_transfer(sprite_frolic);
 		_transition_sprite = sprite_transition_walk_to_frolic;
 	}
 	else if(sprite_current == sprite_idle){
@@ -983,7 +989,6 @@ function player_frolic_begin_sprite(){
 	}
 
 	image_system_setup(sprite_frolic, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
-	image_set_frame(image, _target_frame);
 
 	if(_transition_sprite != noone){
 		image_system_queue_add_to_front(_transition_sprite, ANIMATION_FPS_DEFAULT);
