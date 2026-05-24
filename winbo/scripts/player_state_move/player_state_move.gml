@@ -232,13 +232,7 @@ function player_state_move(){
 			input_aim_direction = input_move_direction;
 		}
 
-		var _float_input_active;
-		_float_input_active = player_dive_spring_float_input_active();
-
-		if(!_float_input_active){
-			dive_spring_float_release_required = false;
-		}
-		else if(!dive_spring_float_release_required){
+		if(player_dive_spring_float_input_active()){
 			if((float_countdown > 0) && (!move_grounded)){
 				if((acceleration.y >= 0) && (velocity.y >= 0)){
 					player_frolic_clear();
@@ -600,7 +594,7 @@ function player_dive_spring_try_start(){
 	dive_spring_move_input_previous = input_move_magnitude;
 	dive_spring_dive_timer = 0;
 	dive_spring_enemy_impact = false;
-	dive_spring_float_release_required = false;
+	dive_spring_float_cancel_requested = false;
 	dive_spring_dash_cancel_requested = false;
 	dive_spring_momentum_x = velocity.x;
 	dive_spring_velocity_retention_aerial_previous = velocity_retention_aerial;
@@ -803,10 +797,7 @@ function player_dive_spring_state_spring(){
 		return;
 	}
 
-	if(player_dive_spring_float_interrupt_try(true)){
-		return;
-	}
-
+	player_dive_spring_float_cancel_update();
 	player_dive_spring_dash_cancel_update();
 
 	if(velocity.y >= 0){
@@ -824,7 +815,7 @@ function player_dive_spring_state_transition(){
 		image_set_frame(image, dive_spring_transition_start_frame);
 	}
 
-	player_dive_spring_float_release_update();
+	player_dive_spring_float_cancel_update();
 	player_dive_spring_dash_cancel_update();
 	move_gravity.Copy(move_gravity_fall);
 	player_movement_update();
@@ -839,7 +830,7 @@ function player_dive_spring_state_transition(){
 			return;
 		}
 
-		if(!move_grounded && player_dive_spring_float_interrupt_try(false)){
+		if(!move_grounded && player_dive_spring_float_interrupt_try()){
 			return;
 		}
 
@@ -862,6 +853,12 @@ function player_dive_spring_state_transition(){
 		else{
 			image_system_setup(_target_fall_sprite, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
 		}
+	}
+}
+
+function player_dive_spring_float_cancel_update(){
+	if(player_dive_spring_float_input_active()){
+		dive_spring_float_cancel_requested = true;
 	}
 }
 
@@ -934,31 +931,18 @@ function player_dive_spring_dash_interrupt_try(){
 	return true;
 }
 
-function player_dive_spring_float_release_update(){
-	if(!player_dive_spring_float_input_active()){
-		dive_spring_float_release_required = false;
-	}
-}
-
-function player_dive_spring_float_interrupt_try(_allow_rising){
-	var _float_input;
-	_float_input = player_dive_spring_float_input_active();
-
-	if(!_float_input){
-		dive_spring_float_release_required = false;
+function player_dive_spring_float_interrupt_try(){
+	if(!dive_spring_float_cancel_requested){
 		return false;
 	}
 
-	if(dive_spring_float_release_required || (float_countdown <= 0) || move_grounded){
-		return false;
-	}
-
-	if(!_allow_rising && (velocity.y < 0)){
+	if((float_countdown <= 0) || move_grounded){
 		return false;
 	}
 
 	player_dive_spring_restore_movement();
 	dive_spring_phase = DiveSpringPhase.dive;
+	dive_spring_float_cancel_requested = false;
 	state = PlayerState.float;
 	image_system_setup(sprite_float, ANIMATION_FPS_DEFAULT, true, true, 5, IMAGE_LOOP_FULL);
 	return true;
@@ -1017,7 +1001,6 @@ function player_dive_spring_begin_spring(){
 	dash_stamina = dash_stamina_max;
 	dash_stamina_depleted = false;
 	float_countdown = float_countdown_max;
-	dive_spring_float_release_required = true;
 	with(o_camera){
 		if(follow_jump_dampening_enable){
 			follow_jump_dampening_factor = 1;
@@ -1031,7 +1014,7 @@ function player_dive_spring_begin_fail(){
 	dive_spring_phase = DiveSpringPhase.fail;
 	dive_spring_move_input_previous = 0;
 	dive_spring_dive_timer = 0;
-	dive_spring_float_release_required = false;
+	dive_spring_float_cancel_requested = false;
 	dive_spring_dash_cancel_requested = false;
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
@@ -1057,7 +1040,7 @@ function player_dive_spring_reset(){
 	dive_spring_move_input_previous = 0;
 	dive_spring_dive_timer = 0;
 	dive_spring_enemy_impact = false;
-	dive_spring_float_release_required = false;
+	dive_spring_float_cancel_requested = false;
 	dive_spring_dash_cancel_requested = false;
 }
 

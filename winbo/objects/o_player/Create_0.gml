@@ -227,7 +227,7 @@ is_player = true;
 	dive_spring_velocity_retention_aerial_previous = velocity_retention_aerial;
 	dive_spring_movement_override_active = false;
 	dive_spring_enemy_impact = false;
-	dive_spring_float_release_required = false;
+	dive_spring_float_cancel_requested = false;
 	dive_spring_dash_cancel_requested = false;
 #endregion
 
