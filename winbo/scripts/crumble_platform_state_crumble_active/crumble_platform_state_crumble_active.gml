@@ -9,7 +9,7 @@ function crumble_platform_state_crumble_active(){
 		image_set_all(image, sprite_break, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 
 	if(break_fx_enable){
-		breakable_wall_spawn_break_fx(x, y, break_fx_sprite, image_xscale, image_yscale, break_fx_smoke_sprite, break_fx_columns, break_fx_rows);
+		breakable_wall_spawn_break_fx(x, y, break_fx_sprite, image_xscale, image_yscale, break_fx_smoke_sprite, break_fx_columns, break_fx_rows, break_fx_blast_direction);
 		image.animate = false;
 		image_alpha = 0;
 	}

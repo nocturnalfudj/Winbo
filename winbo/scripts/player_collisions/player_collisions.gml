@@ -451,6 +451,7 @@ function player_collisions(){
 				if((object_index == o_platform_crumble) || object_is_ancestor(object_index, o_platform_crumble)){
 					if(!crumble_trigger_active){
 						crumble_trigger_active = true;
+						break_fx_blast_direction = noone;
 								
 						if(crumble_trigger_active_instant){
 							crumble_platform_state_crumble_active();

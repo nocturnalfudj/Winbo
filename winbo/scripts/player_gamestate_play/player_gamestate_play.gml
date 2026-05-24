@@ -111,6 +111,7 @@ function player_gamestate_play(){
 						
 						if(!crumble_trigger_active){
 							crumble_trigger_active = true;
+							break_fx_blast_direction = other.input_move_direction;
 								
 							if(crumble_trigger_active_instant){
 								crumble_platform_state_crumble_active();
