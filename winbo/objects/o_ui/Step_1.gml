@@ -88,14 +88,6 @@
 				ui_anchor_create(o_anchor_dialogue,"lyr_hud");
 			}
 			
-			//TODO - replace when dialouge system is finished
-			if(mouse_check_button_pressed(mb_any)){
-				//Go back to play gamestate
-				game_state_set_target(GameState.play);
-				
-				//Remove Dialogue
-				ui_anchor_remove(o_anchor_dialogue);
-			}
 		break;
 		
 		case GameState.gameover:

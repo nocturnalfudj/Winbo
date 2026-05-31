@@ -1,0 +1,73 @@
+function presence_dialogue_page(_text, _lines) {
+	return {
+		text: _text,
+		lines: _lines,
+	};
+}
+
+function presence_dialogue_pages_create(_stage) {
+	switch(_stage) {
+		case "level_3":
+			return [
+				presence_dialogue_page("They fear you because they can not understand you, Winbo.", 2),
+				presence_dialogue_page("They want you to be like them. They want you to have lore.", 2),
+				presence_dialogue_page("For so great a sin there can be no punishment too severe.", 2),
+				presence_dialogue_page("Jump on their heads, Winbo. Jump on all of their heads.", 2),
+			];
+
+		case "level_5":
+			return [
+				presence_dialogue_page("You have likely surmised by now, Winbo.", 1),
+				presence_dialogue_page("Collecting all of my Talismans will unlock a bonus level.", 2),
+				presence_dialogue_page("These degenerates have no concept of bonus levels.", 2),
+				presence_dialogue_page("It is an art lost to them amidst the mire of their melodrama.", 2),
+				presence_dialogue_page("At most they can conceive of concept art or cutscenes,", 2),
+				presence_dialogue_page("rendered by the same profane machines that create", 2),
+				presence_dialogue_page("the motion pictures they envy so dearly.", 1),
+				presence_dialogue_page("Release them from their myopic ambition.", 1),
+				presence_dialogue_page("Give them the violence they so crave.", 1),
+			];
+
+		case "level_7":
+			return [
+				presence_dialogue_page("Our time is close at hand, Winbo.", 1),
+				presence_dialogue_page("When I first returned you to these lands I had salivated", 2),
+				presence_dialogue_page("at the thought of a day like this.", 1),
+				presence_dialogue_page("At this mountain's summit is a man on a journey", 2),
+				presence_dialogue_page("as petty and rote as any we have seen.", 1),
+				presence_dialogue_page("He thinks himself the hero in some grand yet tragic odyssey.", 2),
+				presence_dialogue_page("He indulges in his own melancholy,", 1),
+				presence_dialogue_page("and is emboldened by the world that has formed around him.", 2),
+				presence_dialogue_page("Let us bring it all crashing down.", 1),
+				presence_dialogue_page("Humbling him will be our first truly great step", 2),
+				presence_dialogue_page("in returning to The Old Ways.", 1),
+				presence_dialogue_page("See that it is done, Winbo.", 1),
+			];
+
+		case "bonus":
+			return [
+				presence_dialogue_page("Yes, bonus content.", 1),
+				presence_dialogue_page("Your reward for gathering all the Talismans.", 1),
+				presence_dialogue_page("The deed is done, Winbo, but perhaps our job is not.", 2),
+				presence_dialogue_page("Does your wish to purge these lands remain?", 1),
+				presence_dialogue_page("Are you satisfied?", 1),
+				presence_dialogue_page("Or do the embers of rage still crackle within your rattling soul?", 2),
+				presence_dialogue_page("If so, perhaps we may meet again.", 1),
+				presence_dialogue_page("For now, enjoy the succulent fruits of your success.", 2),
+				presence_dialogue_page("Farewell.", 1),
+			];
+	}
+
+	return [
+		presence_dialogue_page("Look upon these charlatans, Winbo.", 1),
+		presence_dialogue_page("With their guns and bombs and internal conflict.", 1),
+		presence_dialogue_page("So self-important are they that they pay no mind", 2),
+		presence_dialogue_page("to whose domain this once was until he stands before them.", 2),
+		presence_dialogue_page("Collect my Talismans and humble them,", 1),
+		presence_dialogue_page("remind them of whence they came.", 1),
+		presence_dialogue_page("This is your nature, Winbo.", 1),
+		presence_dialogue_page("You collect things.", 1),
+		presence_dialogue_page("Now go, strip them of all their pretences.", 1),
+		presence_dialogue_page("Strip them of all that they are.", 1),
+	];
+}

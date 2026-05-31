@@ -33,7 +33,7 @@ function level_select_init() {
 			LEVEL_SELECT_TRANSITION_VIA_PRESENCE_HUB,
 			false,
 			Environment.tutorial_environment,
-			["game"]
+			["game","presence_dialogue"]
 		);
 		level_select_register(
 			"presence",
@@ -44,7 +44,7 @@ function level_select_init() {
 			LEVEL_SELECT_TRANSITION_VIA_PRESENCE_HUB,
 			false,
 			Environment.presence_environment,
-			["game"]
+			["game","presence_dialogue"]
 		);
 	
 	// Progression uses 0-based asset IDs and 1-based player labels

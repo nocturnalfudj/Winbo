@@ -28,40 +28,45 @@ ui_group_set(UIGroup.dialogue,id);
 	transform_system_update();
 #endregion
 
-#region Menu Creation
-	var _x,_y,_x_center,_y_center,_x_width,_y_height;
-	with(o_camera){
-		_x_center = width_ini_half;
-		_y_center = height_ini_half;
-		_x_width = width_ini;
-		_y_height = height_ini;
+#region Presence Dialogue
+	enum PresenceDialoguePhase {
+		demon,
+		decode_wait,
+		english,
+		complete
 	}
-	
-	//Fade
-	_x = 0;
-	_y = 0;
-	//instance_create_layer(_x,_y,"lyr_pause_back",o_fade_dialogue);
-	
-	//Name
-	_x = 500;
-	_y = 500;
-	with(instance_create_layer(_x,_y,"lyr_pause",o_txtPstr_dialogue_name)){
-		transform_parent_anchor_child_id = AnchorTransformChild.center_left;
-	}
-	
-	//Quote
-	_x = 500;
-	_y = 600;
-	with(instance_create_layer(_x,_y,"lyr_pause",o_txtPstr_dialogue_quote)){
-		transform_parent_anchor_child_id = AnchorTransformChild.center_left;
-	}
-	
-	//Next
-	_x = -150;
-	_y = -150;
-	with(instance_create_layer(_x,_y,"lyr_pause",o_txtPstr_dialogue_next)){
-		transform_parent_anchor_child_id = AnchorTransformChild.bottom_right;
-	}
+
+	presence_dialogue_pages = presence_dialogue_pages_create(presence_dialogue_stage_get());
+	presence_dialogue_page_index = 0;
+	presence_dialogue_phase = PresenceDialoguePhase.demon;
+	presence_dialogue_reveal_count = 0;
+	presence_dialogue_decode_countdown = 0;
+	presence_dialogue_fast_countdown = 0;
+	presence_dialogue_frame = 0;
+	presence_dialogue_frame_speed = 15 / SECOND;
+	presence_dialogue_reveal_speed = 40 / SECOND;
+	presence_dialogue_reveal_speed_fast = 150 / SECOND;
+	presence_dialogue_decode_wait_time = 0.35 * SECOND;
+	presence_dialogue_box_scale = 1;
+	presence_dialogue_text_scale = 0.8;
+	presence_dialogue_text_offset_x = -210;
+	presence_dialogue_text_offset_y = -12;
+	presence_dialogue_text_width = 860;
+	presence_dialogue_text_sep = 58;
+	presence_dialogue_anchor_offset_y = -610;
+	presence_dialogue_page_text = presence_dialogue_pages[0].text;
+	presence_dialogue_page_line_count = presence_dialogue_pages[0].lines;
+	presence_dialogue_ready_for_advance = false;
+
+	presence_dialogue_page_start = function() {
+		presence_dialogue_phase = PresenceDialoguePhase.demon;
+		presence_dialogue_reveal_count = 0;
+		presence_dialogue_decode_countdown = 0;
+		presence_dialogue_fast_countdown = 0;
+		presence_dialogue_page_text = presence_dialogue_pages[presence_dialogue_page_index].text;
+		presence_dialogue_page_line_count = presence_dialogue_pages[presence_dialogue_page_index].lines;
+		presence_dialogue_ready_for_advance = false;
+	};
 #endregion
 
 #region State Scripts
