@@ -1,0 +1,26 @@
+{
+  "$GMSound": "v2",
+  "%Name": "music_bonus_room",
+  "audioGroupId": {
+    "name": "audiogroup_default",
+    "path": "audiogroups/audiogroup_default",
+  },
+  "bitDepth": 1,
+  "channelFormat": 0,
+  "compression": 0,
+  "compressionQuality": 4,
+  "conversionMode": 0,
+  "duration": 100.032,
+  "exportDir": "",
+  "name": "music_bonus_room",
+  "parent": {
+    "name": "Music",
+    "path": "folders/Control/Audio/Music.yy",
+  },
+  "preload": false,
+  "resourceType": "GMSound",
+  "resourceVersion": "2.0",
+  "sampleRate": 48000,
+  "soundFile": "music_bonus_room.wav",
+  "volume": 1.0,
+}

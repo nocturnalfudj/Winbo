@@ -1926,6 +1926,7 @@
     {"id":{"name":"sh_menu_background","path":"shaders/sh_menu_background/sh_menu_background.yy",},},
     {"id":{"name":"sh_monochrome","path":"shaders/sh_monochrome/sh_monochrome.yy",},},
     {"id":{"name":"sh_vignette_noise","path":"shaders/sh_vignette_noise/sh_vignette_noise.yy",},},
+    {"id":{"name":"music_bonus_room","path":"sounds/music_bonus_room/music_bonus_room.yy",},},
     {"id":{"name":"music_level_2","path":"sounds/music_level_2/music_level_2.yy",},},
     {"id":{"name":"music_level_test","path":"sounds/music_level_test/music_level_test.yy",},},
     {"id":{"name":"music_main_menu","path":"sounds/music_main_menu/music_main_menu.yy",},},

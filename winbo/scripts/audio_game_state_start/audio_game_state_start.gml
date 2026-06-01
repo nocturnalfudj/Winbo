@@ -39,6 +39,14 @@ function audio_gameplay_music_resolve(_room) {
 			_music = music_level_2;
 			_loop_start = 0;
 		break;
+
+		case r_game_level_0_bonus_a:
+		case r_game_level_0_bonus_b:
+		case r_game_level_1_bonus_a:
+		case r_game_level_1_bonus_b:
+			_music = music_bonus_room;
+			_loop_start = 0;
+		break;
 	}
 
 	return {
