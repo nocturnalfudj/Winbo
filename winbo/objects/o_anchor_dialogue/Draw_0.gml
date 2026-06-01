@@ -11,17 +11,21 @@ if(instance_number(o_npc_presence) > 0) {
 }
 
 var _box_sprite;
+var _text_offset_y;
 switch(presence_dialogue_page_line_count) {
 	case 1:
 		_box_sprite = spr_presence_speech_box_small;
+		_text_offset_y = presence_dialogue_text_offset_y_small;
 	break;
 
 	case 2:
 		_box_sprite = spr_presence_speech_box_medium;
+		_text_offset_y = presence_dialogue_text_offset_y_medium;
 	break;
 
 	default:
 		_box_sprite = spr_presence_speech_box_large;
+		_text_offset_y = presence_dialogue_text_offset_y_large;
 	break;
 }
 
@@ -48,7 +52,7 @@ if((presence_dialogue_phase == PresenceDialoguePhase.demon) || (presence_dialogu
 var _text_x;
 var _text_y;
 _text_x = _presence_x + presence_dialogue_text_offset_x;
-_text_y = _presence_y + presence_dialogue_text_offset_y;
+_text_y = _presence_y + _text_offset_y;
 
 draw_text_ext_transformed_ags(
 	_text_x,
@@ -62,6 +66,6 @@ draw_text_ext_transformed_ags(
 	c_white,
 	_alpha,
 	fa_left,
-	fa_middle,
+	fa_top,
 	_font
 );
