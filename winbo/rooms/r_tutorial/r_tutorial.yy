@@ -12,7 +12,6 @@
     {"name":"inst_577C388","path":"rooms/r_tutorial/r_tutorial.yy",},
     {"name":"inst_792A83D0","path":"rooms/r_tutorial/r_tutorial.yy",},
     {"name":"inst_1B27635C","path":"rooms/r_tutorial/r_tutorial.yy",},
-    {"name":"inst_2A4FDDE5","path":"rooms/r_tutorial/r_tutorial.yy",},
   ],
   "isDnd":false,
   "layers":[
@@ -131,7 +130,6 @@
         {"$GMRInstanceLayer":"","%Name":"lyr_leaves","depth":4600,"effectEnabled":true,"effectType":"none","gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":true,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"name":"lyr_leaves","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
         {"$GMRInstanceLayer":"","%Name":"lyr_solid","depth":4600,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":true,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
             {"$GMRInstance":"v4","%Name":"inst_1B27635C","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_1B27635C","objectId":{"name":"o_door_next_level","path":"objects/o_door_next_level/o_door_next_level.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":3872.0,"y":2112.0,},
-            {"$GMRInstance":"v4","%Name":"inst_2A4FDDE5","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_2A4FDDE5","objectId":{"name":"o_npc_presence","path":"objects/o_npc_presence/o_npc_presence.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":2752.0,"y":1952.0,},
           ],"layers":[],"name":"lyr_solid","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
       ],"name":"Game","properties":[],"resourceType":"GMRLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRInstanceLayer":"","%Name":"lyr_pfx_midground","depth":4700,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":true,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"name":"lyr_pfx_midground","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},

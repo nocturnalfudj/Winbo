@@ -64,10 +64,7 @@
   "resourceType": "GMObject",
   "resourceVersion": "2.0",
   "solid": false,
-  "spriteId": {
-    "name": "spr_npc_presence",
-    "path": "sprites/spr_npc_presence/spr_npc_presence.yy",
-  },
+  "spriteId": null,
   "spriteMaskId": null,
   "visible": true,
 }

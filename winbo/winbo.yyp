@@ -2332,7 +2332,6 @@
     {"id":{"name":"spr_npc_presence_head_intro","path":"sprites/spr_npc_presence_head_intro/spr_npc_presence_head_intro.yy",},},
     {"id":{"name":"spr_npc_presence_head_left","path":"sprites/spr_npc_presence_head_left/spr_npc_presence_head_left.yy",},},
     {"id":{"name":"spr_npc_presence_head_right","path":"sprites/spr_npc_presence_head_right/spr_npc_presence_head_right.yy",},},
-    {"id":{"name":"spr_npc_presence","path":"sprites/spr_npc_presence/spr_npc_presence.yy",},},
     {"id":{"name":"spr_npc","path":"sprites/spr_npc/spr_npc.yy",},},
     {"id":{"name":"spr_orb_red","path":"sprites/spr_orb_red/spr_orb_red.yy",},},
     {"id":{"name":"spr_orb_silver","path":"sprites/spr_orb_silver/spr_orb_silver.yy",},},
