@@ -10,6 +10,11 @@ switch(global.game_state){
 		//Interact System
 		interact_system_update();
 	break;
+
+	case GameState.dialogue:
+		//Transform Update
+		transform_system_update();
+	break;
 	
 	case GameState.gameover:
 		//Transform Update
@@ -27,7 +32,7 @@ if(!presence_visual_enable){
 	exit;
 }
 
-if(global.game_state != GameState.play){
+if((global.game_state != GameState.play) && (global.game_state != GameState.dialogue)){
 	exit;
 }
 

@@ -2359,6 +2359,7 @@
     {"id":{"name":"spr_player_bump","path":"sprites/spr_player_bump/spr_player_bump.yy",},},
     {"id":{"name":"spr_player_dash","path":"sprites/spr_player_dash/spr_player_dash.yy",},},
     {"id":{"name":"spr_player_death","path":"sprites/spr_player_death/spr_player_death.yy",},},
+    {"id":{"name":"spr_player_dialogue_idle","path":"sprites/spr_player_dialogue_idle/spr_player_dialogue_idle.yy",},},
     {"id":{"name":"spr_player_dive_spring_effect_lines","path":"sprites/spr_player_dive_spring_effect_lines/spr_player_dive_spring_effect_lines.yy",},},
     {"id":{"name":"spr_player_dive_spring_fail","path":"sprites/spr_player_dive_spring_fail/spr_player_dive_spring_fail.yy",},},
     {"id":{"name":"spr_player_dive_spring","path":"sprites/spr_player_dive_spring/spr_player_dive_spring.yy",},},

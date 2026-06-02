@@ -48,6 +48,7 @@ is_player = true;
 	sprite_dive_spring_fail	= spr_player_dive_spring_fail;
 	sprite_dive_spring_effect_lines = spr_player_dive_spring_effect_lines;
 	sprite_sitdown			= spr_player_sitdown;		//director_get_custom_sprite(spr_player_sitdown);
+	sprite_dialogue_idle	= spr_player_dialogue_idle;
 	sprite_stage_entrance	= spr_player_stage_entrance;
 	sprite_bonus_room_enter	= spr_player_bonus_room_enter;
 	sprite_frolic			= spr_player_frolic;

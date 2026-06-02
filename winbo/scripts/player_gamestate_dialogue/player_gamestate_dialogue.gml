@@ -84,8 +84,11 @@ function player_gamestate_dialogue(){
 			//Not Bumping and Not Landing
 			if(!_bump_block && !_landing_block){
 				if(move_grounded){
-					if(sprite_current != sprite_sitdown){
-						image_system_setup(sprite_sitdown,ANIMATION_FPS_DEFAULT, true, true, 14, IMAGE_LOOP_FULL);
+					if(sprite_current != sprite_sitdown && sprite_current != sprite_dialogue_idle){
+						image_system_setup(sprite_sitdown, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+					}
+					else if((sprite_current == sprite_sitdown) && (sprite_current_frame >= image.sprite_number - 1)){
+						image_system_setup(sprite_dialogue_idle, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 					}
 				}
 			}
