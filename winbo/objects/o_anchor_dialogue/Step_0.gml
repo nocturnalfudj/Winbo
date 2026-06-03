@@ -39,8 +39,10 @@ switch(presence_dialogue_phase) {
 
 		if(presence_dialogue_reveal_count < _text_length) {
 			presence_dialogue_reveal_count += _reveal_speed * _delta_time_scaled;
+			presence_dialogue_text_apply_reveal();
 			if(presence_dialogue_reveal_count >= _text_length) {
 				presence_dialogue_reveal_count = _text_length;
+				presence_dialogue_text_apply_reveal();
 				if(presence_dialogue_phase == PresenceDialoguePhase.demon) {
 					presence_dialogue_phase = PresenceDialoguePhase.decode_wait;
 					presence_dialogue_decode_countdown = presence_dialogue_decode_wait_time;
@@ -59,6 +61,7 @@ switch(presence_dialogue_phase) {
 			presence_dialogue_phase = PresenceDialoguePhase.english;
 			presence_dialogue_reveal_count = 0;
 			presence_dialogue_fast_countdown = 0;
+			presence_dialogue_text_start();
 		}
 	break;
 

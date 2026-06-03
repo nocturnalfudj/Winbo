@@ -40,6 +40,7 @@ function text_rich_draw_characters(_gui_scale, _offset_x = 0, _offset_y = 0) {
 	// Slow path: per-character rendering
 	// Set font for measurements
 	draw_set_font(font);
+	var _parent_alpha = image_alpha;
 	
 	// Get font height for center calculation
 	var _font_height = string_height("M");
@@ -59,7 +60,7 @@ function text_rich_draw_characters(_gui_scale, _offset_x = 0, _offset_y = 0) {
 		var _char_y = _char_struct.y * _gui_scale + _offset_y;
 		var _char_angle = _char_struct.image_angle;
 		var _char_colour = _char_struct.image_blend;
-		var _char_alpha = _char_struct.image_alpha;
+		var _char_alpha = _char_struct.image_alpha * _parent_alpha;
 		var _char_scale_x = _char_struct.image_xscale * _gui_scale;
 		var _char_scale_y = _char_struct.image_yscale * _gui_scale;
 		var _char_text = _char_struct.char;

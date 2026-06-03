@@ -40,32 +40,14 @@ if(presence_dialogue_ready_for_advance && presence_dialogue_page_index < array_l
 	draw_sprite_ext(spr_presence_speech_prompt,_frame,_presence_x,_presence_y,presence_dialogue_box_scale,presence_dialogue_box_scale,0,c_white,_alpha);
 }
 
-var _text;
-_text = string_copy(presence_dialogue_page_text,1,floor(presence_dialogue_reveal_count));
-
-var _font;
-_font = fnt_presence_dialogue_43;
-if((presence_dialogue_phase == PresenceDialoguePhase.demon) || (presence_dialogue_phase == PresenceDialoguePhase.decode_wait)) {
-	_font = fnt_presence_sans_43;
-}
-
 var _text_x;
 var _text_y;
 _text_x = _presence_x + presence_dialogue_text_offset_x;
 _text_y = _presence_y + _text_offset_y;
 
-draw_text_ext_transformed_ags(
-	_text_x,
-	_text_y,
-	_text,
-	presence_dialogue_text_sep,
-	presence_dialogue_text_width,
-	presence_dialogue_text_scale,
-	presence_dialogue_text_scale,
-	0,
-	c_white,
-	_alpha,
-	fa_left,
-	fa_top,
-	_font
-);
+with(presence_dialogue_text_instance) {
+	image_alpha = _alpha;
+	image_xscale = other.presence_dialogue_text_scale;
+	image_yscale = other.presence_dialogue_text_scale;
+	text_rich_draw_characters(1,_text_x,_text_y);
+}
