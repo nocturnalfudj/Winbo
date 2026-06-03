@@ -1,4 +1,6 @@
 function text_clean_up(_text){
+	_text ??= noone;
+
 	if(_text != noone){
 		var _text_group;
 		_text_group = _text.text_group;

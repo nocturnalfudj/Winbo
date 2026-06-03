@@ -1,1 +1,2 @@
-text_clean_up();
+// Inherit text_button cleanup
+event_inherited();
