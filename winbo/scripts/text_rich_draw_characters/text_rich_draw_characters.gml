@@ -13,7 +13,7 @@ function text_rich_draw_characters(_gui_scale, _offset_x = 0, _offset_y = 0) {
 	}
 	
 	// Fast path: Draw entire string at once when not animating
-	if (!rich_text_is_animating) {
+	if (!rich_text_is_animating && !rich_text_force_character_draw) {
 		// Calculate base position with alignment
 		var _x = x * _gui_scale + _offset_x;
 		var _y = y * _gui_scale + _offset_y;

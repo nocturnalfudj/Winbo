@@ -45,9 +45,14 @@ var _text_y;
 _text_x = _presence_x + presence_dialogue_text_offset_x;
 _text_y = _presence_y + _text_offset_y;
 
-with(presence_dialogue_text_instance) {
-	image_alpha = _alpha;
-	image_xscale = other.presence_dialogue_text_scale;
-	image_yscale = other.presence_dialogue_text_scale;
-	text_rich_draw_characters(1,_text_x,_text_y);
+if(presence_dialogue_phase == PresenceDialoguePhase.decode_glitch) {
+	presence_dialogue_decode_draw(_text_x,_text_y,_alpha);
+}
+else {
+	with(presence_dialogue_text_instance) {
+		image_alpha = _alpha;
+		image_xscale = other.presence_dialogue_text_scale;
+		image_yscale = other.presence_dialogue_text_scale;
+		text_rich_draw_characters(1,_text_x,_text_y);
+	}
 }
