@@ -12,6 +12,12 @@
     "desktop":{
       "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
     },
+    "android":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
   },
   "DynamicTexturePage":false,
   "edgeFiltering":false,
@@ -77,9 +83,15 @@
     "timeUnits":1,
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"d20ed645-1d16-4d9b-afc9-59307d214e71","path":"sprites/spr_player_fall/spr_player_fall.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"d9826713-4eee-4014-9df1-511602bb1b85","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"7fd9ca3b-59bb-4e73-809a-ca58de34d3ec","path":"sprites/spr_player_fall/spr_player_fall.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"c44718a2-b4ea-422c-b69b-f584bd1019e0","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"45fb02a7-6f4b-4eb1-9c6c-f0cbb656337f","path":"sprites/spr_player_fall/spr_player_fall.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"d89b04f5-ae16-43a4-96ee-cb82445ea124","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"d20ed645-1d16-4d9b-afc9-59307d214e71","path":"sprites/spr_player_fall/spr_player_fall.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"d9826713-4eee-4014-9df1-511602bb1b85","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"7fd9ca3b-59bb-4e73-809a-ca58de34d3ec","path":"sprites/spr_player_fall/spr_player_fall.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"c44718a2-b4ea-422c-b69b-f584bd1019e0","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"45fb02a7-6f4b-4eb1-9c6c-f0cbb656337f","path":"sprites/spr_player_fall/spr_player_fall.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"d89b04f5-ae16-43a4-96ee-cb82445ea124","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -90,8 +102,8 @@
   "swatchColours":null,
   "swfPrecision":2.525,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"game",
+    "path":"texturegroups/game",
   },
   "type":0,
   "VTile":false,

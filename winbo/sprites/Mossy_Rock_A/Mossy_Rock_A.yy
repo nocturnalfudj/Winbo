@@ -8,6 +8,17 @@
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
+  "ConfigValues":{
+    "android":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+    "desktop":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+  },
   "DynamicTexturePage":false,
   "edgeFiltering":false,
   "For3D":false,
@@ -70,7 +81,9 @@
     "timeUnits":1,
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"a19c9a54-d984-4684-ad42-795a56f0ae96","path":"sprites/Mossy_Rock_A/Mossy_Rock_A.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"5f960ae7-7be2-47b4-ba3b-2e704c2ae7bb","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"a19c9a54-d984-4684-ad42-795a56f0ae96","path":"sprites/Mossy_Rock_A/Mossy_Rock_A.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"5f960ae7-7be2-47b4-ba3b-2e704c2ae7bb","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,

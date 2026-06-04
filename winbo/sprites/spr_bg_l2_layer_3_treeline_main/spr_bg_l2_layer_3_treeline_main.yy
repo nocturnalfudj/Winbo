@@ -2,21 +2,21 @@
   "$GMSprite":"v2",
   "%Name":"spr_bg_l2_layer_3_treeline_main",
   "bboxMode":0,
-  "bbox_bottom":4319,
+  "bbox_bottom":3691,
   "bbox_left":0,
-  "bbox_right":7679,
-  "bbox_top":0,
+  "bbox_right":7412,
+  "bbox_top":918,
   "collisionKind":1,
   "collisionTolerance":0,
   "ConfigValues":{
     "desktop":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+      "textureGroupId":"{ \"name\":\"level_2\", \"path\":\"texturegroups/level_2\" }",
     },
     "android":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+      "textureGroupId":"{ \"name\":\"level_2\", \"path\":\"texturegroups/level_2\" }",
     },
     "ios":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+      "textureGroupId":"{ \"name\":\"level_2\", \"path\":\"texturegroups/level_2\" }",
     },
   },
   "DynamicTexturePage":false,
@@ -92,8 +92,8 @@
   "swatchColours":null,
   "swfPrecision":2.525,
   "textureGroupId":{
-    "name":"game",
-    "path":"texturegroups/game",
+    "name":"level_2",
+    "path":"texturegroups/level_2",
   },
   "type":0,
   "VTile":false,

@@ -10,7 +10,13 @@
   "collisionTolerance":0,
   "ConfigValues":{
     "desktop":{
-      "textureGroupId":"{ \"name\":\"Default\", \"path\":\"texturegroups/Default\" }",
+      "textureGroupId":"{ \"name\":\"bayhorn\", \"path\":\"texturegroups/bayhorn\" }",
+    },
+    "android":{
+      "textureGroupId":"{ \"name\":\"bayhorn\", \"path\":\"texturegroups/bayhorn\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"bayhorn\", \"path\":\"texturegroups/bayhorn\" }",
     },
   },
   "DynamicTexturePage":false,
@@ -128,8 +134,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"bayhorn",
+    "path":"texturegroups/bayhorn",
   },
   "type":0,
   "VTile":false,

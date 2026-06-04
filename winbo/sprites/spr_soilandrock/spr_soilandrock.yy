@@ -8,6 +8,17 @@
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
+  "ConfigValues":{
+    "android":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+    "desktop":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+  },
   "DynamicTexturePage":false,
   "edgeFiltering":false,
   "For3D":false,
@@ -70,7 +81,9 @@
     "timeUnits":1,
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"2a683e17-c17f-41d6-b6e4-fd8a4e72de35","path":"sprites/spr_soilandrock/spr_soilandrock.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"d1380d6c-37d4-47f8-adb6-3406fa134eb6","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"2a683e17-c17f-41d6-b6e4-fd8a4e72de35","path":"sprites/spr_soilandrock/spr_soilandrock.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"d1380d6c-37d4-47f8-adb6-3406fa134eb6","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -81,8 +94,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"game",
+    "path":"texturegroups/game",
   },
   "type":0,
   "VTile":false,

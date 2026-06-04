@@ -10,7 +10,13 @@
   "collisionTolerance":0,
   "ConfigValues":{
     "desktop":{
-      "textureGroupId":"{ \"name\":\"Default\", \"path\":\"texturegroups/Default\" }",
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+    "android":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
     },
   },
   "DynamicTexturePage":false,
@@ -38,7 +44,13 @@
     "resourceType":"GMNineSliceData",
     "resourceVersion":"2.0",
     "right":320,
-    "tileMode":[0,1,0,0,0,],
+    "tileMode":[
+      0,
+      1,
+      0,
+      0,
+      0,
+    ],
     "top":141,
   },
   "origin":4,
@@ -88,7 +100,9 @@
     "timeUnits":1,
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"f334cb46-5634-4a1f-b9b3-e3ce7a680865","path":"sprites/spr_platform_moving_orange_ns/spr_platform_moving_orange_ns.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"cb994d3c-3222-4277-9ff2-9607aa675821","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"f334cb46-5634-4a1f-b9b3-e3ce7a680865","path":"sprites/spr_platform_moving_orange_ns/spr_platform_moving_orange_ns.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"cb994d3c-3222-4277-9ff2-9607aa675821","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -99,8 +113,8 @@
   "swatchColours":null,
   "swfPrecision":2.525,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"game",
+    "path":"texturegroups/game",
   },
   "type":0,
   "VTile":false,

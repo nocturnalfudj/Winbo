@@ -7,6 +7,17 @@
         38,39,40,41,42,43,44,45,46,47,
       ],},
   ],
+  "ConfigValues":{
+    "android":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+    "desktop":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+  },
   "macroPageTiles":{
     "SerialiseHeight":0,
     "SerialiseWidth":0,
@@ -28,8 +39,8 @@
   },
   "spriteNoExport":false,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"game",
+    "path":"texturegroups/game",
   },
   "tileAnimationFrames":[],
   "tileAnimationSpeed":15.0,

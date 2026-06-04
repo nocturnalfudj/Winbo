@@ -7,6 +7,17 @@
         38,39,40,41,42,43,44,45,46,47,
       ],},
   ],
+  "ConfigValues":{
+    "android":{
+      "textureGroupId":"{ \"name\":\"presence\", \"path\":\"texturegroups/presence\" }",
+    },
+    "desktop":{
+      "textureGroupId":"{ \"name\":\"presence\", \"path\":\"texturegroups/presence\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"presence\", \"path\":\"texturegroups/presence\" }",
+    },
+  },
   "macroPageTiles":{
     "SerialiseHeight":0,
     "SerialiseWidth":0,
@@ -28,8 +39,8 @@
   },
   "spriteNoExport":false,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"presence",
+    "path":"texturegroups/presence",
   },
   "tileAnimationFrames":[],
   "tileAnimationSpeed":15.0,

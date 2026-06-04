@@ -22,7 +22,7 @@ function level_select_init() {
 			LEVEL_SELECT_TRANSITION_DIRECT,
 			true,
 			Environment.opening_cutscene_environment,
-			["game"]
+			["game","opening_cutscene"]
 		);
 		level_select_register(
 			"tutorial",
@@ -33,7 +33,7 @@ function level_select_init() {
 			LEVEL_SELECT_TRANSITION_VIA_PRESENCE_HUB,
 			false,
 			Environment.tutorial_environment,
-			["game","presence_dialogue"]
+			["game","tutorial"]
 		);
 		level_select_register(
 			"presence",
@@ -44,7 +44,7 @@ function level_select_init() {
 			LEVEL_SELECT_TRANSITION_VIA_PRESENCE_HUB,
 			false,
 			Environment.presence_environment,
-			["game","presence_dialogue"]
+			["game","presence","bayhorn","presence_dialogue"]
 		);
 	
 	// Progression uses 0-based asset IDs and 1-based player labels
@@ -57,7 +57,7 @@ function level_select_init() {
 			LEVEL_SELECT_TRANSITION_VIA_PRESENCE_HUB,
 			false,
 			Environment.level_1_environment,
-			["game"]
+			["game","level_1","bayhorn","enemies"]
 		);
 		level_select_register(
 			"level_1",
@@ -68,7 +68,7 @@ function level_select_init() {
 			LEVEL_SELECT_TRANSITION_VIA_PRESENCE_HUB,
 			false,
 			Environment.level_2_environment,
-			["game"]
+			["game","level_2"]
 		);
 		level_select_register(
 			"asset_test",
@@ -79,7 +79,7 @@ function level_select_init() {
 			LEVEL_SELECT_TRANSITION_DIRECT,
 			true,
 			Environment.level_1_environment,
-			["game"]
+			["game","level_1","level_2","bonus","presence","bayhorn","presence_dialogue","enemies"]
 		);
 	
 	// Bonus rooms are selectable from menus but kept off the main progression chain.
@@ -92,7 +92,7 @@ function level_select_init() {
 			LEVEL_SELECT_TRANSITION_DIRECT,
 			false,
 			Environment.bonus_room_environment,
-			["game"]
+			["game","bonus"]
 		);
 		level_select_register(
 			"level_0_bonus_b",
@@ -103,7 +103,7 @@ function level_select_init() {
 			LEVEL_SELECT_TRANSITION_DIRECT,
 			false,
 			Environment.bonus_room_environment,
-			["game"]
+			["game","bonus"]
 		);
 		level_select_register(
 			"level_1_bonus_a",
@@ -114,7 +114,7 @@ function level_select_init() {
 			LEVEL_SELECT_TRANSITION_DIRECT,
 			false,
 			Environment.bonus_room_environment,
-			["game"]
+			["game","bonus"]
 		);
 		level_select_register(
 			"level_1_bonus_b",
@@ -125,7 +125,7 @@ function level_select_init() {
 			LEVEL_SELECT_TRANSITION_DIRECT,
 			false,
 			Environment.bonus_room_environment,
-			["game"]
+			["game","bonus"]
 		);
 	
 	sdm("Level Select System initialized with " + string(ds_map_size(o_director.level_registry)) + " levels", LOG_COLOUR_COMMAND_SUCCESS);

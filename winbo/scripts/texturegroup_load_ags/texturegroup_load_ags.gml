@@ -15,7 +15,7 @@ function texturegroup_load_ags(_texture_group,_finished_loading){
 		_finished_loading = false;
 		
 		//Load
-		texturegroup_load(_texture_group);
+		texturegroup_load(_texture_group, true);
 			
 		//sdm("texture status - " + _texture_group + " : " +string(texturegroup_get_status(_texture_group)));
 	}
@@ -28,8 +28,10 @@ function texturegroup_load_ags(_texture_group,_finished_loading){
 	}
 	//Finished Loading
 	else if(_texture_group_status == texturegroup_status_loaded){
-		//Fetch
-		//texture_prefetch(_texture_group);
+		if(!texture_is_ready(_texture_group)){
+			_finished_loading = false;
+			texture_prefetch(_texture_group);
+		}
 			
 		//sdm("texture status - " + _texture_group + " : " +string(texturegroup_get_status(_texture_group)));
 	}

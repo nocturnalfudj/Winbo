@@ -5,18 +5,18 @@
   "bbox_bottom":4319,
   "bbox_left":0,
   "bbox_right":7679,
-  "bbox_top":0,
+  "bbox_top":3152,
   "collisionKind":1,
   "collisionTolerance":0,
   "ConfigValues":{
     "desktop":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+      "textureGroupId":"{ \"name\":\"level_1\", \"path\":\"texturegroups/level_1\" }",
     },
     "android":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+      "textureGroupId":"{ \"name\":\"level_1\", \"path\":\"texturegroups/level_1\" }",
     },
     "ios":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+      "textureGroupId":"{ \"name\":\"level_1\", \"path\":\"texturegroups/level_1\" }",
     },
   },
   "DynamicTexturePage":false,
@@ -92,8 +92,8 @@
   "swatchColours":null,
   "swfPrecision":2.525,
   "textureGroupId":{
-    "name":"game",
-    "path":"texturegroups/game",
+    "name":"level_1",
+    "path":"texturegroups/level_1",
   },
   "type":0,
   "VTile":false,

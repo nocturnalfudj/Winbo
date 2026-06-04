@@ -2,12 +2,23 @@
   "$GMSprite":"v2",
   "%Name":"spr_apocalypse_survivor_shoot_crouch_diagonal_body",
   "bboxMode":0,
-  "bbox_bottom":849,
-  "bbox_left":193,
-  "bbox_right":887,
-  "bbox_top":196,
+  "bbox_bottom":1461,
+  "bbox_left":0,
+  "bbox_right":1469,
+  "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
+  "ConfigValues":{
+    "android":{
+      "textureGroupId":"{ \"name\":\"enemies\", \"path\":\"texturegroups/enemies\" }",
+    },
+    "desktop":{
+      "textureGroupId":"{ \"name\":\"enemies\", \"path\":\"texturegroups/enemies\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"enemies\", \"path\":\"texturegroups/enemies\" }",
+    },
+  },
   "DynamicTexturePage":false,
   "edgeFiltering":false,
   "For3D":false,
@@ -149,8 +160,8 @@
   "swatchColours":null,
   "swfPrecision":2.525,
   "textureGroupId":{
-    "name":"game",
-    "path":"texturegroups/game",
+    "name":"enemies",
+    "path":"texturegroups/enemies",
   },
   "type":0,
   "VTile":false,

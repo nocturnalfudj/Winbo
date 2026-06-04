@@ -8,6 +8,17 @@
   "bbox_top":90,
   "collisionKind":1,
   "collisionTolerance":0,
+  "ConfigValues":{
+    "android":{
+      "textureGroupId":"{ \"name\":\"bonus\", \"path\":\"texturegroups/bonus\" }",
+    },
+    "desktop":{
+      "textureGroupId":"{ \"name\":\"bonus\", \"path\":\"texturegroups/bonus\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"bonus\", \"path\":\"texturegroups/bonus\" }",
+    },
+  },
   "DynamicTexturePage":false,
   "edgeFiltering":false,
   "For3D":false,
@@ -70,7 +81,9 @@
     "timeUnits":1,
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"31e222d9-2515-4c35-b737-2500bf64560c","path":"sprites/spr_talisman_2/spr_talisman_2.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"1d443f9c-7b57-4721-b36f-7b0bbe73be09","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"31e222d9-2515-4c35-b737-2500bf64560c","path":"sprites/spr_talisman_2/spr_talisman_2.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"1d443f9c-7b57-4721-b36f-7b0bbe73be09","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -81,8 +94,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"game",
-    "path":"texturegroups/game",
+    "name":"bonus",
+    "path":"texturegroups/bonus",
   },
   "type":0,
   "VTile":false,

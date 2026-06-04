@@ -12,6 +12,12 @@
     "desktop":{
       "textureGroupId":"{ \"name\":\"main_menu\", \"path\":\"texturegroups/main_menu\" }",
     },
+    "android":{
+      "textureGroupId":"{ \"name\":\"main_menu\", \"path\":\"texturegroups/main_menu\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"main_menu\", \"path\":\"texturegroups/main_menu\" }",
+    },
   },
   "DynamicTexturePage":false,
   "edgeFiltering":false,

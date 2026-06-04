@@ -10,13 +10,13 @@
   "collisionTolerance":0,
   "ConfigValues":{
     "desktop":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+      "textureGroupId":"{ \"name\":\"level_2\", \"path\":\"texturegroups/level_2\" }",
     },
     "android":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+      "textureGroupId":"{ \"name\":\"level_2\", \"path\":\"texturegroups/level_2\" }",
     },
     "ios":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+      "textureGroupId":"{ \"name\":\"level_2\", \"path\":\"texturegroups/level_2\" }",
     },
   },
   "DynamicTexturePage":false,
@@ -92,8 +92,8 @@
   "swatchColours":null,
   "swfPrecision":2.525,
   "textureGroupId":{
-    "name":"game",
-    "path":"texturegroups/game",
+    "name":"level_2",
+    "path":"texturegroups/level_2",
   },
   "type":0,
   "VTile":false,

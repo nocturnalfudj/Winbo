@@ -8,6 +8,17 @@
   "bbox_top":4508,
   "collisionKind":1,
   "collisionTolerance":0,
+  "ConfigValues":{
+    "android":{
+      "textureGroupId":"{ \"name\":\"level_1\", \"path\":\"texturegroups/level_1\" }",
+    },
+    "desktop":{
+      "textureGroupId":"{ \"name\":\"level_1\", \"path\":\"texturegroups/level_1\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"level_1\", \"path\":\"texturegroups/level_1\" }",
+    },
+  },
   "DynamicTexturePage":false,
   "edgeFiltering":false,
   "For3D":false,
@@ -83,8 +94,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"level_1",
+    "path":"texturegroups/level_1",
   },
   "type":0,
   "VTile":false,

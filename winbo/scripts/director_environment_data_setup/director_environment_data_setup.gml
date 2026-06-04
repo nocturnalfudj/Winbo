@@ -81,7 +81,7 @@ function director_environment_data_setup(){
 		);
 		with(environment[_environment]){
 			//Texture Group
-			texture_group = "default_environment";
+			texture_group = "level_1";
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
@@ -107,7 +107,7 @@ function director_environment_data_setup(){
 			[]
 		);
 		with(environment[_environment]){
-			texture_group = "default_environment";
+			texture_group = "level_1";
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
@@ -145,7 +145,7 @@ function director_environment_data_setup(){
 			[]
 		);
 		with(environment[_environment]){
-			texture_group = "default_environment";
+			texture_group = "level_2";
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
@@ -181,7 +181,7 @@ function director_environment_data_setup(){
 			[]
 		);
 		with(environment[_environment]){
-			texture_group = "default_environment";
+			texture_group = "bonus";
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
@@ -207,7 +207,7 @@ function director_environment_data_setup(){
 			]
 		);
 		with(environment[_environment]){
-			texture_group = "game";
+			texture_group = "opening_cutscene";
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
@@ -231,7 +231,7 @@ function director_environment_data_setup(){
 			[]
 		);
 		with(environment[_environment]){
-			texture_group = "game";
+			texture_group = "tutorial";
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
@@ -256,7 +256,7 @@ function director_environment_data_setup(){
 			]
 		);
 		with(environment[_environment]){
-			texture_group = "game";
+			texture_group = "presence";
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion

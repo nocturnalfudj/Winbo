@@ -3,14 +3,20 @@
   "%Name":"spr_commando_death_left",
   "bboxMode":0,
   "bbox_bottom":649,
-  "bbox_left":235,
-  "bbox_right":585,
+  "bbox_left":214,
+  "bbox_right":606,
   "bbox_top":157,
   "collisionKind":1,
   "collisionTolerance":0,
   "ConfigValues":{
     "desktop":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+      "textureGroupId":"{ \"name\":\"enemies\", \"path\":\"texturegroups/enemies\" }",
+    },
+    "android":{
+      "textureGroupId":"{ \"name\":\"enemies\", \"path\":\"texturegroups/enemies\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"enemies\", \"path\":\"texturegroups/enemies\" }",
     },
   },
   "DynamicTexturePage":false,
@@ -90,8 +96,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"game",
-    "path":"texturegroups/game",
+    "name":"enemies",
+    "path":"texturegroups/enemies",
   },
   "type":0,
   "VTile":false,

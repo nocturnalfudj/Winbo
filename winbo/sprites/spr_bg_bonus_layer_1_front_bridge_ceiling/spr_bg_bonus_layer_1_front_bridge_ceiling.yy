@@ -8,6 +8,17 @@
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
+  "ConfigValues":{
+    "android":{
+      "textureGroupId":"{ \"name\":\"bonus\", \"path\":\"texturegroups/bonus\" }",
+    },
+    "desktop":{
+      "textureGroupId":"{ \"name\":\"bonus\", \"path\":\"texturegroups/bonus\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"bonus\", \"path\":\"texturegroups/bonus\" }",
+    },
+  },
   "DynamicTexturePage":false,
   "edgeFiltering":false,
   "For3D":false,
@@ -81,8 +92,8 @@
   "swatchColours":null,
   "swfPrecision":2.525,
   "textureGroupId":{
-    "name":"game",
-    "path":"texturegroups/game",
+    "name":"bonus",
+    "path":"texturegroups/bonus",
   },
   "type":0,
   "VTile":false,

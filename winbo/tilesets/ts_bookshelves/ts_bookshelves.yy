@@ -4,6 +4,17 @@
   "autoTileSets":[
     {"$GMAutoTileSet":"","%Name":"ts_bookshelves","closed_edge":false,"name":"ts_bookshelves","resourceType":"GMAutoTileSet","resourceVersion":"2.0","tiles":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0,],},
   ],
+  "ConfigValues":{
+    "android":{
+      "textureGroupId":"{ \"name\":\"bonus\", \"path\":\"texturegroups/bonus\" }",
+    },
+    "desktop":{
+      "textureGroupId":"{ \"name\":\"bonus\", \"path\":\"texturegroups/bonus\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"bonus\", \"path\":\"texturegroups/bonus\" }",
+    },
+  },
   "macroPageTiles":{
     "SerialiseHeight":0,
     "SerialiseWidth":0,
@@ -25,8 +36,8 @@
   },
   "spriteNoExport":false,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"bonus",
+    "path":"texturegroups/bonus",
   },
   "tileAnimationFrames":[],
   "tileAnimationSpeed":15.0,

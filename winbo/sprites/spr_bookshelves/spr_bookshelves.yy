@@ -10,7 +10,13 @@
   "collisionTolerance":0,
   "ConfigValues":{
     "desktop":{
-      "textureGroupId":"{ \"name\":\"Default\", \"path\":\"texturegroups/Default\" }",
+      "textureGroupId":"{ \"name\":\"bonus\", \"path\":\"texturegroups/bonus\" }",
+    },
+    "android":{
+      "textureGroupId":"{ \"name\":\"bonus\", \"path\":\"texturegroups/bonus\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"bonus\", \"path\":\"texturegroups/bonus\" }",
     },
   },
   "DynamicTexturePage":false,
@@ -86,8 +92,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"bonus",
+    "path":"texturegroups/bonus",
   },
   "type":0,
   "VTile":false,

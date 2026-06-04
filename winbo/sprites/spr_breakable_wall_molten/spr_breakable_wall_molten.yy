@@ -2,15 +2,21 @@
   "$GMSprite":"v2",
   "%Name":"spr_breakable_wall_molten",
   "bboxMode":0,
-  "bbox_bottom":596,
-  "bbox_left":0,
-  "bbox_right":597,
-  "bbox_top":0,
+  "bbox_bottom":592,
+  "bbox_left":4,
+  "bbox_right":592,
+  "bbox_top":5,
   "collisionKind":1,
   "collisionTolerance":0,
   "ConfigValues":{
     "desktop":{
-      "textureGroupId":"{ \"name\":\"Default\", \"path\":\"texturegroups/Default\" }",
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+    "android":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
     },
   },
   "DynamicTexturePage":false,
@@ -86,8 +92,8 @@
   "swatchColours":null,
   "swfPrecision":2.525,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"game",
+    "path":"texturegroups/game",
   },
   "type":0,
   "VTile":false,

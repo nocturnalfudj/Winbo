@@ -8,6 +8,17 @@
   "bbox_top":318,
   "collisionKind":1,
   "collisionTolerance":0,
+  "ConfigValues":{
+    "android":{
+      "textureGroupId":"{ \"name\":\"enemies\", \"path\":\"texturegroups/enemies\" }",
+    },
+    "desktop":{
+      "textureGroupId":"{ \"name\":\"enemies\", \"path\":\"texturegroups/enemies\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"enemies\", \"path\":\"texturegroups/enemies\" }",
+    },
+  },
   "DynamicTexturePage":false,
   "edgeFiltering":false,
   "For3D":false,
@@ -81,8 +92,8 @@
   "swatchColours":null,
   "swfPrecision":2.525,
   "textureGroupId":{
-    "name":"game",
-    "path":"texturegroups/game",
+    "name":"enemies",
+    "path":"texturegroups/enemies",
   },
   "type":0,
   "VTile":false,
