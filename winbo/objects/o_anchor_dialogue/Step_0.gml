@@ -72,7 +72,7 @@ switch(presence_dialogue_phase) {
 
 		if(presence_dialogue_decode_time >= presence_dialogue_decode_duration) {
 			presence_dialogue_decode_time = presence_dialogue_decode_duration;
-			presence_dialogue_text_complete();
+			presence_dialogue_decode_complete();
 		}
 	break;
 

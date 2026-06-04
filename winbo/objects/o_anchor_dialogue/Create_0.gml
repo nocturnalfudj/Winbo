@@ -175,6 +175,26 @@ ui_group_set(UIGroup.dialogue,id);
 		presence_dialogue_ready_for_advance = true;
 	};
 
+	presence_dialogue_decode_complete = function() {
+		presence_dialogue_reveal_count = presence_dialogue_page_character_count;
+		presence_dialogue_text_revealed_count_prev = presence_dialogue_page_character_count;
+
+		with(presence_dialogue_text_instance) {
+			text_rich_stop_animations();
+
+			for(var _i=0;_i<rich_character_count;_i++) {
+				other.presence_dialogue_text_set_character_alpha(rich_character[_i],1);
+			}
+
+			rich_text_force_character_draw = true;
+			rich_text_is_animating = false;
+			rich_text_is_visible = rich_character_count > 0;
+		}
+
+		presence_dialogue_phase = PresenceDialoguePhase.complete;
+		presence_dialogue_ready_for_advance = true;
+	};
+
 	presence_dialogue_reveal_finish = function() {
 		if(presence_dialogue_phase == PresenceDialoguePhase.demon_type) {
 			presence_dialogue_decode_start();
@@ -260,12 +280,32 @@ ui_group_set(UIGroup.dialogue,id);
 					if(_english_alpha > 0) {
 						draw_set_font(fnt_presence_dialogue_43);
 						draw_set_color(_character.image_blend);
+
+						var _english_stable_mix;
+						var _english_stable_alpha;
+						var _english_smear_alpha;
+						_english_stable_mix = clamp((_progress - 0.72) / 0.28,0,1);
+						_english_stable_alpha = _english_alpha * _english_stable_mix;
+						_english_smear_alpha = _english_alpha * (1 - _english_stable_mix);
+
 						for(var _pass=0;_pass<2;_pass++) {
 							var _pass_offset;
 							_pass_offset = (_pass - 0.5) * _smear_x * 0.4 - _jitter_x * 0.5;
-							draw_set_alpha(_alpha * _english_alpha * (0.35 + 0.2 * _progress));
+							draw_set_alpha(_alpha * _english_smear_alpha * (0.35 + 0.2 * _progress));
 							draw_text_transformed(
 								_center_x + _pass_offset,
+								_center_y,
+								_character_text,
+								_character_scale_x,
+								_character_scale_y,
+								_character_angle
+							);
+						}
+
+						if(_english_stable_alpha > 0) {
+							draw_set_alpha(_alpha * _english_stable_alpha);
+							draw_text_transformed(
+								_center_x,
 								_center_y,
 								_character_text,
 								_character_scale_x,
