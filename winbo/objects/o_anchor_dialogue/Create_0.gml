@@ -40,12 +40,14 @@ ui_group_set(UIGroup.dialogue,id);
 	presence_dialogue_page_index = 0;
 	presence_dialogue_phase = PresenceDialoguePhase.demon_type;
 	presence_dialogue_reveal_count = 0;
+	presence_dialogue_reveal_finish_countdown = 0;
 	presence_dialogue_decode_time = 0;
 	presence_dialogue_fast_countdown = 0;
 	presence_dialogue_frame = 0;
 	presence_dialogue_frame_speed = 15 / SECOND;
 	presence_dialogue_reveal_speed = 40 / SECOND;
 	presence_dialogue_reveal_speed_fast = 150 / SECOND;
+	presence_dialogue_character_reveal_fade_time = 0.08 * SECOND;
 	presence_dialogue_decode_duration = 0.5 * SECOND;
 	presence_dialogue_decode_smear_px = 18;
 	presence_dialogue_decode_jitter_px = 6;
@@ -80,7 +82,7 @@ ui_group_set(UIGroup.dialogue,id);
 		image_alpha = 1;
 		reveal_enable = false;
 		shadow_enable = false;
-		rich_text_force_character_draw = false;
+		rich_text_force_character_draw = true;
 	}
 
 	presence_dialogue_text_set_character_alpha = function(_character, _alpha) {
@@ -101,16 +103,16 @@ ui_group_set(UIGroup.dialogue,id);
 			width_max = other.presence_dialogue_text_width;
 			alignment_h = fa_left;
 			alignment_v = fa_top;
+			sep = other.presence_dialogue_text_sep;
 			text_ui_text_strings_update();
 			text_ui_set_width_height_pre_scale();
-			sep = other.presence_dialogue_text_sep;
 			text_poster_dimensions();
 			rich_character_rebuild_required = true;
 			rich_word_rebuild_required = true;
 			text_rich_rebuild_characters();
 			text_rich_stop_animations();
 			text_rich_reset_transforms();
-			rich_text_force_character_draw = _hidden;
+			rich_text_force_character_draw = true;
 
 			for(var _i=0;_i<rich_character_count;_i++) {
 				other.presence_dialogue_text_set_character_alpha(rich_character[_i],_hidden ? 0 : 1);
@@ -135,11 +137,30 @@ ui_group_set(UIGroup.dialogue,id);
 
 		if(_visible_count != presence_dialogue_text_revealed_count_prev) {
 			with(presence_dialogue_text_instance) {
-				for(var _i=0;_i<rich_character_count;_i++) {
-					other.presence_dialogue_text_set_character_alpha(rich_character[_i],(_i < _visible_count) ? 1 : 0);
+				if(_visible_count > other.presence_dialogue_text_revealed_count_prev) {
+					var _start_index;
+					var _end_index;
+					_start_index = other.presence_dialogue_text_revealed_count_prev;
+					_end_index = _visible_count - 1;
+					text_rich_animate_characters(
+						TransformValue.alpha,
+						0,
+						1,
+						other.presence_dialogue_character_reveal_fade_time,
+						ease_linear,
+						0,
+						0,
+						_start_index,
+						_end_index
+					);
 				}
-				rich_text_force_character_draw = _visible_count < rich_character_count;
-				rich_text_is_animating = rich_text_force_character_draw;
+				else {
+					for(var _i=0;_i<rich_character_count;_i++) {
+						other.presence_dialogue_text_set_character_alpha(rich_character[_i],(_i < _visible_count) ? 1 : 0);
+					}
+				}
+				rich_text_force_character_draw = true;
+				rich_text_is_animating = _visible_count < rich_character_count;
 				rich_text_is_visible = _visible_count > 0;
 			}
 
@@ -152,6 +173,15 @@ ui_group_set(UIGroup.dialogue,id);
 		presence_dialogue_text_apply_reveal();
 		presence_dialogue_phase = PresenceDialoguePhase.complete;
 		presence_dialogue_ready_for_advance = true;
+	};
+
+	presence_dialogue_reveal_finish = function() {
+		if(presence_dialogue_phase == PresenceDialoguePhase.demon_type) {
+			presence_dialogue_decode_start();
+		}
+		else {
+			presence_dialogue_text_complete();
+		}
 	};
 
 	presence_dialogue_decode_start = function() {
@@ -254,6 +284,7 @@ ui_group_set(UIGroup.dialogue,id);
 
 	presence_dialogue_page_start = function() {
 		presence_dialogue_reveal_count = 0;
+		presence_dialogue_reveal_finish_countdown = 0;
 		presence_dialogue_decode_time = 0;
 		presence_dialogue_fast_countdown = 0;
 		presence_dialogue_page_text = presence_dialogue_pages[presence_dialogue_page_index].text;

@@ -14,15 +14,16 @@ function text_rich_rebuild_characters() {
 		var _existing_char = rich_character[_i];
 		var _new_data = _new_positions[_i];
 		
-		// Check if character changed
+		// Check if character or measured layout changed
 		var _char_changed = (_existing_char.char != _new_data.char);
+		var _width_changed = (abs(_existing_char.char_width - _new_data.width) > 0.01);
 		
 		// Check if position changed (with small tolerance for float comparison)
-		var _pos_changed = (abs(_existing_char.transform[TransformType.anchor].value[TransformValue.x].current - _new_data.x) > 0.01) ||
-		                    (abs(_existing_char.transform[TransformType.anchor].value[TransformValue.y].current - _new_data.y) > 0.01);
+		var _pos_changed = (abs(_existing_char.transform[TransformType.anchor].value[TransformValue.x].rest - _new_data.x) > 0.01) ||
+		                    (abs(_existing_char.transform[TransformType.anchor].value[TransformValue.y].rest - _new_data.y) > 0.01);
 		
-		// Update character data if changed
-		if (_char_changed) {
+		// Update character data every rebuild so font, sep, and wrap changes cannot leave stale glyph metrics.
+		if (_char_changed || _width_changed) {
 			_existing_char.char = _new_data.char;
 			_existing_char.char_width = _new_data.width;
 			_existing_char.bounding_box_width = _new_data.width;
@@ -34,7 +35,7 @@ function text_rich_rebuild_characters() {
 		_existing_char.index = _new_data.index;
 		
 		// Update position in transform anchor if changed
-		if (_pos_changed || _char_changed) {
+		if (_pos_changed || _char_changed || _width_changed) {
 			with (_existing_char) {
 				// Stop any ongoing animations when position or character changes
 				for (var _j = 0; _j < TransformValue.SIZE; _j++) {

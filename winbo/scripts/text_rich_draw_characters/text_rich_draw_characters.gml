@@ -12,7 +12,7 @@ function text_rich_draw_characters(_gui_scale, _offset_x = 0, _offset_y = 0) {
 		return;
 	}
 	
-	// Fast path: Draw entire string at once when not animating
+	// Fast path: Draw entire string at once only when a caller explicitly opts out of rich layout.
 	if (!rich_text_is_animating && !rich_text_force_character_draw) {
 		// Calculate base position with alignment
 		var _x = x * _gui_scale + _offset_x;
@@ -25,7 +25,7 @@ function text_rich_draw_characters(_gui_scale, _offset_x = 0, _offset_y = 0) {
 			_x, _y, 
 			text_final_string, 
 			sep, 
-			width_actual,
+			width_max,
 			_scale_x, _scale_y, 
 			image_angle, 
 			image_blend, 
@@ -64,6 +64,9 @@ function text_rich_draw_characters(_gui_scale, _offset_x = 0, _offset_y = 0) {
 		var _char_scale_x = _char_struct.image_xscale * _gui_scale;
 		var _char_scale_y = _char_struct.image_yscale * _gui_scale;
 		var _char_text = _char_struct.char;
+		if ((_char_alpha <= 0) || (_char_text == "\n")) {
+			continue;
+		}
 		
 		// Calculate character dimensions (unscaled, will be scaled by draw_text_transformed)
 		var _char_width_unscaled = _char_struct.char_width;
@@ -107,4 +110,6 @@ function text_rich_draw_characters(_gui_scale, _offset_x = 0, _offset_y = 0) {
 	// Reset draw state
 	draw_set_alpha(1);
 	draw_set_color(c_white);
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
 }

@@ -39,8 +39,8 @@ function rich_text_system_create() {
 		// Track if ANY character is currently animating (for fast-path rendering)
 		rich_text_is_animating = false;
 
-		// Force per-character drawing when callers control character visibility directly.
-		rich_text_force_character_draw = false;
+		// Keep static and animated rich text on the same layout path.
+		rich_text_force_character_draw = true;
 		
 		// Track if text should be drawn (false if all characters are invisible)
 		rich_text_is_visible = true;

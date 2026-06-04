@@ -29,6 +29,10 @@ switch(presence_dialogue_phase) {
 		if(_advance_pressed && presence_dialogue_reveal_count < _text_length) {
 			presence_dialogue_fast_countdown = 0.35 * SECOND;
 		}
+		else if(_advance_pressed && presence_dialogue_reveal_finish_countdown > 0) {
+			presence_dialogue_reveal_finish_countdown = 0;
+			presence_dialogue_reveal_finish();
+		}
 
 		var _reveal_speed;
 		_reveal_speed = presence_dialogue_reveal_speed;
@@ -43,13 +47,18 @@ switch(presence_dialogue_phase) {
 			if(presence_dialogue_reveal_count >= _text_length) {
 				presence_dialogue_reveal_count = _text_length;
 				presence_dialogue_text_apply_reveal();
-				if(presence_dialogue_phase == PresenceDialoguePhase.demon_type) {
-					presence_dialogue_decode_start();
-				}
-				else {
-					presence_dialogue_text_complete();
-				}
+				presence_dialogue_reveal_finish_countdown = presence_dialogue_character_reveal_fade_time;
 			}
+		}
+		else if(presence_dialogue_reveal_finish_countdown > 0) {
+			presence_dialogue_reveal_finish_countdown -= _delta_time_scaled;
+			if(presence_dialogue_reveal_finish_countdown <= 0) {
+				presence_dialogue_reveal_finish_countdown = 0;
+				presence_dialogue_reveal_finish();
+			}
+		}
+		else if(_text_length <= 0) {
+			presence_dialogue_reveal_finish();
 		}
 	break;
 
