@@ -48,9 +48,12 @@ ui_group_set(UIGroup.dialogue,id);
 	presence_dialogue_reveal_speed = 40 / SECOND;
 	presence_dialogue_reveal_speed_fast = 150 / SECOND;
 	presence_dialogue_character_reveal_fade_time = 0.08 * SECOND;
-	presence_dialogue_decode_duration = 0.5 * SECOND;
-	presence_dialogue_decode_smear_px = 18;
-	presence_dialogue_decode_jitter_px = 6;
+	presence_dialogue_decode_duration = 0.9 * SECOND;
+	presence_dialogue_decode_smear_px = 22;
+	presence_dialogue_decode_jitter_px = 9;
+	presence_dialogue_decode_jitter_y_px = 5;
+	presence_dialogue_decode_stagger = 0.45;
+	presence_dialogue_decode_scramble_chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghkmnopqrstuvwxyz";
 	presence_dialogue_box_scale = 1;
 	presence_dialogue_text_scale = 1;
 	presence_dialogue_text_offset_x = -220;
@@ -194,22 +197,32 @@ ui_group_set(UIGroup.dialogue,id);
 	};
 
 	presence_dialogue_decode_start = function() {
+		//Keep the demon layout intact for the glitch; English is configured hidden in decode_complete
 		presence_dialogue_phase = PresenceDialoguePhase.decode_glitch;
 		presence_dialogue_decode_time = 0;
-		presence_dialogue_text_configure(fnt_presence_dialogue_43,true);
+	};
+
+	presence_dialogue_decode_random = function(_frame, _salt) {
+		var _value;
+		_value = sin((_frame + 1) * 12.9898 + (_salt + 1) * 78.233) * 43758.5453;
+		return _value - floor(_value);
 	};
 
 	presence_dialogue_decode_draw = function(_text_x, _text_y, _alpha) {
 		var _progress;
-		var _noise;
 		var _phase_frame;
+		var _stagger;
+		var _scramble_chars;
+		var _scramble_char_count;
 		_progress = clamp(presence_dialogue_decode_time / presence_dialogue_decode_duration,0,1);
-		_noise = 1 - _progress;
 		_phase_frame = floor(presence_dialogue_decode_time * 0.45);
+		_stagger = presence_dialogue_decode_stagger;
+		_scramble_chars = presence_dialogue_decode_scramble_chars;
+		_scramble_char_count = string_length(_scramble_chars);
 
 		with(presence_dialogue_text_instance) {
 			var _font_height;
-			draw_set_font(fnt_presence_dialogue_43);
+			draw_set_font(fnt_presence_sans_43);
 			_font_height = string_height("M");
 			draw_set_halign(fa_center);
 			draw_set_valign(fa_middle);
@@ -219,56 +232,100 @@ ui_group_set(UIGroup.dialogue,id);
 				var _character_text;
 				_character = rich_character[_i];
 				_character_text = _character.char;
-				if(_character_text != chr(10)) {
-					var _character_x;
-					var _character_y;
-					var _character_width;
-					var _center_x;
-					var _center_y;
-					var _character_scale_x;
-					var _character_scale_y;
-					var _character_angle;
-					var _random_value;
-					var _jitter_x;
-					var _smear_x;
-					var _demon_alpha;
-					_character_x = _character.x + _text_x;
-					_character_y = _character.y + _text_y;
-					_character_width = _character.char_width;
-					_center_x = _character_x + _character_width / 2;
-					_center_y = _character_y + _font_height / 2;
-					_character_scale_x = _character.image_xscale;
-					_character_scale_y = _character.image_yscale;
-					_character_angle = _character.image_angle;
-					_random_value = sin((_phase_frame + 1) * 12.9898 + (_i + 1) * 78.233) * 43758.5453;
-					_random_value -= floor(_random_value);
-					_jitter_x = (_random_value - 0.5) * other.presence_dialogue_decode_jitter_px * _noise;
-					_smear_x = other.presence_dialogue_decode_smear_px * _noise;
-					_demon_alpha = 1 - _progress;
-
-					if(_demon_alpha > 0) {
-						draw_set_font(fnt_presence_sans_43);
-						draw_set_color(_character.image_blend);
-						for(var _pass=0;_pass<3;_pass++) {
-							var _pass_offset;
-							_pass_offset = (_pass - 1) * _smear_x + _jitter_x;
-							draw_set_alpha(_alpha * _demon_alpha * (0.16 + 0.12 * _random_value));
-							draw_text_transformed(
-								_center_x + _pass_offset,
-								_center_y,
-								_character_text,
-								_character_scale_x,
-								_character_scale_y,
-								_character_angle
-							);
-						}
-					}
+				if(_character_text == chr(10) || _character_text == " ") {
+					continue;
 				}
+
+				//Stable per-character random staggers each letter onto its own decay schedule
+				var _character_random;
+				var _character_progress;
+				var _demon_alpha;
+				_character_random = other.presence_dialogue_decode_random(0,_i * 17);
+				_character_progress = clamp(_progress * (1 + _stagger) - _character_random * _stagger,0,1);
+				_demon_alpha = 1 - _character_progress;
+				if(_demon_alpha <= 0) {
+					continue;
+				}
+
+				//Frame-varying randoms drive the flicker, scramble, jitter and distortion
+				var _flicker_random;
+				var _scramble_random;
+				var _glyph_random;
+				var _jitter_random_x;
+				var _jitter_random_y;
+				var _spike_random;
+				var _angle_random;
+				var _scale_random_x;
+				var _scale_random_y;
+				_flicker_random = other.presence_dialogue_decode_random(_phase_frame,_i * 17 + 1);
+				_scramble_random = other.presence_dialogue_decode_random(_phase_frame,_i * 17 + 2);
+				_glyph_random = other.presence_dialogue_decode_random(_phase_frame,_i * 17 + 3);
+				_jitter_random_x = other.presence_dialogue_decode_random(_phase_frame,_i * 17 + 4);
+				_jitter_random_y = other.presence_dialogue_decode_random(_phase_frame,_i * 17 + 5);
+				_spike_random = other.presence_dialogue_decode_random(_phase_frame,_i * 17 + 6);
+				_angle_random = other.presence_dialogue_decode_random(_phase_frame,_i * 17 + 7);
+				_scale_random_x = other.presence_dialogue_decode_random(_phase_frame,_i * 17 + 8);
+				_scale_random_y = other.presence_dialogue_decode_random(_phase_frame,_i * 17 + 9);
+
+				//Hard dropout frames read as electrical flicker
+				if(_flicker_random < 0.22 * _character_progress) {
+					continue;
+				}
+				_demon_alpha *= 1 - 0.5 * _character_progress * (1 - _flicker_random);
+
+				//Scramble the glyph more aggressively the further the letter has decayed
+				if(_scramble_random < _character_progress * 2.2) {
+					_character_text = string_char_at(_scramble_chars,1 + floor(_glyph_random * _scramble_char_count));
+				}
+
+				var _center_x;
+				var _center_y;
+				_center_x = _character.x + _text_x + _character.char_width / 2;
+				_center_y = _character.y + _text_y + _font_height / 2;
+
+				//Jitter with occasional larger displacement spikes
+				var _jitter_x;
+				var _jitter_y;
+				_jitter_x = (_jitter_random_x - 0.5) * 2 * other.presence_dialogue_decode_jitter_px * _character_progress;
+				_jitter_y = (_jitter_random_y - 0.5) * 2 * other.presence_dialogue_decode_jitter_y_px * _character_progress;
+				if(_spike_random < 0.12 * _character_progress) {
+					_jitter_x *= 3.5;
+					_jitter_y *= 2.5;
+				}
+
+				var _character_scale_x;
+				var _character_scale_y;
+				var _character_angle;
+				_character_scale_x = _character.image_xscale * (1 + (_scale_random_x - 0.5) * 0.6 * _character_progress);
+				_character_scale_y = _character.image_yscale * (1 + (_scale_random_y - 0.5) * 0.8 * _character_progress);
+				_character_angle = _character.image_angle + (_angle_random - 0.5) * 24 * _character_progress;
+
+				var _draw_x;
+				var _draw_y;
+				var _smear_x;
+				_draw_x = _center_x + _jitter_x;
+				_draw_y = _center_y + _jitter_y;
+				_smear_x = other.presence_dialogue_decode_smear_px * _character_progress;
+
+				draw_set_color(_character.image_blend);
+
+				//Smear ghosts either side of the core glyph
+				if(_smear_x > 0.5) {
+					draw_set_alpha(_alpha * _demon_alpha * 0.3);
+					draw_text_transformed(_draw_x - _smear_x,_draw_y,_character_text,_character_scale_x,_character_scale_y,_character_angle);
+					draw_text_transformed(_draw_x + _smear_x,_draw_y,_character_text,_character_scale_x,_character_scale_y,_character_angle);
+				}
+
+				//Core glyph fades out as the letter decays
+				draw_set_alpha(_alpha * _demon_alpha);
+				draw_text_transformed(_draw_x,_draw_y,_character_text,_character_scale_x,_character_scale_y,_character_angle);
 			}
 		}
 
 		draw_set_alpha(1);
 		draw_set_color(c_white);
+		draw_set_halign(fa_left);
+		draw_set_valign(fa_top);
 	};
 
 	presence_dialogue_page_start = function() {
