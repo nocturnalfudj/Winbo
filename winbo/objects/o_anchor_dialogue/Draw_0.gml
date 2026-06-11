@@ -42,8 +42,8 @@ if(presence_dialogue_ready_for_advance && presence_dialogue_page_index < array_l
 
 var _text_x;
 var _text_y;
-_text_x = _presence_x + presence_dialogue_text_offset_x;
-_text_y = _presence_y + _text_offset_y;
+_text_x = _presence_x + presence_dialogue_text_offset_x * presence_dialogue_box_scale;
+_text_y = _presence_y + _text_offset_y * presence_dialogue_box_scale;
 
 if(presence_dialogue_phase == PresenceDialoguePhase.decode_glitch) {
 	presence_dialogue_decode_draw(_text_x,_text_y,_alpha);
@@ -51,8 +51,8 @@ if(presence_dialogue_phase == PresenceDialoguePhase.decode_glitch) {
 else {
 	with(presence_dialogue_text_instance) {
 		image_alpha = _alpha;
-		image_xscale = other.presence_dialogue_text_scale;
-		image_yscale = other.presence_dialogue_text_scale;
-		text_rich_draw_characters(1,_text_x,_text_y);
+		image_xscale = 1;
+		image_yscale = 1;
+		text_rich_draw_characters(other.presence_dialogue_text_scale,_text_x,_text_y);
 	}
 }

@@ -45,7 +45,7 @@ ui_group_set(UIGroup.dialogue,id);
 	presence_dialogue_fast_countdown = 0;
 	presence_dialogue_frame = 0;
 	presence_dialogue_frame_speed = 15 / SECOND;
-	presence_dialogue_reveal_speed = 40 / SECOND;
+	presence_dialogue_reveal_speed = 25 / SECOND;
 	presence_dialogue_reveal_speed_fast = 150 / SECOND;
 	presence_dialogue_character_reveal_fade_time = 0.08 * SECOND;
 	presence_dialogue_decode_duration = 0.9 * SECOND;
@@ -54,8 +54,8 @@ ui_group_set(UIGroup.dialogue,id);
 	presence_dialogue_decode_jitter_y_px = 5;
 	presence_dialogue_decode_stagger = 0.45;
 	presence_dialogue_decode_scramble_chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghkmnopqrstuvwxyz";
-	presence_dialogue_box_scale = 1;
-	presence_dialogue_text_scale = 1;
+	presence_dialogue_box_scale = 1.35;
+	presence_dialogue_text_scale = 1.35;
 	presence_dialogue_text_offset_x = -220;
 	presence_dialogue_text_offset_y_small = -22;
 	presence_dialogue_text_offset_y_medium = -50;
@@ -214,11 +214,13 @@ ui_group_set(UIGroup.dialogue,id);
 		var _stagger;
 		var _scramble_chars;
 		var _scramble_char_count;
+		var _text_draw_scale;
 		_progress = clamp(presence_dialogue_decode_time / presence_dialogue_decode_duration,0,1);
 		_phase_frame = floor(presence_dialogue_decode_time * 0.45);
 		_stagger = presence_dialogue_decode_stagger;
 		_scramble_chars = presence_dialogue_decode_scramble_chars;
 		_scramble_char_count = string_length(_scramble_chars);
+		_text_draw_scale = presence_dialogue_text_scale;
 
 		with(presence_dialogue_text_instance) {
 			var _font_height;
@@ -280,14 +282,14 @@ ui_group_set(UIGroup.dialogue,id);
 
 				var _center_x;
 				var _center_y;
-				_center_x = _character.x + _text_x + _character.char_width / 2;
-				_center_y = _character.y + _text_y + _font_height / 2;
+				_center_x = _character.x * _text_draw_scale + _text_x + _character.char_width * _text_draw_scale / 2;
+				_center_y = _character.y * _text_draw_scale + _text_y + _font_height * _text_draw_scale / 2;
 
 				//Jitter with occasional larger displacement spikes
 				var _jitter_x;
 				var _jitter_y;
-				_jitter_x = (_jitter_random_x - 0.5) * 2 * other.presence_dialogue_decode_jitter_px * _character_progress;
-				_jitter_y = (_jitter_random_y - 0.5) * 2 * other.presence_dialogue_decode_jitter_y_px * _character_progress;
+				_jitter_x = (_jitter_random_x - 0.5) * 2 * other.presence_dialogue_decode_jitter_px * _text_draw_scale * _character_progress;
+				_jitter_y = (_jitter_random_y - 0.5) * 2 * other.presence_dialogue_decode_jitter_y_px * _text_draw_scale * _character_progress;
 				if(_spike_random < 0.12 * _character_progress) {
 					_jitter_x *= 3.5;
 					_jitter_y *= 2.5;
@@ -296,8 +298,8 @@ ui_group_set(UIGroup.dialogue,id);
 				var _character_scale_x;
 				var _character_scale_y;
 				var _character_angle;
-				_character_scale_x = _character.image_xscale * (1 + (_scale_random_x - 0.5) * 0.6 * _character_progress);
-				_character_scale_y = _character.image_yscale * (1 + (_scale_random_y - 0.5) * 0.8 * _character_progress);
+				_character_scale_x = _character.image_xscale * _text_draw_scale * (1 + (_scale_random_x - 0.5) * 0.6 * _character_progress);
+				_character_scale_y = _character.image_yscale * _text_draw_scale * (1 + (_scale_random_y - 0.5) * 0.8 * _character_progress);
 				_character_angle = _character.image_angle + (_angle_random - 0.5) * 24 * _character_progress;
 
 				var _draw_x;
@@ -305,7 +307,7 @@ ui_group_set(UIGroup.dialogue,id);
 				var _smear_x;
 				_draw_x = _center_x + _jitter_x;
 				_draw_y = _center_y + _jitter_y;
-				_smear_x = other.presence_dialogue_decode_smear_px * _character_progress;
+				_smear_x = other.presence_dialogue_decode_smear_px * _text_draw_scale * _character_progress;
 
 				draw_set_color(_character.image_blend);
 
