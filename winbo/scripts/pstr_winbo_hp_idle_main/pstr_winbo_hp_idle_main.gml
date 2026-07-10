@@ -9,7 +9,7 @@ function pstr_winbo_hp_idle_main(){
 	}
 	
 	//Determine Show Target
-	if((_hp - 1) >= hp_id){
+	if(_hp > hp_id + 1){
 		show_target = true;
 	}
 	else{

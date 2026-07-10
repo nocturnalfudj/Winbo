@@ -56,7 +56,7 @@ bg_anim_time_seconds += delta_time / 1000000;
 					game_state_set_target(GameState.gameover);
 					
 					//Reset Lives
-					//resource[Resource.winbo_lives][Team.player] = PLAYER_HP_MAX_DEFAULT
+					//resource[Resource.winbo_lives][Team.player] = PLAYER_LIVES_DEFAULT
 					
 					//Reset Cash
 					//resource[Resource.cash][Team.player] = 0;

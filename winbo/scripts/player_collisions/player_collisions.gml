@@ -38,7 +38,7 @@ function player_collisions(){
 
 				// Check if player is dashing/recently dashed - deflect bullet instead of damage
 				// Uses bump_allow for 0.1s leniency window (same as wall bumps)
-				if(other.bump_allow){
+				if(other.bump_allow && deflect_enable){
 					if(deflect_flyoff_enable){
 						var _flyoff_direction = point_direction(other.x, other.y, x, y);
 						bullet_begin_deflect_flyoff(_flyoff_direction);

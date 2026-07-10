@@ -18,7 +18,7 @@ function master_game_state_gameover() {
 		// Check for mouse click to continue
 		if(mouse_check_button_pressed(mb_left)){
 			// Reset Lives
-			o_director.resource[Resource.winbo_lives][Team.player] = PLAYER_HP_MAX_DEFAULT;
+			o_director.resource[Resource.winbo_lives][Team.player] = PLAYER_LIVES_DEFAULT;
 			
 			// Reset Cash
 			o_director.resource[Resource.cash][Team.player] = 0;

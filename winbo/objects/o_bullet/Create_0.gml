@@ -89,7 +89,10 @@ owner = noone;
 		death_anim_suppressed = false;
 		death_anim_suppress_on_deflect = false;
 
-		// Deflect fly-off (disabled by default; missiles override this to true)
+		// Deflect behavior
+		deflect_enable = true;
+
+		// Deflect fly-off
 		deflect_flyoff_enable = false;
 		deflect_flyoff_active = false;
 		deflect_flyoff_speed = 42;

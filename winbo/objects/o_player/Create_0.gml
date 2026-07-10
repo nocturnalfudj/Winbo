@@ -292,7 +292,8 @@ is_player = true;
 #endregion
 
 #region Health
-	#macro PLAYER_HP_MAX_DEFAULT 2
+	#macro PLAYER_HP_MAX_DEFAULT 3
+	#macro PLAYER_LIVES_DEFAULT 2
 
 	hp = PLAYER_HP_MAX_DEFAULT;
 	hp_set_max(hp);

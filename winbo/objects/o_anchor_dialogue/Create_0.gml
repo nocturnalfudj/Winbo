@@ -55,20 +55,33 @@ ui_group_set(UIGroup.dialogue,id);
 	presence_dialogue_decode_stagger = 0.45;
 	presence_dialogue_decode_scramble_chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghkmnopqrstuvwxyz";
 	presence_dialogue_box_scale = 1.35;
-	presence_dialogue_text_scale = 1.35;
+	presence_dialogue_text_scale = presence_dialogue_pages[0].text_scale;
 	presence_dialogue_text_offset_x = -220;
 	presence_dialogue_text_offset_y_small = -22;
 	presence_dialogue_text_offset_y_medium = -50;
 	presence_dialogue_text_offset_y_large = -88;
-	presence_dialogue_text_width = 370;
+	presence_dialogue_text_center_offset_y_small = 13;
+	presence_dialogue_text_center_offset_y_medium = 0;
+	presence_dialogue_text_center_offset_y_large = -27;
+	presence_dialogue_text_width = presence_dialogue_pages[0].text_width;
 	presence_dialogue_text_sep = 40;
 	presence_dialogue_anchor_offset_y = -610;
 	presence_dialogue_page_text = presence_dialogue_pages[0].text;
 	presence_dialogue_page_line_count = presence_dialogue_pages[0].lines;
 	presence_dialogue_page_mode = presence_dialogue_pages[0].mode;
+	presence_dialogue_page_text_centered = presence_dialogue_pages[0].text_centered;
 	presence_dialogue_page_character_count = 0;
 	presence_dialogue_ready_for_advance = false;
 	presence_dialogue_text_revealed_count_prev = 0;
+	presence_dialogue_sfx_sounds = [
+		snd_presence_speech_1,
+		snd_presence_speech_2,
+		snd_presence_speech_3,
+		snd_presence_speech_4,
+	];
+	presence_dialogue_sfx_chance = 0.5;
+	presence_dialogue_sfx_last_sound = noone;
+	presence_dialogue_sfx_instance = noone;
 	presence_dialogue_text_instance = instance_create_layer(0,0,"lyr_hud",o_text_rich);
 
 	with(presence_dialogue_text_instance) {
@@ -104,8 +117,8 @@ ui_group_set(UIGroup.dialogue,id);
 			suffix_string = "";
 			font = _font;
 			width_max = other.presence_dialogue_text_width;
-			alignment_h = fa_left;
-			alignment_v = fa_top;
+			alignment_h = other.presence_dialogue_page_text_centered ? fa_center : fa_left;
+			alignment_v = other.presence_dialogue_page_text_centered ? fa_middle : fa_top;
 			sep = other.presence_dialogue_text_sep;
 			text_ui_text_strings_update();
 			text_ui_set_width_height_pre_scale();
@@ -206,6 +219,40 @@ ui_group_set(UIGroup.dialogue,id);
 		var _value;
 		_value = sin((_frame + 1) * 12.9898 + (_salt + 1) * 78.233) * 43758.5453;
 		return _value - floor(_value);
+	};
+
+	presence_dialogue_sfx_try_play = function() {
+		if(presence_dialogue_sfx_instance != noone) {
+			if(audio_is_playing(presence_dialogue_sfx_instance) || audio_is_paused(presence_dialogue_sfx_instance)) {
+				return;
+			}
+			presence_dialogue_sfx_instance = noone;
+		}
+
+		if(random(1) >= presence_dialogue_sfx_chance) {
+			return;
+		}
+
+		var _eligible_sounds;
+		_eligible_sounds = [];
+		for(var _i=0;_i<array_length(presence_dialogue_sfx_sounds);_i++) {
+			var _sound;
+			_sound = presence_dialogue_sfx_sounds[_i];
+			if(_sound != presence_dialogue_sfx_last_sound) {
+				array_push(_eligible_sounds,_sound);
+			}
+		}
+
+		if(array_length(_eligible_sounds) <= 0) {
+			return;
+		}
+
+		var _selected_sound;
+		_selected_sound = _eligible_sounds[irandom(array_length(_eligible_sounds) - 1)];
+		presence_dialogue_sfx_instance = audio_sound_play(_selected_sound,AudioChannel.sfx,false,0,0,true,1,1);
+		if(presence_dialogue_sfx_instance != noone) {
+			presence_dialogue_sfx_last_sound = _selected_sound;
+		}
 	};
 
 	presence_dialogue_decode_draw = function(_text_x, _text_y, _alpha) {
@@ -331,13 +378,18 @@ ui_group_set(UIGroup.dialogue,id);
 	};
 
 	presence_dialogue_page_start = function() {
+		var _page;
+		_page = presence_dialogue_pages[presence_dialogue_page_index];
 		presence_dialogue_reveal_count = 0;
 		presence_dialogue_reveal_finish_countdown = 0;
 		presence_dialogue_decode_time = 0;
 		presence_dialogue_fast_countdown = 0;
-		presence_dialogue_page_text = presence_dialogue_pages[presence_dialogue_page_index].text;
-		presence_dialogue_page_line_count = presence_dialogue_pages[presence_dialogue_page_index].lines;
-		presence_dialogue_page_mode = presence_dialogue_pages[presence_dialogue_page_index].mode;
+		presence_dialogue_page_text = _page.text;
+		presence_dialogue_page_line_count = _page.lines;
+		presence_dialogue_page_mode = _page.mode;
+		presence_dialogue_text_scale = _page.text_scale;
+		presence_dialogue_text_width = _page.text_width;
+		presence_dialogue_page_text_centered = _page.text_centered;
 		presence_dialogue_ready_for_advance = false;
 		if(presence_dialogue_page_mode == PresenceDialoguePageMode.demon_decode) {
 			presence_dialogue_phase = PresenceDialoguePhase.demon_type;
@@ -347,6 +399,7 @@ ui_group_set(UIGroup.dialogue,id);
 			presence_dialogue_phase = PresenceDialoguePhase.direct_english_type;
 			presence_dialogue_text_configure(fnt_presence_dialogue_43,true);
 		}
+		presence_dialogue_sfx_try_play();
 	};
 
 	presence_dialogue_page_start();
