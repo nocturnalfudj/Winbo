@@ -82,11 +82,11 @@ function presence_dialogue_pages_create(_stage) {
 	}
 
 	return presence_dialogue_pages_prepare([
-		presence_dialogue_page("Look upon these charlatans, Winbo.|With their guns and bombs and|internal conflict.", 3, 0.82, 850, true),
-		presence_dialogue_page("So self-important are they that they pay no|mind to whose domain this once was until|he stands before them.", 3, 0.82, 850, true),
-		presence_dialogue_page("Sweep through these lands, and collect|the Orbs, Winbo. Pass through my doors,|and gather my Talismans.", 3, 0.82, 850, true),
-		presence_dialogue_page("Humble them.|Remind them of whence they came.", 2, 0.82, 850, true),
-		presence_dialogue_page("This is your nature, Winbo...|You collect things.", 2, 0.82, 850, true),
-		presence_dialogue_page("Now go. Strip them of all their pretences.|Strip them of all that they are.", 2, 0.82, 850, true),
+		presence_dialogue_page("Look upon these charlatans, Winbo.|With their guns and bombs and|internal conflict.", 3, 1.05, 850, true),
+		presence_dialogue_page("So self-important are they that they|pay no mind to whose domain this|once was until he stands before them.", 3, 1.05, 850, true),
+		presence_dialogue_page("Sweep through these lands, and|collect the Orbs, Winbo. Pass through|my doors, and gather my Talismans.", 3, 1.05, 850, true),
+		presence_dialogue_page("Humble them.|Remind them of whence they came.", 2, 1.05, 850, true),
+		presence_dialogue_page("This is your nature, Winbo...|You collect things.", 2, 1.05, 850, true),
+		presence_dialogue_page("Now go. Strip them of|all their pretences. Strip|them of all that they are.", 3, 1.05, 850, true),
 	]);
 }

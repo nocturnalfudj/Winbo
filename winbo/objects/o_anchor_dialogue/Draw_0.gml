@@ -45,8 +45,8 @@ draw_sprite_ext(_box_sprite,_frame,_presence_x,_presence_y,presence_dialogue_box
 if(presence_dialogue_ready_for_advance && presence_dialogue_page_index < array_length(presence_dialogue_pages) - 1) {
 	var _prompt_y;
 	_prompt_y = _presence_y;
-	if(presence_dialogue_page_text_centered && presence_dialogue_page_line_count == 2) {
-		_prompt_y += 30 * presence_dialogue_box_scale;
+	if(presence_dialogue_page_text_centered) {
+		_prompt_y += 50 * presence_dialogue_box_scale;
 	}
 	draw_sprite_ext(spr_presence_speech_prompt,_frame,_presence_x,_prompt_y,presence_dialogue_box_scale,presence_dialogue_box_scale,0,c_white,_alpha);
 }
