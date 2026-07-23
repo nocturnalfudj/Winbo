@@ -6,6 +6,7 @@
   "inheritCreationOrder":true,
   "inheritLayers":false,
   "instanceCreationOrder":[
+    {"name":"inst_9d5d2c4f9ddb4608974617ec613cfe3c","path":"rooms/r_game_level_0/r_game_level_0.yy",},
     {"name":"inst_7AE32030_3_2","path":"rooms/r_game_level_0/r_game_level_0.yy",},
     {"name":"inst_71875AEF_3_2","path":"rooms/r_game_level_0/r_game_level_0.yy",},
     {"name":"inst_41B37CCA_3_2","path":"rooms/r_game_level_0/r_game_level_0.yy",},
@@ -325,7 +326,9 @@
       ],"name":"Menu","properties":[],"resourceType":"GMRLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRLayer":"","%Name":"Cutscene","depth":2300,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[
         {"$GMRInstanceLayer":"","%Name":"lyr_cutscene_front","depth":2400,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"name":"lyr_cutscene_front","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
-        {"$GMRInstanceLayer":"","%Name":"lyr_cutscene","depth":2500,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"name":"lyr_cutscene","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
+        {"$GMRInstanceLayer":"","%Name":"lyr_cutscene","depth":2500,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
+            {"$GMRInstance":"v4","%Name":"inst_9d5d2c4f9ddb4608974617ec613cfe3c","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_9d5d2c4f9ddb4608974617ec613cfe3c","objectId":{"name":"o_level_title_popup","path":"objects/o_level_title_popup/o_level_title_popup.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":0.0,"y":0.0,},
+          ],"layers":[],"name":"lyr_cutscene","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
         {"$GMRInstanceLayer":"","%Name":"lyr_cutscene_back","depth":2600,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"name":"lyr_cutscene_back","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
       ],"name":"Cutscene","properties":[],"resourceType":"GMRLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRLayer":"","%Name":"HUD","depth":2700,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[

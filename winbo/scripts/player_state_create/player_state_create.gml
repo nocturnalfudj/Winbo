@@ -83,7 +83,7 @@ function player_stage_entrance_finish(){
 	state = PlayerState.move;
 }
 
-function player_bonus_room_enter_begin(_target_room, _target_x, _target_y){
+function player_bonus_room_enter_begin(_target_room, _target_x, _target_y, _hold_countdown){
 	var _transform;
 	_transform = transform[TransformType.anchor];
 
@@ -101,6 +101,7 @@ function player_bonus_room_enter_begin(_target_room, _target_x, _target_y){
 	bonus_room_enter_start_y = y;
 	bonus_room_enter_target_x = _target_x;
 	bonus_room_enter_target_y = _target_y;
+	bonus_room_enter_hold_countdown = max(0, _hold_countdown);
 	bonus_room_enter_transition_requested = false;
 	bonus_room_enter_hp_vulnerable_previous = hp_vulnerable;
 	bonus_room_enter_user_hp_vulnerable_previous = user.hp_vulnerable;
@@ -128,6 +129,12 @@ function player_state_bonus_room_enter(){
 		image_set_frame(image, 0);
 	}
 
+	if(bonus_room_enter_hold_countdown > 0){
+		bonus_room_enter_hold_countdown = max(0, bonus_room_enter_hold_countdown - global.delta_time_factor);
+		image_set_frame(image, 0);
+		return;
+	}
+
 	var _progress;
 	_progress = clamp(sprite_current_frame / max(1, image.sprite_number - 1), 0, 1);
 	_progress = _progress * _progress * (3 - 2 * _progress);
@@ -142,6 +149,7 @@ function player_state_bonus_room_enter(){
 function player_bonus_room_enter_finish(){
 	x = bonus_room_enter_target_x;
 	y = bonus_room_enter_target_y;
+	bonus_room_enter_hold_countdown = 0;
 
 	var _target_room;
 	_target_room = bonus_room_enter_target_room;

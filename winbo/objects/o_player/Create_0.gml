@@ -165,6 +165,7 @@ is_player = true;
 	bonus_room_enter_start_y = 0;
 	bonus_room_enter_target_x = 0;
 	bonus_room_enter_target_y = 0;
+	bonus_room_enter_hold_countdown = 0;
 	bonus_room_enter_transition_requested = false;
 	bonus_room_enter_hp_vulnerable_previous = true;
 	bonus_room_enter_user_hp_vulnerable_previous = true;

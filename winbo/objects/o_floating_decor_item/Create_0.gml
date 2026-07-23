@@ -1,0 +1,11 @@
+decor_sprite = spr_floating_firefly;
+image_index = 0;
+image_speed = 0;
+drift_x = 24 / SECOND;
+drift_y = 0;
+sway_phase = 0;
+sway_speed = 1 / SECOND;
+sway_amount = 18;
+image_xscale = 1;
+image_yscale = 1;
+image_alpha = 1;

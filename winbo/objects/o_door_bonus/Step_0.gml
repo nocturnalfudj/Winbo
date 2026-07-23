@@ -76,8 +76,11 @@ if (bonus_door_input_pressed) {
 	bonus_door_input_pressed = false;
 	
 	if (_player_instance != noone) {
+		var _door_frames_remaining = max(0, bonus_door_open_last_image_index - bonus_door_open_image_index);
+		var _player_hold_countdown = ((_door_frames_remaining + bonus_door_player_hold_extra_frames) / bonus_door_open_animation_fps) * SECOND;
+
 		with (_player_instance) {
-			player_bonus_room_enter_begin(other.room_target, other.x, y);
+			player_bonus_room_enter_begin(other.room_target, other.x, y, _player_hold_countdown);
 		}
 	}
 }

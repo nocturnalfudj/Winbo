@@ -25,6 +25,14 @@ function director_room_finalize_gameplay(_request) {
 			ui_anchor_create(o_anchor_game, "lyr_pfx_midground");
 		}
 	}
+
+	if(_request.target_room == r_opening_cutscene) {
+		instance_create_layer(0,0,"lyr_cutscene",o_opening_cutscene_controller);
+	}
+
+	if(_request.target_room == r_game_level_0 || _request.target_room == r_game_level_1) {
+		instance_create_layer(0,0,"lyr_spawner",o_floating_decor_controller);
+	}
 	
 	with(o_director){
 		level_transitioning = false;

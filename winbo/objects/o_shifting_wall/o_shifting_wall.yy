@@ -31,6 +31,7 @@
   "physicsShapePoints":[],
   "physicsStartAwake":true,
   "properties":[
+    {"$GMObjectProperty":"v2","%Name":"shifting_wall_variant","filters":[],"listItems":null,"multiselect":false,"name":"shifting_wall_variant","rangeEnabled":true,"rangeMax":1.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"0","varType":0,},
     {"$GMObjectProperty":"v2","%Name":"shifting_wall_track_group","filters":[
         "GMTileSet",
         "GMSprite",

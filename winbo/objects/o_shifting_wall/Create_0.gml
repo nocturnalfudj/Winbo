@@ -1,9 +1,10 @@
 event_inherited();
 
-sprite_current = spr_shifting_wall;
-sprite_solo = spr_shifting_wall;
-sprite_ns = spr_shifting_wall;
-sprite_index = spr_shifting_wall;
+var _wall_sprite = (shifting_wall_variant == 1) ? spr_shifting_wall_stone : spr_shifting_wall;
+sprite_current = _wall_sprite;
+sprite_solo = _wall_sprite;
+sprite_ns = _wall_sprite;
+sprite_index = _wall_sprite;
 image_xscale = 1;
 image_yscale = 1;
 use_ns = false;
@@ -56,8 +57,8 @@ shifting_wall_path_configure = function(){
 		var _track_width = shifting_wall_track_bound.shifting_wall_track_width;
 		var _track_height = shifting_wall_track_bound.shifting_wall_track_height;
 		var _track_angle = abs(round(shifting_wall_track_bound.image_angle)) mod 180;
-		var _wall_width = sprite_get_width(spr_shifting_wall);
-		var _wall_height = sprite_get_height(spr_shifting_wall);
+		var _wall_width = sprite_get_width(sprite_current);
+		var _wall_height = sprite_get_height(sprite_current);
 
 		shifting_wall_horizontal = (_track_angle == 90) || (_track_width > (_track_height * 1.5));
 

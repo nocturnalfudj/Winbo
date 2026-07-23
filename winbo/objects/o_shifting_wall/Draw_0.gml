@@ -7,17 +7,18 @@ if(!camera_visible)
 if(o_director.depth_grid_draw_event_state != 1)
 	exit;
 
-var _track_x = start_x + (sprite_get_width(spr_shifting_wall) - sprite_get_width(spr_shifting_wall_track)) * 0.5;
-var _track_y = min(start_y, start_y + path_point[1].y) - ((sprite_get_height(spr_shifting_wall_track) - (sprite_get_height(spr_shifting_wall) + abs(path_point[1].y))) * 0.5);
+var _track_sprite = (shifting_wall_variant == 1) ? spr_shifting_wall_track_stone : spr_shifting_wall_track;
+var _track_x = start_x + (sprite_get_width(sprite_current) - sprite_get_width(_track_sprite)) * 0.5;
+var _track_y = min(start_y, start_y + path_point[1].y) - ((sprite_get_height(_track_sprite) - (sprite_get_height(sprite_current) + abs(path_point[1].y))) * 0.5);
 
 if(shifting_wall_track_draw){
-	draw_sprite_ext(spr_shifting_wall_track,0,_track_x,_track_y,1,1,0,image_blend,image_alpha);
+	draw_sprite_ext(_track_sprite,0,_track_x,_track_y,1,1,0,image_blend,image_alpha);
 }
 
 var _gear_angle = current_time * 0.72;
 var _cos = dcos(image_angle);
 var _sin = dsin(image_angle);
-var _gear_local_x = sprite_get_width(spr_shifting_wall) * 0.5;
+var _gear_local_x = sprite_get_width(sprite_current) * 0.5;
 var _gear_y_0 = 128;
 var _gear_y_1 = 320;
 var _gear_y_2 = 512;
