@@ -56,20 +56,19 @@ ui_group_set(UIGroup.dialogue,id);
 	presence_dialogue_decode_scramble_chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghkmnopqrstuvwxyz";
 	presence_dialogue_box_scale = 1.35;
 	presence_dialogue_text_scale = presence_dialogue_pages[0].text_scale;
-	presence_dialogue_text_offset_x = -220;
-	presence_dialogue_text_offset_y_small = -22;
-	presence_dialogue_text_offset_y_medium = -50;
-	presence_dialogue_text_offset_y_large = -88;
-	presence_dialogue_text_center_offset_y_small = 13;
-	presence_dialogue_text_center_offset_y_medium = -5;
-	presence_dialogue_text_center_offset_y_large = -37;
-	presence_dialogue_text_width = presence_dialogue_pages[0].text_width;
+	presence_dialogue_text_content_width = 430;
+	presence_dialogue_text_center_y_small = 42;
+	presence_dialogue_text_center_y_medium = 29;
+	presence_dialogue_text_center_y_large = 2;
+	presence_dialogue_text_width = min(
+		presence_dialogue_pages[0].text_width,
+		(presence_dialogue_text_content_width * presence_dialogue_box_scale) / presence_dialogue_text_scale
+	);
 	presence_dialogue_text_sep = 50;
 	presence_dialogue_anchor_offset_y = -610;
 	presence_dialogue_page_text = presence_dialogue_pages[0].text;
 	presence_dialogue_page_line_count = presence_dialogue_pages[0].lines;
 	presence_dialogue_page_mode = presence_dialogue_pages[0].mode;
-	presence_dialogue_page_text_centered = presence_dialogue_pages[0].text_centered;
 	presence_dialogue_page_character_count = 0;
 	presence_dialogue_ready_for_advance = false;
 	presence_dialogue_text_revealed_count_prev = 0;
@@ -117,8 +116,8 @@ ui_group_set(UIGroup.dialogue,id);
 			suffix_string = "";
 			font = _font;
 			width_max = other.presence_dialogue_text_width;
-			alignment_h = other.presence_dialogue_page_text_centered ? fa_center : fa_left;
-			alignment_v = other.presence_dialogue_page_text_centered ? fa_middle : fa_top;
+			alignment_h = fa_center;
+			alignment_v = fa_middle;
 			sep = other.presence_dialogue_text_sep;
 			text_ui_text_strings_update();
 			text_ui_set_width_height_pre_scale();
@@ -388,8 +387,10 @@ ui_group_set(UIGroup.dialogue,id);
 		presence_dialogue_page_line_count = _page.lines;
 		presence_dialogue_page_mode = _page.mode;
 		presence_dialogue_text_scale = _page.text_scale;
-		presence_dialogue_text_width = _page.text_width;
-		presence_dialogue_page_text_centered = _page.text_centered;
+		presence_dialogue_text_width = min(
+			_page.text_width,
+			(presence_dialogue_text_content_width * presence_dialogue_box_scale) / presence_dialogue_text_scale
+		);
 		presence_dialogue_ready_for_advance = false;
 		if(presence_dialogue_page_mode == PresenceDialoguePageMode.demon_decode) {
 			presence_dialogue_phase = PresenceDialoguePhase.demon_type;

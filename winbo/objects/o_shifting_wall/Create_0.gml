@@ -5,11 +5,9 @@ sprite_current = _wall_sprite;
 sprite_solo = _wall_sprite;
 sprite_ns = _wall_sprite;
 sprite_index = _wall_sprite;
-image_xscale = 1;
-image_yscale = 1;
+image_xscale = shifting_wall_scale;
+image_yscale = shifting_wall_scale;
 use_ns = false;
-shifting_wall_track_group = 0;
-shifting_wall_path_seconds = SECOND * 1.25;
 shifting_wall_track_draw = true;
 shifting_wall_track_bound = noone;
 shifting_wall_horizontal = false;
@@ -57,8 +55,8 @@ shifting_wall_path_configure = function(){
 		var _track_width = shifting_wall_track_bound.shifting_wall_track_width;
 		var _track_height = shifting_wall_track_bound.shifting_wall_track_height;
 		var _track_angle = abs(round(shifting_wall_track_bound.image_angle)) mod 180;
-		var _wall_width = sprite_get_width(sprite_current);
-		var _wall_height = sprite_get_height(sprite_current);
+		var _wall_width = sprite_get_width(sprite_current) * abs(image_xscale);
+		var _wall_height = sprite_get_height(sprite_current) * abs(image_yscale);
 
 		shifting_wall_horizontal = (_track_angle == 90) || (_track_width > (_track_height * 1.5));
 
