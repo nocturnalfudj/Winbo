@@ -3,10 +3,10 @@ enum PresenceDialoguePageMode {
 	direct_english
 }
 
-function presence_dialogue_page(_text, _lines, _text_scale = 1.35, _text_width = 370) {
+function presence_dialogue_page(_text, _expected_lines, _text_scale = 1.35, _text_width = 370) {
 	return {
 		text: string_replace_all(_text,"|",chr(10)),
-		lines: _lines,
+		expected_lines: _expected_lines,
 		mode: PresenceDialoguePageMode.direct_english,
 		text_scale: _text_scale,
 		text_width: _text_width,

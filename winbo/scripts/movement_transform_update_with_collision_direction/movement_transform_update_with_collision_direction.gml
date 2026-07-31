@@ -323,6 +323,10 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
             // Get platform movement to help decide push direction
             var _platform_dx = _overlap.x - _overlap.xprevious;
             var _platform_dy = _overlap.y - _overlap.yprevious;
+            var _overlap_push_limit = max(
+                32,
+                ceil(max(abs(_platform_dx),abs(_platform_dy))) + 2
+            );
             
             // If platform is actively moving, move player with it first
             if(abs(_platform_dx) > 0.1 || abs(_platform_dy) > 0.1){
@@ -413,23 +417,24 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
                 }
                 
                 // Find the best direction to push out (only for allowed directions)
-                var _push_left = _push_left_allowed ? 0 : 999;
-                var _push_right = _push_right_allowed ? 0 : 999;
-                var _push_up = _push_up_allowed ? 0 : 999;
-                var _push_down = _push_down_allowed ? 0 : 999;
+                var _push_unavailable = _overlap_push_limit + 1;
+                var _push_left = _push_left_allowed ? 0 : _push_unavailable;
+                var _push_right = _push_right_allowed ? 0 : _push_unavailable;
+                var _push_up = _push_up_allowed ? 0 : _push_unavailable;
+                var _push_down = _push_down_allowed ? 0 : _push_unavailable;
                 
                 // Check how far we need to move in each allowed direction to get out
                 if(_push_left_allowed){
-                    while(place_meeting(x - _push_left, y, _overlap) && _push_left < 32) _push_left++;
+                    while(place_meeting(x - _push_left, y, _overlap) && _push_left < _overlap_push_limit) _push_left++;
                 }
                 if(_push_right_allowed){
-                    while(place_meeting(x + _push_right, y, _overlap) && _push_right < 32) _push_right++;
+                    while(place_meeting(x + _push_right, y, _overlap) && _push_right < _overlap_push_limit) _push_right++;
                 }
                 if(_push_up_allowed){
-                    while(place_meeting(x, y - _push_up, _overlap) && _push_up < 32) _push_up++;
+                    while(place_meeting(x, y - _push_up, _overlap) && _push_up < _overlap_push_limit) _push_up++;
                 }
                 if(_push_down_allowed){
-                    while(place_meeting(x, y + _push_down, _overlap) && _push_down < 32) _push_down++;
+                    while(place_meeting(x, y + _push_down, _overlap) && _push_down < _overlap_push_limit) _push_down++;
                 }
                 
                 // Prefer pushing in the direction the platform came from (only if allowed)
@@ -441,9 +446,9 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
                 
                 // Find the shortest push distance among allowed directions
                 var _min_push = min(_push_left, _push_right, _push_up, _push_down);
-                
+
                 // Apply the push in the direction that requires the least movement
-                if(_min_push < 32){
+                if(_min_push < _overlap_push_limit){
                     if(_min_push == _push_left && _push_left > 0 && _push_left_allowed){
                         x -= _push_left;
                         if(_use_transform_anchor){

@@ -55,20 +55,30 @@ ui_group_set(UIGroup.dialogue,id);
 	presence_dialogue_decode_stagger = 0.45;
 	presence_dialogue_decode_scramble_chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghkmnopqrstuvwxyz";
 	presence_dialogue_box_scale = 1.35;
-	presence_dialogue_text_scale = presence_dialogue_pages[0].text_scale;
-	presence_dialogue_text_content_width = 430;
-	presence_dialogue_text_center_y_small = 42;
-	presence_dialogue_text_center_y_medium = 29;
-	presence_dialogue_text_center_y_large = 2;
-	presence_dialogue_text_width = min(
-		presence_dialogue_pages[0].text_width,
-		(presence_dialogue_text_content_width * presence_dialogue_box_scale) / presence_dialogue_text_scale
-	);
-	presence_dialogue_text_sep = 50;
+	presence_dialogue_text_scale_requested = presence_dialogue_pages[0].text_scale;
+	presence_dialogue_text_scale = presence_dialogue_text_scale_requested;
+	presence_dialogue_text_width_requested = presence_dialogue_pages[0].text_width;
+	presence_dialogue_text_width = presence_dialogue_text_width_requested;
+	presence_dialogue_text_sep_base = 50;
+	presence_dialogue_text_sep_visual_extra = 10;
+	presence_dialogue_text_sep = presence_dialogue_text_sep_base
+		+ presence_dialogue_text_sep_visual_extra / presence_dialogue_text_scale;
 	presence_dialogue_anchor_offset_y = -610;
 	presence_dialogue_page_text = presence_dialogue_pages[0].text;
-	presence_dialogue_page_line_count = presence_dialogue_pages[0].lines;
+	presence_dialogue_page_expected_lines = presence_dialogue_pages[0].expected_lines;
+	presence_dialogue_page_actual_lines = presence_dialogue_page_expected_lines;
 	presence_dialogue_page_mode = presence_dialogue_pages[0].mode;
+	presence_dialogue_box_sprite = spr_presence_speech_box_large;
+	presence_dialogue_text_center_y = 7;
+	presence_dialogue_safe_left = -200;
+	presence_dialogue_safe_right = 200;
+	presence_dialogue_safe_top = -78;
+	presence_dialogue_safe_bottom = 92;
+	presence_dialogue_layout_bounds_left = 0;
+	presence_dialogue_layout_bounds_right = 0;
+	presence_dialogue_layout_bounds_top = 0;
+	presence_dialogue_layout_bounds_bottom = 0;
+	presence_dialogue_layout_valid = true;
 	presence_dialogue_page_character_count = 0;
 	presence_dialogue_ready_for_advance = false;
 	presence_dialogue_text_revealed_count_prev = 0;
@@ -109,7 +119,158 @@ ui_group_set(UIGroup.dialogue,id);
 		}
 	};
 
+	presence_dialogue_safe_rect_for_lines = function(_line_count) {
+		if(_line_count <= 1) {
+			return {
+				sprite: spr_presence_speech_box_small,
+				left: -200,
+				right: 200,
+				top: -24,
+				bottom: 70,
+			};
+		}
+
+		if(_line_count == 2) {
+			return {
+				sprite: spr_presence_speech_box_medium,
+				left: -200,
+				right: 200,
+				top: -42,
+				bottom: 76,
+			};
+		}
+
+		return {
+			sprite: spr_presence_speech_box_large,
+			left: -200,
+			right: 200,
+			top: -78,
+			bottom: 92,
+		};
+	};
+
 	presence_dialogue_text_configure = function(_font, _hidden) {
+		draw_set_font(_font);
+		var _explicit_lines = string_split(presence_dialogue_page_text,chr(10));
+		var _explicit_line_count = max(1,array_length(_explicit_lines));
+		var _explicit_max_width = 0;
+		for(var _line_index=0;_line_index<_explicit_line_count;_line_index++) {
+			_explicit_max_width = max(_explicit_max_width,string_width(_explicit_lines[_line_index]));
+		}
+
+		var _font_height = string_height("M");
+		var _layout_lines = max(1,presence_dialogue_page_expected_lines);
+		var _safe;
+
+		repeat(3) {
+			_safe = presence_dialogue_safe_rect_for_lines(_layout_lines);
+			var _safe_width_rendered = (_safe.right - _safe.left) * presence_dialogue_box_scale * 0.98;
+			var _safe_height_rendered = (_safe.bottom - _safe.top) * presence_dialogue_box_scale * 0.98;
+			var _height_without_visual_spacing = _font_height
+				+ max(0,_layout_lines - 1) * presence_dialogue_text_sep_base;
+			var _visual_spacing_height = max(0,_layout_lines - 1) * presence_dialogue_text_sep_visual_extra;
+			var _scale_width = (_explicit_max_width > 0)
+				? _safe_width_rendered / _explicit_max_width
+				: presence_dialogue_text_scale_requested;
+			var _scale_height = (_height_without_visual_spacing > 0)
+				? max(0.01,_safe_height_rendered - _visual_spacing_height) / _height_without_visual_spacing
+				: presence_dialogue_text_scale_requested;
+
+			presence_dialogue_text_scale = min(
+				presence_dialogue_text_scale_requested,
+				_scale_width,
+				_scale_height
+			);
+			presence_dialogue_text_sep = presence_dialogue_text_sep_base
+				+ presence_dialogue_text_sep_visual_extra / presence_dialogue_text_scale;
+			presence_dialogue_text_width = min(
+				max(presence_dialogue_text_width_requested,_explicit_max_width + 1),
+				_safe_width_rendered / presence_dialogue_text_scale
+			);
+
+			with(presence_dialogue_text_instance) {
+				text_string = other.presence_dialogue_page_text;
+				prefix_string = "";
+				suffix_string = "";
+				font = _font;
+				width_max = other.presence_dialogue_text_width;
+				alignment_h = fa_center;
+				alignment_v = fa_middle;
+				sep = other.presence_dialogue_text_sep;
+				text_ui_text_strings_update();
+
+				var _positions = text_rich_calculate_character_positions();
+				var _positions_count = array_length(_positions);
+				var _actual_lines = 1;
+				var _has_visible_character = false;
+				var _bounds_left = 0;
+				var _bounds_right = 0;
+				var _bounds_top = 0;
+				var _bounds_bottom = 0;
+				draw_set_font(_font);
+				var _measured_font_height = string_height("M");
+
+				for(var _position_index=0;_position_index<_positions_count;_position_index++) {
+					var _position = _positions[_position_index];
+					_actual_lines = max(_actual_lines,_position.line + 1);
+					if(_position.char == chr(10)) continue;
+
+					var _position_right = _position.x + _position.width;
+					var _position_bottom = _position.y + _measured_font_height;
+					if(!_has_visible_character) {
+						_bounds_left = _position.x;
+						_bounds_right = _position_right;
+						_bounds_top = _position.y;
+						_bounds_bottom = _position_bottom;
+						_has_visible_character = true;
+					}
+					else {
+						_bounds_left = min(_bounds_left,_position.x);
+						_bounds_right = max(_bounds_right,_position_right);
+						_bounds_top = min(_bounds_top,_position.y);
+						_bounds_bottom = max(_bounds_bottom,_position_bottom);
+					}
+				}
+
+				other.presence_dialogue_page_actual_lines = _actual_lines;
+				other.presence_dialogue_layout_bounds_left = _bounds_left;
+				other.presence_dialogue_layout_bounds_right = _bounds_right;
+				other.presence_dialogue_layout_bounds_top = _bounds_top;
+				other.presence_dialogue_layout_bounds_bottom = _bounds_bottom;
+			}
+
+			_layout_lines = presence_dialogue_page_actual_lines;
+		}
+
+		_safe = presence_dialogue_safe_rect_for_lines(presence_dialogue_page_actual_lines);
+		presence_dialogue_box_sprite = _safe.sprite;
+		presence_dialogue_safe_left = _safe.left;
+		presence_dialogue_safe_right = _safe.right;
+		presence_dialogue_safe_top = _safe.top;
+		presence_dialogue_safe_bottom = _safe.bottom;
+		presence_dialogue_text_center_y = (_safe.top + _safe.bottom) * 0.5;
+
+		var _bounds_width_rendered = (presence_dialogue_layout_bounds_right - presence_dialogue_layout_bounds_left)
+			* presence_dialogue_text_scale;
+		var _bounds_height_rendered = (presence_dialogue_layout_bounds_bottom - presence_dialogue_layout_bounds_top)
+			* presence_dialogue_text_scale;
+		var _final_safe_width_rendered = (_safe.right - _safe.left) * presence_dialogue_box_scale;
+		var _final_safe_height_rendered = (_safe.bottom - _safe.top) * presence_dialogue_box_scale;
+		presence_dialogue_layout_valid = _bounds_width_rendered <= _final_safe_width_rendered
+			&& _bounds_height_rendered <= _final_safe_height_rendered;
+
+		if(presence_dialogue_page_actual_lines != presence_dialogue_page_expected_lines) {
+			sdm(
+				"Presence dialogue line mismatch: expected "
+				+ string(presence_dialogue_page_expected_lines)
+				+ ", measured "
+				+ string(presence_dialogue_page_actual_lines)
+			);
+		}
+		if(!presence_dialogue_layout_valid) {
+			sdm("Presence dialogue exceeded its measured safe area.");
+		}
+
 		with(presence_dialogue_text_instance) {
 			text_string = other.presence_dialogue_page_text;
 			prefix_string = "";
@@ -384,13 +545,10 @@ ui_group_set(UIGroup.dialogue,id);
 		presence_dialogue_decode_time = 0;
 		presence_dialogue_fast_countdown = 0;
 		presence_dialogue_page_text = _page.text;
-		presence_dialogue_page_line_count = _page.lines;
+		presence_dialogue_page_expected_lines = _page.expected_lines;
 		presence_dialogue_page_mode = _page.mode;
-		presence_dialogue_text_scale = _page.text_scale;
-		presence_dialogue_text_width = min(
-			_page.text_width,
-			(presence_dialogue_text_content_width * presence_dialogue_box_scale) / presence_dialogue_text_scale
-		);
+		presence_dialogue_text_scale_requested = _page.text_scale;
+		presence_dialogue_text_width_requested = _page.text_width;
 		presence_dialogue_ready_for_advance = false;
 		if(presence_dialogue_page_mode == PresenceDialoguePageMode.demon_decode) {
 			presence_dialogue_phase = PresenceDialoguePhase.demon_type;

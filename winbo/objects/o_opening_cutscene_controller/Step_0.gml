@@ -4,7 +4,24 @@ var _dt = min(global.delta_time,0.05) * o_master.time_scale * o_master.time_effe
 
 switch(phase) {
 	case OpeningCutscenePhase.intro:
-		soldier_frame = min(beg_frame_first,soldier_frame + soldier_fps * _dt);
+		var _intro_dt = _dt;
+		if(intro_preroll_elapsed < intro_preroll_duration) {
+			var _preroll_remaining = intro_preroll_duration - intro_preroll_elapsed;
+			var _preroll_dt = min(_intro_dt,_preroll_remaining);
+			intro_preroll_elapsed += _preroll_dt;
+			_intro_dt -= _preroll_dt;
+			soldier_frame = (soldier_frame + soldier_fps * _preroll_dt) mod intro_preroll_frame_count;
+			if(intro_preroll_elapsed >= intro_preroll_duration) soldier_frame = 0;
+		}
+
+		var _soldier_frame_previous = soldier_frame;
+		soldier_frame = min(beg_frame_first,soldier_frame + soldier_fps * _intro_dt);
+		if(!dialogue_played
+		&& _soldier_frame_previous < dialogue_cue_frame
+		&& soldier_frame >= dialogue_cue_frame) {
+			enemy_voice_play(id,snd_opening_cutscene_npc_dialogue,false);
+			dialogue_played = true;
+		}
 		if(soldier_frame >= beg_frame_first) {
 			phase = OpeningCutscenePhase.interactive;
 			prompt_elapsed = 0;
@@ -50,6 +67,11 @@ switch(phase) {
 			if(_stomped) {
 				phase = OpeningCutscenePhase.defeat;
 				soldier_frame = defeat_frame_first;
+				opening_cutscene_sfx_stop(voice_snd_id);
+				voice_snd_id = noone;
+				enemy_voice_play(id,snd_opening_cutscene_npc_death_scream,false);
+				stomp_smoke_pending = true;
+				stomp_smoke_step_count = 0;
 				with(_player) {
 					acceleration.Set(0,0);
 					velocity.Set(0,0);
@@ -76,10 +98,30 @@ switch(phase) {
 	break;
 }
 
+if(stomp_smoke_pending) {
+	if(stomp_smoke_frame < 0) {
+		stomp_smoke_step_count++;
+		if(stomp_smoke_step_count > stomp_smoke_delay_steps) {
+			stomp_smoke_frame = 0;
+			audio_enemy_stomp_poof_play();
+		}
+	}
+	else {
+		stomp_smoke_frame += stomp_smoke_fps * _dt;
+		if(stomp_smoke_frame >= sprite_get_number(spr_smoke_explosion_large)) {
+			stomp_smoke_pending = false;
+		}
+	}
+}
+
 if(phase == OpeningCutscenePhase.exit && instance_number(o_player) > 0 && !transition_requested) {
 	var _player_exit = instance_find(o_player,0);
 	if(_player_exit.bbox_left >= camera_fixed_x + player_exit_x) {
 		level_select_unlock("tutorial");
 		transition_requested = level_select_start("tutorial");
+		if(transition_requested && ambience_snd_id != noone) {
+			opening_cutscene_sfx_stop(ambience_snd_id);
+			ambience_snd_id = noone;
+		}
 	}
 }

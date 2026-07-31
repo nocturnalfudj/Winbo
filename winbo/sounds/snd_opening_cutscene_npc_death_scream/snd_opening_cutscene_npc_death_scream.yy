@@ -1,0 +1,26 @@
+{
+  "$GMSound": "v2",
+  "%Name": "snd_opening_cutscene_npc_death_scream",
+  "audioGroupId": {
+    "name": "audiogroup_default",
+    "path": "audiogroups/audiogroup_default",
+  },
+  "bitDepth": 1,
+  "channelFormat": 0,
+  "compression": 0,
+  "compressionQuality": 4,
+  "conversionMode": 0,
+  "duration": 1.62,
+  "exportDir": "",
+  "name": "snd_opening_cutscene_npc_death_scream",
+  "parent": {
+    "name": "Opening Cutscene",
+    "path": "folders/Control/Audio/SFX/Opening Cutscene.yy",
+  },
+  "preload": false,
+  "resourceType": "GMSound",
+  "resourceVersion": "2.0",
+  "sampleRate": 44100,
+  "soundFile": "snd_opening_cutscene_npc_death_scream.wav",
+  "volume": 0.7,
+}

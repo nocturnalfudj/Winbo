@@ -42,6 +42,20 @@ if(instance_number(o_player) > 0) {
 	draw_sprite_ext(_player_sprite,_player_frame,_player_x,_player_y,_face,1,_player.image_angle,c_white,1);
 }
 
+if(stomp_smoke_pending && stomp_smoke_frame >= 0) {
+	draw_sprite_ext(
+		spr_smoke_explosion_large,
+		min(floor(stomp_smoke_frame),sprite_get_number(spr_smoke_explosion_large) - 1),
+		stomp_smoke_x * _asset_scale_x,
+		stomp_smoke_y * _asset_scale_y,
+		_asset_scale_x,
+		_asset_scale_y,
+		0,
+		c_white,
+		1
+	);
+}
+
 draw_sprite_ext(spr_opening_bg_0,0,0,0,_asset_scale_x,_asset_scale_y,0,c_white,1);
 
 if(phase == OpeningCutscenePhase.interactive) {
