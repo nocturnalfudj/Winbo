@@ -40,6 +40,11 @@ function audio_gameplay_music_resolve(_room) {
 			_loop_start = 0;
 		break;
 
+		case r_game_level_presence:
+			_music = music_presence_ambience;
+			_loop_start = 0;
+		break;
+
 		case r_game_level_0_bonus_a:
 		case r_game_level_0_bonus_b:
 		case r_game_level_1_bonus_a:

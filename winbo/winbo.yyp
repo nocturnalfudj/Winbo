@@ -1996,6 +1996,8 @@
     {"id":{"name":"music_level_2","path":"sounds/music_level_2/music_level_2.yy",},},
     {"id":{"name":"music_level_test","path":"sounds/music_level_test/music_level_test.yy",},},
     {"id":{"name":"music_main_menu","path":"sounds/music_main_menu/music_main_menu.yy",},},
+    {"id":{"name":"music_presence_ambience","path":"sounds/music_presence_ambience/music_presence_ambience.yy",},},
+    {"id":{"name":"snd_bonus_door_creak","path":"sounds/snd_bonus_door_creak/snd_bonus_door_creak.yy",},},
     {"id":{"name":"snd_checkpoint_1","path":"sounds/snd_checkpoint_1/snd_checkpoint_1.yy",},},
     {"id":{"name":"snd_checkpoint_2","path":"sounds/snd_checkpoint_2/snd_checkpoint_2.yy",},},
     {"id":{"name":"snd_checkpoint_3","path":"sounds/snd_checkpoint_3/snd_checkpoint_3.yy",},},
