@@ -47,7 +47,7 @@ if(soldier_frame >= 83) {
 		spr_opening_cutscene_m16,
 		0,
 		sequence_draw_x,
-		_sequence_draw_y,
+		m16_draw_y,
 		soldier_scale,
 		soldier_scale,
 		0,
@@ -58,11 +58,12 @@ if(soldier_frame >= 83) {
 
 if(instance_number(o_player) > 0) {
 	var _player = instance_find(o_player,0);
-	var _player_walking_in = phase == OpeningCutscenePhase.intro && soldier_frame < player_entry_end_frame;
+	var _player_walking_in = phase == OpeningCutscenePhase.intro && !player_entry_motion_complete;
 	var _player_scripted_stomp = phase == OpeningCutscenePhase.stomp;
 	var _player_scripted_defeat = phase == OpeningCutscenePhase.defeat;
 	var _player_scripted_landing = phase == OpeningCutscenePhase.landing;
-	var _player_scripted_idle = phase == OpeningCutscenePhase.interactive;
+	var _player_scripted_idle = (phase == OpeningCutscenePhase.intro && player_entry_motion_complete)
+		|| phase == OpeningCutscenePhase.interactive;
 	var _player_scripted_exit = phase == OpeningCutscenePhase.exit;
 	var _stomp_progress = _player_scripted_stomp ? clamp(stomp_elapsed / stomp_duration,0,1) : 0;
 	var _defeat_progress = _player_scripted_defeat ? clamp(defeat_elapsed / defeat_duration,0,1) : 0;
@@ -70,7 +71,7 @@ if(instance_number(o_player) > 0) {
 	if(_player_walking_in || _player_scripted_exit) {
 		_player_sprite = _player.sprite_walk;
 	}
-	else if(phase == OpeningCutscenePhase.intro || _player_scripted_idle) {
+	else if(_player_scripted_idle) {
 		_player_sprite = _player.sprite_idle;
 	}
 	else if(_player_scripted_stomp) {
@@ -87,7 +88,7 @@ if(instance_number(o_player) > 0) {
 		_player_sprite = _player.sprite_land_sideways;
 	}
 
-	var _player_scripted_draw = phase == OpeningCutscenePhase.intro
+	var _player_scripted_draw = _player_walking_in
 		|| _player_scripted_idle
 		|| _player_scripted_stomp
 		|| _player_scripted_defeat
@@ -109,23 +110,39 @@ if(instance_number(o_player) > 0) {
 				+ ((_player_frame - _walk_loop_start) mod max(1,_walk_frame_count - _walk_loop_start));
 		}
 	}
+	else if(_player_walking_in) {
+		var _entry_walk_frame_count = sprite_get_number(_player_sprite);
+		var _entry_walk_loop_start = min(4,_entry_walk_frame_count - 1);
+		_player_frame = floor(player_entry_walk_elapsed * ANIMATION_FPS_DEFAULT);
+		if(_player_frame >= _entry_walk_frame_count) {
+			_player_frame = _entry_walk_loop_start
+				+ ((_player_frame - _entry_walk_loop_start)
+				mod max(1,_entry_walk_frame_count - _entry_walk_loop_start));
+		}
+	}
+	else if(_player_scripted_idle) {
+		_player_frame = floor(player_entry_idle_elapsed * ANIMATION_FPS_DEFAULT)
+			mod max(1,sprite_get_number(_player_sprite));
+	}
 	else if(_player_scripted_draw) {
 		_player_frame = floor(current_time * (ANIMATION_FPS_DEFAULT / 1000))
 			mod max(1,sprite_get_number(_player_sprite));
 	}
 	var _face = _player_scripted_draw ? 1 : sign(_player.face_horizontal * _player.sprite_face_direction);
 	if(_face == 0) _face = 1;
-	draw_sprite_ext(
-		_player_sprite,
-		_player_frame,
-		_player.x,
-		_player.y,
-		_face,
-		1,
-		_player_scripted_draw ? 0 : _player.image_angle,
-		c_white,
-		1
-	);
+	if(_player_scripted_draw) {
+		draw_sprite_ext(
+			_player_sprite,
+			_player_frame,
+			_player.x,
+			_player.y,
+			_face,
+			1,
+			0,
+			c_white,
+			1
+		);
+	}
 }
 
 if(stomp_smoke_pending && stomp_smoke_frame >= 0) {

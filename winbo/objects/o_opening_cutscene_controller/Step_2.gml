@@ -36,10 +36,9 @@ if(phase == OpeningCutscenePhase.intro) {
 	_player.state = PlayerState.stage_entrance;
 	_player.hp_vulnerable = false;
 	_player.user.hp_vulnerable = false;
-	var _entry_progress = clamp((soldier_frame - 40) / (player_entry_end_frame - 40),0,1);
-	var _entry_eased = 1 - sqr(1 - _entry_progress);
-	_player.x = camera_fixed_x + lerp(player_intro_x,player_handoff_x,_entry_eased);
+	_player.x = player_entry_x;
 	_player.y = player_ground_y;
+	_player.move_grounded = true;
 	var _player_transform = _player.transform[TransformType.anchor];
 	transform_set(_player_transform,TransformValue.x,_player.x,false);
 	transform_set(_player_transform,TransformValue.y,_player.y,false);

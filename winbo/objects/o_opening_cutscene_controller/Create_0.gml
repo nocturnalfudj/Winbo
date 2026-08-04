@@ -21,8 +21,14 @@ defeat_frame_last = 215;
 defeat_elapsed = 0;
 defeat_duration = 0.8;
 defeat_sequence_duration = (defeat_frame_last - defeat_frame_first + 1) / soldier_fps;
-player_entry_end_frame = 78;
-dialogue_cue_frame = player_entry_end_frame;
+player_entry_arrival_frame = 78;
+player_entry_frame_first = 0;
+player_entry_stop_speed = 0.05;
+player_entry_x = 0;
+player_entry_velocity = 0;
+player_entry_motion_complete = false;
+player_entry_walk_elapsed = 0;
+player_entry_idle_elapsed = 0;
 dialogue_played = false;
 voice_snd_id = noone;
 opening_cutscene_sfx_stop = function(_sound_instance) {
@@ -53,7 +59,9 @@ stomp_player_target_x = 0;
 stomp_player_target_y = 0;
 landing_elapsed = 0;
 landing_frame_count = sprite_get_number(spr_player_land_sideways);
-landing_duration = landing_frame_count / ANIMATION_FPS_DEFAULT;
+// Normal movement releases the landing block as soon as the last frame has
+// rendered once, rather than holding that frame for a full animation interval.
+landing_duration = (landing_frame_count - 1) / ANIMATION_FPS_DEFAULT + 1 / SECOND;
 exit_player_x = 0;
 exit_elapsed = 0;
 exit_player_velocity = 0;
@@ -102,6 +110,16 @@ soldier_scale = 0.75;
 soldier_head_local_x = 1067.5;
 soldier_head_local_y = 420;
 soldier_foot_local_y = 795;
+m16_bottom_local_y = 790;
+m16_draw_y = 0;
+environment_ground_local_y = 1922;
+environment_ground_y = 0;
+player_foot_local_y = sprite_get_bbox_bottom(spr_player_idle)
+	- sprite_get_yoffset(spr_player_idle);
+opening_platform_id = instance_find(o_platform,0);
+opening_platform_top_offset_y = (
+	sprite_get_bbox_top(spr_platform) - sprite_get_yoffset(spr_platform)
+) * opening_platform_id.image_yscale;
 soldier_body_center_local_y = (soldier_head_local_y + soldier_foot_local_y) * 0.5;
 var _landing_sprite = spr_player_fall_sideways;
 landing_center_x = (sprite_get_bbox_left(_landing_sprite)
@@ -128,21 +146,38 @@ opening_cutscene_layout_update = function(_scene_width,_scene_height) {
 	);
 	var _view_cover_y = camera_fixed_y + scene_height
 		- scene_authored_height * _view_cover_scale;
-	var _authored_camera_y = room_height - scene_authored_height;
-	var _player_ground_view_y = 3620 - _authored_camera_y;
-	player_ground_y = _view_cover_y + _player_ground_view_y * _view_cover_scale;
+	environment_ground_y = _view_cover_y
+		+ environment_ground_local_y * _view_cover_scale;
+	player_ground_y = environment_ground_y - player_foot_local_y;
+	opening_platform_id.y = environment_ground_y - opening_platform_top_offset_y;
 	player_intro_x = -0.09375 * scene_width;
 	player_handoff_x = 0.2734375 * scene_width;
 	player_exit_x = 1.0520833333 * scene_width;
+	var _entry_distance = player_handoff_x - player_intro_x;
+	var _entry_steady_velocity = exit_move_acceleration * exit_velocity_retention
+		/ (1 - exit_velocity_retention);
+	var _entry_steady_step_distance = _entry_steady_velocity
+		+ exit_move_acceleration * 0.5;
+	var _entry_coast_steps = ceil(
+		ln(player_entry_stop_speed / _entry_steady_velocity)
+		/ ln(exit_velocity_retention)
+	);
+	var _entry_duration = _entry_distance / (_entry_steady_step_distance * SECOND)
+		+ _entry_coast_steps / SECOND;
+	player_entry_frame_first = max(
+		0,
+		player_entry_arrival_frame - soldier_fps * _entry_duration
+	);
 	stomp_arc_height = (320 / scene_authored_height) * scene_height;
 	defeat_bounce_height = (240 / scene_authored_height) * scene_height;
 
 	walk_back_distance = (400 / scene_authored_height) * scene_height;
 	// At 1080p the soldier begins 200px left of centre, then backs to centre.
 	soldier_head_x = camera_center_x;
-	soldier_ground_y = player_ground_y + 137 * _view_cover_scale;
+	soldier_ground_y = environment_ground_y;
 	sequence_draw_x = soldier_head_x - walk_back_distance - soldier_head_local_x * soldier_scale;
 	sequence_draw_y = soldier_ground_y - soldier_foot_local_y * soldier_scale;
+	m16_draw_y = soldier_ground_y - m16_bottom_local_y * soldier_scale;
 	soldier_head_y = sequence_draw_y + soldier_head_local_y * soldier_scale;
 	stomp_player_start_x = camera_fixed_x + player_handoff_x;
 	stomp_player_start_y = player_ground_y;
@@ -152,6 +187,7 @@ opening_cutscene_layout_update = function(_scene_width,_scene_height) {
 	stomp_smoke_y = sequence_draw_y + soldier_body_center_local_y * soldier_scale;
 };
 opening_cutscene_layout_update(o_camera.width,o_camera.height);
+player_entry_x = camera_fixed_x + player_intro_x;
 
 var _camera_center_x = camera_center_x;
 var _camera_center_y = camera_center_y;

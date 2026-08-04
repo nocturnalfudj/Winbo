@@ -16,11 +16,40 @@ switch(phase) {
 			if(intro_preroll_elapsed >= intro_preroll_duration) soldier_frame = 0;
 		}
 
-		var _soldier_frame_previous = soldier_frame;
 		soldier_frame = min(beg_frame_first,soldier_frame + soldier_fps * _intro_dt);
-		if(!dialogue_played
-		&& _soldier_frame_previous < dialogue_cue_frame
-		&& soldier_frame >= dialogue_cue_frame) {
+
+		if(soldier_frame >= player_entry_frame_first && !player_entry_motion_complete) {
+			player_entry_walk_elapsed += _dt;
+			var _entry_target_x = camera_fixed_x + player_handoff_x;
+			var _entry_remaining = _entry_target_x - player_entry_x;
+			var _entry_movement_delta = global.delta_time_factor_scaled;
+			var _entry_retention = power(exit_velocity_retention,_entry_movement_delta);
+			var _entry_stopping_distance = player_entry_velocity * _entry_movement_delta
+				/ (1 - _entry_retention);
+			var _entry_acceleration = (_entry_remaining > _entry_stopping_distance)
+				? exit_move_acceleration
+				: 0;
+			player_entry_x += (
+				player_entry_velocity
+				+ _entry_acceleration * 0.5 * _entry_movement_delta
+			) * _entry_movement_delta;
+			player_entry_velocity = (
+				player_entry_velocity
+				+ _entry_acceleration * _entry_movement_delta
+			) * _entry_retention;
+
+			if(_entry_acceleration == 0 && player_entry_velocity <= player_entry_stop_speed) {
+				player_entry_x = _entry_target_x;
+				player_entry_velocity = 0;
+				player_entry_motion_complete = true;
+				player_entry_idle_elapsed = 0;
+			}
+		}
+		else if(player_entry_motion_complete) {
+			player_entry_idle_elapsed += _dt;
+		}
+
+		if(player_entry_motion_complete && !dialogue_played) {
 			enemy_voice_play(id,snd_opening_cutscene_npc_dialogue,false);
 			dialogue_played = true;
 		}
@@ -46,6 +75,7 @@ switch(phase) {
 	break;
 
 	case OpeningCutscenePhase.interactive:
+		player_entry_idle_elapsed += _dt;
 		soldier_frame += soldier_fps * _dt;
 		if(soldier_frame >= beg_frame_last + 1) soldier_frame = beg_frame_first;
 
@@ -104,7 +134,7 @@ switch(phase) {
 			defeat_frame_last - defeat_frame_first,
 			floor(defeat_elapsed * soldier_fps)
 		);
-		if(defeat_elapsed >= defeat_duration && !stomp_smoke_pending) {
+		if(defeat_elapsed >= defeat_duration) {
 			phase = OpeningCutscenePhase.landing;
 			landing_elapsed = 0;
 			exit_player_x = stomp_player_target_x;
