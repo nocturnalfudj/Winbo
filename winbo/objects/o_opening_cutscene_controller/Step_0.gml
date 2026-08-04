@@ -196,7 +196,7 @@ if(phase == OpeningCutscenePhase.exit
 }
 
 if(phase == OpeningCutscenePhase.title
-&& title_elapsed >= title_duration
+&& (!title_card_enabled || title_elapsed >= title_duration)
 && !transition_requested) {
 	level_select_unlock("tutorial");
 	transition_requested = level_select_start("tutorial");

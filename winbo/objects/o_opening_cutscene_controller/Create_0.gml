@@ -141,6 +141,7 @@ opening_cutscene_prompt_update = function() {
 		&& prompt_right_sprite != noone;
 };
 transition_requested = false;
+title_card_enabled = false;
 title_elapsed = 0;
 title_black_fade_duration = 0.4;
 title_text_fade_in_duration = 1;

@@ -208,7 +208,7 @@ if(phase == OpeningCutscenePhase.interactive) {
 	draw_set_valign(fa_top);
 }
 
-if(phase == OpeningCutscenePhase.title) {
+if(phase == OpeningCutscenePhase.title && title_card_enabled) {
 	var _black_alpha = clamp(title_elapsed / title_black_fade_duration,0,1);
 	var _title_elapsed = max(0,title_elapsed - title_black_fade_duration);
 	var _title_fade_in = clamp(
