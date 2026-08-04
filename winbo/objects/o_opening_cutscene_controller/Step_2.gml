@@ -83,6 +83,16 @@ else if(phase == OpeningCutscenePhase.defeat) {
 	transform_set(_player.transform[TransformType.anchor],TransformValue.x,_player.x,false);
 	transform_set(_player.transform[TransformType.anchor],TransformValue.y,_player.y,false);
 }
+else if(phase == OpeningCutscenePhase.landing) {
+	_player.x = stomp_player_target_x;
+	_player.y = player_ground_y;
+	_player.velocity.Set(0,0);
+	_player.acceleration.Set(0,0);
+	_player.move_grounded = true;
+	_player.state = PlayerState.stage_entrance;
+	transform_set(_player.transform[TransformType.anchor],TransformValue.x,_player.x,false);
+	transform_set(_player.transform[TransformType.anchor],TransformValue.y,_player.y,false);
+}
 else if(phase == OpeningCutscenePhase.exit) {
 	_player.x = exit_player_x;
 	_player.y = player_ground_y;

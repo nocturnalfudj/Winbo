@@ -3,6 +3,7 @@ enum OpeningCutscenePhase {
 	interactive,
 	stomp,
 	defeat,
+	landing,
 	exit,
 	title
 }
@@ -41,6 +42,7 @@ opening_cutscene_sfx_stop = function(_sound_instance) {
 transition_requested = false;
 walk_back_frame_first = 99;
 walk_back_frame_last = 132;
+walk_back_deceleration_frame_first = 123;
 walk_back_distance = 0;
 stomp_elapsed = 0;
 stomp_duration = 0.75;
@@ -49,9 +51,14 @@ stomp_player_start_x = 0;
 stomp_player_start_y = 0;
 stomp_player_target_x = 0;
 stomp_player_target_y = 0;
+landing_elapsed = 0;
+landing_frame_count = sprite_get_number(spr_player_land_sideways);
+landing_duration = landing_frame_count / ANIMATION_FPS_DEFAULT;
 exit_player_x = 0;
 exit_elapsed = 0;
-exit_run_speed = 0;
+exit_player_velocity = 0;
+exit_velocity_retention = 0.7;
+exit_move_acceleration = 3;
 title_elapsed = 0;
 title_duration = 2.5;
 title_fade_duration = 0.4;
@@ -127,7 +134,6 @@ opening_cutscene_layout_update = function(_scene_width,_scene_height) {
 	player_intro_x = -0.09375 * scene_width;
 	player_handoff_x = 0.2734375 * scene_width;
 	player_exit_x = 1.0520833333 * scene_width;
-	exit_run_speed = 0.46875 * scene_width;
 	stomp_arc_height = (320 / scene_authored_height) * scene_height;
 	defeat_bounce_height = (240 / scene_authored_height) * scene_height;
 
@@ -188,6 +194,8 @@ if(instance_number(o_player) > 0) {
 		player_hp_vulnerable_restore = _player.hp_vulnerable;
 		player_user_hp_vulnerable_restore = _player.user.hp_vulnerable;
 	}
+	exit_velocity_retention = _player.velocity_retention_default;
+	exit_move_acceleration = _player.input_move_acceleration_default;
 	_player.visible = false;
 	_player.x = camera_fixed_x + player_intro_x;
 	_player.y = player_ground_y;

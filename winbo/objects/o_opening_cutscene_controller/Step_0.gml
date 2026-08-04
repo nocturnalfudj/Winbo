@@ -105,8 +105,19 @@ switch(phase) {
 			floor(defeat_elapsed * soldier_fps)
 		);
 		if(defeat_elapsed >= defeat_duration && !stomp_smoke_pending) {
+			phase = OpeningCutscenePhase.landing;
+			landing_elapsed = 0;
+			exit_player_x = stomp_player_target_x;
+		}
+	break;
+
+	case OpeningCutscenePhase.landing:
+		soldier_frame = defeat_frame_last;
+		landing_elapsed = min(landing_duration,landing_elapsed + _dt);
+		if(landing_elapsed >= landing_duration) {
 			phase = OpeningCutscenePhase.exit;
 			exit_elapsed = 0;
+			exit_player_velocity = 0;
 			exit_player_x = stomp_player_target_x;
 		}
 	break;
@@ -114,7 +125,15 @@ switch(phase) {
 	case OpeningCutscenePhase.exit:
 		soldier_frame = defeat_frame_last;
 		exit_elapsed += _dt;
-		exit_player_x = stomp_player_target_x + exit_run_speed * exit_elapsed;
+		var _movement_delta = global.delta_time_factor_scaled;
+		exit_player_x += (
+			exit_player_velocity
+			+ exit_move_acceleration * 0.5 * _movement_delta
+		) * _movement_delta;
+		exit_player_velocity = (
+			exit_player_velocity
+			+ exit_move_acceleration * _movement_delta
+		) * power(exit_velocity_retention,_movement_delta);
 		if(exit_player_x >= camera_fixed_x + player_exit_x) {
 			phase = OpeningCutscenePhase.title;
 			title_elapsed = 0;
