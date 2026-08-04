@@ -28,7 +28,8 @@ with(o_camera) {
 if(instance_number(o_player) == 0) exit;
 
 var _player = instance_find(o_player,0);
-_player.visible = phase != OpeningCutscenePhase.intro;
+_player.visible = phase != OpeningCutscenePhase.intro
+	&& phase != OpeningCutscenePhase.title;
 
 if(phase == OpeningCutscenePhase.intro) {
 	// Keep gameplay logic from treating the scripted off-screen entry as an

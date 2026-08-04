@@ -153,6 +153,11 @@ switch(phase) {
 	case OpeningCutscenePhase.exit:
 		soldier_frame = defeat_frame_last;
 	break;
+
+	case OpeningCutscenePhase.title:
+		soldier_frame = defeat_frame_last;
+		title_elapsed = min(title_duration,title_elapsed + _dt);
+	break;
 }
 
 if(stomp_smoke_pending) {
@@ -177,11 +182,18 @@ if(phase == OpeningCutscenePhase.exit
 	var _player_exit = instance_find(o_player,0);
 	var _exit_x = camera_fixed_x + scene_width - player_exit_margin;
 	if(_player_exit.bbox_right >= _exit_x) {
-		level_select_unlock("tutorial");
-		transition_requested = level_select_start("tutorial");
-		if(transition_requested && ambience_snd_id != noone) {
+		phase = OpeningCutscenePhase.title;
+		title_elapsed = 0;
+		if(ambience_snd_id != noone) {
 			opening_cutscene_sfx_stop(ambience_snd_id);
 			ambience_snd_id = noone;
 		}
 	}
+}
+
+if(phase == OpeningCutscenePhase.title
+&& title_elapsed >= title_duration
+&& !transition_requested) {
+	level_select_unlock("tutorial");
+	transition_requested = level_select_start("tutorial");
 }

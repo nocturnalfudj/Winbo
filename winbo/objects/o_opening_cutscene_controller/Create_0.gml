@@ -2,7 +2,8 @@ enum OpeningCutscenePhase {
 	intro,
 	interactive,
 	defeat,
-	exit
+	exit,
+	title
 }
 
 phase = OpeningCutscenePhase.intro;
@@ -28,7 +29,7 @@ player_entry_x = 0;
 player_entry_velocity = 0;
 player_entry_velocity_retention = 0.7;
 player_entry_move_acceleration = 1.5;
-player_entry_animation_fps = 7.5;
+player_entry_animation_fps = ANIMATION_FPS_DEFAULT;
 player_entry_motion_complete = false;
 player_entry_walk_elapsed = 0;
 player_entry_idle_elapsed = 0;
@@ -140,6 +141,9 @@ opening_cutscene_prompt_update = function() {
 		&& prompt_right_sprite != noone;
 };
 transition_requested = false;
+title_elapsed = 0;
+title_duration = 2.5;
+title_fade_duration = 0.4;
 player_exit_margin = 64;
 player_screen_bound_margin = 64;
 player_move_limit_enable_x_restore = false;
