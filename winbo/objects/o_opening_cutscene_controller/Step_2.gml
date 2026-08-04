@@ -46,6 +46,17 @@ if(phase == OpeningCutscenePhase.intro) {
 	_player.velocity.Set(0,0);
 	_player.acceleration.Set(0,0);
 }
+else if(phase == OpeningCutscenePhase.title) {
+	// Player control ends only after Winbo is fully beyond the visible view.
+	// Hold that off-screen position so late input cannot bring him back.
+	_player.x = title_player_lock_x;
+	_player.y = title_player_lock_y;
+	_player.velocity.Set(0,0);
+	_player.acceleration.Set(0,0);
+	var _title_player_transform = _player.transform[TransformType.anchor];
+	transform_set(_title_player_transform,TransformValue.x,_player.x,false);
+	transform_set(_title_player_transform,TransformValue.y,_player.y,false);
+}
 
 // The opening is a focused tutorial beat; suppress the normal five-second
 // secret idle so it cannot cover the prompt or replace Winbo's control pose.

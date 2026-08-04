@@ -209,13 +209,25 @@ if(phase == OpeningCutscenePhase.interactive) {
 }
 
 if(phase == OpeningCutscenePhase.title) {
-	var _fade_in = clamp(title_elapsed / title_fade_duration,0,1);
-	var _fade_out = clamp((title_duration - title_elapsed) / title_fade_duration,0,1);
-	var _title_alpha = min(_fade_in,_fade_out);
+	var _black_alpha = clamp(title_elapsed / title_black_fade_duration,0,1);
+	var _title_elapsed = max(0,title_elapsed - title_black_fade_duration);
+	var _title_fade_in = clamp(
+		_title_elapsed / title_text_fade_in_duration,
+		0,
+		1
+	);
+	var _title_fade_in_eased = _title_fade_in * _title_fade_in
+		* (3 - 2 * _title_fade_in);
+	var _title_fade_out = clamp(
+		(title_duration - title_elapsed) / title_text_fade_out_duration,
+		0,
+		1
+	);
+	var _title_alpha = min(_title_fade_in_eased,_title_fade_out);
 	var _title_scale = min(_scale_x,_scale_y)
-		* lerp(1.8,2.25,1 - power(1 - _fade_in,3));
+		* lerp(1.8,2.25,_title_fade_in_eased);
 
-	draw_set_alpha(_fade_in);
+	draw_set_alpha(_black_alpha);
 	draw_set_colour(c_black);
 	draw_rectangle(0,0,_gui_width,_gui_height,false);
 

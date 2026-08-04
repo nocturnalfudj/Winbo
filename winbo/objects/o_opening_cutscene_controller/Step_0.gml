@@ -180,10 +180,14 @@ if(phase == OpeningCutscenePhase.exit
 && instance_number(o_player) > 0
 && !transition_requested) {
 	var _player_exit = instance_find(o_player,0);
-	var _exit_x = camera_fixed_x + scene_width - player_exit_margin;
-	if(_player_exit.bbox_right >= _exit_x) {
+	var _exit_x = camera_fixed_x + scene_width;
+	if(_player_exit.bbox_left >= _exit_x) {
 		phase = OpeningCutscenePhase.title;
 		title_elapsed = 0;
+		title_player_lock_x = _player_exit.x;
+		title_player_lock_y = _player_exit.y;
+		_player_exit.velocity.Set(0,0);
+		_player_exit.acceleration.Set(0,0);
 		if(ambience_snd_id != noone) {
 			opening_cutscene_sfx_stop(ambience_snd_id);
 			ambience_snd_id = noone;

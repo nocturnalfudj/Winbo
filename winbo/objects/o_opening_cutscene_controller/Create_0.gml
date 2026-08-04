@@ -142,9 +142,16 @@ opening_cutscene_prompt_update = function() {
 };
 transition_requested = false;
 title_elapsed = 0;
-title_duration = 2.5;
-title_fade_duration = 0.4;
-player_exit_margin = 64;
+title_black_fade_duration = 0.4;
+title_text_fade_in_duration = 1;
+title_text_hold_duration = 1.2;
+title_text_fade_out_duration = 0.4;
+title_duration = title_black_fade_duration
+	+ title_text_fade_in_duration
+	+ title_text_hold_duration
+	+ title_text_fade_out_duration;
+title_player_lock_x = 0;
+title_player_lock_y = 0;
 player_screen_bound_margin = 64;
 player_move_limit_enable_x_restore = false;
 player_move_limit_x_min_restore = 0;
