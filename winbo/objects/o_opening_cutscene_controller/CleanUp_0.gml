@@ -5,6 +5,17 @@ if(instance_number(o_player) > 0) {
 	_player.state = PlayerState.move;
 	_player.hp_vulnerable = player_hp_vulnerable_restore;
 	_player.user.hp_vulnerable = player_user_hp_vulnerable_restore;
+	if(player_move_limit_enable_x_restore) {
+		with(_player) {
+			movement_limit_enable_x(
+				other.player_move_limit_x_min_restore,
+				other.player_move_limit_x_max_restore
+			);
+		}
+	}
+	else {
+		_player.move_limit_enable_x = false;
+	}
 }
 layer_set_visible("lyr_hud_front",hud_front_visible_restore);
 layer_set_visible("lyr_hud",hud_visible_restore);

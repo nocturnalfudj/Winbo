@@ -1,18 +1,15 @@
 enum OpeningCutscenePhase {
 	intro,
 	interactive,
-	stomp,
 	defeat,
-	landing,
-	exit,
-	title
+	exit
 }
 
 phase = OpeningCutscenePhase.intro;
 soldier_frame = 0;
 soldier_fps = 15;
 intro_preroll_elapsed = 0;
-intro_preroll_duration = 1;
+intro_preroll_duration = 2;
 intro_preroll_frame_count = 15;
 beg_frame_first = 200;
 beg_frame_last = 205;
@@ -21,14 +18,36 @@ defeat_frame_last = 215;
 defeat_elapsed = 0;
 defeat_duration = 0.8;
 defeat_sequence_duration = (defeat_frame_last - defeat_frame_first + 1) / soldier_fps;
-player_entry_arrival_frame = 78;
+soldier_notice_frame = 78;
+soldier_notice_delay_duration = 0.5;
+player_entry_arrival_frame = soldier_notice_frame
+	- soldier_fps * soldier_notice_delay_duration;
 player_entry_frame_first = 0;
 player_entry_stop_speed = 0.05;
 player_entry_x = 0;
 player_entry_velocity = 0;
+player_entry_velocity_retention = 0.7;
+player_entry_move_acceleration = 1.5;
+player_entry_animation_fps = 7.5;
 player_entry_motion_complete = false;
 player_entry_walk_elapsed = 0;
 player_entry_idle_elapsed = 0;
+player_bottom_previous = 0;
+prompt_elapsed = 0;
+prompt_move_delay = 1.25;
+prompt_input_type = Input.mouse_and_keyboard;
+prompt_input_type_initialized = false;
+prompt_controls = [UserControl.jump,UserControl.left,UserControl.right];
+prompt_jump_key = noone;
+prompt_left_key = noone;
+prompt_right_key = noone;
+prompt_jump_sprite = noone;
+prompt_left_sprite = noone;
+prompt_right_sprite = noone;
+prompt_jump_label = "W";
+prompt_left_label = "A";
+prompt_right_label = "D";
+prompt_use_sprites = false;
 dialogue_played = false;
 voice_snd_id = noone;
 opening_cutscene_sfx_stop = function(_sound_instance) {
@@ -45,31 +64,91 @@ opening_cutscene_sfx_stop = function(_sound_instance) {
 	);
 	audio_stop_sound(_sound_instance);
 };
+opening_cutscene_prompt_label_get = function(_input_type,_key) {
+	if(_key == noone) return "Unbound";
+	if(_input_type == Input.mouse) {
+		return ds_list_find_value(global.mouse_keycode_list,_key);
+	}
+	if(_input_type == Input.gamepad) {
+		return ds_list_find_value(global.gamepad_keycode_list,_key);
+	}
+	if(_input_type == Input.mouse_and_keyboard
+	&& (_key == mb_left || _key == mb_right || _key == mb_middle)) {
+		return ds_list_find_value(global.mouse_keycode_list,_key);
+	}
+	return ds_list_find_value(global.keyboard_keycode_list,_key);
+};
+opening_cutscene_prompt_update = function() {
+	var _user = o_input.user[0];
+	var _input_type = _user.input;
+	if(_input_type == Input.mouse_and_keyboard_and_gamepad) {
+		var _gamepad_device = _user.input_device;
+		var _gamepad_active = abs(input_check_gamepad(_gamepad_device,gp_axislh)) > 0
+			|| abs(input_check_gamepad(_gamepad_device,gp_axislv)) > 0
+			|| abs(input_check_gamepad(_gamepad_device,gp_axisrh)) > 0
+			|| abs(input_check_gamepad(_gamepad_device,gp_axisrv)) > 0;
+		var _mouse_keyboard_active = false;
+		for(var _control_index=0;_control_index<array_length(prompt_controls);_control_index++) {
+			var _control = prompt_controls[_control_index];
+			var _gamepad_key = _user.control[_control].input[Input.gamepad][InputProperty.key];
+			var _mouse_keyboard_key = _user.control[_control]
+				.input[Input.mouse_and_keyboard][InputProperty.key];
+			if(_gamepad_key != noone) {
+				_gamepad_active = _gamepad_active
+					|| input_check_gamepad(_gamepad_device,_gamepad_key);
+			}
+			if(_mouse_keyboard_key != noone) {
+				_mouse_keyboard_active = _mouse_keyboard_active
+					|| input_check_keyboard_mouse(_mouse_keyboard_key);
+			}
+		}
+
+		if(_gamepad_active) {
+			prompt_input_type = Input.gamepad;
+		}
+		else if(_mouse_keyboard_active) {
+			prompt_input_type = Input.mouse_and_keyboard;
+		}
+		else if(!prompt_input_type_initialized) {
+			prompt_input_type = _user.gamepad_using
+				? Input.gamepad
+				: Input.mouse_and_keyboard;
+		}
+		_input_type = prompt_input_type;
+	}
+	if(_input_type != Input.gamepad
+	&& _input_type != Input.mouse
+	&& _input_type != Input.keyboard
+	&& _input_type != Input.mouse_and_keyboard) {
+		_input_type = Input.mouse_and_keyboard;
+	}
+
+	prompt_input_type = _input_type;
+	prompt_input_type_initialized = true;
+	prompt_jump_key = _user.control[UserControl.jump].input[_input_type][InputProperty.key];
+	prompt_left_key = _user.control[UserControl.left].input[_input_type][InputProperty.key];
+	prompt_right_key = _user.control[UserControl.right].input[_input_type][InputProperty.key];
+	prompt_jump_sprite = _user.control[UserControl.jump].input[_input_type][InputProperty.sprite];
+	prompt_left_sprite = _user.control[UserControl.left].input[_input_type][InputProperty.sprite];
+	prompt_right_sprite = _user.control[UserControl.right].input[_input_type][InputProperty.sprite];
+	prompt_jump_label = opening_cutscene_prompt_label_get(_input_type,prompt_jump_key);
+	prompt_left_label = opening_cutscene_prompt_label_get(_input_type,prompt_left_key);
+	prompt_right_label = opening_cutscene_prompt_label_get(_input_type,prompt_right_key);
+	prompt_use_sprites = _input_type == Input.gamepad
+		&& prompt_jump_sprite != noone
+		&& prompt_left_sprite != noone
+		&& prompt_right_sprite != noone;
+};
 transition_requested = false;
+player_exit_margin = 64;
+player_screen_bound_margin = 64;
+player_move_limit_enable_x_restore = false;
+player_move_limit_x_min_restore = 0;
+player_move_limit_x_max_restore = 0;
 walk_back_frame_first = 99;
 walk_back_frame_last = 132;
 walk_back_deceleration_frame_first = 123;
 walk_back_distance = 0;
-stomp_elapsed = 0;
-stomp_duration = 0.75;
-stomp_arc_height = 0;
-stomp_player_start_x = 0;
-stomp_player_start_y = 0;
-stomp_player_target_x = 0;
-stomp_player_target_y = 0;
-landing_elapsed = 0;
-landing_frame_count = sprite_get_number(spr_player_land_sideways);
-// Normal movement releases the landing block as soon as the last frame has
-// rendered once, rather than holding that frame for a full animation interval.
-landing_duration = (landing_frame_count - 1) / ANIMATION_FPS_DEFAULT + 1 / SECOND;
-exit_player_x = 0;
-exit_elapsed = 0;
-exit_player_velocity = 0;
-exit_velocity_retention = 0.7;
-exit_move_acceleration = 3;
-title_elapsed = 0;
-title_duration = 2.5;
-title_fade_duration = 0.4;
 stomp_smoke_frame = -1;
 stomp_smoke_fps = ANIMATION_FPS_DEFAULT;
 stomp_smoke_delay_elapsed = 0;
@@ -121,12 +200,6 @@ opening_platform_top_offset_y = (
 	sprite_get_bbox_top(spr_platform) - sprite_get_yoffset(spr_platform)
 ) * opening_platform_id.image_yscale;
 soldier_body_center_local_y = (soldier_head_local_y + soldier_foot_local_y) * 0.5;
-var _landing_sprite = spr_player_fall_sideways;
-landing_center_x = (sprite_get_bbox_left(_landing_sprite)
-	+ sprite_get_bbox_right(_landing_sprite)) * 0.5
-	- sprite_get_xoffset(_landing_sprite);
-landing_bottom_y = sprite_get_bbox_bottom(_landing_sprite)
-	- sprite_get_yoffset(_landing_sprite);
 
 // The source frames contain almost no translation during the backing-away
 // walk, so move the soldier canvas explicitly and leave the dropped M16 put.
@@ -151,16 +224,16 @@ opening_cutscene_layout_update = function(_scene_width,_scene_height) {
 	player_ground_y = environment_ground_y - player_foot_local_y;
 	opening_platform_id.y = environment_ground_y - opening_platform_top_offset_y;
 	player_intro_x = -0.09375 * scene_width;
-	player_handoff_x = 0.2734375 * scene_width;
-	player_exit_x = 1.0520833333 * scene_width;
+	player_handoff_x = 0.14 * scene_width;
 	var _entry_distance = player_handoff_x - player_intro_x;
-	var _entry_steady_velocity = exit_move_acceleration * exit_velocity_retention
-		/ (1 - exit_velocity_retention);
+	var _entry_steady_velocity = player_entry_move_acceleration
+		* player_entry_velocity_retention
+		/ (1 - player_entry_velocity_retention);
 	var _entry_steady_step_distance = _entry_steady_velocity
-		+ exit_move_acceleration * 0.5;
+		+ player_entry_move_acceleration * 0.5;
 	var _entry_coast_steps = ceil(
 		ln(player_entry_stop_speed / _entry_steady_velocity)
-		/ ln(exit_velocity_retention)
+		/ ln(player_entry_velocity_retention)
 	);
 	var _entry_duration = _entry_distance / (_entry_steady_step_distance * SECOND)
 		+ _entry_coast_steps / SECOND;
@@ -168,9 +241,6 @@ opening_cutscene_layout_update = function(_scene_width,_scene_height) {
 		0,
 		player_entry_arrival_frame - soldier_fps * _entry_duration
 	);
-	stomp_arc_height = (320 / scene_authored_height) * scene_height;
-	defeat_bounce_height = (240 / scene_authored_height) * scene_height;
-
 	walk_back_distance = (400 / scene_authored_height) * scene_height;
 	// At 1080p the soldier begins 200px left of centre, then backs to centre.
 	soldier_head_x = camera_center_x;
@@ -179,10 +249,8 @@ opening_cutscene_layout_update = function(_scene_width,_scene_height) {
 	sequence_draw_y = soldier_ground_y - soldier_foot_local_y * soldier_scale;
 	m16_draw_y = soldier_ground_y - m16_bottom_local_y * soldier_scale;
 	soldier_head_y = sequence_draw_y + soldier_head_local_y * soldier_scale;
-	stomp_player_start_x = camera_fixed_x + player_handoff_x;
-	stomp_player_start_y = player_ground_y;
-	stomp_player_target_x = soldier_head_x - landing_center_x;
-	stomp_player_target_y = soldier_head_y - landing_bottom_y;
+	soldier_head_left = sequence_draw_x + walk_back_distance + 995 * soldier_scale;
+	soldier_head_right = sequence_draw_x + walk_back_distance + 1140 * soldier_scale;
 	stomp_smoke_x = soldier_head_x;
 	stomp_smoke_y = sequence_draw_y + soldier_body_center_local_y * soldier_scale;
 };
@@ -222,6 +290,11 @@ ambience_snd_id = audio_sound_play(
 
 if(instance_number(o_player) > 0) {
 	var _player = instance_find(o_player,0);
+	player_move_limit_enable_x_restore = _player.move_limit_enable_x;
+	if(player_move_limit_enable_x_restore) {
+		player_move_limit_x_min_restore = _player.move_limit_x.x;
+		player_move_limit_x_max_restore = _player.move_limit_x.y;
+	}
 	if(_player.state == PlayerState.stage_entrance) {
 		player_hp_vulnerable_restore = _player.stage_entrance_hp_vulnerable_previous;
 		player_user_hp_vulnerable_restore = _player.stage_entrance_user_hp_vulnerable_previous;
@@ -230,10 +303,12 @@ if(instance_number(o_player) > 0) {
 		player_hp_vulnerable_restore = _player.hp_vulnerable;
 		player_user_hp_vulnerable_restore = _player.user.hp_vulnerable;
 	}
-	exit_velocity_retention = _player.velocity_retention_default;
-	exit_move_acceleration = _player.input_move_acceleration_default;
+	player_entry_velocity_retention = _player.velocity_retention_default;
+	player_entry_move_acceleration = _player.input_move_acceleration_default * 0.5;
+	opening_cutscene_layout_update(o_camera.width,o_camera.height);
+	player_entry_x = camera_fixed_x + player_intro_x;
 	_player.visible = false;
-	_player.x = camera_fixed_x + player_intro_x;
+	_player.x = player_entry_x;
 	_player.y = player_ground_y;
 	var _player_transform = _player.transform[TransformType.anchor];
 	transform_set(_player_transform,TransformValue.x,_player.x,false);
@@ -248,3 +323,4 @@ if(instance_number(o_player) > 0) {
 		state = PlayerState.stage_entrance;
 	}
 }
+opening_cutscene_prompt_update();

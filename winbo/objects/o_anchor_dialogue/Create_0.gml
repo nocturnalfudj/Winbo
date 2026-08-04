@@ -70,8 +70,10 @@ ui_group_set(UIGroup.dialogue,id);
 	presence_dialogue_page_mode = presence_dialogue_pages[0].mode;
 	presence_dialogue_box_sprite = spr_presence_speech_box_large;
 	presence_dialogue_text_center_y = 7;
-	presence_dialogue_safe_left = -200;
-	presence_dialogue_safe_right = 200;
+	presence_dialogue_text_offset_x = 0;
+	presence_dialogue_text_offset_y = 0;
+	presence_dialogue_safe_left = -250;
+	presence_dialogue_safe_right = 250;
 	presence_dialogue_safe_top = -78;
 	presence_dialogue_safe_bottom = 92;
 	presence_dialogue_layout_bounds_left = 0;
@@ -123,8 +125,8 @@ ui_group_set(UIGroup.dialogue,id);
 		if(_line_count <= 1) {
 			return {
 				sprite: spr_presence_speech_box_small,
-				left: -200,
-				right: 200,
+				left: -250,
+				right: 250,
 				top: -24,
 				bottom: 70,
 			};
@@ -133,8 +135,8 @@ ui_group_set(UIGroup.dialogue,id);
 		if(_line_count == 2) {
 			return {
 				sprite: spr_presence_speech_box_medium,
-				left: -200,
-				right: 200,
+				left: -250,
+				right: 250,
 				top: -42,
 				bottom: 76,
 			};
@@ -142,10 +144,10 @@ ui_group_set(UIGroup.dialogue,id);
 
 		return {
 			sprite: spr_presence_speech_box_large,
-			left: -200,
-			right: 200,
-			top: -78,
-			bottom: 92,
+			left: -250,
+			right: 250,
+			top: -100,
+			bottom: 70,
 		};
 	};
 
@@ -249,6 +251,12 @@ ui_group_set(UIGroup.dialogue,id);
 		presence_dialogue_safe_top = _safe.top;
 		presence_dialogue_safe_bottom = _safe.bottom;
 		presence_dialogue_text_center_y = (_safe.top + _safe.bottom) * 0.5;
+		presence_dialogue_text_offset_x = -(
+			presence_dialogue_layout_bounds_left + presence_dialogue_layout_bounds_right
+		) * 0.5 * presence_dialogue_text_scale;
+		presence_dialogue_text_offset_y = -(
+			presence_dialogue_layout_bounds_top + presence_dialogue_layout_bounds_bottom
+		) * 0.5 * presence_dialogue_text_scale;
 
 		var _bounds_width_rendered = (presence_dialogue_layout_bounds_right - presence_dialogue_layout_bounds_left)
 			* presence_dialogue_text_scale;

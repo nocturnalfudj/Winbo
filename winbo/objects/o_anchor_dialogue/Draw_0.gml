@@ -25,8 +25,9 @@ if(presence_dialogue_ready_for_advance && presence_dialogue_page_index < array_l
 
 var _text_x;
 var _text_y;
-_text_x = _presence_x;
-_text_y = _presence_y + presence_dialogue_text_center_y * presence_dialogue_box_scale;
+_text_x = _presence_x + presence_dialogue_text_offset_x;
+_text_y = _presence_y + presence_dialogue_text_center_y * presence_dialogue_box_scale
+	+ presence_dialogue_text_offset_y;
 
 if(presence_dialogue_phase == PresenceDialoguePhase.decode_glitch) {
 	presence_dialogue_decode_draw(_text_x,_text_y,_alpha);
