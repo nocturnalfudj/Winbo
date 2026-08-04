@@ -197,13 +197,13 @@ function director_environment_data_setup(){
 			_environment_tile,
 			_environment_foreground,
 			[
-				{mode: "normal", sprite: spr_bg_opening_layer_4, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false},
-				{mode: "normal", sprite: spr_bg_opening_layer_3, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false},
-				{mode: "normal", sprite: spr_bg_opening_layer_2, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false},
-				{mode: "normal", sprite: spr_bg_opening_layer_1, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false}
+				{mode: "view_cover", sprite: spr_bg_opening_layer_4},
+				{mode: "view_cover", sprite: spr_bg_opening_layer_3},
+				{mode: "view_cover", sprite: spr_bg_opening_layer_2},
+				{mode: "view_cover", sprite: spr_bg_opening_layer_1}
 			],
 			[
-				{mode: "normal", sprite: spr_bg_opening_layer_0_foreground, parallax_x: 1.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false}
+				{mode: "view_cover", sprite: spr_bg_opening_layer_0_foreground}
 			]
 		);
 		with(environment[_environment]){

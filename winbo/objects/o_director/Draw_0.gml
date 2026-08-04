@@ -93,6 +93,28 @@ if(o_master.debug_navigation_grid_enable){
 				for(var _i = 0; _i < _front_layer_count; _i++){
 					var _layer = _front_layers[_i];
 					switch(_layer.mode){
+						case "view_cover":
+							var _view_scale = max(
+								_camera_width / sprite_get_width(_layer.sprite),
+								_camera_height / sprite_get_height(_layer.sprite)
+							);
+							var _view_draw_x = _camera_x
+								+ (_camera_width - sprite_get_width(_layer.sprite) * _view_scale) * 0.5;
+							var _view_draw_y = _camera_y + _camera_height
+								- sprite_get_height(_layer.sprite) * _view_scale;
+							draw_sprite_ext(
+								_layer.sprite,
+								0,
+								_view_draw_x,
+								_view_draw_y,
+								_view_scale,
+								_view_scale,
+								0,
+								c_white,
+								1
+							);
+						break;
+
 						case "normal":
 							var _repeat_x = !variable_struct_exists(_layer, "repeat_x") || _layer.repeat_x;
 							var _clamp_y = !variable_struct_exists(_layer, "clamp_y") || _layer.clamp_y;

@@ -1,4 +1,29 @@
-o_camera.lighting_enable = false;
+// The normal paused/stopped camera state targets the menu origin and starts a
+// zoom recoil. Reassert this room's stationary camera after every camera Step
+// so pausing cannot move the canonical environment away from the cutscene.
+opening_cutscene_layout_update(o_camera.width,o_camera.height);
+var _camera_center_x = camera_center_x;
+var _camera_center_y = camera_center_y;
+var _camera_zoom_anchor_rest = camera_zoom_anchor_rest_restore;
+var _camera_zoom_relative_rest = camera_zoom_relative_rest_restore;
+with(o_camera) {
+	state = CameraState.stationary;
+	follow_target_id = noone;
+	stationary_target.Set(_camera_center_x,_camera_center_y);
+	zoom_control_enable = false;
+	zoom_anchor.rest = _camera_zoom_anchor_rest;
+	zoom_relative.rest = _camera_zoom_relative_rest;
+	zoom_anchor.animating = false;
+	zoom_relative.animating = false;
+	zoom_updated = false;
+	x = _camera_center_x;
+	y = _camera_center_y;
+	var _camera_transform = transform[TransformType.anchor];
+	transform_set(_camera_transform,TransformValue.x,x,false);
+	transform_set(_camera_transform,TransformValue.y,y,false);
+	camera_view_pos_update();
+	lighting_enable = false;
+}
 
 if(instance_number(o_player) == 0) exit;
 
@@ -41,14 +66,22 @@ else if(phase == OpeningCutscenePhase.stomp) {
 	_player.velocity.Set(0,0);
 	_player.acceleration.Set(0,0);
 	_player.move_grounded = false;
+	_player.state = PlayerState.stage_entrance;
 	transform_set(_player.transform[TransformType.anchor],TransformValue.x,_player.x,false);
 	transform_set(_player.transform[TransformType.anchor],TransformValue.y,_player.y,false);
 }
 else if(phase == OpeningCutscenePhase.defeat) {
+	var _defeat_progress = clamp(defeat_elapsed / defeat_duration,0,1);
+	var _defeat_eased = _defeat_progress * _defeat_progress * (3 - 2 * _defeat_progress);
 	_player.x = stomp_player_target_x;
-	_player.velocity.x = 0;
-	_player.acceleration.x = 0;
+	_player.y = lerp(stomp_player_target_y,player_ground_y,_defeat_eased)
+		- 4 * defeat_bounce_height * _defeat_progress * (1 - _defeat_progress);
+	_player.velocity.Set(0,0);
+	_player.acceleration.Set(0,0);
+	_player.move_grounded = _defeat_progress >= 1;
+	_player.state = PlayerState.stage_entrance;
 	transform_set(_player.transform[TransformType.anchor],TransformValue.x,_player.x,false);
+	transform_set(_player.transform[TransformType.anchor],TransformValue.y,_player.y,false);
 }
 else if(phase == OpeningCutscenePhase.exit) {
 	_player.x = exit_player_x;
@@ -56,6 +89,7 @@ else if(phase == OpeningCutscenePhase.exit) {
 	_player.velocity.Set(0,0);
 	_player.acceleration.Set(0,0);
 	_player.move_grounded = true;
+	_player.state = PlayerState.stage_entrance;
 	transform_set(_player.transform[TransformType.anchor],TransformValue.x,_player.x,false);
 	transform_set(_player.transform[TransformType.anchor],TransformValue.y,_player.y,false);
 }

@@ -3,7 +3,8 @@ enum OpeningCutscenePhase {
 	interactive,
 	stomp,
 	defeat,
-	exit
+	exit,
+	title
 }
 
 phase = OpeningCutscenePhase.intro;
@@ -16,6 +17,9 @@ beg_frame_first = 200;
 beg_frame_last = 205;
 defeat_frame_first = 214;
 defeat_frame_last = 215;
+defeat_elapsed = 0;
+defeat_duration = 0.8;
+defeat_sequence_duration = (defeat_frame_last - defeat_frame_first + 1) / soldier_fps;
 player_entry_end_frame = 78;
 dialogue_cue_frame = player_entry_end_frame;
 dialogue_played = false;
@@ -37,65 +41,41 @@ opening_cutscene_sfx_stop = function(_sound_instance) {
 transition_requested = false;
 walk_back_frame_first = 99;
 walk_back_frame_last = 132;
-walk_back_distance = 400;
+walk_back_distance = 0;
 stomp_elapsed = 0;
 stomp_duration = 0.75;
-stomp_arc_height = 320;
+stomp_arc_height = 0;
 stomp_player_start_x = 0;
 stomp_player_start_y = 0;
 stomp_player_target_x = 0;
 stomp_player_target_y = 0;
 exit_player_x = 0;
-exit_run_speed = 1800;
+exit_elapsed = 0;
+exit_run_speed = 0;
+title_elapsed = 0;
+title_duration = 2.5;
+title_fade_duration = 0.4;
 stomp_smoke_frame = -1;
 stomp_smoke_fps = ANIMATION_FPS_DEFAULT;
-stomp_smoke_delay_steps = 2;
-stomp_smoke_step_count = 0;
+stomp_smoke_delay_elapsed = 0;
 stomp_smoke_pending = false;
 stomp_smoke_x = 0;
 stomp_smoke_y = 0;
 
-// The opening art is authored as one 3840x2160 environment view at the bottom
-// of the inherited gameplay room. Configure the persistent camera itself so
-// the director's normal environment renderer and the application surface use
-// the same fixed view throughout the cutscene.
-scene_width = 3840;
-scene_height = 2160;
-camera_fixed_x = 0;
-camera_fixed_y = room_height - scene_height;
-camera_center_x = camera_fixed_x + scene_width * 0.5;
-camera_center_y = camera_fixed_y + scene_height * 0.5;
+// Keep the normal gameplay camera dimensions and lock only its position. The
+// director remains the sole owner of the opening environment at every
+// resolution, exactly as it is in the other gameplay rooms.
+scene_authored_width = 3840;
+scene_authored_height = 2160;
 camera_state_restore = o_camera.state;
 camera_follow_target_restore = o_camera.follow_target_id;
 camera_stationary_target_x_restore = o_camera.stationary_target.x;
 camera_stationary_target_y_restore = o_camera.stationary_target.y;
 camera_x_restore = o_camera.x;
 camera_y_restore = o_camera.y;
-camera_image_xscale_restore = o_camera.image_xscale;
-camera_image_yscale_restore = o_camera.image_yscale;
 camera_zoom_control_enable_restore = o_camera.zoom_control_enable;
-
-var _camera_center_x = camera_center_x;
-var _camera_center_y = camera_center_y;
-var _scene_width = scene_width;
-var _scene_height = scene_height;
-with(o_camera) {
-	state = CameraState.stationary;
-	follow_target_id = noone;
-	stationary_target.Set(_camera_center_x,_camera_center_y);
-	zoom_control_enable = false;
-	zoom_anchor.animating = false;
-	zoom_relative.animating = false;
-	image_xscale = _scene_width / (width_ini * zoom_resultant);
-	image_yscale = _scene_height / (height_ini * zoom_resultant);
-	x = _camera_center_x;
-	y = _camera_center_y;
-	var _camera_transform = transform[TransformType.anchor];
-	transform_set(_camera_transform,TransformValue.x,x,false);
-	transform_set(_camera_transform,TransformValue.y,y,false);
-	camera_zoom_set_dimensions();
-	camera_view_pos_update();
-}
+camera_zoom_anchor_rest_restore = o_camera.zoom_anchor.rest;
+camera_zoom_relative_rest_restore = o_camera.zoom_relative.rest;
 
 var _hud_front_layer = layer_get_id("lyr_hud_front");
 var _hud_layer = layer_get_id("lyr_hud");
@@ -106,29 +86,84 @@ hud_back_visible_restore = layer_get_visible(_hud_back_layer);
 layer_set_visible(_hud_front_layer,false);
 layer_set_visible(_hud_layer,false);
 layer_set_visible(_hud_back_layer,false);
-scene_scale = scene_height / 1080;
-player_ground_y = 3620;
-player_intro_x = -180 * scene_scale;
-player_handoff_x = 525 * scene_scale;
-player_exit_x = scene_width + 200;
 player_hp_vulnerable_restore = true;
 player_user_hp_vulnerable_restore = true;
 
-// This is a unique, full-canvas scripted soldier rather than an Apocalypse
-// Survivor reskin. Its sequence was authored at native scale for this scene.
-sequence_draw_x = 850;
-sequence_draw_y = 1122;
+// The cutscene soldier portrays the Apocalypse Survivor. Match that enemy's
+// normal 0.75 gameplay scale while retaining the artist-authored sequence.
+soldier_scale = 0.75;
 soldier_head_local_x = 1067.5;
 soldier_head_local_y = 420;
 soldier_foot_local_y = 795;
 soldier_body_center_local_y = (soldier_head_local_y + soldier_foot_local_y) * 0.5;
+var _landing_sprite = spr_player_fall_sideways;
+landing_center_x = (sprite_get_bbox_left(_landing_sprite)
+	+ sprite_get_bbox_right(_landing_sprite)) * 0.5
+	- sprite_get_xoffset(_landing_sprite);
+landing_bottom_y = sprite_get_bbox_bottom(_landing_sprite)
+	- sprite_get_yoffset(_landing_sprite);
 
 // The source frames contain almost no translation during the backing-away
 // walk, so move the soldier canvas explicitly and leave the dropped M16 put.
-soldier_head_scene_x = sequence_draw_x + walk_back_distance + soldier_head_local_x;
-soldier_head_scene_y = sequence_draw_y + soldier_head_local_y;
-stomp_smoke_x = soldier_head_scene_x;
-stomp_smoke_y = sequence_draw_y + soldier_body_center_local_y;
+// Recalculate view-relative choreography through the canonical camera system;
+// this keeps the environment and actors aligned after a resolution change.
+opening_cutscene_layout_update = function(_scene_width,_scene_height) {
+	scene_width = _scene_width;
+	scene_height = _scene_height;
+	camera_fixed_x = 0;
+	camera_fixed_y = max(0,room_height - scene_height);
+	camera_center_x = camera_fixed_x + scene_width * 0.5;
+	camera_center_y = camera_fixed_y + scene_height * 0.5;
+
+	var _view_cover_scale = max(
+		scene_width / scene_authored_width,
+		scene_height / scene_authored_height
+	);
+	var _view_cover_y = camera_fixed_y + scene_height
+		- scene_authored_height * _view_cover_scale;
+	var _authored_camera_y = room_height - scene_authored_height;
+	var _player_ground_view_y = 3620 - _authored_camera_y;
+	player_ground_y = _view_cover_y + _player_ground_view_y * _view_cover_scale;
+	player_intro_x = -0.09375 * scene_width;
+	player_handoff_x = 0.2734375 * scene_width;
+	player_exit_x = 1.0520833333 * scene_width;
+	exit_run_speed = 0.46875 * scene_width;
+	stomp_arc_height = (320 / scene_authored_height) * scene_height;
+	defeat_bounce_height = (240 / scene_authored_height) * scene_height;
+
+	walk_back_distance = (400 / scene_authored_height) * scene_height;
+	// At 1080p the soldier begins 200px left of centre, then backs to centre.
+	soldier_head_x = camera_center_x;
+	soldier_ground_y = player_ground_y + 137 * _view_cover_scale;
+	sequence_draw_x = soldier_head_x - walk_back_distance - soldier_head_local_x * soldier_scale;
+	sequence_draw_y = soldier_ground_y - soldier_foot_local_y * soldier_scale;
+	soldier_head_y = sequence_draw_y + soldier_head_local_y * soldier_scale;
+	stomp_player_start_x = camera_fixed_x + player_handoff_x;
+	stomp_player_start_y = player_ground_y;
+	stomp_player_target_x = soldier_head_x - landing_center_x;
+	stomp_player_target_y = soldier_head_y - landing_bottom_y;
+	stomp_smoke_x = soldier_head_x;
+	stomp_smoke_y = sequence_draw_y + soldier_body_center_local_y * soldier_scale;
+};
+opening_cutscene_layout_update(o_camera.width,o_camera.height);
+
+var _camera_center_x = camera_center_x;
+var _camera_center_y = camera_center_y;
+with(o_camera) {
+	state = CameraState.stationary;
+	follow_target_id = noone;
+	stationary_target.Set(_camera_center_x,_camera_center_y);
+	zoom_control_enable = false;
+	zoom_anchor.animating = false;
+	zoom_relative.animating = false;
+	zoom_updated = false;
+	x = _camera_center_x;
+	y = _camera_center_y;
+	var _camera_transform = transform[TransformType.anchor];
+	transform_set(_camera_transform,TransformValue.x,x,false);
+	transform_set(_camera_transform,TransformValue.y,y,false);
+	camera_view_pos_update();
+}
 
 lighting_was_enabled = o_camera.lighting_enable;
 o_camera.lighting_enable = false;
