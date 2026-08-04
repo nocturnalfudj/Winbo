@@ -24,7 +24,6 @@ switch(phase) {
 		}
 		if(soldier_frame >= beg_frame_first) {
 			phase = OpeningCutscenePhase.interactive;
-			prompt_elapsed = 0;
 			if(instance_number(o_player) > 0) {
 				var _player = instance_find(o_player,0);
 				_player.x = camera_fixed_x + player_handoff_x;
@@ -40,61 +39,89 @@ switch(phase) {
 				var _player_transform = _player.transform[TransformType.anchor];
 				transform_set(_player_transform,TransformValue.x,_player.x,false);
 				transform_set(_player_transform,TransformValue.y,_player.y,false);
-				player_bottom_previous = _player.bbox_bottom - camera_fixed_y;
 			}
 		}
 	break;
 
 	case OpeningCutscenePhase.interactive:
-		prompt_elapsed += _dt;
 		soldier_frame += soldier_fps * _dt;
 		if(soldier_frame >= beg_frame_last + 1) soldier_frame = beg_frame_first;
 
 		if(instance_number(o_player) > 0) {
 			var _player = instance_find(o_player,0);
-			var _head_left = sequence_draw_x + 995;
-			var _head_right = sequence_draw_x + 1140;
-			var _head_y = sequence_draw_y + 420;
-			var _player_left = _player.bbox_left - camera_fixed_x;
-			var _player_right = _player.bbox_right - camera_fixed_x;
-			var _player_bottom = _player.bbox_bottom - camera_fixed_y;
-			var _stomped = _player.velocity.y > 0
-					&& _player_right >= _head_left
-					&& _player_left <= _head_right
-					&& player_bottom_previous <= _head_y
-					&& _player_bottom >= _head_y;
+			var _jump_pressed = _player.input_current[UserControl.jump]
+				&& !_player.input_previous[UserControl.jump];
 
-			if(_stomped) {
-				phase = OpeningCutscenePhase.defeat;
-				soldier_frame = defeat_frame_first;
-				opening_cutscene_sfx_stop(voice_snd_id);
-				voice_snd_id = noone;
-				enemy_voice_play(id,snd_opening_cutscene_npc_death_scream,false);
-				stomp_smoke_pending = true;
-				stomp_smoke_step_count = 0;
-				with(_player) {
-					acceleration.Set(0,0);
-					velocity.Set(0,0);
-					acceleration.AddMagnitudeDirection(input_move_acceleration_jump * enemy_bounce_acceleration_factor,90);
-					move_gravity.Copy(move_gravity_rise);
-					player_air_spin_start();
-					dash_stamina = dash_stamina_max;
-					dash_stamina_depleted = false;
-				}
+			if(_jump_pressed) {
+				phase = OpeningCutscenePhase.stomp;
+				stomp_elapsed = 0;
+				stomp_player_start_x = _player.x;
+				stomp_player_start_y = _player.y;
+
+				var _landing_sprite = _player.sprite_fall_sideways;
+				var _landing_center_x = (sprite_get_bbox_left(_landing_sprite)
+					+ sprite_get_bbox_right(_landing_sprite)) * 0.5
+					- sprite_get_xoffset(_landing_sprite);
+				var _landing_bottom_y = sprite_get_bbox_bottom(_landing_sprite)
+					- sprite_get_yoffset(_landing_sprite);
+				stomp_player_target_x = camera_fixed_x + soldier_head_scene_x - _landing_center_x;
+				stomp_player_target_y = camera_fixed_y + soldier_head_scene_y - _landing_bottom_y;
+
+				_player.velocity.Set(0,0);
+				_player.acceleration.Set(0,0);
 			}
-			else {
-				player_bottom_previous = _player_bottom;
+		}
+	break;
+
+	case OpeningCutscenePhase.stomp:
+		soldier_frame += soldier_fps * _dt;
+		if(soldier_frame >= beg_frame_last + 1) soldier_frame = beg_frame_first;
+		stomp_elapsed = min(stomp_duration,stomp_elapsed + _dt);
+
+		if(stomp_elapsed >= stomp_duration && instance_number(o_player) > 0) {
+			var _player = instance_find(o_player,0);
+			_player.x = stomp_player_target_x;
+			_player.y = stomp_player_target_y;
+			var _player_transform = _player.transform[TransformType.anchor];
+			transform_set(_player_transform,TransformValue.x,_player.x,false);
+			transform_set(_player_transform,TransformValue.y,_player.y,false);
+
+			phase = OpeningCutscenePhase.defeat;
+			soldier_frame = defeat_frame_first;
+			opening_cutscene_sfx_stop(voice_snd_id);
+			voice_snd_id = noone;
+			enemy_voice_play(id,snd_opening_cutscene_npc_death_scream,false);
+			stomp_smoke_pending = true;
+			stomp_smoke_step_count = 0;
+			with(_player) {
+				acceleration.Set(0,0);
+				velocity.Set(0,0);
+				acceleration.AddMagnitudeDirection(input_move_acceleration_jump * enemy_bounce_acceleration_factor,90);
+				move_gravity.Copy(move_gravity_rise);
+				move_grounded = false;
+				player_air_spin_start();
+				dash_stamina = dash_stamina_max;
+				dash_stamina_depleted = false;
 			}
 		}
 	break;
 
 	case OpeningCutscenePhase.defeat:
 		soldier_frame = min(defeat_frame_last,soldier_frame + soldier_fps * _dt);
-		if(soldier_frame >= defeat_frame_last) phase = OpeningCutscenePhase.exit;
+		if(soldier_frame >= defeat_frame_last
+		&& !stomp_smoke_pending
+		&& instance_number(o_player) > 0) {
+			var _player = instance_find(o_player,0);
+			if(_player.move_grounded) {
+				phase = OpeningCutscenePhase.exit;
+				exit_player_x = _player.x;
+			}
+		}
 	break;
 
 	case OpeningCutscenePhase.exit:
 		soldier_frame = defeat_frame_last;
+		exit_player_x += exit_run_speed * _dt;
 	break;
 }
 
@@ -114,9 +141,8 @@ if(stomp_smoke_pending) {
 	}
 }
 
-if(phase == OpeningCutscenePhase.exit && instance_number(o_player) > 0 && !transition_requested) {
-	var _player_exit = instance_find(o_player,0);
-	if(_player_exit.bbox_left >= camera_fixed_x + player_exit_x) {
+if(phase == OpeningCutscenePhase.exit && !transition_requested) {
+	if(exit_player_x >= camera_fixed_x + player_exit_x) {
 		level_select_unlock("tutorial");
 		transition_requested = level_select_start("tutorial");
 		if(transition_requested && ambience_snd_id != noone) {

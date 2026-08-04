@@ -5,6 +5,7 @@
     {"$GMEvent":"v1","%Name":"Create_0","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"Create_0","resourceType":"GMEvent","resourceVersion":"2.0"},
     {"$GMEvent":"v1","%Name":"Step_0","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"Step_0","resourceType":"GMEvent","resourceVersion":"2.0"},
     {"$GMEvent":"v1","%Name":"Step_2","collisionObjectId":null,"eventNum":2,"eventType":3,"isDnD":false,"name":"Step_2","resourceType":"GMEvent","resourceVersion":"2.0"},
+    {"$GMEvent":"v1","%Name":"Draw_0","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"Draw_0","resourceType":"GMEvent","resourceVersion":"2.0"},
     {"$GMEvent":"v1","%Name":"Draw_64","collisionObjectId":null,"eventNum":64,"eventType":8,"isDnD":false,"name":"Draw_64","resourceType":"GMEvent","resourceVersion":"2.0"},
     {"$GMEvent":"v1","%Name":"CleanUp_0","collisionObjectId":null,"eventNum":0,"eventType":12,"isDnD":false,"name":"CleanUp_0","resourceType":"GMEvent","resourceVersion":"2.0"}
   ],

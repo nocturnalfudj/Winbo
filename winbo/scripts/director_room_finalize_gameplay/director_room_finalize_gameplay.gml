@@ -27,7 +27,9 @@ function director_room_finalize_gameplay(_request) {
 	}
 
 	if(_request.target_room == r_opening_cutscene) {
-		instance_create_layer(0,0,"lyr_cutscene",o_opening_cutscene_controller);
+		// Match gameplay rendering: director Draw Begin backgrounds, normal actor
+		// Draw on lyr_player, then the director's normal foreground pass.
+		instance_create_layer(0,0,"lyr_player",o_opening_cutscene_controller);
 	}
 
 	if(_request.target_room == r_game_level_0 || _request.target_room == r_game_level_1) {

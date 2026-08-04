@@ -1,4 +1,3 @@
-camera_set_view_pos(view_camera[0],camera_fixed_x,camera_fixed_y);
 o_camera.lighting_enable = false;
 
 if(instance_number(o_player) == 0) exit;
@@ -23,11 +22,42 @@ if(phase == OpeningCutscenePhase.intro) {
 	_player.acceleration.Set(0,0);
 }
 else if(phase == OpeningCutscenePhase.interactive) {
-	var _clamped_x = clamp(_player.x,camera_fixed_x - 100,camera_fixed_x + player_gate_x);
-	if(_clamped_x != _player.x) {
-		_player.x = _clamped_x;
-		transform_set(_player.transform[TransformType.anchor],TransformValue.x,_clamped_x,false);
-	}
+	// The card specifies a single jump-button prompt followed by a scripted
+	// stomp. Keep Winbo staged while still allowing player_input() to poll it.
+	_player.x = camera_fixed_x + player_handoff_x;
+	_player.y = player_ground_y;
+	_player.velocity.Set(0,0);
+	_player.acceleration.Set(0,0);
+	_player.move_grounded = true;
+	transform_set(_player.transform[TransformType.anchor],TransformValue.x,_player.x,false);
+	transform_set(_player.transform[TransformType.anchor],TransformValue.y,_player.y,false);
+}
+else if(phase == OpeningCutscenePhase.stomp) {
+	var _stomp_progress = clamp(stomp_elapsed / stomp_duration,0,1);
+	var _stomp_eased = _stomp_progress * _stomp_progress * (3 - 2 * _stomp_progress);
+	_player.x = lerp(stomp_player_start_x,stomp_player_target_x,_stomp_eased);
+	_player.y = lerp(stomp_player_start_y,stomp_player_target_y,_stomp_eased)
+		- 4 * stomp_arc_height * _stomp_progress * (1 - _stomp_progress);
+	_player.velocity.Set(0,0);
+	_player.acceleration.Set(0,0);
+	_player.move_grounded = false;
+	transform_set(_player.transform[TransformType.anchor],TransformValue.x,_player.x,false);
+	transform_set(_player.transform[TransformType.anchor],TransformValue.y,_player.y,false);
+}
+else if(phase == OpeningCutscenePhase.defeat) {
+	_player.x = stomp_player_target_x;
+	_player.velocity.x = 0;
+	_player.acceleration.x = 0;
+	transform_set(_player.transform[TransformType.anchor],TransformValue.x,_player.x,false);
+}
+else if(phase == OpeningCutscenePhase.exit) {
+	_player.x = exit_player_x;
+	_player.y = player_ground_y;
+	_player.velocity.Set(0,0);
+	_player.acceleration.Set(0,0);
+	_player.move_grounded = true;
+	transform_set(_player.transform[TransformType.anchor],TransformValue.x,_player.x,false);
+	transform_set(_player.transform[TransformType.anchor],TransformValue.y,_player.y,false);
 }
 
 // The opening is a focused tutorial beat; suppress the normal five-second
