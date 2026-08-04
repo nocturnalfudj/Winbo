@@ -276,7 +276,10 @@ function master_game_state_loading() {
 		
 		case GameplayLoadingPhase.transition_out:
 			if(!screen_fade_active && screen_fade_alpha > 0){
-				master_screen_fade_begin(screen_fade_alpha, 0, SCREEN_FADE_GAMEPLAY_FROM_BLACK_TIME);
+				var _fade_from_black_time = (_request.target_room == r_opening_cutscene)
+					? SECOND * 0.75
+					: SCREEN_FADE_GAMEPLAY_FROM_BLACK_TIME;
+				master_screen_fade_begin(screen_fade_alpha, 0, _fade_from_black_time);
 			}
 			
 			if(!screen_fade_active && screen_fade_alpha <= 0){

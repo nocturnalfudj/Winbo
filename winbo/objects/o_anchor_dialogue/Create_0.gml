@@ -66,6 +66,7 @@ ui_group_set(UIGroup.dialogue,id);
 	presence_dialogue_anchor_offset_y = -610;
 	presence_dialogue_page_text = presence_dialogue_pages[0].text;
 	presence_dialogue_page_expected_lines = presence_dialogue_pages[0].expected_lines;
+	presence_dialogue_page_offset_y = presence_dialogue_pages[0].text_offset_y;
 	presence_dialogue_page_actual_lines = presence_dialogue_page_expected_lines;
 	presence_dialogue_page_mode = presence_dialogue_pages[0].mode;
 	presence_dialogue_box_sprite = spr_presence_speech_box_large;
@@ -256,7 +257,7 @@ ui_group_set(UIGroup.dialogue,id);
 		) * 0.5 * presence_dialogue_text_scale;
 		presence_dialogue_text_offset_y = -(
 			presence_dialogue_layout_bounds_top + presence_dialogue_layout_bounds_bottom
-		) * 0.5 * presence_dialogue_text_scale;
+		) * 0.5 * presence_dialogue_text_scale + presence_dialogue_page_offset_y;
 
 		var _bounds_width_rendered = (presence_dialogue_layout_bounds_right - presence_dialogue_layout_bounds_left)
 			* presence_dialogue_text_scale;
@@ -554,6 +555,7 @@ ui_group_set(UIGroup.dialogue,id);
 		presence_dialogue_fast_countdown = 0;
 		presence_dialogue_page_text = _page.text;
 		presence_dialogue_page_expected_lines = _page.expected_lines;
+		presence_dialogue_page_offset_y = _page.text_offset_y;
 		presence_dialogue_page_mode = _page.mode;
 		presence_dialogue_text_scale_requested = _page.text_scale;
 		presence_dialogue_text_width_requested = _page.text_width;

@@ -17,6 +17,14 @@ if(instance_number(o_player) > 0) {
 		_player.move_limit_enable_x = false;
 	}
 }
+with(soldier_solid_id) {
+	collision_enable_x_in = false;
+	collision_enable_x_left = false;
+	collision_enable_x_right = false;
+	collision_enable_y_in = false;
+	collision_enable_y_up = false;
+	collision_enable_y_down = false;
+}
 layer_set_visible("lyr_hud_front",hud_front_visible_restore);
 layer_set_visible("lyr_hud",hud_visible_restore);
 layer_set_visible("lyr_hud_back",hud_back_visible_restore);

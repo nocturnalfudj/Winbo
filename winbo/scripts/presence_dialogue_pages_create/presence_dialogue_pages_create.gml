@@ -3,13 +3,14 @@ enum PresenceDialoguePageMode {
 	direct_english
 }
 
-function presence_dialogue_page(_text, _expected_lines, _text_scale = 1.35, _text_width = 370) {
+function presence_dialogue_page(_text, _expected_lines, _text_scale = 1.35, _text_width = 370, _text_offset_y = 0) {
 	return {
 		text: string_replace_all(_text,"|",chr(10)),
 		expected_lines: _expected_lines,
 		mode: PresenceDialoguePageMode.direct_english,
 		text_scale: _text_scale,
 		text_width: _text_width,
+		text_offset_y: _text_offset_y,
 	};
 }
 
@@ -85,7 +86,7 @@ function presence_dialogue_pages_create(_stage) {
 		presence_dialogue_page("So self-important are they that they|pay no mind to whose domain this|once was until he stands before them.", 3, 0.90, 750),
 		presence_dialogue_page("Sweep through these lands, and|collect the Orbs, Winbo. Pass through|my doors, and gather my Talismans.", 3, 0.90, 750),
 		presence_dialogue_page("Humble them.|Remind them of whence they came.", 2, 0.90, 750),
-		presence_dialogue_page("This is your nature, Winbo...|You collect things.", 2, 0.90, 750),
-		presence_dialogue_page("Now go. Strip them of|all their pretences. Strip|them of all that they are.", 3, 0.90, 750),
+		presence_dialogue_page("This is your nature, Winbo...|You collect things.", 2, 0.90, 750, -12),
+		presence_dialogue_page("Now go. Strip them of|all their pretences. Strip|them of all that they are.", 3, 0.90, 750, -12),
 	]);
 }

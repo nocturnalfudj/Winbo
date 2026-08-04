@@ -53,16 +53,6 @@ dialogue_played = false;
 voice_snd_id = noone;
 opening_cutscene_sfx_stop = function(_sound_instance) {
 	if(_sound_instance == noone) return;
-
-	var _sound_list = o_audio.channel[AudioChannel.sfx][AudioChannelProperty.sound_list];
-	var _sound_index = ds_list_find_index(_sound_list,_sound_instance);
-	if(_sound_index < 0) return;
-
-	ds_list_delete(_sound_list,_sound_index);
-	o_audio.channel[AudioChannel.sfx][AudioChannelProperty.sound_num] = max(
-		0,
-		o_audio.channel[AudioChannel.sfx][AudioChannelProperty.sound_num] - 1
-	);
 	audio_stop_sound(_sound_instance);
 };
 opening_cutscene_prompt_label_get = function(_input_type,_key) {
@@ -213,6 +203,28 @@ opening_platform_top_offset_y = (
 ) * opening_platform_id.image_yscale;
 soldier_body_center_local_y = (soldier_head_local_y + soldier_foot_local_y) * 0.5;
 
+// The interactive frames occupy x=900..1129 and y=412..795 in the authored
+// canvas. Add modest side/top forgiveness so the whole visible soldier reads
+// as solid and any clearly landed jump counts, rather than only his head.
+soldier_collision_local_left = 880;
+soldier_collision_local_right = 1150;
+soldier_collision_local_top = 400;
+soldier_collision_local_bottom = 795;
+soldier_solid_left = 0;
+soldier_solid_right = 0;
+soldier_solid_top = 0;
+soldier_solid_bottom = 0;
+soldier_solid_id = instance_create_layer(0,0,"lyr_opening_level_walls",o_platform);
+with(soldier_solid_id) {
+	visible = false;
+	collision_enable_x_in = false;
+	collision_enable_x_left = false;
+	collision_enable_x_right = false;
+	collision_enable_y_in = false;
+	collision_enable_y_up = false;
+	collision_enable_y_down = false;
+}
+
 // The source frames contain almost no translation during the backing-away
 // walk, so move the soldier canvas explicitly and leave the dropped M16 put.
 // Recalculate view-relative choreography through the canonical camera system;
@@ -260,9 +272,32 @@ opening_cutscene_layout_update = function(_scene_width,_scene_height) {
 	sequence_draw_x = soldier_head_x - walk_back_distance - soldier_head_local_x * soldier_scale;
 	sequence_draw_y = soldier_ground_y - soldier_foot_local_y * soldier_scale;
 	m16_draw_y = soldier_ground_y - m16_bottom_local_y * soldier_scale;
-	soldier_head_y = sequence_draw_y + soldier_head_local_y * soldier_scale;
-	soldier_head_left = sequence_draw_x + walk_back_distance + 995 * soldier_scale;
-	soldier_head_right = sequence_draw_x + walk_back_distance + 1140 * soldier_scale;
+	soldier_solid_left = sequence_draw_x + walk_back_distance
+		+ soldier_collision_local_left * soldier_scale;
+	soldier_solid_right = sequence_draw_x + walk_back_distance
+		+ soldier_collision_local_right * soldier_scale;
+	soldier_solid_top = sequence_draw_y + soldier_collision_local_top * soldier_scale;
+	soldier_solid_bottom = sequence_draw_y + soldier_collision_local_bottom * soldier_scale;
+	var _solid_sprite_width = sprite_get_bbox_right(spr_platform)
+		- sprite_get_bbox_left(spr_platform) + 1;
+	var _solid_sprite_height = sprite_get_bbox_bottom(spr_platform)
+		- sprite_get_bbox_top(spr_platform) + 1;
+	var _solid_scale_x = (soldier_solid_right - soldier_solid_left)
+		/ _solid_sprite_width;
+	var _solid_scale_y = (soldier_solid_bottom - soldier_solid_top)
+		/ _solid_sprite_height;
+	var _solid_local_left = sprite_get_bbox_left(spr_platform)
+		- sprite_get_xoffset(spr_platform);
+	var _solid_local_top = sprite_get_bbox_top(spr_platform)
+		- sprite_get_yoffset(spr_platform);
+	var _soldier_solid_x = soldier_solid_left - _solid_local_left * _solid_scale_x;
+	var _soldier_solid_y = soldier_solid_top - _solid_local_top * _solid_scale_y;
+	with(soldier_solid_id) {
+		x = _soldier_solid_x;
+		y = _soldier_solid_y;
+		image_xscale = _solid_scale_x;
+		image_yscale = _solid_scale_y;
+	}
 	stomp_smoke_x = soldier_head_x;
 	stomp_smoke_y = sequence_draw_y + soldier_body_center_local_y * soldier_scale;
 };

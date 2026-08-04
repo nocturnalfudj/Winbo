@@ -83,10 +83,19 @@ switch(phase) {
 				with(_player) {
 					movement_limit_enable_x(_limit_left,_limit_right);
 				}
+				with(soldier_solid_id) {
+					collision_enable_x_in = true;
+					collision_enable_x_left = true;
+					collision_enable_x_right = true;
+					collision_enable_y_in = true;
+					collision_enable_y_up = true;
+					collision_enable_y_down = true;
+				}
 				var _player_transform = _player.transform[TransformType.anchor];
 				transform_set(_player_transform,TransformValue.x,_player.x,false);
 				transform_set(_player_transform,TransformValue.y,_player.y,false);
 				player_bottom_previous = _player.bbox_bottom;
+
 			}
 		}
 	break;
@@ -101,13 +110,21 @@ switch(phase) {
 		if(instance_number(o_player) > 0) {
 			var _player = instance_find(o_player,0);
 			var _player_bottom = _player.bbox_bottom;
-			var _stomped = _player.velocity.y > 0
-				&& _player.bbox_right >= soldier_head_left
-				&& _player.bbox_left <= soldier_head_right
-				&& player_bottom_previous <= soldier_head_y
-				&& _player_bottom >= soldier_head_y;
+			var _landed_on_soldier = _player.move_grounded_instance == soldier_solid_id
+				|| (_player.collision.y == 1
+					&& _player.move_collision_object_instance == soldier_solid_id);
+			var _stomped = _landed_on_soldier
+				&& player_bottom_previous <= soldier_solid_top + 4;
 
 			if(_stomped) {
+				with(soldier_solid_id) {
+					collision_enable_x_in = false;
+					collision_enable_x_left = false;
+					collision_enable_x_right = false;
+					collision_enable_y_in = false;
+					collision_enable_y_up = false;
+					collision_enable_y_down = false;
+				}
 				phase = OpeningCutscenePhase.defeat;
 				soldier_frame = defeat_frame_first;
 				defeat_elapsed = 0;

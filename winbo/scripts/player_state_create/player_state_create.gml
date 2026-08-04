@@ -66,6 +66,38 @@ function player_stage_entrance_finish(){
 	user.hp_vulnerable = stage_entrance_user_hp_vulnerable_previous;
 	spawn_context = PlayerSpawnContext.none;
 
+	// GameMaker collision masks include both bounding-box edges. A room spawn
+	// whose feet are authored exactly on the platform top therefore begins one
+	// pixel inside the floor. Match the normal downward-collision result by
+	// moving that single pixel out before handing control to the player; leaving
+	// it overlapped makes horizontal input hit the floor's x collision and push
+	// back in the opposite direction until the first jump clears the overlap.
+	if(place_meeting(x,y,move_collision_object)
+	&& !place_meeting(x,y - 1,move_collision_object)) {
+		y -= 1;
+		transform_set(
+			transform[TransformType.anchor],
+			TransformValue.y,
+			y,
+			false
+		);
+	}
+
+	// Return every movement field to the normal grounded-play baseline. Without
+	// this reset, room-entry state can survive until the first jump refreshes it.
+	velocity.Set(0,0);
+	acceleration.Set(0,0);
+	velocity_retention = velocity_retention_default;
+	movement_input_move_acceleration_factor_set(1);
+	input_move_direction = 0;
+	input_move_magnitude = 0;
+	input_move_direction_prev = 0;
+	input_move_magnitude_prev = 0;
+	input_aim_direction = 0;
+	face_horizontal = 1;
+	collision.Set(0,0);
+	move_collision_object_instance = noone;
+
 	move_grounded = place_meeting(x, y + 1, move_collision_object);
 	if(move_grounded){
 		move_grounded_instance = instance_place(x, y + 1, move_collision_object);
@@ -77,6 +109,10 @@ function player_stage_entrance_finish(){
 		move_grounded_close = false;
 		move_grounded_close_instance = noone;
 	}
+	move_grounded_previous = move_grounded;
+	move_grounded_close_prev = move_grounded_close;
+	stationary = true;
+	stationary_time = 0;
 
 	image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
 	image_set_frame(image, 0);
