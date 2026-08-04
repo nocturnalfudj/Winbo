@@ -118,7 +118,7 @@ switch(phase) {
 				stomp_smoke_delay_elapsed = 0;
 				stomp_smoke_frame = -1;
 				var _exit_limit_left = camera_fixed_x + player_screen_bound_margin;
-				var _exit_limit_right = room_width - player_screen_bound_margin;
+				var _exit_limit_right = room_width;
 				with(_player) {
 					movement_limit_enable_x(_exit_limit_left,_exit_limit_right);
 					acceleration.Set(0,0);
