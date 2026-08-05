@@ -208,7 +208,7 @@ soldier_body_center_local_y = (soldier_head_local_y + soldier_foot_local_y) * 0.
 // measured visible bounds for forgiving stomp detection.
 soldier_collision_local_left = 940;
 soldier_collision_local_right = 1120;
-soldier_collision_local_top = 412;
+soldier_collision_local_top = 460;
 soldier_collision_local_bottom = 795;
 soldier_stomp_local_left = 900;
 soldier_stomp_local_right = 1129;
