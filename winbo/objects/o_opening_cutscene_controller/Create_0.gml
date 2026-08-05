@@ -203,17 +203,23 @@ opening_platform_top_offset_y = (
 ) * opening_platform_id.image_yscale;
 soldier_body_center_local_y = (soldier_head_local_y + soldier_foot_local_y) * 0.5;
 
-// The interactive frames occupy x=900..1129 and y=412..795 in the authored
-// canvas. Add modest side/top forgiveness so the whole visible soldier reads
-// as solid and any clearly landed jump counts, rather than only his head.
-soldier_collision_local_left = 880;
-soldier_collision_local_right = 1150;
-soldier_collision_local_top = 400;
+// Match the Apocalypse Survivor's normal physical width rather than using the
+// full animation silhouette as a rectangular wall. Keep the separately
+// measured visible bounds for forgiving stomp detection.
+soldier_collision_local_left = 940;
+soldier_collision_local_right = 1120;
+soldier_collision_local_top = 412;
 soldier_collision_local_bottom = 795;
+soldier_stomp_local_left = 900;
+soldier_stomp_local_right = 1129;
+soldier_stomp_local_top = 412;
 soldier_solid_left = 0;
 soldier_solid_right = 0;
 soldier_solid_top = 0;
 soldier_solid_bottom = 0;
+soldier_stomp_left = 0;
+soldier_stomp_right = 0;
+soldier_stomp_top = 0;
 soldier_solid_id = instance_create_layer(0,0,"lyr_opening_level_walls",o_platform);
 with(soldier_solid_id) {
 	visible = false;
@@ -278,6 +284,11 @@ opening_cutscene_layout_update = function(_scene_width,_scene_height) {
 		+ soldier_collision_local_right * soldier_scale;
 	soldier_solid_top = sequence_draw_y + soldier_collision_local_top * soldier_scale;
 	soldier_solid_bottom = sequence_draw_y + soldier_collision_local_bottom * soldier_scale;
+	soldier_stomp_left = sequence_draw_x + walk_back_distance
+		+ soldier_stomp_local_left * soldier_scale;
+	soldier_stomp_right = sequence_draw_x + walk_back_distance
+		+ soldier_stomp_local_right * soldier_scale;
+	soldier_stomp_top = sequence_draw_y + soldier_stomp_local_top * soldier_scale;
 	var _solid_sprite_width = sprite_get_bbox_right(spr_platform)
 		- sprite_get_bbox_left(spr_platform) + 1;
 	var _solid_sprite_height = sprite_get_bbox_bottom(spr_platform)

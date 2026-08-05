@@ -113,8 +113,14 @@ switch(phase) {
 			var _landed_on_soldier = _player.move_grounded_instance == soldier_solid_id
 				|| (_player.collision.y == 1
 					&& _player.move_collision_object_instance == soldier_solid_id);
-			var _stomped = _landed_on_soldier
-				&& player_bottom_previous <= soldier_solid_top + 4;
+			var _crossed_visible_soldier_top = _player.velocity.y >= 0
+				&& _player.bbox_right >= soldier_stomp_left
+				&& _player.bbox_left <= soldier_stomp_right
+				&& player_bottom_previous <= soldier_stomp_top + 4
+				&& _player_bottom >= soldier_stomp_top;
+			var _stomped = (_landed_on_soldier
+				&& player_bottom_previous <= soldier_solid_top + 4)
+				|| _crossed_visible_soldier_top;
 
 			if(_stomped) {
 				with(soldier_solid_id) {
