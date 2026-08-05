@@ -7,19 +7,46 @@ var _dt = min(global.delta_time,0.05) * o_master.time_scale * o_master.time_effe
 switch(phase) {
 	case OpeningCutscenePhase.intro:
 		var _intro_dt = _dt;
-		if(intro_preroll_elapsed < intro_preroll_duration) {
-			var _preroll_remaining = intro_preroll_duration - intro_preroll_elapsed;
-			var _preroll_dt = min(_intro_dt,_preroll_remaining);
-			intro_preroll_elapsed += _preroll_dt;
-			_intro_dt -= _preroll_dt;
-			soldier_frame = (soldier_frame + soldier_fps * _preroll_dt)
-				mod intro_preroll_frame_count;
-			if(intro_preroll_elapsed >= intro_preroll_duration) soldier_frame = 0;
+		if(intro_phase == OpeningCutsceneIntroPhase.first_look) {
+			var _first_look_remaining = max(
+				0,
+				(intro_first_look_frame_last - soldier_frame) / soldier_fps
+			);
+			var _first_look_dt = min(_intro_dt,_first_look_remaining);
+			soldier_frame += soldier_fps * _first_look_dt;
+			_intro_dt -= _first_look_dt;
+			if(soldier_frame >= intro_first_look_frame_last) {
+				intro_phase = OpeningCutsceneIntroPhase.idle;
+				intro_idle_elapsed = 0;
+				soldier_frame = 0;
+			}
 		}
 
-		soldier_frame = min(beg_frame_first,soldier_frame + soldier_fps * _intro_dt);
+		if(intro_phase == OpeningCutsceneIntroPhase.idle) {
+			var _idle_remaining = intro_idle_duration - intro_idle_elapsed;
+			var _idle_dt = min(_intro_dt,_idle_remaining);
+			intro_idle_elapsed += _idle_dt;
+			_intro_dt -= _idle_dt;
+			soldier_frame = min(
+				intro_idle_frame_count - 1,
+				intro_idle_elapsed * soldier_fps
+			);
+			if(intro_idle_elapsed >= intro_idle_duration) {
+				intro_phase = OpeningCutsceneIntroPhase.second_look;
+				soldier_frame = intro_idle_frame_count;
+			}
+		}
 
-		if(soldier_frame >= player_entry_frame_first && !player_entry_motion_complete) {
+		if(intro_phase == OpeningCutsceneIntroPhase.second_look) {
+			soldier_frame = min(
+				beg_frame_first,
+				soldier_frame + soldier_fps * _intro_dt
+			);
+		}
+
+		if(intro_phase == OpeningCutsceneIntroPhase.second_look
+		&& soldier_frame >= player_entry_frame_first
+		&& !player_entry_motion_complete) {
 			player_entry_walk_elapsed += _dt;
 			var _entry_target_x = camera_fixed_x + player_handoff_x;
 			var _entry_remaining = _entry_target_x - player_entry_x;
@@ -53,14 +80,17 @@ switch(phase) {
 			player_entry_idle_elapsed += _dt;
 		}
 
-		if(player_entry_motion_complete
+		if(intro_phase == OpeningCutsceneIntroPhase.second_look
+		&& player_entry_motion_complete
 		&& soldier_frame >= soldier_notice_frame
 		&& !dialogue_played) {
 			enemy_voice_play(id,snd_opening_cutscene_npc_dialogue,false);
 			dialogue_played = true;
 		}
 
-		if(soldier_frame >= beg_frame_first && player_entry_motion_complete) {
+		if(intro_phase == OpeningCutsceneIntroPhase.second_look
+		&& soldier_frame >= beg_frame_first
+		&& player_entry_motion_complete) {
 			phase = OpeningCutscenePhase.interactive;
 			prompt_elapsed = 0;
 			opening_cutscene_prompt_update();

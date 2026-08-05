@@ -6,12 +6,20 @@ enum OpeningCutscenePhase {
 	title
 }
 
+enum OpeningCutsceneIntroPhase {
+	first_look,
+	idle,
+	second_look
+}
+
 phase = OpeningCutscenePhase.intro;
+intro_phase = OpeningCutsceneIntroPhase.first_look;
 soldier_frame = 0;
 soldier_fps = 15;
-intro_preroll_elapsed = 0;
-intro_preroll_duration = 2;
-intro_preroll_frame_count = 15;
+intro_first_look_frame_last = 65;
+intro_idle_elapsed = 0;
+intro_idle_frame_count = 15;
+intro_idle_duration = intro_idle_frame_count / soldier_fps;
 beg_frame_first = 200;
 beg_frame_last = 205;
 defeat_frame_first = 214;

@@ -1071,18 +1071,24 @@ function player_animation_frame_transfer(_target_sprite){
 function player_frolic_begin_sprite(){
 	var _transition_sprite;
 	_transition_sprite = noone;
+	var _transition_sprite_followup;
+	_transition_sprite_followup = noone;
 
 	if(sprite_current == sprite_walk){
 		_transition_sprite = sprite_transition_walk_to_frolic;
 	}
 	else if(sprite_current == sprite_idle){
 		_transition_sprite = sprite_transition_idle_to_frolic;
+		_transition_sprite_followup = sprite_transition_walk_to_frolic;
 	}
 
 	image_system_setup(sprite_frolic, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
 
 	if(_transition_sprite != noone){
 		image_system_queue_add_to_front(_transition_sprite, ANIMATION_FPS_DEFAULT);
+	}
+	if(_transition_sprite_followup != noone){
+		image_system_queue_add_to_back(_transition_sprite_followup, ANIMATION_FPS_DEFAULT);
 	}
 }
 
