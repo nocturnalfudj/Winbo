@@ -56,7 +56,9 @@ if(soldier_frame >= 83) {
 	);
 }
 
-if(phase == OpeningCutscenePhase.intro && instance_number(o_player) > 0) {
+if(phase == OpeningCutscenePhase.intro
+&& player_entry_started
+&& instance_number(o_player) > 0) {
 	var _player = instance_find(o_player,0);
 	var _player_walking_in = !player_entry_motion_complete;
 	var _player_sprite = _player_walking_in ? _player.sprite_walk : _player.sprite_idle;
@@ -78,8 +80,8 @@ if(phase == OpeningCutscenePhase.intro && instance_number(o_player) > 0) {
 	draw_sprite_ext(
 		_player_sprite,
 		_player_frame,
-		_player.x,
-		_player.y,
+		player_entry_x,
+		player_ground_y,
 		1,
 		1,
 		0,

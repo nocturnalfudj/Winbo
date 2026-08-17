@@ -1,6 +1,6 @@
 {
   "$GMSound": "v2",
-  "%Name": "snd_bonus_door_creak",
+  "%Name": "snd_bonus_door_creak_2",
   "audioGroupId": {
     "name": "audiogroup_default",
     "path": "audiogroups/audiogroup_default",
@@ -10,9 +10,9 @@
   "compression": 0,
   "compressionQuality": 4,
   "conversionMode": 0,
-  "duration": 3.070023,
+  "duration": 4.091125,
   "exportDir": "",
-  "name": "snd_bonus_door_creak",
+  "name": "snd_bonus_door_creak_2",
   "parent": {
     "name": "SFX",
     "path": "folders/Control/Audio/SFX.yy",
@@ -20,7 +20,7 @@
   "preload": false,
   "resourceType": "GMSound",
   "resourceVersion": "2.0",
-  "sampleRate": 44100,
-  "soundFile": "snd_bonus_door_creak.wav",
+  "sampleRate": 22050,
+  "soundFile": "snd_bonus_door_creak_2.mp3",
   "volume": 1.0,
 }

@@ -27,6 +27,7 @@ if(spawn_countdown <= 0 && instance_number(o_floating_decor_item) < spawn_count_
 	_item.image_xscale = _background ? 0.65 : 1;
 	_item.image_yscale = _item.image_xscale;
 	_item.image_alpha = _background ? 0.72 : 1;
+	_item.draw_in_gui = !_background;
 
 	spawn_countdown = random_range(spawn_interval_min,spawn_interval_max);
 }

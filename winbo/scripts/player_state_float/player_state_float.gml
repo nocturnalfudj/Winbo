@@ -114,7 +114,7 @@ function player_state_float(){
 						}
 					}
 					
-						if(quick_smoke_fx_enable){
+						if(jump_smoke_fx_enable && move_grounded){
 							// Jumping smoke FX (ground puff)
 							var _jump_smoke_sprite = (input_move_magnitude > 0.1) ? spr_smoke_jump_diagonal : spr_smoke_jump_upward;
 							var _jump_smoke_xscale = 1;
@@ -200,9 +200,11 @@ function player_state_float(){
 	
 	//Collision Situations
 	player_collisions();
-	
+
 	//Movement Update
 	player_movement_update();
+	player_mushroom_collisions_post_movement();
+	player_landing_smoke_update();
 
 	if(move_grounded){
 		player_air_spin_clear();

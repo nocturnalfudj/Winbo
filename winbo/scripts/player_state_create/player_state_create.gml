@@ -24,6 +24,21 @@ function player_stage_entrance_begin(){
 
 	draw_adjustment_y = stage_entrance_draw_adjustment_y;
 
+	// The supplied 1500px-wide sequence carries Winbo toward its centred origin.
+	// Offset only the small, resolution-dependent remainder needed to keep the
+	// first frame outside the camera, then ease that remainder away as it plays.
+	var _entrance_frame_zero_right_x = 67;
+	var _entrance_camera_width = camera_get_view_width(view_camera[0]);
+	stage_entrance_draw_offset_start_x = min(
+		0,
+		sprite_get_xoffset(sprite_stage_entrance)
+			- _entrance_frame_zero_right_x
+			- _entrance_camera_width * 0.5
+			- 1
+	);
+	stage_entrance_landing_smoke_pending = (room != r_opening_cutscene);
+	draw_adjustment_x = stage_entrance_draw_offset_start_x;
+
 	velocity.x = 0;
 	velocity.y = 0;
 	acceleration.x = 0;
@@ -40,7 +55,16 @@ function player_stage_entrance_begin(){
 
 function player_state_stage_entrance(){
 	draw_adjustment_y = stage_entrance_draw_adjustment_y;
-
+	var _entrance_progress = clamp(
+		sprite_current_frame / max(1, image.sprite_number - 1),
+		0,
+		1
+	);
+	draw_adjustment_x = lerp(
+		stage_entrance_draw_offset_start_x,
+		0,
+		ease_quad_out(0, 1, false, _entrance_progress, 1)
+	);
 	velocity.x = 0;
 	acceleration.x = 0;
 
@@ -55,16 +79,22 @@ function player_state_stage_entrance(){
 	}
 
 	if((sprite_current_frame >= (image.sprite_number - 1)) && move_grounded){
+		if(stage_entrance_landing_smoke_pending){
+			stage_entrance_landing_smoke_pending = false;
+			fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", spr_fx_smoke_landing, 1, 1, 0, 18);
+		}
 		player_stage_entrance_finish();
 	}
 }
 
 function player_stage_entrance_finish(){
+	draw_adjustment_x = 0;
 	draw_adjustment_y = 0;
 
 	hp_vulnerable = stage_entrance_hp_vulnerable_previous;
 	user.hp_vulnerable = stage_entrance_user_hp_vulnerable_previous;
 	spawn_context = PlayerSpawnContext.none;
+	stage_entrance_landing_smoke_pending = false;
 
 	// GameMaker collision masks include both bounding-box edges. A room spawn
 	// whose feet are authored exactly on the platform top therefore begins one

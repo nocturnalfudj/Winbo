@@ -3,9 +3,9 @@
   "%Name":"spr_apocalypse_survivor_projectile",
   "bboxMode":0,
   "bbox_bottom": 34,
-  "bbox_left":73,
+  "bbox_left":0,
   "bbox_right": 71,
-  "bbox_top":7,
+  "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
   "ConfigValues":{

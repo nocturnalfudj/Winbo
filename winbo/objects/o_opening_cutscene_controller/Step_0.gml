@@ -7,45 +7,62 @@ var _dt = min(global.delta_time,0.05) * o_master.time_scale * o_master.time_effe
 switch(phase) {
 	case OpeningCutscenePhase.intro:
 		var _intro_dt = _dt;
-		if(intro_phase == OpeningCutsceneIntroPhase.first_look) {
-			var _first_look_remaining = max(
+		if(intro_phase == OpeningCutsceneIntroPhase.first_survey) {
+			var _first_survey_remaining = max(
 				0,
-				(intro_first_look_frame_last - soldier_frame) / soldier_fps
+				(intro_survey_frame_last - soldier_frame) / soldier_fps
 			);
-			var _first_look_dt = min(_intro_dt,_first_look_remaining);
-			soldier_frame += soldier_fps * _first_look_dt;
-			_intro_dt -= _first_look_dt;
-			if(soldier_frame >= intro_first_look_frame_last) {
-				intro_phase = OpeningCutsceneIntroPhase.idle;
-				intro_idle_elapsed = 0;
-				soldier_frame = 0;
+			var _first_survey_dt = min(_intro_dt,_first_survey_remaining);
+			soldier_frame += soldier_fps * _first_survey_dt;
+			_intro_dt -= _first_survey_dt;
+			if(soldier_frame >= intro_survey_frame_last) {
+				intro_phase = OpeningCutsceneIntroPhase.pause;
+				intro_pause_elapsed = 0;
+				soldier_frame = intro_pause_frame_first;
 			}
 		}
 
-		if(intro_phase == OpeningCutsceneIntroPhase.idle) {
-			var _idle_remaining = intro_idle_duration - intro_idle_elapsed;
-			var _idle_dt = min(_intro_dt,_idle_remaining);
-			intro_idle_elapsed += _idle_dt;
-			_intro_dt -= _idle_dt;
-			soldier_frame = min(
-				intro_idle_frame_count - 1,
-				intro_idle_elapsed * soldier_fps
-			);
-			if(intro_idle_elapsed >= intro_idle_duration) {
-				intro_phase = OpeningCutsceneIntroPhase.second_look;
-				soldier_frame = intro_idle_frame_count;
+		if(intro_phase == OpeningCutsceneIntroPhase.pause) {
+			var _pause_remaining = intro_pause_duration - intro_pause_elapsed;
+			var _pause_dt = min(_intro_dt,_pause_remaining);
+			intro_pause_elapsed += _pause_dt;
+			_intro_dt -= _pause_dt;
+			var _pause_frame_count = intro_pause_frame_last
+				- intro_pause_frame_first + 1;
+			soldier_frame = intro_pause_frame_first
+				+ ((intro_pause_elapsed * soldier_fps) mod _pause_frame_count);
+			if(intro_pause_elapsed >= intro_pause_duration) {
+				intro_phase = OpeningCutsceneIntroPhase.second_survey;
+				soldier_frame = intro_second_survey_frame_first;
 			}
 		}
 
-		if(intro_phase == OpeningCutsceneIntroPhase.second_look) {
+		if(intro_phase == OpeningCutsceneIntroPhase.second_survey) {
+			var _second_survey_remaining = max(
+				0,
+				(intro_survey_frame_last - soldier_frame) / soldier_fps
+			);
+			var _second_survey_dt = min(_intro_dt,_second_survey_remaining);
+			soldier_frame += soldier_fps * _second_survey_dt;
+			_intro_dt -= _second_survey_dt;
+			if(soldier_frame >= intro_survey_frame_last) {
+				intro_phase = OpeningCutsceneIntroPhase.spot;
+				soldier_frame = intro_spot_frame_first;
+			}
+		}
+
+		if(intro_phase == OpeningCutsceneIntroPhase.spot) {
 			soldier_frame = min(
 				beg_frame_first,
 				soldier_frame + soldier_fps * _intro_dt
 			);
 		}
 
-		if(intro_phase == OpeningCutsceneIntroPhase.second_look
-		&& soldier_frame >= player_entry_frame_first
+		if(intro_phase != OpeningCutsceneIntroPhase.first_survey) {
+			player_entry_started = true;
+		}
+
+		if(player_entry_started
 		&& !player_entry_motion_complete) {
 			player_entry_walk_elapsed += _dt;
 			var _entry_target_x = camera_fixed_x + player_handoff_x;
@@ -80,7 +97,7 @@ switch(phase) {
 			player_entry_idle_elapsed += _dt;
 		}
 
-		if(intro_phase == OpeningCutsceneIntroPhase.second_look
+		if(intro_phase == OpeningCutsceneIntroPhase.spot
 		&& player_entry_motion_complete
 		&& soldier_frame >= soldier_notice_frame
 		&& !dialogue_played) {
@@ -88,7 +105,7 @@ switch(phase) {
 			dialogue_played = true;
 		}
 
-		if(intro_phase == OpeningCutsceneIntroPhase.second_look
+		if(intro_phase == OpeningCutsceneIntroPhase.spot
 		&& soldier_frame >= beg_frame_first
 		&& player_entry_motion_complete) {
 			phase = OpeningCutscenePhase.interactive;

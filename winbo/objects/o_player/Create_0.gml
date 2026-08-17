@@ -62,7 +62,6 @@ is_player = true;
 		spr_player_secret_idle_thought_1,
 		spr_player_secret_idle_thought_2,
 		spr_player_secret_idle_thought_3,
-		spr_player_secret_idle_thought_5,
 		spr_player_secret_idle_thought_6,
 		spr_player_secret_idle_thought_7,
 		spr_player_secret_idle_thought_8,
@@ -144,7 +143,11 @@ is_player = true;
 	acceleration_sway_enable = false;
 	acceleration_sway_max = 5;
 	acceleration_sway_lerp_val = 0.3;
+	// Keep the retired walk/bump smoke disabled while enabling the newly
+	// supplied jump and landing effects independently.
 	quick_smoke_fx_enable = false;
+	jump_smoke_fx_enable = true;
+	landing_smoke_armed = false;
 	
 	//Float
 	float_countdown_max = SECOND * 1;
@@ -160,6 +163,8 @@ is_player = true;
 	stage_entrance_hp_vulnerable_previous = true;
 	stage_entrance_user_hp_vulnerable_previous = true;
 	stage_entrance_draw_adjustment_y = 0;
+	stage_entrance_draw_offset_start_x = 0;
+	stage_entrance_landing_smoke_pending = false;
 	bonus_room_enter_target_room = noone;
 	bonus_room_enter_start_x = 0;
 	bonus_room_enter_start_y = 0;
@@ -202,16 +207,20 @@ is_player = true;
 
 	dive_spring_phase = DiveSpringPhase.dive;
 	dive_spring_impact_timer = 0;
-	dive_spring_fail_window_max = SECOND * 0.25;
-	dive_spring_success_window_max = SECOND * 0.25;
+	dive_spring_fail_window_max = SECOND * 0.2;
+	dive_spring_success_window_max = SECOND * 0.2;
 	dive_spring_move_input_threshold = 0.2;
 	dive_spring_move_input_previous = 0;
 	dive_spring_dive_timer = 0;
 	dive_spring_initial_speed = 12;
 	dive_spring_max_speed = 50;
-	dive_spring_acceleration_time = SECOND * 0.5;
+	dive_spring_acceleration_time = SECOND * 0.375;
 	dive_spring_start_speed = 0;
-	dive_spring_jump_acceleration_factor = 5.34;
+	dive_spring_startup_fps = ANIMATION_FPS_DEFAULT * 1.25;
+	dive_spring_startup_animation_active = false;
+	// With aerial retention held at 1 during ascent, this impulse and reduced
+	// gravity produce roughly two rotor loops before the apex.
+	dive_spring_jump_acceleration_factor = 0.5;
 	dive_spring_descent_loop_start_frame = 4;
 	dive_spring_descent_loop_end_frame = 6;
 	dive_spring_impact_start_frame = 6;
@@ -223,9 +232,11 @@ is_player = true;
 	dive_spring_transition_start_frame = 15;
 	dive_spring_transition_end_frame = 16;
 	dive_spring_fail_start_frame = 0;
-	dive_spring_launch_hold_time_max = SECOND * 0.12;
+	dive_spring_launch_hold_time_max = SECOND * 0.18;
 	dive_spring_launch_hold_time = 0;
-	dive_spring_rotor_fps = 10;
+	dive_spring_launch_applied = false;
+	dive_spring_rotor_fps = 8;
+	dive_spring_rise_gravity_factor = 0.45;
 	dive_spring_momentum_x = 0;
 	dive_spring_velocity_retention_aerial = 1;
 	dive_spring_velocity_retention_aerial_previous = velocity_retention_aerial;

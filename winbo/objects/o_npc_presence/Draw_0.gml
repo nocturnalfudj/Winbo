@@ -28,11 +28,14 @@ if(status_effect_active_count[StatusEffect.invincible] > 0){
 var _body_frame;
 var _head_sprite,_head_frame;
 var _eyes_sprite,_eyes_frame;
+var _eyes_x,_eyes_y;
 _body_frame = floor(presence_visual_body_idle_frame);
 _head_sprite = spr_npc_presence_head_front;
 _head_frame = floor(presence_visual_head_idle_frame);
 _eyes_sprite = presence_visual_eye_sprite;
 _eyes_frame = floor(presence_visual_eyes_idle_frame);
+_eyes_x = _character_x + (presence_visual_eye_offset_x * _scale_x);
+_eyes_y = _character_y + (presence_visual_eye_offset_y * _scale_y);
 
 switch(presence_visual_state){
 	case PresenceVisualState.intro:
@@ -113,7 +116,7 @@ if(_head_sprite != noone){
 }
 
 if(_eyes_sprite != noone){
-	draw_sprite_ext(_eyes_sprite,_eyes_frame,_character_x,_character_y,_scale_x,_scale_y,image_angle + acceleration_sway,image_blend,_alpha);
+	draw_sprite_ext(_eyes_sprite,_eyes_frame,_eyes_x,_eyes_y,_scale_x,_scale_y,image_angle + acceleration_sway,image_blend,_alpha);
 }
 
 if(flash_alpha > 0){
@@ -127,7 +130,7 @@ if(flash_alpha > 0){
 	}
 
 	if(_eyes_sprite != noone){
-		draw_sprite_ext(_eyes_sprite,_eyes_frame,_character_x,_character_y,_scale_x,_scale_y,image_angle + acceleration_sway,flash_colour,flash_alpha);
+		draw_sprite_ext(_eyes_sprite,_eyes_frame,_eyes_x,_eyes_y,_scale_x,_scale_y,image_angle + acceleration_sway,flash_colour,flash_alpha);
 	}
 	shader_reset();
 }

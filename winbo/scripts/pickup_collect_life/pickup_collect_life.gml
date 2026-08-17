@@ -9,6 +9,8 @@ function pickup_collect_life(){
 	with(instance_create_layer(x,y,"lyr_pfx_foreground",o_txtPstr_life)){
 		text_string = string(other.life_value);
 	}
+
+	fx_spawn_sprite_once(x, y, "lyr_pfx_foreground", spr_fx_collect_life, 1, 1, 0, 20);
 	
 	//Camera Shake
 	camera_shake_add(0.1,250,10,5,false,false,false,1,,false,100,);

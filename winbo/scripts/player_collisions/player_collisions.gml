@@ -18,7 +18,7 @@ function player_collisions(){
 				//Normal Hit
 				else{
 					with(other){
-						player_hit(other.damage_amount);
+						player_hit(other.damage_amount, other, true);
 					}
 				}
 			}
@@ -99,7 +99,7 @@ function player_collisions(){
 				else{
 					// Normal damage - hit player and destroy bullet
 					with(other){
-						player_hit();
+						player_hit(1, other, false);
 					}
 					state = BulletState.death;
 				}
@@ -120,7 +120,7 @@ function player_collisions(){
 							
 				//Kill Player
 				with(other){
-					player_hit();
+					player_hit(1, other, true);
 				}
 			}
 		#endregion
@@ -202,7 +202,7 @@ function player_collisions(){
 				//Contact Damage - player takes damage from touching enemies (not stomping)
 				else{
 					with(other){
-						player_hit();
+					player_hit(1, other, false);
 					}
 				}
 			}
@@ -256,38 +256,42 @@ function player_collisions(){
 	#region Spring
 		var _spring_collision_instance;
 		_spring_collision_instance = instance_place(x,y,o_spring);
-		// Trigger for o_spring or o_spring_vertical, but NOT o_spring_horizontal
-		if((state == PlayerState.dive_spring) && (dive_spring_phase == DiveSpringPhase.dive) && (_spring_collision_instance != noone) && (_spring_collision_instance.object_index != o_spring_horizontal)){
-			spring_countdown = SPRING_COUNTDOWN_MAX;
-
-			with(_spring_collision_instance){
-				image_system_setup(sprite_active,ANIMATION_FPS_DEFAULT,true,false,0,IMAGE_LOOP_FULL);
+		if((_spring_collision_instance == noone) && (move_grounded_instance != noone)){
+			if((move_grounded_instance.object_index == o_spring)
+			|| object_is_ancestor(move_grounded_instance.object_index, o_spring)){
+				_spring_collision_instance = move_grounded_instance;
 			}
-
-			player_dive_spring_begin_spring();
 		}
-		else if((state != PlayerState.dive_spring) && (_spring_collision_instance != noone) && (_spring_collision_instance.object_index != o_spring_horizontal) && (spring_countdown <= 0) && (velocity.y > 0)){
-			//Reset Countdown
-			spring_countdown = SPRING_COUNTDOWN_MAX;
-					
-			//Bounce Acceleration
-			acceleration.Set(0,0);
-			velocity.Set(0,0);
-			acceleration.AddMagnitudeDirection(_spring_collision_instance.spring_acceleration * input_move_acceleration_jump,_spring_collision_instance.spring_direction);
-						
-			//Start with Rise Gravity
-			move_gravity.Copy(move_gravity_rise);
+		if(_spring_collision_instance == noone){
+			_spring_collision_instance = instance_place(x, y + 10, o_spring);
+		}
+		var _spring_sweep_y;
+		_spring_sweep_y = y - yprevious;
+		if((_spring_collision_instance == noone) && (_spring_sweep_y > 0)){
+			_spring_collision_instance = collision_rectangle(
+				bbox_left,
+				bbox_top - _spring_sweep_y,
+				bbox_right,
+				bbox_bottom,
+				o_spring,
+				false,
+				true
+			);
+		}
 
-			player_air_spin_start();
-			
-			//Refill Dash Stamina
-			dash_stamina = dash_stamina_max;
-			dash_stamina_depleted = false;
-					
-			//Spring Animation
-			with(_spring_collision_instance){
-				//Start Active Animation
-				image_system_setup(sprite_active,ANIMATION_FPS_DEFAULT,true,false,0,IMAGE_LOOP_FULL);
+		if((_spring_collision_instance != noone)
+		&& (_spring_collision_instance.object_index != o_spring_horizontal)
+		&& (spring_countdown <= 0)){
+			var _spring_top_contact;
+			var _spring_previous_bottom;
+			_spring_previous_bottom = bbox_bottom - _spring_sweep_y;
+			_spring_top_contact = (move_grounded_instance == _spring_collision_instance)
+				|| ((_spring_previous_bottom <= (_spring_collision_instance.bbox_top + 4))
+					&& (bbox_bottom >= _spring_collision_instance.bbox_top)
+					&& (velocity.y >= 0));
+
+			if(_spring_top_contact){
+				player_mushroom_bounce(_spring_collision_instance);
 			}
 		}
 	#endregion
@@ -295,45 +299,46 @@ function player_collisions(){
 	#region Spring Horizontal
 		var _spring_horizontal_collision_instance;
 		_spring_horizontal_collision_instance = instance_place(x,y,o_spring_horizontal);
-		if((state != PlayerState.dive_spring) && (_spring_horizontal_collision_instance != noone) && (spring_countdown <= 0) && (abs(velocity.x) > 0.1)){
-			// Determine bounce direction based on velocity
-			// Moving right bounces left, moving left bounces right (opposite direction)
-			var _bounce_direction;
-			if(velocity.x > 0){
-				_bounce_direction = 180; // Moving right, bounce left (opposite)
+		var _spring_horizontal_direct_contact;
+		_spring_horizontal_direct_contact = _spring_horizontal_collision_instance != noone;
+		if((_spring_horizontal_collision_instance == noone) && (move_grounded_instance != noone)){
+			if((move_grounded_instance.object_index == o_spring_horizontal)
+			|| object_is_ancestor(move_grounded_instance.object_index, o_spring_horizontal)){
+				_spring_horizontal_collision_instance = move_grounded_instance;
 			}
-			else{
-				_bounce_direction = 0; // Moving left, bounce right (opposite)
+		}
+		if(_spring_horizontal_collision_instance == noone){
+			_spring_horizontal_collision_instance = instance_place(x, y + 10, o_spring_horizontal);
+		}
+		var _spring_horizontal_sweep_y;
+		_spring_horizontal_sweep_y = y - yprevious;
+		if((_spring_horizontal_collision_instance == noone) && (_spring_horizontal_sweep_y > 0)){
+			_spring_horizontal_collision_instance = collision_rectangle(
+				bbox_left,
+				bbox_top - _spring_horizontal_sweep_y,
+				bbox_right,
+				bbox_bottom,
+				o_spring_horizontal,
+				false,
+				true
+			);
+		}
+		if((_spring_horizontal_collision_instance != noone) && (spring_countdown <= 0)){
+			var _mushroom_top_contact;
+			var _mushroom_previous_bottom;
+			_mushroom_previous_bottom = bbox_bottom - _spring_horizontal_sweep_y;
+			_mushroom_top_contact = (move_grounded_instance == _spring_horizontal_collision_instance)
+				|| ((_mushroom_previous_bottom <= (_spring_horizontal_collision_instance.bbox_top + 4))
+					&& (bbox_bottom >= _spring_horizontal_collision_instance.bbox_top)
+					&& (velocity.y >= 0));
+
+			if(_mushroom_top_contact){
+				player_mushroom_bounce(_spring_horizontal_collision_instance);
 			}
-			
-			//Reset Countdown
-			spring_countdown = SPRING_COUNTDOWN_MAX;
-					
-			//Bounce Acceleration
-			// Reset horizontal velocity/acceleration
-			velocity.x = 0;
-			acceleration.x = 0;
-			
-			// Only reset downward Y velocity/acceleration (preserve upward momentum)
-			if(velocity.y > 0){
-				velocity.y = 0;
-				acceleration.y = 0;
-			}
-			
-			// Apply horizontal bounce acceleration (doubled for stronger bounce)
-			acceleration.AddMagnitudeDirection(_spring_horizontal_collision_instance.spring_acceleration * input_move_acceleration_jump * 1.2, _bounce_direction);
-					
-			//Start with Rise Gravity (same as vertical spring)
-			move_gravity.Copy(move_gravity_rise);
-			
-			//Refill Dash Stamina
-			dash_stamina = dash_stamina_max;
-			dash_stamina_depleted = false;
-					
-			//Spring Animation
-			with(_spring_horizontal_collision_instance){
-				//Start Active Animation
-				image_system_setup(sprite_active,ANIMATION_FPS_DEFAULT,true,false,0,IMAGE_LOOP_FULL);
+			else if(_spring_horizontal_direct_contact
+			&& (state != PlayerState.dive_spring)
+			&& (abs(velocity.x) > 0.1)){
+				player_mushroom_side_bounce(_spring_horizontal_collision_instance);
 			}
 		}
 	#endregion
@@ -448,7 +453,8 @@ function player_collisions(){
 	#region Landed on Crumble Platform
 		if(move_grounded_instance != noone){
 			with(move_grounded_instance){
-				if((object_index == o_platform_crumble) || object_is_ancestor(object_index, o_platform_crumble)){
+				if(((object_index == o_platform_crumble) || object_is_ancestor(object_index, o_platform_crumble))
+				&& (crumble_trigger_type == PlatformCrumbleTrigger.touch)){
 					if(!crumble_trigger_active){
 						crumble_trigger_active = true;
 						break_fx_blast_direction = noone;
@@ -461,4 +467,249 @@ function player_collisions(){
 			}
 		}
 	#endregion
+}
+
+/// @function player_mushroom_collisions_post_movement
+/// @summary Resolve mushroom contacts against the movement system's updated anchor transform.
+function player_mushroom_collisions_post_movement(){
+	var _spring_sweep_x, _spring_sweep_y;
+	var _movement_transform, _position_x, _position_y;
+	_movement_transform = transform[TransformType.anchor];
+	_position_x = _movement_transform.value[TransformValue.x].current;
+	_position_y = _movement_transform.value[TransformValue.y].current;
+	_spring_sweep_x = _position_x - x;
+	_spring_sweep_y = _position_y - y;
+	if((_spring_sweep_x == 0) && (_spring_sweep_y == 0)){
+		return;
+	}
+
+	// Movement writes the anchor transform first; the normal transform-system
+	// pass does not copy it back to x/y until later in the player Step event.
+	// Synchronize now so bbox values and the contact resolution use the actual
+	// post-movement position.
+	x = _position_x;
+	y = _position_y;
+
+	if(spring_countdown > 0){
+		return;
+	}
+
+	// The movement solver stops just clear of a resolved collision. Find the
+	// nearest actual downward-blocking surface at that final position instead
+	// of trusting its unordered candidate id; overlapping solids can otherwise
+	// leave a lower mushroom recorded as the collision owner.
+	if((collision.y == 1) && (_spring_sweep_y > 0)){
+		var _resolved_surface_candidates;
+		_resolved_surface_candidates = ds_list_create();
+		collision_rectangle_list(
+			bbox_left,
+			bbox_bottom,
+			bbox_right,
+			bbox_bottom + 4,
+			move_collision_object,
+			false,
+			true,
+			_resolved_surface_candidates,
+			false
+		);
+
+		var _resolved_surface_distance, _resolved_mushroom;
+		_resolved_surface_distance = 5;
+		_resolved_mushroom = noone;
+		for(var _surface_index = 0;
+		_surface_index < ds_list_size(_resolved_surface_candidates);
+		_surface_index++){
+			var _surface;
+			_surface = _resolved_surface_candidates[| _surface_index];
+			var _surface_distance;
+			_surface_distance = _surface.bbox_top - bbox_bottom;
+			var _surface_blocks_down;
+			_surface_blocks_down = _surface.collision_enable_y_in
+				|| _surface.collision_enable_y_down;
+			var _surface_is_mushroom;
+			_surface_is_mushroom = (_surface.object_index == o_spring)
+				|| object_is_ancestor(_surface.object_index, o_spring);
+
+			if(_surface_blocks_down
+			&& (_surface_distance >= 0)
+			&& ((_surface_distance < _resolved_surface_distance)
+				|| ((_surface_distance == _resolved_surface_distance)
+					&& _surface_is_mushroom))){
+				_resolved_surface_distance = _surface_distance;
+				_resolved_mushroom = _surface_is_mushroom ? _surface : noone;
+			}
+		}
+		ds_list_destroy(_resolved_surface_candidates);
+
+		if(_resolved_mushroom != noone){
+			player_mushroom_bounce(_resolved_mushroom);
+			return;
+		}
+	}
+
+	var _previous_left, _previous_right, _previous_top, _previous_bottom;
+	_previous_left = bbox_left - _spring_sweep_x;
+	_previous_right = bbox_right - _spring_sweep_x;
+	_previous_top = bbox_top - _spring_sweep_y;
+	_previous_bottom = bbox_bottom - _spring_sweep_y;
+
+	var _mushroom_candidates;
+	_mushroom_candidates = ds_list_create();
+	collision_rectangle_list(
+		min(_previous_left, bbox_left),
+		min(_previous_top, bbox_top),
+		max(_previous_right, bbox_right),
+		max(_previous_bottom, bbox_bottom),
+		o_spring,
+		false,
+		true,
+		_mushroom_candidates,
+		false
+	);
+
+	var _contact_mushroom, _contact_type, _contact_fraction;
+	_contact_mushroom = noone;
+	_contact_type = 0;
+	_contact_fraction = 2;
+
+	for(var _candidate_index = 0; _candidate_index < ds_list_size(_mushroom_candidates); _candidate_index++){
+		var _mushroom;
+		_mushroom = _mushroom_candidates[| _candidate_index];
+
+		// Test the exact horizontal span at the instant the feet cross the cap.
+		// Using the full swept AABB alone would report false corner contacts.
+		if((_spring_sweep_y > 0)
+		&& (_previous_bottom <= (_mushroom.bbox_top + 4))
+		&& (bbox_bottom >= _mushroom.bbox_top)){
+			var _top_fraction, _left_at_top, _right_at_top;
+			_top_fraction = clamp((_mushroom.bbox_top - _previous_bottom) / _spring_sweep_y, 0, 1);
+			_left_at_top = _previous_left + (_spring_sweep_x * _top_fraction);
+			_right_at_top = _previous_right + (_spring_sweep_x * _top_fraction);
+
+			if((_right_at_top >= _mushroom.bbox_left)
+			&& (_left_at_top <= _mushroom.bbox_right)
+			&& (_top_fraction < _contact_fraction)){
+				_contact_mushroom = _mushroom;
+				_contact_type = 1;
+				_contact_fraction = _top_fraction;
+			}
+		}
+
+		var _horizontal_mushroom;
+		_horizontal_mushroom = (_mushroom.object_index == o_spring_horizontal)
+			|| object_is_ancestor(_mushroom.object_index, o_spring_horizontal);
+		if(_horizontal_mushroom && (_spring_sweep_x != 0)){
+			var _side_fraction;
+			_side_fraction = -1;
+			if((_spring_sweep_x > 0)
+			&& (_previous_right <= _mushroom.bbox_left)
+			&& (bbox_right >= _mushroom.bbox_left)){
+				_side_fraction = (_mushroom.bbox_left - _previous_right) / _spring_sweep_x;
+			}
+			else if((_spring_sweep_x < 0)
+			&& (_previous_left >= _mushroom.bbox_right)
+			&& (bbox_left <= _mushroom.bbox_right)){
+				_side_fraction = (_mushroom.bbox_right - _previous_left) / _spring_sweep_x;
+			}
+
+			if((_side_fraction >= 0)
+			&& (_side_fraction <= 1)
+			&& (_side_fraction < _contact_fraction)){
+				var _top_at_side, _bottom_at_side;
+				_top_at_side = _previous_top + (_spring_sweep_y * _side_fraction);
+				_bottom_at_side = _previous_bottom + (_spring_sweep_y * _side_fraction);
+				if((_bottom_at_side > _mushroom.bbox_top)
+				&& (_top_at_side < _mushroom.bbox_bottom)){
+					_contact_mushroom = _mushroom;
+					_contact_type = 2;
+					_contact_fraction = _side_fraction;
+				}
+			}
+		}
+	}
+
+	ds_list_destroy(_mushroom_candidates);
+
+	if(_contact_type == 1){
+		player_mushroom_bounce(_contact_mushroom);
+	}
+	else if(_contact_type == 2){
+		if(_spring_sweep_x > 0){
+			x -= bbox_right - _contact_mushroom.bbox_left;
+		}
+		else{
+			x += _contact_mushroom.bbox_right - bbox_left;
+		}
+		transform_set(transform[TransformType.anchor], TransformValue.x, x, false);
+		player_mushroom_side_bounce(_contact_mushroom, sign(_spring_sweep_x));
+	}
+}
+
+/// @function player_mushroom_bounce
+/// @summary Bounce from the top of any mushroom, regardless of the current aerial state.
+function player_mushroom_bounce(_mushroom){
+	// A mushroom bounce always wins over Dive Spring: cancel the special state
+	// before applying the standard vertical spring impulse.
+	if(state == PlayerState.dive_spring){
+		player_dive_spring_reset();
+		state = PlayerState.move;
+	}
+
+	// Swept detection can catch a fast Dive Spring after the movement step has
+	// crossed the mushroom top. Resolve that penetration before launching.
+	if(bbox_bottom > _mushroom.bbox_top){
+		y -= bbox_bottom - _mushroom.bbox_top;
+		transform_set(transform[TransformType.anchor], TransformValue.y, y, false);
+	}
+
+	spring_countdown = SPRING_COUNTDOWN_MAX;
+	move_grounded = false;
+	move_grounded_instance = noone;
+	move_grounded_close = false;
+	move_grounded_close_instance = noone;
+	velocity.Set(0, 0);
+	acceleration.Set(0, 0);
+	acceleration.AddMagnitudeDirection(_mushroom.spring_acceleration * input_move_acceleration_jump, 90);
+	move_gravity.Copy(move_gravity_rise);
+	player_air_spin_start();
+	dash_stamina = dash_stamina_max;
+	dash_stamina_depleted = false;
+	float_countdown = float_countdown_max;
+
+	with(_mushroom){
+		image_system_setup(sprite_active, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+	}
+
+}
+
+/// @function player_mushroom_side_bounce
+/// @summary Preserve the red wall mushroom's original horizontal ricochet.
+function player_mushroom_side_bounce(_mushroom, _approach_direction = 0){
+	if(state == PlayerState.dive_spring){
+		player_dive_spring_reset();
+		state = PlayerState.move;
+	}
+
+	var _bounce_direction;
+	if(_approach_direction == 0){
+		_approach_direction = sign(velocity.x);
+	}
+	_bounce_direction = (_approach_direction > 0) ? 180 : 0;
+
+	spring_countdown = SPRING_COUNTDOWN_MAX;
+	velocity.x = 0;
+	acceleration.x = 0;
+	if(velocity.y > 0){
+		velocity.y = 0;
+		acceleration.y = 0;
+	}
+
+	acceleration.AddMagnitudeDirection(_mushroom.spring_acceleration * input_move_acceleration_jump * 1.2, _bounce_direction);
+	move_gravity.Copy(move_gravity_rise);
+	dash_stamina = dash_stamina_max;
+	dash_stamina_depleted = false;
+
+	with(_mushroom){
+		image_system_setup(sprite_active, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+	}
 }

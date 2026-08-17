@@ -7,19 +7,24 @@ enum OpeningCutscenePhase {
 }
 
 enum OpeningCutsceneIntroPhase {
-	first_look,
-	idle,
-	second_look
+	first_survey,
+	pause,
+	second_survey,
+	spot
 }
 
 phase = OpeningCutscenePhase.intro;
-intro_phase = OpeningCutsceneIntroPhase.first_look;
+intro_phase = OpeningCutsceneIntroPhase.first_survey;
 soldier_frame = 0;
 soldier_fps = 15;
-intro_first_look_frame_last = 65;
-intro_idle_elapsed = 0;
-intro_idle_frame_count = 15;
-intro_idle_duration = intro_idle_frame_count / soldier_fps;
+intro_survey_frame_first = 0;
+intro_survey_frame_last = 65;
+intro_pause_frame_first = 0;
+intro_pause_frame_last = 14;
+intro_second_survey_frame_first = 15;
+intro_pause_elapsed = 0;
+intro_pause_duration = 1;
+intro_spot_frame_first = 66;
 beg_frame_first = 201;
 beg_frame_last = 207;
 defeat_frame_first = 214;
@@ -38,6 +43,7 @@ player_entry_velocity = 0;
 player_entry_velocity_retention = 0.7;
 player_entry_move_acceleration = 1.5;
 player_entry_animation_fps = ANIMATION_FPS_DEFAULT;
+player_entry_started = false;
 player_entry_motion_complete = false;
 player_entry_walk_elapsed = 0;
 player_entry_idle_elapsed = 0;

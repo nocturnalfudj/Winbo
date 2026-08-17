@@ -8,7 +8,6 @@ foreground_sprites = [
 	spr_floating_leaf_purple_a,
 	spr_floating_leaf_purple_b,
 	spr_floating_leaf_purple_c,
-	spr_floating_flower_a,
 	spr_floating_flower_b,
 	spr_floating_flower_c,
 	spr_floating_flower_d,

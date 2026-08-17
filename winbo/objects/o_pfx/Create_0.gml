@@ -42,6 +42,18 @@
 	
 	//Create Particle Effect System
 	pfx_system_create();
+
+	// Player damage sparks use the shared foreground system so their lifetime is
+	// independent of the short hit-state freeze.
+	pfx_type_player_damage_spark = part_type_create();
+	part_type_shape(pfx_type_player_damage_spark, pt_shape_sphere);
+	part_type_size(pfx_type_player_damage_spark, 0.18, 0.22, -0.01, 0.02);
+	part_type_speed(pfx_type_player_damage_spark, 4, 8, -0.2, 1);
+	part_type_direction(pfx_type_player_damage_spark, 0, 0, 0, 12);
+	part_type_gravity(pfx_type_player_damage_spark, 0.18, 270);
+	part_type_colour1(pfx_type_player_damage_spark, make_color_rgb(255, 222, 121));
+	part_type_alpha2(pfx_type_player_damage_spark, 1, 0);
+	part_type_life(pfx_type_player_damage_spark, 12, 20);
 	
 	#region Effects
 		#region Example

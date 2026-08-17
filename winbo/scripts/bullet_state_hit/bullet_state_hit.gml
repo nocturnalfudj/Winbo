@@ -2,6 +2,7 @@ function bullet_state_hit(){
 	// Missile explosion screen shake
 	if (object_index == o_missile) {
 		camera_shake_add(0.3, 8);
+		fx_spawn_ash_decal(x, y, point_direction(0, 0, velocity.x, velocity.y), move_collision_object_instance);
 	}
 
 	//Post Hit Movement Update
