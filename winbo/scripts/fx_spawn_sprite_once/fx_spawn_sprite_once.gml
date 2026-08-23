@@ -1,17 +1,13 @@
-/// @function fx_spawn_sprite_once(_x,_y,_layer,_sprite[_xscale,_yscale,_angle,_fps])
+/// @function fx_spawn_sprite_once(_x,_y,_layer,_sprite[_xscale,_yscale,_angle,_fps,_alpha])
 /// @description Spawn a one-shot sprite FX instance on a given room layer.
-function fx_spawn_sprite_once(_x, _y, _layer, _sprite, _xscale, _yscale, _angle, _fps) {
-	if (argument_count < 5) _xscale = 1;
-	if (argument_count < 6) _yscale = 1;
-	if (argument_count < 7) _angle = 0;
-	if (argument_count < 8) _fps = ANIMATION_FPS_DEFAULT;
-
+function fx_spawn_sprite_once(_x, _y, _layer, _sprite, _xscale = 1, _yscale = 1, _angle = 0, _fps = ANIMATION_FPS_DEFAULT, _alpha = 1) {
 	var _inst = instance_create_layer(_x, _y, _layer, o_fx_sprite_once);
 	_inst.fx_sprite = _sprite;
 	_inst.fx_fps = _fps;
 	_inst.image_xscale = _xscale;
 	_inst.image_yscale = _yscale;
 	_inst.image_angle = _angle;
+	_inst.image_alpha = _alpha;
 	
 	// Important: objects created during Step can Draw before their own Step runs.
 	// Initialise the image system immediately so o_actor.Draw never sees an invalid sprite_current.

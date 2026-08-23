@@ -122,7 +122,7 @@ function player_state_float(){
 								// The diagonal jump smoke art faces left by default; flip so it matches travel direction.
 								_jump_smoke_xscale = (input_move_direction > 90 && input_move_direction < 270) ? 1 : -1;
 							}
-							fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT);
+							fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_midground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT, 0.5);
 						}
 					}
 				}
@@ -202,7 +202,10 @@ function player_state_float(){
 	player_collisions();
 
 	//Movement Update
+	var _air_spin_launch_step;
+	_air_spin_launch_step = player_air_spin_movement_begin();
 	player_movement_update();
+	player_air_spin_movement_end(_air_spin_launch_step);
 	player_mushroom_collisions_post_movement();
 	player_landing_smoke_update();
 

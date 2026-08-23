@@ -61,7 +61,12 @@ function director_gameplay_transition_options_build(_target_room, _reset_level_t
 }
 
 function director_player_spawn_context_for_room_entry(_target_room) {
-	return (_target_room == r_game_level_presence)
-		? PlayerSpawnContext.presence_start
-		: PlayerSpawnContext.level_start;
+	if(_target_room == r_game_level_presence){
+		return PlayerSpawnContext.presence_start;
+	}
+	if(_target_room == r_tutorial){
+		return PlayerSpawnContext.tutorial_continue;
+	}
+
+	return PlayerSpawnContext.level_start;
 }

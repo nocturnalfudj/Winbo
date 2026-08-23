@@ -288,7 +288,7 @@ function player_state_move(){
 						_jump_smoke_xscale = (input_move_direction > 90 && input_move_direction < 270) ? 1 : -1;
 					}
 
-					fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT);
+					fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_midground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT, 0.5);
 				}
 			}
 		}
@@ -352,7 +352,10 @@ function player_state_move(){
 	#endregion
 
 	player_collisions();
+	var _air_spin_launch_step;
+	_air_spin_launch_step = player_air_spin_movement_begin();
 	player_movement_update();
+	player_air_spin_movement_end(_air_spin_launch_step);
 	player_mushroom_collisions_post_movement();
 	player_landing_smoke_update();
 
@@ -560,12 +563,58 @@ function player_frolic_update(_frolic_allowed){
 
 function player_air_spin_start(){
 	air_spin_active = true;
+	air_spin_apex_seen = false;
+	air_spin_launch_pending = true;
 	player_frolic_clear();
 	player_air_spin_begin_sprite();
 }
 
 function player_air_spin_clear(){
 	air_spin_active = false;
+	air_spin_apex_seen = false;
+	air_spin_launch_pending = false;
+}
+
+function player_air_spin_movement_begin(){
+	if(!air_spin_active){
+		return false;
+	}
+
+	var _delta_time_scaled;
+	_delta_time_scaled = max(global.delta_time_factor_scaled, 0.0001);
+	air_spin_movement_override_active = true;
+	air_spin_velocity_retention_aerial_previous = velocity_retention_aerial;
+	velocity_retention_aerial = power(air_spin_velocity_retention_aerial_previous, _delta_time_scaled);
+
+	if(!air_spin_launch_pending){
+		return false;
+	}
+
+	air_spin_launch_pending = false;
+	air_spin_move_grounded_check_previous = move_grounded_check;
+	air_spin_velocity_retention_previous = velocity_retention;
+	acceleration.y /= _delta_time_scaled;
+	move_grounded = false;
+	move_grounded_instance = noone;
+	move_grounded_check = false;
+	velocity_retention = air_spin_velocity_retention_aerial_previous;
+	return true;
+}
+
+function player_air_spin_movement_end(_launch_step){
+	if(air_spin_movement_override_active){
+		velocity_retention_aerial = air_spin_velocity_retention_aerial_previous;
+		air_spin_movement_override_active = false;
+	}
+
+	if(!_launch_step){
+		return;
+	}
+
+	move_grounded_check = air_spin_move_grounded_check_previous;
+	velocity_retention = air_spin_velocity_retention_previous;
+	move_grounded = false;
+	move_grounded_instance = noone;
 }
 
 function player_air_spin_update_state(){
@@ -578,7 +627,20 @@ function player_air_spin_update_state(){
 		return false;
 	}
 
-	if((sprite_current == sprite_air_spin) && (sprite_current_frame >= (image.sprite_number - 1))){
+	// The bounce animation must finish and remain visible through the apex.
+	// Clearing on its last frame made the normal jump sprite appear while Winbo
+	// was still rising from the now-equal mushroom/enemy impulse.
+	var _air_spin_animation_complete, _air_spin_at_or_past_apex;
+	_air_spin_animation_complete = (sprite_current == sprite_air_spin)
+		&& (sprite_current_frame >= (image.sprite_number - 1));
+	_air_spin_at_or_past_apex = (velocity.y >= 0) && (acceleration.y >= 0);
+
+	if(!air_spin_apex_seen && _air_spin_at_or_past_apex){
+		air_spin_apex_seen = true;
+		return true;
+	}
+
+	if(_air_spin_animation_complete && air_spin_apex_seen){
 		player_air_spin_clear();
 		return false;
 	}
@@ -611,6 +673,8 @@ function player_dive_spring_try_start(){
 	dive_spring_enemy_impact = false;
 	dive_spring_float_cancel_requested = false;
 	dive_spring_dash_cancel_requested = false;
+	dive_spring_apex_reached = false;
+	dive_spring_launch_impulse_pending = false;
 	dive_spring_momentum_x = velocity.x;
 	dive_spring_velocity_retention_aerial_previous = velocity_retention_aerial;
 	dive_spring_movement_override_active = true;
@@ -628,6 +692,13 @@ function player_dive_spring_try_start(){
 function player_state_dive_spring(){
 	player_input();
 	character_health();
+
+	// A deep pit keeps the rotor loop instead of forcing an early transition,
+	// so the spring phases need the same room-exit kill as the move state.
+	if((x < 0) || (x > room_width) || (y < 0) || (y > room_height)){
+		character_kill();
+		return;
+	}
 
 	switch(dive_spring_phase){
 		case DiveSpringPhase.dive:
@@ -803,11 +874,18 @@ function player_dive_spring_wrong_input_pressed(){
 
 function player_dive_spring_state_spring(){
 	var _delta_time_scaled;
-	_delta_time_scaled = global.delta_time_factor_scaled;
+	_delta_time_scaled = max(global.delta_time_factor_scaled, 0.0001);
+	var _launch_impulse_this_step, _move_grounded_check_previous, _velocity_retention_previous;
+	_launch_impulse_this_step = false;
+	_move_grounded_check_previous = move_grounded_check;
+	_velocity_retention_previous = velocity_retention;
 
 	if(dive_spring_launch_hold_time > 0){
 		dive_spring_launch_hold_time = max(0, dive_spring_launch_hold_time - _delta_time_scaled);
 
+		// Frame 8 is the grounded in-between before the launch: while the hold
+		// runs, Winbo stays exactly where the impact landed and the pending
+		// impulse must not be applied or integrated.
 		if(dive_spring_launch_hold_time > 0){
 			if(sprite_current != sprite_dive_spring){
 				image_system_setup(sprite_dive_spring, 0, false, false, 0, IMAGE_LOOP_FULL);
@@ -820,24 +898,50 @@ function player_dive_spring_state_spring(){
 		}
 	}
 
-	if(!dive_spring_launch_applied){
-		dive_spring_launch_applied = true;
-		move_grounded = false;
-		move_grounded_instance = noone;
-		velocity.Set(dive_spring_momentum_x, 0);
-		acceleration.Set(0, 0);
-		acceleration.AddMagnitudeDirection(input_move_acceleration_jump * dive_spring_jump_acceleration_factor, 90);
-		move_gravity.Copy(move_gravity_rise);
-	}
-
 	if(sprite_current != sprite_dive_spring || !image.animate || image.loop_start != dive_spring_rotor_loop_start_frame){
 		image_system_setup(sprite_dive_spring, dive_spring_rotor_fps, true, true, dive_spring_rotor_loop_start_frame, dive_spring_rotor_loop_end_frame);
 		image_set_frame(image, dive_spring_rotor_loop_start_frame);
 	}
 
-	move_gravity.Copy(move_gravity_rise);
-	move_gravity_factor = dive_spring_rise_gravity_factor;
+	// The holding-right reference gains horizontal distance immediately rather
+	// than waiting for an apex dash. Neutral input leaves x acceleration at zero.
+	var _horizontal_acceleration_factor;
+	_horizontal_acceleration_factor = dive_spring_apex_reached
+		? dive_spring_horizontal_acceleration_factor_fall
+		: dive_spring_horizontal_acceleration_factor_rise;
+	acceleration.AddMagnitudeDirection(INPUT_MOVE_ACCELERATION * _horizontal_acceleration_factor * input_move_magnitude, input_move_direction);
+	if(dive_spring_launch_impulse_pending){
+		// Apply the launch as a fixed impulse. Dividing its one-step acceleration
+		// by delta keeps the mockup trajectory stable when the runner drops frames.
+		acceleration.AddMagnitudeDirection(input_move_acceleration_jump * dive_spring_jump_acceleration_factor / _delta_time_scaled, 90);
+		dive_spring_launch_impulse_pending = false;
+		_launch_impulse_this_step = true;
+		// The collision ground probe can still report contact on the first upward
+		// step. Force this one integration step to use the spring's aerial drag.
+		move_grounded = false;
+		move_grounded_instance = noone;
+		move_grounded_check = false;
+		velocity_retention = dive_spring_velocity_retention_aerial;
+	}
+
+	var _retention_base;
+	_retention_base = dive_spring_apex_reached
+		? dive_spring_velocity_retention_aerial_previous
+		: dive_spring_velocity_retention_aerial;
+	velocity_retention_aerial = power(_retention_base, _delta_time_scaled);
+	if(dive_spring_apex_reached){
+		move_gravity.Copy(move_gravity_fall);
+	}
+	else{
+		move_gravity.Copy(move_gravity_rise);
+	}
 	player_movement_update();
+	if(_launch_impulse_this_step){
+		move_grounded_check = _move_grounded_check_previous;
+		velocity_retention = _velocity_retention_previous;
+		move_grounded = false;
+		move_grounded_instance = noone;
+	}
 	player_mushroom_collisions_post_movement();
 
 	if((state != PlayerState.dive_spring) || (dive_spring_phase != DiveSpringPhase.spring)){
@@ -853,17 +957,40 @@ function player_dive_spring_state_spring(){
 	player_dive_spring_float_cancel_update();
 	player_dive_spring_dash_cancel_update();
 
-	if(velocity.y >= 0){
-		player_dive_spring_restore_movement();
-		dive_spring_phase = DiveSpringPhase.transition;
+	// An explicit cancel interrupts the rotor arc promptly; uninterrupted
+	// flight keeps the rotor loop and the frames 15-16 landing transition.
+	if(!move_grounded && player_dive_spring_dash_interrupt_try()){
+		return;
+	}
+
+	if(!move_grounded && player_dive_spring_float_interrupt_try()){
+		return;
+	}
+
+	if(!dive_spring_apex_reached && (velocity.y >= 0)){
+		dive_spring_apex_reached = true;
 		velocity.y = 0;
 		acceleration.Set(0, 0);
-		image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
-		image_set_frame(image, dive_spring_transition_start_frame);
+	}
+	else if(dive_spring_apex_reached){
+		// Both supplied mockups keep the rotor through the apex and most of the
+		// descent, then play frames 15-16 shortly before landing. Over a deep pit
+		// the rotor must keep looping: never force the transition in mid-air.
+		var _transition_near_ground;
+		_transition_near_ground = place_meeting(x, y + dive_spring_transition_ground_probe_distance, move_collision_object);
+		if(_transition_near_ground || move_grounded){
+			dive_spring_phase = DiveSpringPhase.transition;
+			acceleration.Set(0, 0);
+			image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+			image_set_frame(image, dive_spring_transition_start_frame);
+		}
 	}
 }
 
 function player_dive_spring_state_transition(){
+	var _delta_time_scaled;
+	_delta_time_scaled = max(global.delta_time_factor_scaled, 0.0001);
+
 	if(sprite_current != sprite_dive_spring){
 		image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 		image_set_frame(image, dive_spring_transition_start_frame);
@@ -871,6 +998,8 @@ function player_dive_spring_state_transition(){
 
 	player_dive_spring_float_cancel_update();
 	player_dive_spring_dash_cancel_update();
+	acceleration.AddMagnitudeDirection(INPUT_MOVE_ACCELERATION * dive_spring_horizontal_acceleration_factor_fall * input_move_magnitude, input_move_direction);
+	velocity_retention_aerial = power(dive_spring_velocity_retention_aerial_previous, _delta_time_scaled);
 	move_gravity_factor = 1;
 	move_gravity.Copy(move_gravity_fall);
 	player_movement_update();
@@ -918,7 +1047,10 @@ function player_dive_spring_state_transition(){
 }
 
 function player_dive_spring_float_cancel_update(){
-	if(player_dive_spring_float_input_active()){
+	// Only a fresh press counts as a cancel request: the launch key is usually
+	// still held during spring flight, and a stale hold must not interrupt the
+	// rotor arc now that cancels execute promptly.
+	if((input_current[UserControl.float] && !input_previous[UserControl.float]) || keyboard_check_pressed(vk_up)){
 		dive_spring_float_cancel_requested = true;
 	}
 }
@@ -997,7 +1129,9 @@ function player_dive_spring_float_interrupt_try(){
 		return false;
 	}
 
-	if((float_countdown <= 0) || move_grounded){
+	// Float never engages while rising, matching the move-state float rule: a
+	// request made during the rise is honored at the apex.
+	if((float_countdown <= 0) || move_grounded || (velocity.y < 0)){
 		return false;
 	}
 
@@ -1057,7 +1191,9 @@ function player_dive_spring_begin_spring(){
 	dive_spring_move_input_previous = 0;
 	dive_spring_dive_timer = 0;
 	dive_spring_launch_hold_time = dive_spring_launch_hold_time_max;
-	dive_spring_launch_applied = false;
+	dive_spring_launch_impulse_pending = true;
+	dive_spring_apex_reached = false;
+	move_gravity_factor = 1;
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
 	move_gravity.Copy(move_gravity_rise);
@@ -1080,6 +1216,8 @@ function player_dive_spring_begin_fail(){
 	dive_spring_dive_timer = 0;
 	dive_spring_startup_animation_active = false;
 	dive_spring_launch_hold_time = 0;
+	dive_spring_launch_impulse_pending = false;
+	dive_spring_apex_reached = false;
 	dive_spring_float_cancel_requested = false;
 	dive_spring_dash_cancel_requested = false;
 	velocity.Set(0, 0);
@@ -1108,7 +1246,8 @@ function player_dive_spring_reset(){
 	dive_spring_dive_timer = 0;
 	dive_spring_startup_animation_active = false;
 	dive_spring_launch_hold_time = 0;
-	dive_spring_launch_applied = false;
+	dive_spring_launch_impulse_pending = false;
+	dive_spring_apex_reached = false;
 	dive_spring_enemy_impact = false;
 	dive_spring_float_cancel_requested = false;
 	dive_spring_dash_cancel_requested = false;

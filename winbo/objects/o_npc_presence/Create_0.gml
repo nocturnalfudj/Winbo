@@ -29,6 +29,14 @@ event_inherited();
 		right
 	}
 
+	enum PresenceEyeDirection{
+		extreme_left,
+		inbetween_left,
+		front,
+		inbetween_right,
+		extreme_right
+	}
+
 	presence_visual_enable = room == r_game_level_presence;
 	presence_visual_state = PresenceVisualState.hidden;
 	presence_visual_enter_distance = 1000;
@@ -51,20 +59,13 @@ event_inherited();
 	presence_visual_front_eyes_intro_end = 20;
 	presence_visual_front_eyes_idle_start = 30;
 	presence_visual_front_eyes_idle_end = 39;
-	// The supplied diagram measures the full eye travel window. Clamp the
-	// player target to this authored range before choosing a directional set.
-	presence_visual_eye_tracking_range_x = 142;
-	presence_visual_eye_tracking_range_y = 76;
+	// Each supplied eye sprite is a full-canvas layer and must stay anchored to
+	// the body/head draw origin; direction changes swap complete sprite sets.
 	presence_visual_eye_tracking_world_range_x = 600;
-	presence_visual_eye_tracking_world_range_y = 420;
 	presence_visual_eye_tracking_inbetween_threshold = 0.33;
 	presence_visual_eye_tracking_extreme_threshold = 0.75;
-	presence_visual_eye_offset_x = 0;
-	presence_visual_eye_offset_y = 0;
-	presence_visual_eye_target_x = 0;
-	presence_visual_eye_target_y = 0;
-	presence_visual_eye_outro_start_x = 0;
-	presence_visual_eye_outro_start_y = 0;
+	presence_visual_eye_direction = PresenceEyeDirection.front;
+	presence_visual_eye_direction_target = PresenceEyeDirection.front;
 	presence_visual_head_direction = PresenceHeadDirection.front;
 	presence_visual_eye_sprite = spr_npc_presence_eyes_front;
 #endregion

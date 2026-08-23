@@ -37,16 +37,14 @@ if((global.game_state != GameState.play) && (global.game_state != GameState.dial
 }
 
 var _player_in_range;
-var _player_dx, _player_dy;
+var _player_dx;
 _player_in_range = false;
 _player_dx = 0;
-_player_dy = 0;
 
 if(instance_number(o_player) > 0){
 	var _player;
 	_player = instance_find(o_player,0);
 	_player_dx = _player.x - x;
-	_player_dy = _player.y - y;
 
 	var _distance_limit;
 	_distance_limit = presence_visual_exit_distance;
@@ -76,18 +74,14 @@ switch(presence_visual_state){
 			presence_visual_head_idle_frame = 0;
 			presence_visual_eyes_idle_frame = presence_visual_front_eyes_idle_start;
 			presence_visual_eye_sprite = spr_npc_presence_eyes_front;
+			presence_visual_eye_direction = PresenceEyeDirection.front;
+			presence_visual_eye_direction_target = PresenceEyeDirection.front;
 			presence_visual_head_direction = PresenceHeadDirection.front;
 			presence_visual_eye_update_accumulator = 0;
 		}
 	break;
 
 	case PresenceVisualState.intro:
-		presence_visual_eye_target_x = 0;
-		presence_visual_eye_target_y = 0;
-		if(_eye_update_due){
-			presence_visual_eye_offset_x = 0;
-			presence_visual_eye_offset_y = 0;
-		}
 		presence_visual_intro_frame += _frame_step;
 		if(presence_visual_intro_frame >= (presence_visual_body_intro_end + 1)){
 			presence_visual_intro_frame = presence_visual_body_intro_end;
@@ -97,8 +91,6 @@ switch(presence_visual_state){
 			else{
 				presence_visual_state = PresenceVisualState.outro;
 				presence_visual_intro_frame = presence_visual_body_intro_end + 1;
-				presence_visual_eye_outro_start_x = presence_visual_eye_offset_x;
-				presence_visual_eye_outro_start_y = presence_visual_eye_offset_y;
 			}
 		}
 	break;
@@ -140,52 +132,79 @@ switch(presence_visual_state){
 		}
 
 		if(_eye_update_due){
-			presence_visual_eyes_idle_frame += _eye_update_count;
-			if(presence_visual_eye_sprite == spr_npc_presence_eyes_front){
-				if(presence_visual_eyes_idle_frame >= (presence_visual_front_eyes_idle_end + 1)){
-					presence_visual_eyes_idle_frame = presence_visual_front_eyes_idle_start;
-				}
-			}
-			else if(presence_visual_eyes_idle_frame >= 10){
-				presence_visual_eyes_idle_frame = 0;
-			}
-
-			var _previous_eye_sprite;
-			_previous_eye_sprite = presence_visual_eye_sprite;
-
-			var _eye_tracking_half_range_x, _eye_tracking_half_range_y;
-			var _eye_tracking_normalized_x, _eye_tracking_normalized_y;
-			_eye_tracking_half_range_x = presence_visual_eye_tracking_range_x * 0.5;
-			_eye_tracking_half_range_y = presence_visual_eye_tracking_range_y * 0.5;
+			var _eye_tracking_normalized_x;
 			_eye_tracking_normalized_x = clamp(_player_dx / presence_visual_eye_tracking_world_range_x, -1, 1);
-			_eye_tracking_normalized_y = clamp(_player_dy / presence_visual_eye_tracking_world_range_y, -1, 1);
-			presence_visual_eye_target_x = _eye_tracking_normalized_x * _eye_tracking_half_range_x;
-			presence_visual_eye_target_y = _eye_tracking_normalized_y * _eye_tracking_half_range_y;
-			presence_visual_eye_offset_x = presence_visual_eye_target_x;
-			presence_visual_eye_offset_y = presence_visual_eye_target_y;
 
 			if(_eye_tracking_normalized_x <= -presence_visual_eye_tracking_extreme_threshold){
-				presence_visual_eye_sprite = spr_npc_presence_eyes_left_b;
+				presence_visual_eye_direction_target = PresenceEyeDirection.extreme_left;
 			}
 			else if(_eye_tracking_normalized_x <= -presence_visual_eye_tracking_inbetween_threshold){
-				presence_visual_eye_sprite = spr_npc_presence_eyes_left_a;
+				presence_visual_eye_direction_target = PresenceEyeDirection.inbetween_left;
 			}
 			else if(_eye_tracking_normalized_x >= presence_visual_eye_tracking_extreme_threshold){
-				presence_visual_eye_sprite = spr_npc_presence_eyes_right_b;
+				presence_visual_eye_direction_target = PresenceEyeDirection.extreme_right;
 			}
 			else if(_eye_tracking_normalized_x >= presence_visual_eye_tracking_inbetween_threshold){
-				presence_visual_eye_sprite = spr_npc_presence_eyes_right_a;
+				presence_visual_eye_direction_target = PresenceEyeDirection.inbetween_right;
 			}
 			else{
-				presence_visual_eye_sprite = spr_npc_presence_eyes_front;
+				presence_visual_eye_direction_target = PresenceEyeDirection.front;
 			}
 
-			if(presence_visual_eye_sprite != _previous_eye_sprite){
-				if(presence_visual_eye_sprite == spr_npc_presence_eyes_front){
-					presence_visual_eyes_idle_frame = presence_visual_front_eyes_idle_start;
+			// Replay each elapsed 30Hz tick individually so dropped-frame
+			// catch-up matches unbatched 30fps playback exactly: one direction
+			// notch and one frame advance with its wrap check per tick.
+			var _previous_eye_sprite;
+			repeat(_eye_update_count){
+				_previous_eye_sprite = presence_visual_eye_sprite;
+
+				if(presence_visual_eye_direction < presence_visual_eye_direction_target){
+					presence_visual_eye_direction += 1;
+				}
+				else if(presence_visual_eye_direction > presence_visual_eye_direction_target){
+					presence_visual_eye_direction -= 1;
+				}
+
+				switch(presence_visual_eye_direction){
+					case PresenceEyeDirection.extreme_left:
+						presence_visual_eye_sprite = spr_npc_presence_eyes_left_b;
+					break;
+
+					case PresenceEyeDirection.inbetween_left:
+						presence_visual_eye_sprite = spr_npc_presence_eyes_left_a;
+					break;
+
+					case PresenceEyeDirection.inbetween_right:
+						presence_visual_eye_sprite = spr_npc_presence_eyes_right_a;
+					break;
+
+					case PresenceEyeDirection.extreme_right:
+						presence_visual_eye_sprite = spr_npc_presence_eyes_right_b;
+					break;
+
+					default:
+						presence_visual_eye_sprite = spr_npc_presence_eyes_front;
+					break;
+				}
+
+				if(presence_visual_eye_sprite != _previous_eye_sprite){
+					if(presence_visual_eye_sprite == spr_npc_presence_eyes_front){
+						presence_visual_eyes_idle_frame = presence_visual_front_eyes_idle_start;
+					}
+					else{
+						presence_visual_eyes_idle_frame = 0;
+					}
 				}
 				else{
-					presence_visual_eyes_idle_frame = 0;
+					presence_visual_eyes_idle_frame += 1;
+					if(presence_visual_eye_sprite == spr_npc_presence_eyes_front){
+						if(presence_visual_eyes_idle_frame >= (presence_visual_front_eyes_idle_end + 1)){
+							presence_visual_eyes_idle_frame = presence_visual_front_eyes_idle_start;
+						}
+					}
+					else if(presence_visual_eyes_idle_frame >= 10){
+						presence_visual_eyes_idle_frame = 0;
+					}
 				}
 			}
 		}
@@ -193,27 +212,52 @@ switch(presence_visual_state){
 		if(!_player_in_range){
 			presence_visual_state = PresenceVisualState.outro;
 			presence_visual_intro_frame = presence_visual_body_intro_end + 1;
-			presence_visual_eye_outro_start_x = presence_visual_eye_offset_x;
-			presence_visual_eye_outro_start_y = presence_visual_eye_offset_y;
-			presence_visual_eye_sprite = spr_npc_presence_eyes_front;
+			presence_visual_eye_direction_target = PresenceEyeDirection.front;
 			presence_visual_head_direction = PresenceHeadDirection.front;
 		}
 	break;
 
 	case PresenceVisualState.outro:
-		presence_visual_eye_target_x = 0;
-		presence_visual_eye_target_y = 0;
 		presence_visual_intro_frame -= _frame_step;
 		if(_eye_update_due){
-			var _eye_outro_ratio;
-			_eye_outro_ratio = clamp(presence_visual_intro_frame / presence_visual_body_intro_end, 0, 1);
-			presence_visual_eye_offset_x = presence_visual_eye_outro_start_x * _eye_outro_ratio;
-			presence_visual_eye_offset_y = presence_visual_eye_outro_start_y * _eye_outro_ratio;
+			presence_visual_eye_direction_target = PresenceEyeDirection.front;
+			repeat(_eye_update_count){
+				if(presence_visual_eye_direction < presence_visual_eye_direction_target){
+					presence_visual_eye_direction += 1;
+				}
+				else if(presence_visual_eye_direction > presence_visual_eye_direction_target){
+					presence_visual_eye_direction -= 1;
+				}
+
+				switch(presence_visual_eye_direction){
+					case PresenceEyeDirection.extreme_left:
+						presence_visual_eye_sprite = spr_npc_presence_eyes_left_b;
+					break;
+
+					case PresenceEyeDirection.inbetween_left:
+						presence_visual_eye_sprite = spr_npc_presence_eyes_left_a;
+					break;
+
+					case PresenceEyeDirection.inbetween_right:
+						presence_visual_eye_sprite = spr_npc_presence_eyes_right_a;
+					break;
+
+					case PresenceEyeDirection.extreme_right:
+						presence_visual_eye_sprite = spr_npc_presence_eyes_right_b;
+					break;
+
+					default:
+						presence_visual_eye_sprite = spr_npc_presence_eyes_front;
+						presence_visual_eye_direction = PresenceEyeDirection.front;
+					break;
+				}
+			}
 		}
 		if(presence_visual_intro_frame < 0){
 			presence_visual_intro_frame = 0;
-			presence_visual_eye_offset_x = 0;
-			presence_visual_eye_offset_y = 0;
+			presence_visual_eye_direction = PresenceEyeDirection.front;
+			presence_visual_eye_direction_target = PresenceEyeDirection.front;
+			presence_visual_eye_sprite = spr_npc_presence_eyes_front;
 			presence_visual_state = PresenceVisualState.hidden;
 		}
 	break;

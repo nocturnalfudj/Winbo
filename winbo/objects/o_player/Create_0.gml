@@ -164,7 +164,9 @@ is_player = true;
 	stage_entrance_user_hp_vulnerable_previous = true;
 	stage_entrance_draw_adjustment_y = 0;
 	stage_entrance_draw_offset_start_x = 0;
+	stage_entrance_offset_release_frame = 0;
 	stage_entrance_landing_smoke_pending = false;
+	tutorial_continue_countdown = 0;
 	bonus_room_enter_target_room = noone;
 	bonus_room_enter_start_x = 0;
 	bonus_room_enter_start_y = 0;
@@ -195,6 +197,12 @@ is_player = true;
 
 	//Air Spin
 	air_spin_active = false;
+	air_spin_apex_seen = false;
+	air_spin_launch_pending = false;
+	air_spin_movement_override_active = false;
+	air_spin_move_grounded_check_previous = move_grounded_check;
+	air_spin_velocity_retention_previous = velocity_retention;
+	air_spin_velocity_retention_aerial_previous = velocity_retention_aerial;
 
 	//Dive Spring
 	enum DiveSpringPhase{
@@ -218,9 +226,15 @@ is_player = true;
 	dive_spring_start_speed = 0;
 	dive_spring_startup_fps = ANIMATION_FPS_DEFAULT * 1.25;
 	dive_spring_startup_animation_active = false;
-	// With aerial retention held at 1 during ascent, this impulse and reduced
-	// gravity produce roughly two rotor loops before the apex.
-	dive_spring_jump_acceleration_factor = 0.5;
+	// Calibrated on the production integrator: position updates add the
+	// half-step acceleration term, and the launch step applies 0.825 gravity
+	// because the rise vector lerps toward fall while velocity.y is still 0.
+	// A neutral launch rises about 848px (the mockup anchor), peaking by the
+	// 31st 60fps engine step and touching down at launch height on the 63rd;
+	// held right it gains about +230px at the apex and about +445px one step
+	// into the landing transition.
+	// Pair this calibrated impulse with the spring-only aerial retention below.
+	dive_spring_jump_acceleration_factor = 2.3269;
 	dive_spring_descent_loop_start_frame = 4;
 	dive_spring_descent_loop_end_frame = 6;
 	dive_spring_impact_start_frame = 6;
@@ -234,13 +248,16 @@ is_player = true;
 	dive_spring_fail_start_frame = 0;
 	dive_spring_launch_hold_time_max = SECOND * 0.18;
 	dive_spring_launch_hold_time = 0;
-	dive_spring_launch_applied = false;
-	dive_spring_rotor_fps = 8;
-	dive_spring_rise_gravity_factor = 0.45;
+	dive_spring_launch_impulse_pending = false;
+	dive_spring_rotor_fps = ANIMATION_FPS_DEFAULT;
 	dive_spring_momentum_x = 0;
-	dive_spring_velocity_retention_aerial = 1;
+	dive_spring_horizontal_acceleration_factor_rise = 0.3687;
+	dive_spring_horizontal_acceleration_factor_fall = 0.7958;
+	dive_spring_velocity_retention_aerial = 0.9;
 	dive_spring_velocity_retention_aerial_previous = velocity_retention_aerial;
 	dive_spring_movement_override_active = false;
+	dive_spring_apex_reached = false;
+	dive_spring_transition_ground_probe_distance = 400;
 	dive_spring_enemy_impact = false;
 	dive_spring_float_cancel_requested = false;
 	dive_spring_dash_cancel_requested = false;

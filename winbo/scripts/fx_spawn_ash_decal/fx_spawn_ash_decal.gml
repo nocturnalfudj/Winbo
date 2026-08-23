@@ -1,51 +1,78 @@
 /// @function fx_spawn_ash_decal(_x, _y, _blast_direction, _surface)
-/// @description Spawn a fading ash decal on the nearest tile in a cardinal blast direction.
+/// @description Spawn a fading ash decal on the exact solid face hit by a cardinal blast.
 function fx_spawn_ash_decal(_x, _y, _blast_direction, _surface = noone) {
-	var _tile_size = 320;
-	var _half_tile = _tile_size * 0.5;
 	var _cardinal_direction = (round(_blast_direction / 90) * 90 + 360) mod 360;
+	var _impact_x = _x;
+	var _impact_y = _y;
+	var _impact_surface = noone;
+	var _probe_distance_max = 320;
 
-	if((_surface == noone) || !(_surface.object_index == o_solid || object_is_ancestor(_surface.object_index, o_solid))){
-		_surface = collision_line(
-			_x,
-			_y,
-			_x + lengthdir_x(_tile_size, _cardinal_direction),
-			_y + lengthdir_y(_tile_size, _cardinal_direction),
-			o_solid,
-			false,
-			true
-		);
+	// The projectile is stopped immediately outside the collision mask. Probe
+	// forward one pixel at a time so the decal uses the first concrete surface
+	// point instead of a global tile-grid snap or an arbitrary large bbox edge.
+	for(var _probe_distance = 0; _probe_distance <= _probe_distance_max; _probe_distance++){
+		var _probe_x = _x + lengthdir_x(_probe_distance, _cardinal_direction);
+		var _probe_y = _y + lengthdir_y(_probe_distance, _cardinal_direction);
+		var _probe_surface = collision_point(_probe_x, _probe_y, o_solid, true, true);
+
+		if(_probe_surface != noone){
+			_impact_x = _probe_x;
+			_impact_y = _probe_y;
+			_impact_surface = _probe_surface;
+			break;
+		}
 	}
 
-	if(_surface == noone){
-		return noone;
+	// The movement solver normally supplies the exact solid. Retain it only as
+	// a bounded fallback for unusual collision masks that reject point probes.
+	if(_impact_surface == noone){
+		if(_surface == noone){
+			return noone;
+		}
+
+		_impact_surface = _surface;
+		switch(_cardinal_direction){
+			case 0:
+				_impact_x = _surface.bbox_left;
+				_impact_y = clamp(_y, _surface.bbox_top, _surface.bbox_bottom);
+			break;
+
+			case 90:
+				_impact_x = clamp(_x, _surface.bbox_left, _surface.bbox_right);
+				_impact_y = _surface.bbox_bottom;
+			break;
+
+			case 180:
+				_impact_x = _surface.bbox_right;
+				_impact_y = clamp(_y, _surface.bbox_top, _surface.bbox_bottom);
+			break;
+
+			default:
+				_impact_x = clamp(_x, _surface.bbox_left, _surface.bbox_right);
+				_impact_y = _surface.bbox_top;
+			break;
+		}
 	}
 
-	var _tile_center_x = floor(_x / _tile_size) * _tile_size + _half_tile;
-	var _tile_center_y = floor(_y / _tile_size) * _tile_size + _half_tile;
-	var _decal_x = clamp(_tile_center_x, _surface.bbox_left, _surface.bbox_right);
-	var _decal_y = clamp(_tile_center_y, _surface.bbox_top, _surface.bbox_bottom);
+	var _decal_x = _impact_x;
+	var _decal_y = _impact_y;
 	var _decal_angle = 0;
 
 	switch(_cardinal_direction){
 		case 0:
-			_decal_x = _surface.bbox_left;
 			_decal_angle = 90;
 		break;
 
 		case 90:
-			_decal_y = _surface.bbox_bottom;
 			_decal_angle = 180;
 		break;
 
 		case 180:
-			_decal_x = _surface.bbox_right;
 			_decal_angle = 270;
 		break;
 
 		default:
-			_decal_y = _surface.bbox_top;
-		_decal_angle = 0;
+			_decal_angle = 0;
 		break;
 	}
 
@@ -58,9 +85,10 @@ function fx_spawn_ash_decal(_x, _y, _blast_direction, _surface = noone) {
 
 	var _decal_depth = 4150;
 	var _player_layer = layer_get_id("lyr_player");
-	var _tile_layer = layer_get_id("lyr_tileset");
-	if((_player_layer != -1) && (_tile_layer != -1)){
-		_decal_depth = (layer_get_depth(_player_layer) + layer_get_depth(_tile_layer)) * 0.5;
+	if(_player_layer != -1){
+		// Draw behind Winbo but directly in front of terrain in every gameplay
+		// room, including rooms whose tile layers are numbered differently.
+		_decal_depth = layer_get_depth(_player_layer) + 1;
 	}
 
 	var _decal = instance_create_depth(_decal_x, _decal_y, _decal_depth, o_fx_ash_decal);

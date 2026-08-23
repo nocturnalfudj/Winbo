@@ -1,9 +1,23 @@
 /// @function player_state_create
 /// @summary Initialize the player instance and default state.
 function player_state_create(){
-	if(spawn_context != PlayerSpawnContext.none){
+	if(spawn_context == PlayerSpawnContext.level_start){
 		player_stage_entrance_begin();
 		state = PlayerState.stage_entrance;
+		return;
+	}
+	if(spawn_context == PlayerSpawnContext.tutorial_continue){
+		player_tutorial_continue_begin();
+		state = PlayerState.stage_entrance;
+		return;
+	}
+
+	// Presence has its own room reveal. Spawn Winbo normally at the authored
+	// marker instead of replaying the large level-entry sequence over it.
+	if(spawn_context == PlayerSpawnContext.presence_start){
+		spawn_context = PlayerSpawnContext.none;
+		transform_animate_grow_and_appear();
+		state = PlayerState.idle;
 		return;
 	}
 
@@ -24,9 +38,9 @@ function player_stage_entrance_begin(){
 
 	draw_adjustment_y = stage_entrance_draw_adjustment_y;
 
-	// The supplied 1500px-wide sequence carries Winbo toward its centred origin.
-	// Offset only the small, resolution-dependent remainder needed to keep the
-	// first frame outside the camera, then ease that remainder away as it plays.
+	// The supplied 1500px-wide sequence already contains Winbo's complete arc.
+	// Keep frame zero outside the view, but release that small correction during
+	// the early airborne frames so the authored landing receives no extra slide.
 	var _entrance_frame_zero_right_x = 67;
 	var _entrance_camera_width = camera_get_view_width(view_camera[0]);
 	stage_entrance_draw_offset_start_x = min(
@@ -36,6 +50,7 @@ function player_stage_entrance_begin(){
 			- _entrance_camera_width * 0.5
 			- 1
 	);
+	stage_entrance_offset_release_frame = 8;
 	stage_entrance_landing_smoke_pending = (room != r_opening_cutscene);
 	draw_adjustment_x = stage_entrance_draw_offset_start_x;
 
@@ -54,9 +69,14 @@ function player_stage_entrance_begin(){
 }
 
 function player_state_stage_entrance(){
+	if(spawn_context == PlayerSpawnContext.tutorial_continue){
+		player_state_tutorial_continue();
+		return;
+	}
+
 	draw_adjustment_y = stage_entrance_draw_adjustment_y;
 	var _entrance_progress = clamp(
-		sprite_current_frame / max(1, image.sprite_number - 1),
+		sprite_current_frame / stage_entrance_offset_release_frame,
 		0,
 		1
 	);
@@ -83,6 +103,48 @@ function player_state_stage_entrance(){
 			stage_entrance_landing_smoke_pending = false;
 			fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", spr_fx_smoke_landing, 1, 1, 0, 18);
 		}
+		player_stage_entrance_finish();
+	}
+}
+
+function player_tutorial_continue_begin(){
+	var _transform = transform[TransformType.anchor];
+	transform_set(_transform, TransformValue.xscale, 1, false);
+	transform_set(_transform, TransformValue.yscale, 1, false);
+	transform_set(_transform, TransformValue.alpha, 1, false);
+
+	draw_adjustment_x = 0;
+	draw_adjustment_y = 0;
+	velocity.Set(0,0);
+	acceleration.Set(0,0);
+
+	stage_entrance_hp_vulnerable_previous = hp_vulnerable;
+	stage_entrance_user_hp_vulnerable_previous = user.hp_vulnerable;
+	hp_vulnerable = false;
+	user.hp_vulnerable = false;
+	tutorial_continue_countdown = SECOND * 0.5;
+
+	input_move_direction = 0;
+	input_move_magnitude = 1;
+	input_aim_direction = 0;
+	face_horizontal = 1;
+	image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
+}
+
+function player_state_tutorial_continue(){
+	input_move_direction = 0;
+	input_move_magnitude = 1;
+	input_aim_direction = 0;
+	face_horizontal = 1;
+	acceleration.AddMagnitudeDirection(INPUT_MOVE_ACCELERATION, 0);
+	player_movement_update();
+
+	if(sprite_current != sprite_walk){
+		image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
+	}
+
+	tutorial_continue_countdown -= global.delta_time_factor_scaled;
+	if(tutorial_continue_countdown <= 0 || collision.x == 1){
 		player_stage_entrance_finish();
 	}
 }

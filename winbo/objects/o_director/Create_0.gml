@@ -74,7 +74,8 @@
 	enum PlayerSpawnContext {
 		none,
 		level_start,
-		presence_start
+		presence_start,
+		tutorial_continue
 	}
 #endregion
 

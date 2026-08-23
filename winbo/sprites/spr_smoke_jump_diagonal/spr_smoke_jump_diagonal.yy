@@ -3,9 +3,9 @@
   "%Name":"spr_smoke_jump_diagonal",
   "bboxMode":0,
   "bbox_bottom":361,
-  "bbox_left":51,
-  "bbox_right":356,
-  "bbox_top":100,
+  "bbox_left":48,
+  "bbox_right":270,
+  "bbox_top":103,
   "collisionKind":1,
   "collisionTolerance":0,
   "ConfigValues":{

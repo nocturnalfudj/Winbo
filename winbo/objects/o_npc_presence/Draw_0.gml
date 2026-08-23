@@ -28,14 +28,11 @@ if(status_effect_active_count[StatusEffect.invincible] > 0){
 var _body_frame;
 var _head_sprite,_head_frame;
 var _eyes_sprite,_eyes_frame;
-var _eyes_x,_eyes_y;
 _body_frame = floor(presence_visual_body_idle_frame);
 _head_sprite = spr_npc_presence_head_front;
 _head_frame = floor(presence_visual_head_idle_frame);
 _eyes_sprite = presence_visual_eye_sprite;
 _eyes_frame = floor(presence_visual_eyes_idle_frame);
-_eyes_x = _character_x + (presence_visual_eye_offset_x * _scale_x);
-_eyes_y = _character_y + (presence_visual_eye_offset_y * _scale_y);
 
 switch(presence_visual_state){
 	case PresenceVisualState.intro:
@@ -101,9 +98,13 @@ switch(presence_visual_state){
 		_body_frame = _outro_frame;
 		_head_sprite = spr_npc_presence_head_intro;
 		_head_frame = round((max(0,presence_visual_intro_frame) / max(1,presence_visual_body_intro_end)) * presence_visual_head_intro_end);
-		_eyes_sprite = spr_npc_presence_eyes_front;
 		_head_frame = clamp(_head_frame,0,presence_visual_head_intro_end);
-		_eyes_frame = clamp(_outro_eye_frame,0,presence_visual_front_eyes_intro_end);
+		if(_eyes_sprite == spr_npc_presence_eyes_front){
+			_eyes_frame = clamp(_outro_eye_frame,0,presence_visual_front_eyes_intro_end);
+		}
+		else{
+			_eyes_frame = clamp(floor(presence_visual_eyes_idle_frame),0,9);
+		}
 	break;
 }
 
@@ -116,7 +117,7 @@ if(_head_sprite != noone){
 }
 
 if(_eyes_sprite != noone){
-	draw_sprite_ext(_eyes_sprite,_eyes_frame,_eyes_x,_eyes_y,_scale_x,_scale_y,image_angle + acceleration_sway,image_blend,_alpha);
+	draw_sprite_ext(_eyes_sprite,_eyes_frame,_character_x,_character_y,_scale_x,_scale_y,image_angle + acceleration_sway,image_blend,_alpha);
 }
 
 if(flash_alpha > 0){
@@ -130,7 +131,7 @@ if(flash_alpha > 0){
 	}
 
 	if(_eyes_sprite != noone){
-		draw_sprite_ext(_eyes_sprite,_eyes_frame,_eyes_x,_eyes_y,_scale_x,_scale_y,image_angle + acceleration_sway,flash_colour,flash_alpha);
+		draw_sprite_ext(_eyes_sprite,_eyes_frame,_character_x,_character_y,_scale_x,_scale_y,image_angle + acceleration_sway,flash_colour,flash_alpha);
 	}
 	shader_reset();
 }

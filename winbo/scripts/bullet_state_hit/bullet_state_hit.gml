@@ -2,7 +2,18 @@ function bullet_state_hit(){
 	// Missile explosion screen shake
 	if (object_index == o_missile) {
 		camera_shake_add(0.3, 8);
-		fx_spawn_ash_decal(x, y, point_direction(0, 0, velocity.x, velocity.y), move_collision_object_instance);
+
+		// The movement solver records the actual face hit. Velocity rounding could
+		// choose the wrong face for diagonal missiles and leave ash below an island.
+		var _ash_direction = point_direction(0, 0, velocity.x, velocity.y);
+		if(collision.y != 0){
+			_ash_direction = (collision.y > 0) ? 270 : 90;
+		}
+		else if(collision.x != 0){
+			_ash_direction = (collision.x > 0) ? 0 : 180;
+		}
+
+		fx_spawn_ash_decal(x, y, _ash_direction, move_collision_object_instance);
 	}
 
 	//Post Hit Movement Update
