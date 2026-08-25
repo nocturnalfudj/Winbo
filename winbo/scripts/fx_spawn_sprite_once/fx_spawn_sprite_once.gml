@@ -23,3 +23,15 @@ function fx_spawn_sprite_once(_x, _y, _layer, _sprite, _xscale = 1, _yscale = 1,
 	}
 	return _inst;
 }
+
+/// @function fx_spawn_sprite_follow_once(_target,_offset_x,_offset_y,_layer,_sprite[_xscale,_yscale,_angle,_fps,_alpha])
+/// @description Spawn a one-shot sprite FX that stays anchored to a target instance.
+function fx_spawn_sprite_follow_once(_target, _offset_x, _offset_y, _layer, _sprite, _xscale = 1, _yscale = 1, _angle = 0, _fps = ANIMATION_FPS_DEFAULT, _alpha = 1){
+	var _inst;
+	_inst = fx_spawn_sprite_once(_target.x + _offset_x, _target.y + _offset_y, _layer, _sprite, _xscale, _yscale, _angle, _fps, _alpha);
+	_inst.fx_follow_enabled = true;
+	_inst.fx_follow_target = _target;
+	_inst.fx_follow_offset_x = _offset_x;
+	_inst.fx_follow_offset_y = _offset_y;
+	return _inst;
+}

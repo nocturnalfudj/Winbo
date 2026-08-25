@@ -241,18 +241,23 @@ function director_environment_data_setup(){
 		_environment_name = "Presence";
 		_environment_tile = noone;
 		_environment_foreground = noone;
+		// The supplied Presence art is one 2160px-high room composition. Pin it
+		// to the bottom of the 4000px room so vertical camera movement cannot
+		// separate its painted floor/cave from the world-space Presence actor.
+		var _presence_background_y;
+		_presence_background_y = 1840;
 		environment[_environment] = new EnvironmentData(
 			_environment,
 			_environment_name,
 			_environment_tile,
 			_environment_foreground,
 			[
-				{mode: "normal", sprite: spr_bg_presence_layer_4, parallax_x: 0.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false},
-				{mode: "normal", sprite: spr_bg_presence_layer_3, parallax_x: 0.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false},
-				{mode: "normal", sprite: spr_bg_presence_layer_2, parallax_x: 0.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false}
+				{mode: "normal", sprite: spr_bg_presence_layer_4, parallax_x: 0.0, parallax_y: 0.0, offset_y: _presence_background_y, repeat_x: false, clamp_y: false},
+				{mode: "normal", sprite: spr_bg_presence_layer_3, parallax_x: 0.0, parallax_y: 0.0, offset_y: _presence_background_y, repeat_x: false, clamp_y: false},
+				{mode: "normal", sprite: spr_bg_presence_layer_2, parallax_x: 0.0, parallax_y: 0.0, offset_y: _presence_background_y, repeat_x: false, clamp_y: false}
 			],
 			[
-				{mode: "normal", sprite: spr_bg_presence_layer_1_foreground, parallax_x: 0.0, parallax_y: 1.0, offset_y: 0, repeat_x: false, clamp_y: false}
+				{mode: "normal", sprite: spr_bg_presence_layer_1_foreground, parallax_x: 0.0, parallax_y: 0.0, offset_y: _presence_background_y, repeat_x: false, clamp_y: false}
 			]
 		);
 		with(environment[_environment]){

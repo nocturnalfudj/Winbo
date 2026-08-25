@@ -3,17 +3,17 @@ function bullet_state_hit(){
 	if (object_index == o_missile) {
 		camera_shake_add(0.3, 8);
 
-		// The movement solver records the actual face hit. Velocity rounding could
-		// choose the wrong face for diagonal missiles and leave ash below an island.
-		var _ash_direction = point_direction(0, 0, velocity.x, velocity.y);
-		if(collision.y != 0){
-			_ash_direction = (collision.y > 0) ? 270 : 90;
+		// Persistent ash is a ground-impact mark. Treat a visually straight-down
+		// homing missile as direct even when steering leaves a few degrees of drift;
+		// upward, diagonal and side impacts still leave no mark.
+		var _ash_down_direction = 270;
+		var _ash_down_tolerance = 5;
+		var _impact_direction = point_direction(0,0,velocity.x,velocity.y);
+		if((collision.y > 0)
+		&& (velocity.y > 0)
+		&& (abs(angle_difference(_impact_direction,_ash_down_direction)) <= _ash_down_tolerance)){
+			fx_spawn_ash_decal(x, y, 270, move_collision_object_instance);
 		}
-		else if(collision.x != 0){
-			_ash_direction = (collision.x > 0) ? 0 : 180;
-		}
-
-		fx_spawn_ash_decal(x, y, _ash_direction, move_collision_object_instance);
 	}
 
 	//Post Hit Movement Update

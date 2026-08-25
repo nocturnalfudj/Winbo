@@ -232,11 +232,18 @@ function player_state_move(){
 			input_aim_direction = input_move_direction;
 		}
 
-		if(player_dive_spring_float_input_active()){
+		// Jump and Float share W on keyboard. Work out whether this press belongs
+		// to a real ground/bounce jump before allowing Float to consume it.
+		var _jump_pressed_now, _close_enough_to_jump, _jump_available_now;
+		_jump_pressed_now = input_current[UserControl.jump] && !input_previous[UserControl.jump];
+		_close_enough_to_jump = move_grounded_close && (velocity.y > 0);
+		_jump_available_now = (bump_jump_count > 0) || move_grounded || _close_enough_to_jump;
+
+		if(player_dive_spring_float_input_active() && !(_jump_pressed_now && _jump_available_now)){
 			if((float_countdown > 0) && (!move_grounded)){
 				if((acceleration.y >= 0) && (velocity.y >= 0)){
 					player_frolic_clear();
-					fx_spawn_sprite_once(x, y, "lyr_pfx_foreground", spr_fx_float_burst, face_horizontal, 1, 0, 18);
+					fx_spawn_sprite_follow_once(id, 0, 0, "lyr_pfx_foreground", spr_fx_float_burst, face_horizontal, 1, 0, 18);
 					state = PlayerState.float;
 				}
 			}
@@ -252,17 +259,8 @@ function player_state_move(){
 	}
 
 	#region Jump
-		if((input_current[UserControl.jump]) && (!input_previous[UserControl.jump])){
-			var _close_enough_to_jump;
-			_close_enough_to_jump = false;
-
-			if(move_grounded_close){
-				if(velocity.y > 0){
-					_close_enough_to_jump = true;
-				}
-			}
-
-			if((bump_jump_count) || (move_grounded) || (_close_enough_to_jump)){
+		if(_jump_pressed_now){
+			if(_jump_available_now){
 				player_frolic_clear();
 
 				acceleration.AddMagnitudeDirection(input_move_acceleration_jump, 90);
@@ -288,7 +286,7 @@ function player_state_move(){
 						_jump_smoke_xscale = (input_move_direction > 90 && input_move_direction < 270) ? 1 : -1;
 					}
 
-					fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_midground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT, 0.5);
+					fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_midground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT);
 				}
 			}
 		}
@@ -1138,7 +1136,7 @@ function player_dive_spring_float_interrupt_try(){
 	player_dive_spring_restore_movement();
 	dive_spring_phase = DiveSpringPhase.dive;
 	dive_spring_float_cancel_requested = false;
-	fx_spawn_sprite_once(x, y, "lyr_pfx_foreground", spr_fx_float_burst, face_horizontal, 1, 0, 18);
+	fx_spawn_sprite_follow_once(id, 0, 0, "lyr_pfx_foreground", spr_fx_float_burst, face_horizontal, 1, 0, 18);
 	state = PlayerState.float;
 	image_system_setup(sprite_float, ANIMATION_FPS_DEFAULT, true, true, 5, IMAGE_LOOP_FULL);
 	return true;

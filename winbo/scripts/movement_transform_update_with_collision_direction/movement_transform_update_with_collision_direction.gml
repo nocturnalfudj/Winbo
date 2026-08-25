@@ -56,6 +56,8 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
     // Initialize collision variables
     collision.Set(0, 0);
     move_collision_object_instance = noone;
+    move_collision_object_instance_x = noone;
+    move_collision_object_instance_y = noone;
     var _collision = false;
 
     // Store initial velocities
@@ -116,6 +118,7 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
                     if(_collision_allowed){
                         _collision_detected = true;
                         move_collision_object_instance = _collision_instance_id; // Set in the moving object's scope
+                        move_collision_object_instance_x = _collision_instance_id;
                         break;
                     }
                 }
@@ -233,6 +236,7 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
                     if(_collision_allowed){
                         _collision_detected = true;
                         move_collision_object_instance = _collision_instance_id; // Set in the moving object's scope
+                        move_collision_object_instance_y = _collision_instance_id;
                         break;
                     }
                 }

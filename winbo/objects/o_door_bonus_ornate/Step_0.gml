@@ -2,6 +2,8 @@ var _open_image_index_before = bonus_door_open_image_index;
 
 event_inherited();
 
+// Frames 0–31 are the approach/glow phase. Trigger when the two door panels
+// first separate at frame 32, which is the requested start of the opening.
 if (bonus_door_open_image_index < bonus_door_creak_frame) {
 	bonus_door_creak_armed = true;
 }

@@ -101,10 +101,12 @@ function player_gamestate_play(){
 				_bump_text_poster_x = x;
 				_bump_text_poster_y = y;
 				
-				var _platform_crumble_dash_collision;
+				var _platform_crumble_dash_collision, _platform_crumble_dash_instant_instance;
 				_platform_crumble_dash_collision = false;
+				_platform_crumble_dash_instant_instance = noone;
 				with(move_collision_object_instance){
-					if((object_index == o_platform_crumble_dash) || object_is_ancestor(object_index, o_platform_crumble_dash)){
+					if(((object_index == o_platform_crumble) || object_is_ancestor(object_index, o_platform_crumble))
+					&& (crumble_trigger_type == PlatformCrumbleTrigger.dash)){
 						_platform_crumble_dash_collision = true;
 						_bump_acceleration = 150;
 						_bump_acceleration_direction_additional = 15;
@@ -114,7 +116,7 @@ function player_gamestate_play(){
 							break_fx_blast_direction = other.input_move_direction;
 								
 							if(crumble_trigger_active_instant){
-								crumble_platform_state_crumble_active();
+								_platform_crumble_dash_instant_instance = id;
 							}
 						}
 					}
@@ -202,14 +204,35 @@ function player_gamestate_play(){
 								audio_player_bump_play();
 							}
 						
-							if(quick_smoke_fx_enable){
-								// Bump impact FX (wall bumps only)
+							if(bump_smoke_fx_enable){
+								// The supplied sprite grows rightward from its centre-line edge.
+								// Read the exact collided surface rather than Winbo's separated bbox,
+								// then place the centre-line edge there and rotate/flip it inward.
 								if (collision.x == 1) {
-									fx_spawn_sprite_once(bbox_right, y, "lyr_pfx_foreground", spr_smoke_bump_impact, -1, 1, 0, ANIMATION_FPS_DEFAULT);
+									with(move_collision_object_instance_x){
+										fx_spawn_sprite_once(bbox_left, other.y, "lyr_pfx_foreground", spr_smoke_bump_impact, -1, 1, 0, ANIMATION_FPS_DEFAULT);
+									}
 								}
 								else if (collision.x == -1) {
-									fx_spawn_sprite_once(bbox_left, y, "lyr_pfx_foreground", spr_smoke_bump_impact, 1, 1, 0, ANIMATION_FPS_DEFAULT);
+									with(move_collision_object_instance_x){
+										fx_spawn_sprite_once(bbox_right, other.y, "lyr_pfx_foreground", spr_smoke_bump_impact, 1, 1, 0, ANIMATION_FPS_DEFAULT);
+									}
 								}
+								else if (collision.y == 1) {
+									with(move_collision_object_instance_y){
+										fx_spawn_sprite_once(other.x, bbox_top, "lyr_pfx_foreground", spr_smoke_bump_impact, 1, 1, 90, ANIMATION_FPS_DEFAULT);
+									}
+								}
+								else if (collision.y == -1) {
+									with(move_collision_object_instance_y){
+										fx_spawn_sprite_once(other.x, bbox_bottom, "lyr_pfx_foreground", spr_smoke_bump_impact, 1, 1, -90, ANIMATION_FPS_DEFAULT);
+									}
+								}
+							}
+
+							// Preserve the contacted surface until the impact effect has read its edge.
+							with(_platform_crumble_dash_instant_instance){
+								crumble_platform_state_crumble_active();
 							}
 					
 						if(_platform_crumble_dash_collision){

@@ -35,6 +35,8 @@ function movement_system_create() {
 	collision = new Vector2(0,0);
 	move_collision_object = o_solid;
 	move_collision_object_instance = noone;
+	move_collision_object_instance_x = noone;
+	move_collision_object_instance_y = noone;
 	
 	move_collision_slip_enable = false;
 	

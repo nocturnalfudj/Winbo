@@ -15,7 +15,7 @@ var _vignette_steps = 8;
 var _step_depth = _vignette_depth / _vignette_steps;
 var _vignette_alpha = image_alpha * fade_factor;
 
-draw_set_colour(c_black);
+draw_set_colour(c_red);
 for(var _step = 0; _step < _vignette_steps; _step++){
 	var _outer_inset = _step * _step_depth;
 	var _inner_inset = (_step + 1) * _step_depth;

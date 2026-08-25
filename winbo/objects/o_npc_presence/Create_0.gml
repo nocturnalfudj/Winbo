@@ -59,11 +59,21 @@ event_inherited();
 	presence_visual_front_eyes_intro_end = 20;
 	presence_visual_front_eyes_idle_start = 30;
 	presence_visual_front_eyes_idle_end = 39;
-	// Each supplied eye sprite is a full-canvas layer and must stay anchored to
-	// the body/head draw origin; direction changes swap complete sprite sets.
+	// Andy's diagram defines the allowed eye travel window directly as 142x76.
+	// The Step event subtracts each directional sprite's baked displacement so
+	// the visible eyes, not the full sprite canvas, remain inside that boundary.
+	presence_visual_eye_tracking_range_x = 142;
+	presence_visual_eye_tracking_range_y = 76;
 	presence_visual_eye_tracking_world_range_x = 600;
+	presence_visual_eye_tracking_world_range_y = 420;
 	presence_visual_eye_tracking_inbetween_threshold = 0.33;
 	presence_visual_eye_tracking_extreme_threshold = 0.75;
+	presence_visual_eye_offset_x = 0;
+	presence_visual_eye_offset_y = 0;
+	presence_visual_eye_art_offset_x = 0;
+	presence_visual_eye_art_offset_y = 0;
+	presence_visual_eye_outro_start_total_x = 0;
+	presence_visual_eye_outro_start_total_y = 0;
 	presence_visual_eye_direction = PresenceEyeDirection.front;
 	presence_visual_eye_direction_target = PresenceEyeDirection.front;
 	presence_visual_head_direction = PresenceHeadDirection.front;

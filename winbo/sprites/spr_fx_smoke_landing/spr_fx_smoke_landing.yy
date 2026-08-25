@@ -53,6 +53,13 @@
       "name": "d089f8d1372e49ec998efbc9c04c2efa",
       "resourceType": "GMSpriteFrame",
       "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "",
+      "%Name": "12069a57c03a4a5c99bd5a8921d7a86f",
+      "name": "12069a57c03a4a5c99bd5a8921d7a86f",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
     }
   ],
   "gridX": 0,
@@ -101,7 +108,7 @@
     },
     "eventStubScript": null,
     "eventToFunction": {},
-    "length": 6,
+    "length": 7.0,
     "lockOrigin": false,
     "moments": {
       "$KeyframeStore<MomentsEventKeyframe>": "",
@@ -257,6 +264,28 @@
               "IsCreationKey": false,
               "Key": 5,
               "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "12069a57c03a4a5c99bd5a8921d7a86f",
+                    "path": "sprites/spr_fx_smoke_landing/spr_fx_smoke_landing.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "ff68537064ab456e93bafc5c3f209d53",
+              "IsCreationKey": false,
+              "Key": 6.0,
+              "Length": 1.0,
               "resourceType": "Keyframe<SpriteFrameKeyframe>",
               "resourceVersion": "2.0",
               "Stretch": false

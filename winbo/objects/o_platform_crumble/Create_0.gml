@@ -37,9 +37,12 @@ respawn_countdown = respawn_countdown_max;
 		touch,
 		dash,
 	}
-	crumble_trigger_type = PlatformCrumbleTrigger.touch;
+	// These platforms are authored as Air-Dash breakables. Ordinary standing
+	// must retain their collision; only the explicit Dash collision path starts
+	// the break sequence.
+	crumble_trigger_type = PlatformCrumbleTrigger.dash;
 	crumble_trigger_active = false;
-	crumble_trigger_active_instant = false;
+	crumble_trigger_active_instant = true;
 #endregion
 
 // Respawn control

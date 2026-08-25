@@ -15,9 +15,16 @@ function player_state_create(){
 	// Presence has its own room reveal. Spawn Winbo normally at the authored
 	// marker instead of replaying the large level-entry sequence over it.
 	if(spawn_context == PlayerSpawnContext.presence_start){
-		spawn_context = PlayerSpawnContext.none;
-		transform_animate_grow_and_appear();
-		state = PlayerState.idle;
+		// The generic Create path starts the actor fully transparent and grows it
+		// in. That made a normal Presence-room spawn look absent and left the
+		// marker's one-pixel floor overlap untreated. Reuse the one-time entry
+		// normalization without playing any level-entry artwork or movement.
+		var _presence_transform;
+		_presence_transform = transform[TransformType.anchor];
+		transform_set(_presence_transform, TransformValue.xscale, 1, false);
+		transform_set(_presence_transform, TransformValue.yscale, 1, false);
+		transform_set(_presence_transform, TransformValue.alpha, 1, false);
+		player_stage_entrance_finish();
 		return;
 	}
 
@@ -39,8 +46,9 @@ function player_stage_entrance_begin(){
 	draw_adjustment_y = stage_entrance_draw_adjustment_y;
 
 	// The supplied 1500px-wide sequence already contains Winbo's complete arc.
-	// Keep frame zero outside the view, but release that small correction during
-	// the early airborne frames so the authored landing receives no extra slide.
+	// Keep frame zero outside the view, then release only that camera correction
+	// at a fixed design-space speed. A symmetric ease removes velocity steps at
+	// both ends without the old front-loaded, cannon-like launch.
 	var _entrance_frame_zero_right_x = 67;
 	var _entrance_camera_width = camera_get_view_width(view_camera[0]);
 	stage_entrance_draw_offset_start_x = min(
@@ -50,9 +58,13 @@ function player_stage_entrance_begin(){
 			- _entrance_camera_width * 0.5
 			- 1
 	);
-	stage_entrance_offset_release_frame = 8;
+	stage_entrance_offset_release_frame = min(
+		16,
+		max(1,ceil(abs(stage_entrance_draw_offset_start_x) / stage_entrance_offset_release_speed))
+	);
 	stage_entrance_landing_smoke_pending = (room != r_opening_cutscene);
 	draw_adjustment_x = stage_entrance_draw_offset_start_x;
+	player_spawn_floor_overlap_resolve();
 
 	velocity.x = 0;
 	velocity.y = 0;
@@ -64,7 +76,10 @@ function player_stage_entrance_begin(){
 	hp_vulnerable = false;
 	user.hp_vulnerable = false;
 
-	image_system_setup(sprite_stage_entrance, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+	// The offscreen-left version covers roughly 1.8x the visible horizontal
+	// distance of the supplied reference. Match its measured screen speed rather
+	// than compressing that extra lead-in into the original 15fps playback.
+	image_system_setup(sprite_stage_entrance, stage_entrance_animation_fps, true, false, 0, IMAGE_LOOP_FULL);
 	image_set_frame(image, 0);
 }
 
@@ -80,11 +95,8 @@ function player_state_stage_entrance(){
 		0,
 		1
 	);
-	draw_adjustment_x = lerp(
-		stage_entrance_draw_offset_start_x,
-		0,
-		ease_quad_out(0, 1, false, _entrance_progress, 1)
-	);
+	var _entrance_eased_progress = ease_quad_in_out(0, 1, false, _entrance_progress, 1);
+	draw_adjustment_x = lerp(stage_entrance_draw_offset_start_x, 0, _entrance_eased_progress);
 	velocity.x = 0;
 	acceleration.x = 0;
 
@@ -94,7 +106,7 @@ function player_state_stage_entrance(){
 	acceleration.x = 0;
 
 	if(sprite_current != sprite_stage_entrance){
-		image_system_setup(sprite_stage_entrance, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+		image_system_setup(sprite_stage_entrance, stage_entrance_animation_fps, true, false, 0, IMAGE_LOOP_FULL);
 		image_set_frame(image, 0);
 	}
 
@@ -158,22 +170,7 @@ function player_stage_entrance_finish(){
 	spawn_context = PlayerSpawnContext.none;
 	stage_entrance_landing_smoke_pending = false;
 
-	// GameMaker collision masks include both bounding-box edges. A room spawn
-	// whose feet are authored exactly on the platform top therefore begins one
-	// pixel inside the floor. Match the normal downward-collision result by
-	// moving that single pixel out before handing control to the player; leaving
-	// it overlapped makes horizontal input hit the floor's x collision and push
-	// back in the opposite direction until the first jump clears the overlap.
-	if(place_meeting(x,y,move_collision_object)
-	&& !place_meeting(x,y - 1,move_collision_object)) {
-		y -= 1;
-		transform_set(
-			transform[TransformType.anchor],
-			TransformValue.y,
-			y,
-			false
-		);
-	}
+	player_spawn_floor_overlap_resolve();
 
 	// Return every movement field to the normal grounded-play baseline. Without
 	// this reset, room-entry state can survive until the first jump refreshes it.
@@ -209,6 +206,21 @@ function player_stage_entrance_finish(){
 	image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
 	image_set_frame(image, 0);
 	state = PlayerState.move;
+}
+
+/// @summary Resolve the one-pixel overlap produced when an authored player
+/// start marker sits exactly on a platform's collision edge.
+function player_spawn_floor_overlap_resolve(){
+	if(place_meeting(x,y,move_collision_object)
+	&& !place_meeting(x,y - 1,move_collision_object)) {
+		y -= 1;
+		transform_set(
+			transform[TransformType.anchor],
+			TransformValue.y,
+			y,
+			false
+		);
+	}
 }
 
 function player_bonus_room_enter_begin(_target_room, _target_x, _target_y, _hold_countdown){

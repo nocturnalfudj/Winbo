@@ -62,6 +62,7 @@ is_player = true;
 		spr_player_secret_idle_thought_1,
 		spr_player_secret_idle_thought_2,
 		spr_player_secret_idle_thought_3,
+		spr_player_secret_idle_thought_4,
 		spr_player_secret_idle_thought_6,
 		spr_player_secret_idle_thought_7,
 		spr_player_secret_idle_thought_8,
@@ -147,6 +148,7 @@ is_player = true;
 	// supplied jump and landing effects independently.
 	quick_smoke_fx_enable = false;
 	jump_smoke_fx_enable = true;
+	bump_smoke_fx_enable = true;
 	landing_smoke_armed = false;
 	
 	//Float
@@ -165,6 +167,8 @@ is_player = true;
 	stage_entrance_draw_adjustment_y = 0;
 	stage_entrance_draw_offset_start_x = 0;
 	stage_entrance_offset_release_frame = 0;
+	stage_entrance_offset_release_speed = 80;
+	stage_entrance_animation_fps = 8.333333333333333;
 	stage_entrance_landing_smoke_pending = false;
 	tutorial_continue_countdown = 0;
 	bonus_room_enter_target_room = noone;
@@ -245,7 +249,7 @@ is_player = true;
 	dive_spring_rotor_loop_end_frame = 15;
 	dive_spring_transition_start_frame = 15;
 	dive_spring_transition_end_frame = 16;
-	dive_spring_fail_start_frame = 0;
+	dive_spring_fail_start_frame = 7;
 	dive_spring_launch_hold_time_max = SECOND * 0.18;
 	dive_spring_launch_hold_time = 0;
 	dive_spring_launch_impulse_pending = false;

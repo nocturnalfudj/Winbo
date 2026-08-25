@@ -11,5 +11,9 @@ image_blend  = c_white;
 
 fx_sprite = noone;
 fx_fps = ANIMATION_FPS_DEFAULT;
+fx_follow_enabled = false;
+fx_follow_target = noone;
+fx_follow_offset_x = 0;
+fx_follow_offset_y = 0;
 
 _fx_started = false;

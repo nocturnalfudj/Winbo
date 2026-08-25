@@ -122,7 +122,7 @@ function player_state_float(){
 								// The diagonal jump smoke art faces left by default; flip so it matches travel direction.
 								_jump_smoke_xscale = (input_move_direction > 90 && input_move_direction < 270) ? 1 : -1;
 							}
-							fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_midground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT, 0.5);
+							fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_midground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT);
 						}
 					}
 				}
