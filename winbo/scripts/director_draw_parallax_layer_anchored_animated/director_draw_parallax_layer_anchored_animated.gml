@@ -13,7 +13,8 @@
 /// @param {Real} _loop_width Width of one repeat cycle in world space.
 /// @param {array} _anchor_x Anchor X positions inside each loop cycle.
 /// @param {Real} [_anchor_sprite_x=0] Sprite-space X offset to align each anchor to.
-/// @param {Bool} [_clamp_y=true] Apply camera-relative Y clamping.
+/// @param {Bool} [_clamp_top=true] Prevent the sprite top moving below the camera top.
+/// @param {Bool} [_clamp_bottom=true] Prevent the sprite bottom moving above the camera bottom.
 function director_draw_parallax_layer_anchored_animated(
 	_base_sprite,
 	_animated_sprite,
@@ -28,7 +29,8 @@ function director_draw_parallax_layer_anchored_animated(
 	_loop_width,
 	_anchor_x,
 	_anchor_sprite_x = 0,
-	_clamp_y = true
+	_clamp_top = true,
+	_clamp_bottom = true
 ) {
 	if(_loop_width <= 0){
 		return;
@@ -45,11 +47,12 @@ function director_draw_parallax_layer_anchored_animated(
 	var _base_x = _camera_x * _parallax_x;
 	var _base_y = (_camera_y * _parallax_y) + _offset_y;
 	
-	if(_clamp_y){
-		// Match the same camera-relative clamping used by existing parallax helpers.
-		var _y_min = _camera_y;
-		var _y_max = (_camera_y + _camera_height) - _sprite_height;
-		_base_y = clamp(_base_y, _y_max, _y_min);
+	if(_clamp_bottom){
+		var _bottom_limit = (_camera_y + _camera_height) - _sprite_height;
+		_base_y = max(_base_y, _bottom_limit);
+	}
+	if(_clamp_top){
+		_base_y = min(_base_y, _camera_y);
 	}
 	
 	var _camera_right = _camera_x + _camera_width;

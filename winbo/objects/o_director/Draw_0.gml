@@ -116,8 +116,6 @@ if(o_master.debug_navigation_grid_enable){
 						break;
 
 						case "normal":
-							var _repeat_x = !variable_struct_exists(_layer, "repeat_x") || _layer.repeat_x;
-							var _clamp_y = !variable_struct_exists(_layer, "clamp_y") || _layer.clamp_y;
 							director_draw_parallax_layer(
 								_layer.sprite,
 								_camera_x,
@@ -127,8 +125,9 @@ if(o_master.debug_navigation_grid_enable){
 								_layer.parallax_x,
 								_layer.parallax_y,
 								_layer.offset_y,
-								_repeat_x,
-								_clamp_y
+								_layer.repeat_x,
+								_layer.clamp_top,
+								_layer.clamp_bottom
 							);
 						break;
 					
@@ -142,7 +141,9 @@ if(o_master.debug_navigation_grid_enable){
 								_camera_height,
 								_layer.parallax_x,
 								_layer.parallax_y,
-								_layer.offset_y
+								_layer.offset_y,
+								_layer.clamp_top,
+								_layer.clamp_bottom
 							);
 						break;
 					
@@ -150,8 +151,7 @@ if(o_master.debug_navigation_grid_enable){
 							var _frame_count = sprite_get_number(_layer.sprite);
 							var _frame = 0;
 							if(_frame_count > 1){
-								var _fps = variable_struct_exists(_layer, "fps") ? _layer.fps : ANIMATION_FPS_DEFAULT;
-								_frame = floor(bg_anim_time_seconds * _fps) mod _frame_count;
+								_frame = floor(bg_anim_time_seconds * _layer.fps) mod _frame_count;
 							}
 						
 							director_draw_parallax_layer_frame(
@@ -163,7 +163,9 @@ if(o_master.debug_navigation_grid_enable){
 								_camera_height,
 								_layer.parallax_x,
 								_layer.parallax_y,
-								_layer.offset_y
+								_layer.offset_y,
+								_layer.clamp_top,
+								_layer.clamp_bottom
 							);
 						break;
 					
@@ -171,28 +173,25 @@ if(o_master.debug_navigation_grid_enable){
 							var _overlay_frame_count = sprite_get_number(_layer.animated_sprite);
 							var _overlay_frame = 0;
 							if(_overlay_frame_count > 1){
-								var _overlay_fps = variable_struct_exists(_layer, "fps") ? _layer.fps : ANIMATION_FPS_DEFAULT;
-								_overlay_frame = floor(bg_anim_time_seconds * _overlay_fps) mod _overlay_frame_count;
+								_overlay_frame = floor(bg_anim_time_seconds * _layer.fps) mod _overlay_frame_count;
 							}
 							
-							var _loop_width = variable_struct_exists(_layer, "loop_width") ? _layer.loop_width : sprite_get_width(_layer.base_sprite);
-							var _anchor_sprite_x = variable_struct_exists(_layer, "anchor_sprite_x") ? _layer.anchor_sprite_x : 0;
-								var _clamp_y = !variable_struct_exists(_layer, "clamp_y") || _layer.clamp_y;
-								director_draw_parallax_layer_anchored_animated(
-									_layer.base_sprite,
-									_layer.animated_sprite,
-									_overlay_frame,
-									_camera_x,
-									_camera_y,
-									_camera_width,
-									_camera_height,
-									_layer.parallax_x,
-									_layer.parallax_y,
-									_layer.offset_y,
-									_loop_width,
-									_layer.anchor_x,
-								_anchor_sprite_x,
-								_clamp_y
+							director_draw_parallax_layer_anchored_animated(
+								_layer.base_sprite,
+								_layer.animated_sprite,
+								_overlay_frame,
+								_camera_x,
+								_camera_y,
+								_camera_width,
+								_camera_height,
+								_layer.parallax_x,
+								_layer.parallax_y,
+								_layer.offset_y,
+								_layer.loop_width,
+								_layer.anchor_x,
+								_layer.anchor_sprite_x,
+								_layer.clamp_top,
+								_layer.clamp_bottom
 							);
 						break;
 					}

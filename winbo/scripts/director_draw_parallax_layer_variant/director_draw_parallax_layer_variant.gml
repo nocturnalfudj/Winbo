@@ -9,17 +9,22 @@
 /// @param {Real} _parallax_x Horizontal parallax factor.
 /// @param {Real} _parallax_y Vertical parallax factor.
 /// @param {Real} _offset_y Additional Y offset.
-function director_draw_parallax_layer_variant(_sprite_first, _sprite_loop, _camera_x, _camera_y, _camera_width, _camera_height, _parallax_x, _parallax_y, _offset_y) {
+/// @param {Bool} [_clamp_top=true] Prevent the sprite top moving below the camera top.
+/// @param {Bool} [_clamp_bottom=true] Prevent the sprite bottom moving above the camera bottom.
+function director_draw_parallax_layer_variant(_sprite_first, _sprite_loop, _camera_x, _camera_y, _camera_width, _camera_height, _parallax_x, _parallax_y, _offset_y, _clamp_top = true, _clamp_bottom = true) {
 	var _sprite_width = sprite_get_width(_sprite_loop);
 	var _sprite_height = sprite_get_height(_sprite_loop);
 	
 	var _base_x = _camera_x * _parallax_x;
 	var _base_y = (_camera_y * _parallax_y) + _offset_y;
 	
-	// Mirror existing clamping behavior used by static parallax layers.
-	var _y_min = _camera_y;
-	var _y_max = (_camera_y + _camera_height) - _sprite_height;
-	_base_y = clamp(_base_y, _y_max, _y_min);
+	if (_clamp_bottom) {
+		var _bottom_limit = (_camera_y + _camera_height) - _sprite_height;
+		_base_y = max(_base_y, _bottom_limit);
+	}
+	if (_clamp_top) {
+		_base_y = min(_base_y, _camera_y);
+	}
 	
 	var _camera_right = _camera_x + _camera_width;
 	var _tiles_back = ceil((_base_x - _camera_x) / _sprite_width);
