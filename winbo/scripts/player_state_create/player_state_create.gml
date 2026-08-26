@@ -45,25 +45,24 @@ function player_stage_entrance_begin(){
 
 	draw_adjustment_y = stage_entrance_draw_adjustment_y;
 
-	// The supplied 1500px-wide sequence already contains Winbo's complete arc.
-	// Keep frame zero outside the view, then release only that camera correction
-	// at a fixed design-space speed. A symmetric ease removes velocity steps at
-	// both ends without the old front-loaded, cannon-like launch.
+	// The supplied sequence already contains Winbo's complete horizontal arc.
+	// Translate that whole authored arc so frame zero starts just beyond the
+	// camera edge. Do not add a second eased journey back to the old centre
+	// marker: Andy explicitly noted that a left-side entry would land farther
+	// left because the source animation is intentionally short.
 	var _entrance_frame_zero_right_x = 67;
-	var _entrance_camera_width = camera_get_view_width(view_camera[0]);
-	stage_entrance_draw_offset_start_x = min(
-		0,
-		sprite_get_xoffset(sprite_stage_entrance)
+	var _entrance_camera_left_x = camera_get_view_x(view_camera[0]);
+	var _entrance_landing_x = min(
+		x,
+		_entrance_camera_left_x
+			+ sprite_get_xoffset(sprite_stage_entrance)
 			- _entrance_frame_zero_right_x
-			- _entrance_camera_width * 0.5
 			- 1
 	);
-	stage_entrance_offset_release_frame = min(
-		16,
-		max(1,ceil(abs(stage_entrance_draw_offset_start_x) / stage_entrance_offset_release_speed))
-	);
+	x = _entrance_landing_x;
+	transform_set(_transform, TransformValue.x, x, false);
+	draw_adjustment_x = 0;
 	stage_entrance_landing_smoke_pending = (room != r_opening_cutscene);
-	draw_adjustment_x = stage_entrance_draw_offset_start_x;
 	player_spawn_floor_overlap_resolve();
 
 	velocity.x = 0;
@@ -76,10 +75,7 @@ function player_stage_entrance_begin(){
 	hp_vulnerable = false;
 	user.hp_vulnerable = false;
 
-	// The offscreen-left version covers roughly 1.8x the visible horizontal
-	// distance of the supplied reference. Match its measured screen speed rather
-	// than compressing that extra lead-in into the original 15fps playback.
-	image_system_setup(sprite_stage_entrance, stage_entrance_animation_fps, true, false, 0, IMAGE_LOOP_FULL);
+	image_system_setup(sprite_stage_entrance, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 	image_set_frame(image, 0);
 }
 
@@ -89,14 +85,8 @@ function player_state_stage_entrance(){
 		return;
 	}
 
+	draw_adjustment_x = 0;
 	draw_adjustment_y = stage_entrance_draw_adjustment_y;
-	var _entrance_progress = clamp(
-		sprite_current_frame / stage_entrance_offset_release_frame,
-		0,
-		1
-	);
-	var _entrance_eased_progress = ease_quad_in_out(0, 1, false, _entrance_progress, 1);
-	draw_adjustment_x = lerp(stage_entrance_draw_offset_start_x, 0, _entrance_eased_progress);
 	velocity.x = 0;
 	acceleration.x = 0;
 
@@ -106,7 +96,7 @@ function player_state_stage_entrance(){
 	acceleration.x = 0;
 
 	if(sprite_current != sprite_stage_entrance){
-		image_system_setup(sprite_stage_entrance, stage_entrance_animation_fps, true, false, 0, IMAGE_LOOP_FULL);
+		image_system_setup(sprite_stage_entrance, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 		image_set_frame(image, 0);
 	}
 
