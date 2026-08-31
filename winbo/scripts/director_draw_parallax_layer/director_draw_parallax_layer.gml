@@ -11,21 +11,32 @@
 /// @param {Bool} [_repeat_x=true] If false, draw a single non-looping tile.
 /// @param {Bool} [_clamp_top=true] Prevent the sprite top moving below the camera top.
 /// @param {Bool} [_clamp_bottom=true] Prevent the sprite bottom moving above the camera bottom.
-function director_draw_parallax_layer(_sprite, _camera_x, _camera_y, _camera_width, _camera_height, _parallax_x, _parallax_y, _offset_y, _repeat_x = true, _clamp_top = true, _clamp_bottom = true) {
+/// @param {Bool} [_anchor_room_bottom=false] Align the authored canvas to the room bottom and move continuously from there.
+function director_draw_parallax_layer(_sprite, _camera_x, _camera_y, _camera_width, _camera_height, _parallax_x, _parallax_y, _offset_y, _repeat_x = true, _clamp_top = true, _clamp_bottom = true, _anchor_room_bottom = false) {
 	var _sprite_width = sprite_get_width(_sprite);
 	var _sprite_height = sprite_get_height(_sprite);
 	
 	var _base_x = _camera_x * _parallax_x;
-	var _base_y = (_camera_y * _parallax_y) + _offset_y;
-	
-	// Apply the bottom constraint first so the top constraint remains
-	// authoritative if an undersized sprite cannot cover both edges.
-	if (_clamp_bottom) {
-		var _bottom_limit = (_camera_y + _camera_height) - _sprite_height;
-		_base_y = max(_base_y, _bottom_limit);
+	var _base_y;
+
+	if (_anchor_room_bottom) {
+		var _camera_bottom_y = room_height - _camera_height;
+		_base_y = (room_height - _sprite_height)
+			+ _offset_y
+			+ ((_camera_y - _camera_bottom_y) * _parallax_y);
 	}
-	if (_clamp_top) {
-		_base_y = min(_base_y, _camera_y);
+	else {
+		_base_y = (_camera_y * _parallax_y) + _offset_y;
+
+		// Apply the bottom constraint first so the top constraint remains
+		// authoritative if an undersized sprite cannot cover both edges.
+		if (_clamp_bottom) {
+			var _bottom_limit = (_camera_y + _camera_height) - _sprite_height;
+			_base_y = max(_base_y, _bottom_limit);
+		}
+		if (_clamp_top) {
+			_base_y = min(_base_y, _camera_y);
+		}
 	}
 
 	if (!_repeat_x) {

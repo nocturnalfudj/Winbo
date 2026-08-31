@@ -130,6 +130,23 @@ if(o_master.debug_navigation_grid_enable){
 								_layer.clamp_bottom
 							);
 						break;
+
+						case "room_bottom":
+							director_draw_parallax_layer(
+								_layer.sprite,
+								_camera_x,
+								_camera_y,
+								_camera_width,
+								_camera_height,
+								_layer.parallax_x,
+								_layer.parallax_y,
+								_layer.offset_y,
+								_layer.repeat_x,
+								_layer.clamp_top,
+								_layer.clamp_bottom,
+								true
+							);
+						break;
 					
 						case "variant_once":
 							director_draw_parallax_layer_variant(
