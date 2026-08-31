@@ -54,34 +54,11 @@ switch(presence_visual_state){
 	case PresenceVisualState.idle:
 		_body_frame = clamp(floor(presence_visual_body_idle_frame),presence_visual_body_idle_start,presence_visual_body_idle_end);
 
-		switch(presence_visual_head_direction){
-			case PresenceHeadDirection.left:
-				_head_sprite = spr_npc_presence_head_left;
-			break;
-
-			case PresenceHeadDirection.right:
-				_head_sprite = spr_npc_presence_head_right;
-			break;
-
-			default:
-				_head_sprite = spr_npc_presence_head_front;
-			break;
-		}
+		// Eye sprites still track Winbo; only the head outline stays fixed.
+		_head_sprite = spr_npc_presence_head_right;
 
 		var _head_idle_end;
-		switch(presence_visual_head_direction){
-			case PresenceHeadDirection.left:
-				_head_idle_end = presence_visual_head_left_idle_end;
-			break;
-
-			case PresenceHeadDirection.right:
-				_head_idle_end = presence_visual_head_right_idle_end;
-			break;
-
-			default:
-				_head_idle_end = presence_visual_head_front_idle_end;
-			break;
-		}
+		_head_idle_end = presence_visual_head_right_idle_end;
 
 		_head_frame = clamp(floor(presence_visual_head_idle_frame),0,_head_idle_end);
 

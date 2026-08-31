@@ -9,6 +9,8 @@ function bonus_room_transition(_target_room) {
 	var _bonus_room_origin;
 	_bonus_room_origin = o_director.bonus_room_origin;
 	
+	// Bonus-room arrivals spawn at the destination marker without the normal
+	// level-entry animation. The saved origin coordinates are reserved for return.
 	if(!director_gameplay_transition_request(
 		_target_room,
 		director_gameplay_transition_options_build(_target_room, false, false, false, GameState.play, PlayerSpawnContext.none)

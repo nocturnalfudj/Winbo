@@ -23,12 +23,6 @@ event_inherited();
 		outro
 	}
 
-	enum PresenceHeadDirection{
-		front,
-		left,
-		right
-	}
-
 	enum PresenceEyeDirection{
 		extreme_left,
 		inbetween_left,
@@ -52,8 +46,6 @@ event_inherited();
 	presence_visual_body_idle_start = 44;
 	presence_visual_body_idle_end = 73;
 	presence_visual_head_intro_end = 29;
-	presence_visual_head_front_idle_end = 8;
-	presence_visual_head_left_idle_end = 9;
 	presence_visual_head_right_idle_end = 8;
 	presence_visual_front_eyes_intro_first = 0;
 	presence_visual_front_eyes_intro_end = 20;
@@ -76,6 +68,5 @@ event_inherited();
 	presence_visual_eye_outro_start_total_y = 0;
 	presence_visual_eye_direction = PresenceEyeDirection.front;
 	presence_visual_eye_direction_target = PresenceEyeDirection.front;
-	presence_visual_head_direction = PresenceHeadDirection.front;
 	presence_visual_eye_sprite = spr_npc_presence_eyes_front;
 #endregion

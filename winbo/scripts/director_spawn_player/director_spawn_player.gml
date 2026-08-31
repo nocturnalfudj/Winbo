@@ -17,8 +17,10 @@ function director_spawn_player(_user,_x,_y,_spawn_context = PlayerSpawnContext.n
 	_player_start_x = room_width/2;
 	_player_start_y = room_height/2;
 	
-	// Check if returning from bonus room - restore saved position
-	if (o_director.bonus_room_entry_x != 0 || o_director.bonus_room_entry_y != 0) {
+	// Restore saved coordinates only after leaving a bonus room. While a bonus
+	// room is active, those coordinates belong to its origin; new bonus rooms
+	// must use their authored player-start marker.
+	if (!o_director.bonus_room_active && (o_director.bonus_room_entry_x != 0 || o_director.bonus_room_entry_y != 0)) {
 		_player_start_x = o_director.bonus_room_entry_x;
 		_player_start_y = o_director.bonus_room_entry_y;
 		

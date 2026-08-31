@@ -61,6 +61,12 @@ function director_gameplay_transition_options_build(_target_room, _reset_level_t
 }
 
 function director_player_spawn_context_for_room_entry(_target_room) {
+	// Bonus rooms use their authored marker without the normal level-entry
+	// sequence, including direct starts from the level-select/dev menu.
+	if(director_environment_resolve_room(_target_room) == Environment.bonus_room_environment){
+		return PlayerSpawnContext.none;
+	}
+
 	if(_target_room == r_game_level_presence){
 		return PlayerSpawnContext.presence_start;
 	}

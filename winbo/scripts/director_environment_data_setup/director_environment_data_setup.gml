@@ -98,11 +98,11 @@ function director_environment_data_setup(){
 			_environment_foreground,
 			[
 				{mode: "normal", sprite: spr_bg_l1_layer_6_sky, parallax_x: 1.00, parallax_y: _gameplay_bg_parallax_y(1.00), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l1_layer_5_mountains, parallax_x: 0.90, parallax_y: _gameplay_bg_parallax_y(0.90), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: false},
-				{mode: "normal", sprite: spr_bg_l1_layer_4_riverside, parallax_x: 0.80, parallax_y: _gameplay_bg_parallax_y(0.80), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: false},
-				{mode: "normal", sprite: spr_bg_l1_layer_3_plains, parallax_x: 0.70, parallax_y: _gameplay_bg_parallax_y(0.70), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: false},
-				{mode: "normal", sprite: spr_bg_l1_layer_2_treeline_second, parallax_x: 0.60, parallax_y: _gameplay_bg_parallax_y(0.60), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: false},
-				{mode: "normal", sprite: spr_bg_l1_layer_1_treeline_main, parallax_x: 0.50, parallax_y: _gameplay_bg_parallax_y(0.50), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: false}
+				{mode: "normal", sprite: spr_bg_l1_layer_5_mountains, parallax_x: 0.90, parallax_y: _gameplay_bg_parallax_y(0.90), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_4_riverside, parallax_x: 0.80, parallax_y: _gameplay_bg_parallax_y(0.80), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_3_plains, parallax_x: 0.70, parallax_y: _gameplay_bg_parallax_y(0.70), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_2_treeline_second, parallax_x: 0.60, parallax_y: _gameplay_bg_parallax_y(0.60), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_1_treeline_main, parallax_x: 0.50, parallax_y: _gameplay_bg_parallax_y(0.50), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true}
 			],
 			[]
 		);
@@ -227,9 +227,9 @@ function director_environment_data_setup(){
 			_environment_foreground,
 			[
 				{mode: "normal", sprite: spr_bg_tutorial_layer_4, parallax_x: 1.00, parallax_y: _gameplay_bg_parallax_y(1.00), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_tutorial_layer_3, parallax_x: 0.85, parallax_y: _gameplay_bg_parallax_y(0.85), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: false},
-				{mode: "normal", sprite: spr_bg_tutorial_layer_2, parallax_x: 0.70, parallax_y: _gameplay_bg_parallax_y(0.70), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: false},
-				{mode: "normal", sprite: spr_bg_tutorial_layer_1, parallax_x: 0.55, parallax_y: _gameplay_bg_parallax_y(0.55), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: false}
+				{mode: "normal", sprite: spr_bg_tutorial_layer_3, parallax_x: 0.85, parallax_y: _gameplay_bg_parallax_y(0.85), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_tutorial_layer_2, parallax_x: 0.70, parallax_y: _gameplay_bg_parallax_y(0.70), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_tutorial_layer_1, parallax_x: 0.55, parallax_y: _gameplay_bg_parallax_y(0.55), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true}
 			],
 			[]
 		);

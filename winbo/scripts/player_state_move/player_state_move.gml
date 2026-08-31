@@ -928,9 +928,11 @@ function player_dive_spring_state_spring(){
 		: dive_spring_velocity_retention_aerial;
 	velocity_retention_aerial = power(_retention_base, _delta_time_scaled);
 	if(dive_spring_apex_reached){
+		move_gravity_factor = 1;
 		move_gravity.Copy(move_gravity_fall);
 	}
 	else{
+		move_gravity_factor = dive_spring_rise_gravity_factor;
 		move_gravity.Copy(move_gravity_rise);
 	}
 	player_movement_update();
@@ -1229,6 +1231,7 @@ function player_dive_spring_register_impact(){
 }
 
 function player_dive_spring_restore_movement(){
+	move_gravity_factor = 1;
 	if(dive_spring_movement_override_active){
 		velocity_retention_aerial = dive_spring_velocity_retention_aerial_previous;
 		dive_spring_movement_override_active = false;
@@ -1237,7 +1240,6 @@ function player_dive_spring_restore_movement(){
 
 function player_dive_spring_reset(){
 	player_dive_spring_restore_movement();
-	move_gravity_factor = 1;
 	dive_spring_phase = DiveSpringPhase.dive;
 	dive_spring_impact_timer = 0;
 	dive_spring_move_input_previous = 0;

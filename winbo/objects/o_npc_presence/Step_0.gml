@@ -78,7 +78,6 @@ switch(presence_visual_state){
 			presence_visual_eye_sprite = spr_npc_presence_eyes_front;
 			presence_visual_eye_direction = PresenceEyeDirection.front;
 			presence_visual_eye_direction_target = PresenceEyeDirection.front;
-			presence_visual_head_direction = PresenceHeadDirection.front;
 			presence_visual_eye_offset_x = 0;
 			presence_visual_eye_offset_y = 0;
 			presence_visual_eye_art_offset_x = 0;
@@ -113,30 +112,9 @@ switch(presence_visual_state){
 			presence_visual_body_idle_frame = presence_visual_body_idle_start;
 		}
 
-		if(_player_dx <= -180){
-			presence_visual_head_direction = PresenceHeadDirection.left;
-		}
-		else if(_player_dx >= 180){
-			presence_visual_head_direction = PresenceHeadDirection.right;
-		}
-		else{
-			presence_visual_head_direction = PresenceHeadDirection.front;
-		}
-
+		// Keep the smoky/jagged right-facing head outline for every look direction.
 		var _head_idle_end;
-		switch(presence_visual_head_direction){
-			case PresenceHeadDirection.left:
-				_head_idle_end = presence_visual_head_left_idle_end;
-			break;
-
-			case PresenceHeadDirection.right:
-				_head_idle_end = presence_visual_head_right_idle_end;
-			break;
-
-			default:
-				_head_idle_end = presence_visual_head_front_idle_end;
-			break;
-		}
+		_head_idle_end = presence_visual_head_right_idle_end;
 
 		presence_visual_head_idle_frame += _frame_step;
 		if(presence_visual_head_idle_frame >= (_head_idle_end + 1)){
@@ -246,7 +224,6 @@ switch(presence_visual_state){
 			presence_visual_eye_direction_target = PresenceEyeDirection.front;
 			presence_visual_eye_outro_start_total_x = presence_visual_eye_offset_x + presence_visual_eye_art_offset_x;
 			presence_visual_eye_outro_start_total_y = presence_visual_eye_offset_y + presence_visual_eye_art_offset_y;
-			presence_visual_head_direction = PresenceHeadDirection.front;
 		}
 	break;
 
