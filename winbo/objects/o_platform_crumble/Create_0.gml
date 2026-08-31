@@ -37,12 +37,11 @@ respawn_countdown = respawn_countdown_max;
 		touch,
 		dash,
 	}
-	// These platforms are authored as Air-Dash breakables. Ordinary standing
-	// must retain their collision; only the explicit Dash collision path starts
-	// the break sequence.
-	crumble_trigger_type = PlatformCrumbleTrigger.dash;
+	// Standard crumble platforms trigger after Winbo stands on them. The dash
+	// variant overrides these defaults in its inherited Create event.
+	crumble_trigger_type = PlatformCrumbleTrigger.touch;
 	crumble_trigger_active = false;
-	crumble_trigger_active_instant = true;
+	crumble_trigger_active_instant = false;
 #endregion
 
 // Respawn control
