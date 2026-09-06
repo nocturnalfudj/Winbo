@@ -3,34 +3,23 @@
   "%Name":"spr_leafybg",
   "bboxMode":0,
   "bbox_bottom":639,
-  "bbox_left":39,
+  "bbox_left":71,
   "bbox_right":2559,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
-  "ConfigValues":{
-    "desktop":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
-    },
-    "android":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
-    },
-    "ios":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
-    },
-  },
   "DynamicTexturePage":false,
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"564b4d0e-8ed0-4876-bd21-1337e0346767","name":"564b4d0e-8ed0-4876-bd21-1337e0346767","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"6ec717ab-d60a-4537-a4e9-ead1ecf589b1","name":"6ec717ab-d60a-4537-a4e9-ead1ecf589b1","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
   "height":640,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"ab5bb707-b705-4be8-8d66-79a8416ccdab","blendMode":0,"displayName":"default","isLocked":false,"name":"ab5bb707-b705-4be8-8d66-79a8416ccdab","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"56a7acea-b465-4c4f-b005-ced205f6a2c5","blendMode":0,"displayName":"default","isLocked":false,"name":"56a7acea-b465-4c4f-b005-ced205f6a2c5","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_leafybg",
   "nineSlice":null,
@@ -74,16 +63,14 @@
     "playbackSpeedType":0,
     "resourceType":"GMSequence",
     "resourceVersion":"2.0",
-    "seqHeight":640.0,
-    "seqWidth":2560.0,
     "showBackdrop":true,
     "showBackdropImage":false,
     "timeUnits":1,
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"564b4d0e-8ed0-4876-bd21-1337e0346767","path":"sprites/spr_leafybg/spr_leafybg.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"27d7a9fa-0d51-453f-b5c3-608545db30dc","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"6ec717ab-d60a-4537-a4e9-ead1ecf589b1","path":"sprites/spr_leafybg/spr_leafybg.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"0858d6f2-2287-4494-97eb-b6e8ff67a524","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -94,8 +81,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"game",
-    "path":"texturegroups/game",
+    "name":"Default",
+    "path":"texturegroups/Default",
   },
   "type":0,
   "VTile":false,
