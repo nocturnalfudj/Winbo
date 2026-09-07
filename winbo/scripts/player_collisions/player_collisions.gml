@@ -1,29 +1,36 @@
 function player_collisions(){
 	#region Collisions
 		#region Hazard
-			var _hazard_collision_instance;
-			_hazard_collision_instance = instance_place(x,y,o_hazard);
-			with(_hazard_collision_instance){
-				//Instant Kill
-				if(instant_kill){
-					with(other){
-						//Set HP to 0
-						hp = 0;
-						user.hp = 0;
-						
-						//Kill Player
-						character_kill();
+			// Check every overlap: an inactive spike must not hide another hazard.
+			var _hazard_collisions = ds_list_create();
+			var _hazard_count = instance_place_list(x,y,o_hazard,_hazard_collisions,false);
+			for(var _hazard_index = 0; _hazard_index < _hazard_count; _hazard_index++){
+				with(_hazard_collisions[| _hazard_index]){
+					if(!hazard_is_active()){
+						continue;
 					}
-				}
-				//Normal Hit
-				else{
-					with(other){
-						player_hit(other.damage_amount, other, true);
+					//Instant Kill
+					if(instant_kill){
+						with(other){
+							//Set HP to 0
+							hp = 0;
+							user.hp = 0;
+
+							//Kill Player
+							character_kill();
+						}
+					}
+					//Normal Hit
+					else{
+						with(other){
+							player_hit(other.damage_amount, other, true);
+						}
 					}
 				}
 			}
+			ds_list_destroy(_hazard_collisions);
 		#endregion
-				
+
 		#region Bullet
 			var _bullet_collision_instance;
 			_bullet_collision_instance = instance_place(x,y,o_bullet);

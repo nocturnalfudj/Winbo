@@ -5,9 +5,7 @@ image_xscale = 1;
 image_yscale = 1;
 image_system_setup(sprite_current, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
 
-saw_track_group = 0;
-saw_move_enabled = 1;
-saw_path_seconds = SECOND * 3;
+// Track settings come from the object's editable room properties.
 damage_amount = 1;
 instant_kill = false;
 
@@ -162,6 +160,14 @@ saw_path_configure_loop = function(_track_width,_track_height,_placed_x,_placed_
 
 saw_path_configure_from_track = function(){
 	saw_track_bound = noone;
+	if(saw_move_enabled <= 0){
+		saw_track_draw = false;
+		saw_start_x = x;
+		saw_start_y = y;
+		saw_path_reset();
+		return;
+	}
+
 	var _nearest_distance = 1000000000;
 	var _track_count = instance_number(o_saw_track);
 

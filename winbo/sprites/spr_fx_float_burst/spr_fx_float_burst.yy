@@ -2,10 +2,10 @@
   "$GMSprite": "v2",
   "%Name": "spr_fx_float_burst",
   "bboxMode": 0,
-  "bbox_bottom": 287,
-  "bbox_left": 0,
-  "bbox_right": 727,
-  "bbox_top": 0,
+  "bbox_bottom": 198,
+  "bbox_left": 26,
+  "bbox_right": 702,
+  "bbox_top": 80,
   "collisionKind": 1,
   "collisionTolerance": 0,
   "DynamicTexturePage": false,
@@ -51,6 +51,20 @@
       "$GMSpriteFrame": "v1",
       "%Name": "3a3e131c4f0648e28cff4fc4a975bf2b",
       "name": "3a3e131c4f0648e28cff4fc4a975bf2b",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "9c7d9d27-ad12-45e9-badd-a30bf9cf995f",
+      "name": "9c7d9d27-ad12-45e9-badd-a30bf9cf995f",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "c00d27d8-ad00-42b6-b639-4eaeee72ef7e",
+      "name": "c00d27d8-ad00-42b6-b639-4eaeee72ef7e",
       "resourceType": "GMSpriteFrame",
       "resourceVersion": "2.0"
     }
@@ -101,7 +115,7 @@
     },
     "eventStubScript": null,
     "eventToFunction": {},
-    "length": 6,
+    "length": 8.0,
     "lockOrigin": false,
     "moments": {
       "$KeyframeStore<MomentsEventKeyframe>": "",
@@ -145,8 +159,8 @@
               "Disabled": false,
               "id": "0a985c30-6047-48ce-a335-2522300ac683",
               "IsCreationKey": false,
-              "Key": 0,
-              "Length": 1,
+              "Key": 0.0,
+              "Length": 1.0,
               "resourceType": "Keyframe<SpriteFrameKeyframe>",
               "resourceVersion": "2.0",
               "Stretch": false
@@ -167,8 +181,8 @@
               "Disabled": false,
               "id": "d241924d-9cfa-4b5d-9760-0145a6702b83",
               "IsCreationKey": false,
-              "Key": 1,
-              "Length": 1,
+              "Key": 1.0,
+              "Length": 1.0,
               "resourceType": "Keyframe<SpriteFrameKeyframe>",
               "resourceVersion": "2.0",
               "Stretch": false
@@ -189,8 +203,8 @@
               "Disabled": false,
               "id": "8544ef3e-417f-4f24-9179-a9e86bf95862",
               "IsCreationKey": false,
-              "Key": 2,
-              "Length": 1,
+              "Key": 2.0,
+              "Length": 1.0,
               "resourceType": "Keyframe<SpriteFrameKeyframe>",
               "resourceVersion": "2.0",
               "Stretch": false
@@ -211,8 +225,8 @@
               "Disabled": false,
               "id": "787b5ff3-13b8-4054-965a-621e1f8b365e",
               "IsCreationKey": false,
-              "Key": 3,
-              "Length": 1,
+              "Key": 3.0,
+              "Length": 1.0,
               "resourceType": "Keyframe<SpriteFrameKeyframe>",
               "resourceVersion": "2.0",
               "Stretch": false
@@ -233,8 +247,8 @@
               "Disabled": false,
               "id": "09d6e58b-c3a9-4c5c-abad-23a88c57f073",
               "IsCreationKey": false,
-              "Key": 4,
-              "Length": 1,
+              "Key": 4.0,
+              "Length": 1.0,
               "resourceType": "Keyframe<SpriteFrameKeyframe>",
               "resourceVersion": "2.0",
               "Stretch": false
@@ -255,8 +269,52 @@
               "Disabled": false,
               "id": "7965fc9d-d77d-47ab-994f-a388e7d39e3b",
               "IsCreationKey": false,
-              "Key": 5,
-              "Length": 1,
+              "Key": 5.0,
+              "Length": 1.0,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "9c7d9d27-ad12-45e9-badd-a30bf9cf995f",
+                    "path": "sprites/spr_fx_float_burst/spr_fx_float_burst.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "99397cc1-bdcc-489c-9ab4-cf15d3129049",
+              "IsCreationKey": false,
+              "Key": 6.0,
+              "Length": 1.0,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "c00d27d8-ad00-42b6-b639-4eaeee72ef7e",
+                    "path": "sprites/spr_fx_float_burst/spr_fx_float_burst.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "1d6f86e7-8ff7-4caa-9a59-578982defb28",
+              "IsCreationKey": false,
+              "Key": 7.0,
+              "Length": 1.0,
               "resourceType": "Keyframe<SpriteFrameKeyframe>",
               "resourceVersion": "2.0",
               "Stretch": false

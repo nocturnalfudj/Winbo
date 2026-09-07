@@ -1,28 +1,10 @@
+// Shared with player damage so retracted spikes are safe for both actors.
 function enemy_spike_is_active(_spike_instance, _active_scale_min){
-	if(_spike_instance == noone || !instance_exists(_spike_instance)){
+	if(_spike_instance == noone){
 		return false;
 	}
-
 	_active_scale_min ??= 0.15;
-
-	// Stationary spikes (or any non-retractable variant) always block.
-	if(!(variable_instance_exists(_spike_instance, "retractable_enable") && _spike_instance.retractable_enable)){
-		return true;
-	}
-
-	// Retractable spikes only block while visibly out.
-	var _spike_scale = 1;
-	if(variable_instance_exists(_spike_instance, "transform")){
-		var _spike_anchor = _spike_instance.transform[TransformType.anchor];
-		if(_spike_anchor != noone){
-			_spike_scale = abs(_spike_anchor.value[TransformValue.yscale].current);
-		}
-	}
-	else if(variable_instance_exists(_spike_instance, "image_yscale")){
-		_spike_scale = abs(_spike_instance.image_yscale);
-	}
-
-	return (_spike_scale > _active_scale_min);
+	return _spike_instance.hazard_is_active(_active_scale_min);
 }
 
 function enemy_spike_contact_kill_check(){

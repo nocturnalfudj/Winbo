@@ -2,10 +2,10 @@
   "$GMSprite": "v2",
   "%Name": "spr_smoke_bump_impact",
   "bboxMode": 0,
-  "bbox_bottom": 272,
-  "bbox_left": 196,
-  "bbox_right": 313,
-  "bbox_top": 123,
+  "bbox_bottom": 304,
+  "bbox_left": 187,
+  "bbox_right": 297,
+  "bbox_top": 113,
   "collisionKind": 1,
   "collisionTolerance": 0,
   "ConfigValues": {
@@ -57,6 +57,27 @@
       "name": "a7b1ee11844245c1b6abe06a65545d22",
       "resourceType": "GMSpriteFrame",
       "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "9e331f3f-99f3-48a4-acd3-02235660b14d",
+      "name": "9e331f3f-99f3-48a4-acd3-02235660b14d",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "5470a44b-be96-458f-91e3-4e3f1480fb09",
+      "name": "5470a44b-be96-458f-91e3-4e3f1480fb09",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "aa22056f-dcb3-4297-b784-6a6d393a65be",
+      "name": "aa22056f-dcb3-4297-b784-6a6d393a65be",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
     }
   ],
   "gridX": 0,
@@ -105,7 +126,7 @@
     },
     "eventStubScript": null,
     "eventToFunction": {},
-    "length": 5.0,
+    "length": 8.0,
     "lockOrigin": false,
     "moments": {
       "$KeyframeStore<MomentsEventKeyframe>": "",
@@ -238,6 +259,72 @@
               "id": "9ad9e3d0-c3a5-4f15-a983-a900d2e60ecd",
               "IsCreationKey": false,
               "Key": 4.0,
+              "Length": 1.0,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "9e331f3f-99f3-48a4-acd3-02235660b14d",
+                    "path": "sprites/spr_smoke_bump_impact/spr_smoke_bump_impact.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "ec9e34d7-96f9-4eb4-828f-5c359a8b8979",
+              "IsCreationKey": false,
+              "Key": 5.0,
+              "Length": 1.0,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "5470a44b-be96-458f-91e3-4e3f1480fb09",
+                    "path": "sprites/spr_smoke_bump_impact/spr_smoke_bump_impact.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "5d157113-eb9f-4a6e-b956-4301a01bc9ae",
+              "IsCreationKey": false,
+              "Key": 6.0,
+              "Length": 1.0,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "aa22056f-dcb3-4297-b784-6a6d393a65be",
+                    "path": "sprites/spr_smoke_bump_impact/spr_smoke_bump_impact.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "e9f30608-78ce-4e16-b5c5-83f710b40711",
+              "IsCreationKey": false,
+              "Key": 7.0,
               "Length": 1.0,
               "resourceType": "Keyframe<SpriteFrameKeyframe>",
               "resourceVersion": "2.0",

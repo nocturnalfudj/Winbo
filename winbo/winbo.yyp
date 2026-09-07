@@ -846,6 +846,7 @@
     {"id":{"name":"o_pstr_winbo_lives","path":"objects/o_pstr_winbo_lives/o_pstr_winbo_lives.yy",},},
     {"id":{"name":"o_rock","path":"objects/o_rock/o_rock.yy",},},
     {"id":{"name":"o_saw_blade","path":"objects/o_saw_blade/o_saw_blade.yy",},},
+    {"id":{"name":"o_saw_blade_stationary","path":"objects/o_saw_blade_stationary/o_saw_blade_stationary.yy",},},
     {"id":{"name":"o_saw_track","path":"objects/o_saw_track/o_saw_track.yy",},},
     {"id":{"name":"o_scroll_slider_horizontal","path":"objects/o_scroll_slider_horizontal/o_scroll_slider_horizontal.yy",},},
     {"id":{"name":"o_scroll_slider_vertical","path":"objects/o_scroll_slider_vertical/o_scroll_slider_vertical.yy",},},

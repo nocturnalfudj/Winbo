@@ -12,8 +12,8 @@
     "path":"folders/Actors/Hazard/Spikes/Retractable.yy",
   },
   "parentObjectId":{
-    "name":"o_spikes",
-    "path":"objects/o_spikes/o_spikes.yy",
+    "name":"o_spikes_retractable",
+    "path":"objects/o_spikes_retractable/o_spikes_retractable.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,

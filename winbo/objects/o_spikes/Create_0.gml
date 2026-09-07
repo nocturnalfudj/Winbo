@@ -25,6 +25,11 @@ transform_set_rest_to_current(transform[TransformType.anchor],TransformValue.ang
 	retractable_state = SpikeRetractableState.out_idle;
 	
 	retractable_enable = false;
+
+	hazard_is_active = function(_active_scale_min = 0.15){
+		return !retractable_enable
+			|| (abs(transform[TransformType.anchor].value[TransformValue.yscale].current) > _active_scale_min);
+	};
 	
 	retractable_out_countdown_max = SECOND * 3;
 	retractable_out_countdown = retractable_out_countdown_max;
