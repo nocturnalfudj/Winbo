@@ -14,6 +14,7 @@
   },
   "defaultScriptType":1,
   "Folders":[
+    {"$GMFolder":"","%Name":"Turret","folderPath":"folders/Actors/Hazard/Turret.yy","name":"Turret","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"__mcp","folderPath":"folders/__mcp.yy","name":"__mcp","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Actors","folderPath":"folders/Actors.yy","name":"Actors","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Bombs","folderPath":"folders/Actors/Bombs.yy","name":"Bombs","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -611,6 +612,11 @@
   },
   "name":"winbo",
   "resources":[
+    {"id":{"name":"o_turret","path":"objects/o_turret/o_turret.yy"}},
+    {"id":{"name":"spr_turret_back","path":"sprites/spr_turret_back/spr_turret_back.yy"}},
+    {"id":{"name":"spr_turret_front","path":"sprites/spr_turret_front/spr_turret_front.yy"}},
+    {"id":{"name":"spr_turret_reticle","path":"sprites/spr_turret_reticle/spr_turret_reticle.yy"}},
+
     {"id":{"name":"curve_back_in_extreme","path":"animcurves/curve_back_in_extreme/curve_back_in_extreme.yy",},},
     {"id":{"name":"curve_back_in_out","path":"animcurves/curve_back_in_out/curve_back_in_out.yy",},},
     {"id":{"name":"curve_back_in","path":"animcurves/curve_back_in/curve_back_in.yy",},},
