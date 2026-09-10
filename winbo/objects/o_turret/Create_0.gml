@@ -2,6 +2,8 @@
 mount_angle = image_angle;
 neutral_angle = 90 + mount_angle;
 aim_angle = neutral_angle;
+// Distance from the bottom-centre pivot to the new barrel mouth.
+muzzle_distance = 275;
 turn_speed = 2;
 aim_half_arc = 60;
 detection_range = 2500;

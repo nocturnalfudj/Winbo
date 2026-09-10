@@ -2,7 +2,7 @@
   "$GMSprite": "v2",
   "%Name": "spr_turret_front",
   "bboxMode": 0,
-  "bbox_bottom": 999,
+  "bbox_bottom": 803,
   "bbox_left": 0,
   "bbox_right": 499,
   "bbox_top": 0,
@@ -29,11 +29,18 @@
       "name": "8d1b00d5-ab5d-42fa-8724-1235bd41b2cd",
       "resourceType": "GMSpriteFrame",
       "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "b6fd47e9-17ce-4145-8dd4-9e061b4dce8a",
+      "name": "b6fd47e9-17ce-4145-8dd4-9e061b4dce8a",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
     }
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 1000,
+  "height": 804,
   "HTile": false,
   "layers": [
     {
@@ -77,7 +84,7 @@
     },
     "eventStubScript": null,
     "eventToFunction": {},
-    "length": 1,
+    "length": 2,
     "lockOrigin": false,
     "moments": {
       "$KeyframeStore<MomentsEventKeyframe>": "",
@@ -91,7 +98,7 @@
     "playbackSpeedType": 0,
     "resourceType": "GMSequence",
     "resourceVersion": "2.0",
-    "seqHeight": 1000,
+    "seqHeight": 804,
     "seqWidth": 500,
     "showBackdrop": true,
     "showBackdropImage": false,
@@ -128,6 +135,28 @@
               "resourceType": "Keyframe<SpriteFrameKeyframe>",
               "resourceVersion": "2.0",
               "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "b6fd47e9-17ce-4145-8dd4-9e061b4dce8a",
+                    "path": "sprites/spr_turret_front/spr_turret_front.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "90ba5987-d4ab-4535-ac4c-18f4ac481a0c",
+              "IsCreationKey": false,
+              "Key": 1.0,
+              "Length": 1.0,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
             }
           ],
           "resourceType": "KeyframeStore<SpriteFrameKeyframe>",
@@ -146,7 +175,7 @@
     "visibleRange": null,
     "volume": 1.0,
     "xorigin": 250,
-    "yorigin": 1000
+    "yorigin": 804
   },
   "swatchColours": null,
   "swfPrecision": 2.525,

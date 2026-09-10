@@ -8,4 +8,12 @@ if(fx_follow_enabled){
 	y = fx_follow_target.y + fx_follow_offset_y;
 }
 
-event_inherited();
+// Match the white smoke palette while retaining the authored alpha animation.
+if(fx_sprite == spr_smoke_bump_impact){
+	shader_set(sh_monochrome);
+	event_inherited();
+	shader_reset();
+}
+else{
+	event_inherited();
+}

@@ -615,6 +615,7 @@
     {"id":{"name":"o_turret","path":"objects/o_turret/o_turret.yy"}},
     {"id":{"name":"spr_turret_back","path":"sprites/spr_turret_back/spr_turret_back.yy"}},
     {"id":{"name":"spr_turret_front","path":"sprites/spr_turret_front/spr_turret_front.yy"}},
+    {"id":{"name":"spr_turret_projectile","path":"sprites/spr_turret_projectile/spr_turret_projectile.yy"}},
     {"id":{"name":"spr_turret_reticle","path":"sprites/spr_turret_reticle/spr_turret_reticle.yy"}},
 
     {"id":{"name":"curve_back_in_extreme","path":"animcurves/curve_back_in_extreme/curve_back_in_extreme.yy",},},

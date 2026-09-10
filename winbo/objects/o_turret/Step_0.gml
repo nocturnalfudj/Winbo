@@ -41,7 +41,7 @@ reticle_frame = min(reticle_lock_frame, reticle_frame + 15 * _dt / SECOND);
 fire_countdown = max(0, fire_countdown - _dt);
 if(fire_countdown > 0 || abs(angle_difference(_desired_angle, aim_angle)) > 2) exit;
 // The source artwork points up, with its pivot at the bottom centre.
-var _muzzle_distance = 416 * abs(image_yscale);
+var _muzzle_distance = muzzle_distance * abs(image_yscale);
 var _mx = x + lengthdir_x(_muzzle_distance, aim_angle);
 var _my = y + lengthdir_y(_muzzle_distance, aim_angle);
 if(collision_line(x, y, _mx, _my, o_solid, false, true) != noone) exit;
@@ -50,9 +50,10 @@ for(var _i = -1; _i <= 1; _i++){
     _bullet.team = team;
     _bullet.owner = id;
     _bullet.damage = projectile_damage;
-    _bullet.sprite_index = spr_apocalypse_survivor_projectile;
-    _bullet.sprite_current = spr_apocalypse_survivor_projectile;
-    with(_bullet) image_system_setup(spr_apocalypse_survivor_projectile, 15, true, true, 0, IMAGE_LOOP_FULL);
+    _bullet.sprite_index = spr_turret_projectile;
+    _bullet.sprite_current = spr_turret_projectile;
+    with(_bullet) image_system_setup(spr_turret_projectile, 15, true, true, 0, IMAGE_LOOP_FULL);
+    // Keep the damage footprint separate from the new decorative glow.
     _bullet.mask_index = spr_apocalypse_survivor_projectile;
     _bullet.sprite_angle_offset = 180;
     _bullet.death_anim_sprite = spr_apocalypse_survivor_projectile_impact;

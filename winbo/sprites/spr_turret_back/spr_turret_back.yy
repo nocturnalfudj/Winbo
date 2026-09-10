@@ -2,7 +2,7 @@
   "$GMSprite": "v2",
   "%Name": "spr_turret_back",
   "bboxMode": 0,
-  "bbox_bottom": 999,
+  "bbox_bottom": 803,
   "bbox_left": 0,
   "bbox_right": 499,
   "bbox_top": 0,
@@ -96,7 +96,7 @@
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 1000,
+  "height": 804,
   "HTile": false,
   "layers": [
     {
@@ -154,7 +154,7 @@
     "playbackSpeedType": 0,
     "resourceType": "GMSequence",
     "resourceVersion": "2.0",
-    "seqHeight": 1000,
+    "seqHeight": 804,
     "seqWidth": 500,
     "showBackdrop": true,
     "showBackdropImage": false,
@@ -407,7 +407,7 @@
     "visibleRange": null,
     "volume": 1.0,
     "xorigin": 250,
-    "yorigin": 1000
+    "yorigin": 804
   },
   "swatchColours": null,
   "swfPrecision": 2.525,
