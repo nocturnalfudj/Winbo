@@ -174,6 +174,8 @@ function player_gamestate_play(){
 		
 				//Bump Happened
 				if(_bump){
+					if(collision.x != 0) flower_fan_bump(move_collision_object_instance_x);
+					if(collision.y != 0) flower_fan_bump(move_collision_object_instance_y);
 					//Trigger Bump
 					bump_triggered = true;
 				

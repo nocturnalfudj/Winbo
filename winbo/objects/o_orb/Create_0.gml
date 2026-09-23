@@ -2,7 +2,9 @@
 event_inherited();
 
 //Image
-sprite_current = sprite_index;//director_get_custom_sprite(spr_orb);
+sprite_current = sprite_index;
+image_system_setup(sprite_current, sprite_get_speed(sprite_current), true, true, 0, IMAGE_LOOP_FULL);
+image.image_animation_time_scale_enable = true;
 
 //Collection
 collect_script = pickup_collect_orb;

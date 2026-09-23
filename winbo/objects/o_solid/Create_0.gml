@@ -24,3 +24,6 @@ collision_enable_y_down		= true;
 
 // Drop-through system
 drop_through_enabled = false;
+
+// Surface motion is separate from motion of the solid itself (conveyor belts).
+surface_speed_x = 0;

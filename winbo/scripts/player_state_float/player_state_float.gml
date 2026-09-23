@@ -20,6 +20,10 @@ function player_state_float(){
 	
 	//Update Health
 	character_health();
+	// Death must finish this state before float input or wind can change it.
+	if(state != PlayerState.float){
+		return;
+	}
 	
 	//Input
 	player_input();
@@ -61,8 +65,9 @@ function player_state_float(){
 			state = PlayerState.move;
 		}
 		
-		//Moving Upward
-		if((acceleration.y < 0) || (velocity.y < 0)){
+		// Wind carries a floating player upward without cancelling float.
+		var _flower_wind = player_flower_wind_find();
+		if(_flower_wind == noone && ((acceleration.y < 0) || (velocity.y < 0))){
 			//Go to Move State
 			state = PlayerState.move;
 		}
@@ -178,11 +183,11 @@ function player_state_float(){
 	#endregion
 	
 	//Float Countdown
-	if(float_countdown <= 0){
+	if(_flower_wind == noone && float_countdown <= 0){
 		//Go to Move State
 		state = PlayerState.move;
 	}
-	else{
+	else if(_flower_wind == noone){
 		float_countdown -= global.delta_time_factor_scaled;
 	}
 	
@@ -204,7 +209,16 @@ function player_state_float(){
 	//Movement Update
 	var _air_spin_launch_step;
 	_air_spin_launch_step = player_air_spin_movement_begin();
+	// Recheck after dash, collisions or death have changed state. No wind persists across them.
+	_flower_wind = player_flower_wind_find();
+	var _flower_gravity_enabled = move_gravity_enable;
+	if(_flower_wind != noone){
+		player_flower_wind_apply(_flower_wind);
+		// Neutral buoyancy in the tunnel; preserve the ordinary gravity vector for exit.
+		move_gravity_enable = false;
+	}
 	player_movement_update();
+	move_gravity_enable = _flower_gravity_enabled;
 	player_air_spin_movement_end(_air_spin_launch_step);
 	player_mushroom_collisions_post_movement();
 	player_landing_smoke_update();

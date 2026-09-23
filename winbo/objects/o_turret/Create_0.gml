@@ -2,13 +2,13 @@
 mount_angle = image_angle;
 neutral_angle = 90 + mount_angle;
 aim_angle = neutral_angle;
-// Distance from the bottom-centre pivot to the new barrel mouth.
-muzzle_distance = 275;
+// Distance from the bottom-centre pivot to the restored barrel mouth.
+muzzle_distance = 416;
 turn_speed = 2;
 aim_half_arc = 60;
 detection_range = 2500;
 spread_angle = 15;
-projectile_speed = 25;
+projectile_speed = 20;
 projectile_damage = 1;
 telegraph_time = SECOND;
 fire_interval = SECOND * 2;

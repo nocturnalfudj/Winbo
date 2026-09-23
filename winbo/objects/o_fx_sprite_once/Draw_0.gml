@@ -8,9 +8,9 @@ if(fx_follow_enabled){
 	y = fx_follow_target.y + fx_follow_offset_y;
 }
 
-// Match the white smoke palette while retaining the authored alpha animation.
+// Give bump smoke a white, opaque core while retaining soft transparent edges.
 if(fx_sprite == spr_smoke_bump_impact){
-	shader_set(sh_monochrome);
+	shader_set(sh_smoke_white);
 	event_inherited();
 	shader_reset();
 }

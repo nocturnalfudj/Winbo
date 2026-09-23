@@ -1,6 +1,15 @@
 function player_collisions(){
 	#region Collisions
 		#region Hazard
+			// Sea mines consume their own single contact and then leave an explosion.
+			var _mine_collisions = ds_list_create();
+			var _mine_count = instance_place_list(x, y, o_sea_mine, _mine_collisions, false);
+			for(var _mine_index = 0; _mine_index < _mine_count; _mine_index++){
+				var _mine = _mine_collisions[| _mine_index];
+				_mine.detonate(id);
+			}
+			ds_list_destroy(_mine_collisions);
+
 			// Check every overlap: an inactive spike must not hide another hazard.
 			var _hazard_collisions = ds_list_create();
 			var _hazard_count = instance_place_list(x,y,o_hazard,_hazard_collisions,false);

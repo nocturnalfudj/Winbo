@@ -21,8 +21,13 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
     if(move_grounded && move_grounded_instance != noone){
         _grounded_movement_x = move_grounded_instance.x - move_grounded_instance.xprevious;
         _grounded_movement_y = move_grounded_instance.y - move_grounded_instance.yprevious;
-        
-
+        // Resolve belt travel through the same wall/edge collision sweep as input.
+        // A jump leaves the surface immediately and receives no airborne carrying.
+        if(_displacement_y >= 0
+        && bbox_bottom <= move_grounded_instance.bbox_top + 1
+        && place_meeting(x, y + 2, move_grounded_instance)){
+            _displacement_x += move_grounded_instance.surface_speed_x * _delta_time;
+        }
     }
 
     // Get Old X & Y

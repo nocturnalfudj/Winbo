@@ -50,10 +50,9 @@ for(var _i = -1; _i <= 1; _i++){
     _bullet.team = team;
     _bullet.owner = id;
     _bullet.damage = projectile_damage;
-    _bullet.sprite_index = spr_turret_projectile;
-    _bullet.sprite_current = spr_turret_projectile;
-    with(_bullet) image_system_setup(spr_turret_projectile, 15, true, true, 0, IMAGE_LOOP_FULL);
-    // Keep the damage footprint separate from the new decorative glow.
+    _bullet.sprite_index = spr_apocalypse_survivor_projectile;
+    _bullet.sprite_current = spr_apocalypse_survivor_projectile;
+    with(_bullet) image_system_setup(spr_apocalypse_survivor_projectile, 15, true, true, 0, IMAGE_LOOP_FULL);
     _bullet.mask_index = spr_apocalypse_survivor_projectile;
     _bullet.sprite_angle_offset = 180;
     _bullet.death_anim_sprite = spr_apocalypse_survivor_projectile_impact;
