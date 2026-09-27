@@ -2,6 +2,10 @@
 /// @summary Execute the player's dash maneuver.
 /// @returns {void} No return value.
 function player_state_dash(){
+	if(swim_active){
+		player_swim_dash();
+		return;
+	}
 	var _delta_time_factor_scaled;
 	_delta_time_factor_scaled = global.delta_time_factor_scaled;
 	

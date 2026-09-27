@@ -2,6 +2,7 @@
 event_inherited();
 
 if(global.game_state != GameState.play){
+	player_look_cancel(true);
 	player_secret_idle_cancel(false);
 	player_frolic_clear();
 	player_air_spin_clear();
@@ -64,3 +65,7 @@ switch(global.game_state){
 		#endregion
 	break;
 }
+
+// Rotate only the underwater dash body; the HUD and collision mask stay upright.
+sprite_angle_offset = sprite_current == spr_player_swim_dash
+	? swim_dash_direction - (face_horizontal < 0 ? 180 : 0) : 0;

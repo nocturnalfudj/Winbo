@@ -201,3 +201,4 @@ torch_light = noone;
 //Draw Adjustment
 draw_adjustment_x = 0;
 draw_adjustment_y = 0;
+sprite_angle_offset = 0;

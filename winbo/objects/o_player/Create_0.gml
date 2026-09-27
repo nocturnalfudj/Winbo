@@ -356,3 +356,6 @@ is_player = true;
 	tracking_light = lighting_light_create_track(spr_light_circular,c_white,"lyr_lighting",1,1,0,0,0,1);
 	//torch_light = lighting_light_create(LightType.torch,"lyr_lighting",0,0,2,2,c_white,0);
 #endregion
+
+player_swim_setup();
+player_look_setup();

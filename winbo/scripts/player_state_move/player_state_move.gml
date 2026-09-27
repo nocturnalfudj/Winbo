@@ -4,14 +4,20 @@ function player_state_move(){
 
 	//Input
 	player_input();
+	if(swim_active){
+		player_swim_move();
+		return;
+	}
 
 	var _bump_block, _landing_block;
 	_bump_block = (sprite_current == sprite_bump) && (sprite_current_frame < (image.sprite_number - 1));
 	_landing_block = ((sprite_current == sprite_land) || (sprite_current == sprite_land_sideways)) && (sprite_current_frame < (image.sprite_number - 1));
 
+	player_look_update(_bump_block, _landing_block);
+
 	var _secret_idle_gate_open, _secret_idle_gameplay_input;
 	_secret_idle_gate_open = player_secret_idle_gate_open(_bump_block, _landing_block);
-	_secret_idle_gameplay_input = player_secret_idle_has_gameplay_input();
+	_secret_idle_gameplay_input = player_look_active() || player_secret_idle_has_gameplay_input();
 
 	if(secret_idle_phase != PLAYER_SECRET_IDLE_PHASE_INACTIVE){
 		if(_secret_idle_gameplay_input || !_secret_idle_gate_open){
@@ -67,7 +73,7 @@ function player_state_move(){
 	_air_spin_playing = player_air_spin_update_state();
 
 	#region Sprite Update
-		if(!_bump_block && !_landing_block && !image.is_playing_queued){
+		if(!player_look_active() && !_bump_block && !_landing_block && !image.is_playing_queued){
 			if(move_grounded){
 				switch(secret_idle_phase){
 					case PLAYER_SECRET_IDLE_PHASE_SITDOWN:
@@ -206,17 +212,17 @@ function player_state_move(){
 	acceleration.AddMagnitudeDirection(INPUT_MOVE_ACCELERATION * input_move_magnitude, input_move_direction);
 
 	#region Arrow Input
-		if(keyboard_check(vk_up)){
+		if(!player_look_arrow_keys_captured() && keyboard_check(vk_up)){
 			input_current[UserControl.jump] = true;
 		}
 
-		if(keyboard_check_pressed(vk_down)){
+		if(!player_look_arrow_keys_captured() && keyboard_check_pressed(vk_down)){
 			input_current[UserControl.down] = true;
 		}
 
 		var _left_key, _right_key;
-		_left_key = keyboard_check_pressed(vk_left);
-		_right_key = keyboard_check_pressed(vk_right);
+		_left_key = !player_look_arrow_keys_captured() && keyboard_check_pressed(vk_left);
+		_right_key = !player_look_arrow_keys_captured() && keyboard_check_pressed(vk_right);
 
 		if(_left_key || _right_key){
 			input_current[UserControl.dash] = true;
@@ -250,7 +256,7 @@ function player_state_move(){
 		}
 	#endregion
 
-	if(player_dive_spring_try_start()){
+	if(!player_look_arrow_keys_captured() && player_dive_spring_try_start()){
 		return;
 	}
 
@@ -331,7 +337,7 @@ function player_state_move(){
 
 	var _face_horizontal_prev;
 	_face_horizontal_prev = face_horizontal;
-	character_face(false);
+	if(!player_look_active()) character_face(false);
 
 	if(move_grounded && !stationary && !frolic_active && (secret_idle_phase == PLAYER_SECRET_IDLE_PHASE_INACTIVE) && (_face_horizontal_prev != face_horizontal)){
 		image_system_queue_add_to_front(sprite_transition_walk_to_walk_other_direction, ANIMATION_FPS_DEFAULT);
@@ -364,6 +370,8 @@ function player_state_move(){
 	if(!move_grounded){
 		player_frolic_clear();
 	}
+
+	if(!move_grounded || !stationary || state != PlayerState.move) player_look_cancel(true);
 
 	if((secret_idle_phase != PLAYER_SECRET_IDLE_PHASE_INACTIVE) && (!move_grounded || !stationary)){
 		player_secret_idle_cancel(true);

@@ -25,6 +25,8 @@ event_inherited();
 		exit;
 #endregion
 
+liquid_bubbles_update();
+
 //Texture Position
 texture_x += texture_x_speed;
 texture_y += texture_y_speed;
@@ -40,7 +42,6 @@ if(wave_sim_enable){
 		wave_width_px = _width_px;
 		wave_segments = max(8, floor(wave_width_px / wave_segment_px));
 		wave_dx = wave_width_px / wave_segments;
-		impulse_radius_ix = ceil(impulse_radius_px / max(1, wave_dx));
 		wave_y = array_create(wave_segments + 1, 0);
 		wave_v = array_create(wave_segments + 1, 0);
 		wave_last_width_px = _width_px;

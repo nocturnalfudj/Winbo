@@ -24,6 +24,8 @@ function player_gamestate_play(){
 		}
 	#endregion
 
+	player_swim_contact_update();
+
 	//State Switch
 	switch(state){
 		case PlayerState.create:
@@ -71,6 +73,8 @@ function player_gamestate_play(){
 		break;
 	}
 
+	if(state != PlayerState.move || swim_active) player_look_cancel(true);
+
 	if(state != PlayerState.move){
 		player_secret_idle_cancel(false);
 		player_frolic_clear();
@@ -93,7 +97,7 @@ function player_gamestate_play(){
 			if(!bump_triggered){
 				var _bump,_bump_acceleration,_bump_acceleration_direction,_bump_acceleration_direction_additional,_bump_dash_direction,_bump_text_poster_distance,_bump_text_poster_x,_bump_text_poster_y;
 				_bump = false;
-				_bump_acceleration = 100;
+				_bump_acceleration = swim_active ? 45 : 100;
 				_bump_acceleration_direction = 0;
 				_bump_acceleration_direction_additional = 45;
 				_bump_dash_direction = 0;
@@ -206,7 +210,7 @@ function player_gamestate_play(){
 								audio_player_bump_play();
 							}
 						
-							if(bump_smoke_fx_enable){
+							if(bump_smoke_fx_enable && !swim_active){
 								// The supplied sprite grows rightward from its centre-line edge.
 								// Read the exact collided surface rather than Winbo's separated bbox,
 								// then place the centre-line edge there and rotate/flip it inward.
@@ -264,6 +268,8 @@ function player_gamestate_play(){
 		}
 	#endregion
 	
+	player_swim_visual_update();
+
 	//Image Update
 	image_system_update();
 

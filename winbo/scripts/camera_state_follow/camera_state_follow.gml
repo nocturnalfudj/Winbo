@@ -1,6 +1,18 @@
 /// @function camera_state_follow
 /// @summary Follow one or more targets while keeping them on screen.
 function camera_state_follow() {
+	// A stale pose must not pan a different follow target or a respawn.
+	var _look_player_count = 0;
+	with(o_player){
+		if((other.follow_target_id == o_player || other.follow_target_id == id)
+		&& global.game_state == GameState.play && state == PlayerState.move
+		&& move_grounded && !swim_active && player_look_active()) _look_player_count++;
+	}
+	if(_look_player_count != 1){
+		look_pan_direction.Set(0, 0);
+		look_pan_lerp_factor = CAMERA_LOOK_PAN_LERP_FACTOR_INTERRUPT;
+	}
+
 	#region Update Targets Coordinates IF Target Exists
 		//Initialise Follow Target Position as 0
 		var _follow_targ_x,_follow_targ_y,_follow_targ_count;
@@ -186,7 +198,24 @@ function camera_state_follow() {
 			
 				_follow_targ_x += follow_offset.x;
 				_follow_targ_y += follow_offset.y;
-			
+
+				#region Player Look Pan
+					var _look_pan_target_x,_look_pan_target_y;
+					_look_pan_target_x = look_pan_direction.x * width * CAMERA_LOOK_PAN_FACTOR_X;
+					if(look_pan_direction.y > 0)
+						_look_pan_target_y = look_pan_direction.y * height * CAMERA_LOOK_PAN_FACTOR_DOWN;
+					else
+						_look_pan_target_y = look_pan_direction.y * height * CAMERA_LOOK_PAN_FACTOR_UP;
+
+					var _look_lerp = 1 - power(1 - look_pan_lerp_factor, global.delta_time_factor_scaled);
+					look_pan_offset.x = lerp(look_pan_offset.x,_look_pan_target_x,_look_lerp);
+					look_pan_offset.y = lerp(look_pan_offset.y,_look_pan_target_y,_look_lerp);
+
+					//Added before the clamp so looking never reveals past the room edges
+					_follow_targ_x += look_pan_offset.x;
+					_follow_targ_y += look_pan_offset.y;
+				#endregion
+
 				if(position_clamp_enable_x)
 					_follow_targ_x = clamp(_follow_targ_x,position_clamp_min.x,position_clamp_max.x);
 				

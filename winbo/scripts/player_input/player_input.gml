@@ -152,12 +152,13 @@ function player_input(){
 		//Up Down
 		var _input_y;
 		_input_y = 0;
-		//_input_y = input_current[UserControl.down] - input_current[UserControl.up];
-		//if((_input_y == 0) && (_gamepad_thumbstick_check_enable)){
-		//	_input_y = input_check_gamepad(_gamepad_device,gp_axislv);
-		//	if(_input_y != 0)
-		//		_gamepad_using = true;
-		//}
+		if(swim_active){
+			_input_y = input_current[UserControl.down] - input_current[UserControl.up];
+			if(_input_y == 0 && _gamepad_thumbstick_check_enable){
+				_input_y = input_check_gamepad(_gamepad_device, gp_axislv);
+				if(_input_y != 0) _gamepad_using = true;
+			}
+		}
 	
 		//Left Right
 		var _input_x;

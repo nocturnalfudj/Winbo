@@ -330,6 +330,19 @@ transform_system_relative_enable();
 	follow_jump_dampening_enable = true;			// Toggle this system on/off
 	follow_jump_dampening_factor = 1.0;				// Current dampening multiplier (0 = no follow, 1 = full follow)
 	follow_jump_dampening_lerp_speed = 0.015;		// How fast the dampening factor lerps back to 1.0
+
+	// Player Look Pan - set by player_look_camera_set(); offsets scale with the zoomed view size
+	look_pan_direction = new Vector2(0,0);			// Unit direction the player is looking (0,0 = centred)
+	look_pan_offset = new Vector2(0,0);				// Current applied offset (world px)
+	look_pan_lerp_factor = CAMERA_LOOK_PAN_LERP_FACTOR_RETURN;
+
+	#macro CAMERA_LOOK_PAN_FACTOR_X 0.12			// Fraction of view width revealed looking left/right
+	#macro CAMERA_LOOK_PAN_FACTOR_UP 0.15			// Fraction of view height revealed looking up
+	#macro CAMERA_LOOK_PAN_FACTOR_DOWN 0.22			// Fraction of view height revealed looking down
+
+	#macro CAMERA_LOOK_PAN_LERP_FACTOR_PAN 0.06			// Ease toward the look offset
+	#macro CAMERA_LOOK_PAN_LERP_FACTOR_RETURN 0.08		// Ease back after a normal release
+	#macro CAMERA_LOOK_PAN_LERP_FACTOR_INTERRUPT 0.25	// Quick return when an action interrupts the look
 #endregion
 
 #region Stationary

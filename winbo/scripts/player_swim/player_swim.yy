@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"player_swim",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"player_swim",
+  "parent":{
+    "name":"States",
+    "path":"folders/Actors/Characters/Player/Parent/States.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

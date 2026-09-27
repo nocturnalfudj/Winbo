@@ -9,7 +9,14 @@ if(fx_follow_enabled){
 }
 
 // Give bump smoke a white, opaque core while retaining soft transparent edges.
-if(fx_sprite == spr_smoke_bump_impact){
+if(fx_liquid_clip_enable){
+	shader_set(sh_fx_liquid_clip);
+	shader_set_uniform_f(fx_liquid_clip_uniform, fx_liquid_clip_left, fx_liquid_clip_top,
+		fx_liquid_clip_right, fx_liquid_clip_bottom);
+	event_inherited();
+	shader_reset();
+}
+else if(fx_sprite == spr_smoke_bump_impact){
 	shader_set(sh_smoke_white);
 	event_inherited();
 	shader_reset();

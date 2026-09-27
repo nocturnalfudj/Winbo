@@ -68,3 +68,5 @@ wave_vel_max = 8000;
 // Surface dimension cache (optimization to prevent unnecessary resizing)
 cached_surf_w = -1;
 cached_surf_h = -1;
+ambient_bubbles_enable = false;
+ambient_bubbles_countdown = random_range(SECOND * 0.6, SECOND * 1.4);

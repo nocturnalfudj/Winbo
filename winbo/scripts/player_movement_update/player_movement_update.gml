@@ -15,7 +15,7 @@ function player_movement_update(){
 	}
 		
 	#region Landing
-		if((state == PlayerState.move) || (state == PlayerState.float)){
+		if(!swim_active && ((state == PlayerState.move) || (state == PlayerState.float))){
 			// Check if we should trigger landing animation (just became grounded)
 			var _should_start_landing = false;
 			_should_start_landing = (move_grounded && !move_grounded_previous);

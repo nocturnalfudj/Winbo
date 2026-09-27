@@ -1,60 +1,35 @@
 // Inherit the parent event
 event_inherited();
 
-//Random Sprite
-switch(irandom(3)){
-	case 0:
-		sprite_current = spr_tree_a_trunk;
-		sprite_leaves = spr_tree_a_leaves;
-		
-		leaves_x = 0;
-		leaves_y = -364;
-	break;
-	
-	case 1:
-		sprite_current = spr_tree_b_trunk;
-		sprite_leaves = spr_tree_b_leaves;
-		
-		leaves_x = 0;
-		leaves_y = -538;
-	break;
-	
-	case 2:
-		sprite_current = spr_tree_c_trunk;
-		sprite_leaves = spr_tree_c_leaves;
-		
-		leaves_x = 0;
-		leaves_y = -463;
-	break;
-	
-	case 3:
-		sprite_current = spr_tree_d_trunk;
-		sprite_leaves = spr_tree_d_leaves;
-		
-		leaves_x = 0;
-		leaves_y = -529;
-	break;
+//Variant (tree_variant is a Variable Definition: "random", "a", "b", "c", "d")
+var _sprites = [spr_tree_a, spr_tree_b, spr_tree_c, spr_tree_d];
+var _index = irandom(array_length(_sprites) - 1);
+
+switch(tree_variant){
+	case "a": _index = 0; break;
+	case "b": _index = 1; break;
+	case "c": _index = 2; break;
+	case "d": _index = 3; break;
 }
 
-#region Leaves Distortion
-	distort_sprite	= spr_flag_distort_no_spec
-	distort_tex		= sprite_get_texture(distort_sprite, 0);
+sprite_index = _sprites[_index];
+sprite_current = sprite_index;
 
-	shader			= sh_flag_distortion;
-	u_distort_tex	= shader_get_sampler_index(shader, "distort_tex");
-	u_time			= shader_get_uniform(shader, "time");
-	u_strength		= shader_get_uniform(shader, "strength");
-	u_size			= shader_get_uniform(shader, "size");
-	u_R_or_G		= shader_get_uniform(shader, "R_or_G");
-	u_spec			= shader_get_uniform(shader, "spec");
+#region Scale
+	//Trees keep their authored relative sizes; the set is scaled so its average visible height
+	//matches the old trunk + leaves trees (1170, 1594, 1430, 1385 px tall)
+	var _height_total = 0;
+	for(var _i = 0; _i < array_length(_sprites); _i++)
+		_height_total += sprite_get_yoffset(_sprites[_i]) - sprite_get_bbox_top(_sprites[_i]);
 
-	time			= random(1);
+	var _scale = (1395 * array_length(_sprites)) / _height_total;
+	image_xscale *= _scale;
+	image_yscale *= _scale;
 #endregion
 
-#region Camera Visible Buff Increse
-	//To accomodate for the leaves being separate and not considered by the camera visible system
-	camera_visible_buff_factor = 7;
-	
-	camera_visible_buff_width = sprite_width * camera_visible_buff_factor;
-	camera_visible_buff_height = sprite_height * camera_visible_buff_factor * 2;
-#endregion
+//Ground - sit the lowest opaque pixel on the placement point
+y += (sprite_get_yoffset(sprite_index) - sprite_get_bbox_bottom(sprite_index) - 1) * image_yscale;
+
+//Camera Visible Buffer - origin is at the base, so the buffer must reach the full scaled height
+camera_visible_buff_width = abs(sprite_width) * camera_visible_buff_factor;
+camera_visible_buff_height = abs(sprite_height) * camera_visible_buff_factor;

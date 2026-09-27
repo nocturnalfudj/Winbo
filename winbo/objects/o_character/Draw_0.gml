@@ -70,12 +70,12 @@ _scale_y = image_yscale * _move_effect_y;
 	}
 	
 	//Draw Body
-	draw_sprite_ext(sprite_current,sprite_current_frame,_character_x,_character_y,_scale_x_face_adjusted,_scale_y_face_adjusted,image_angle + acceleration_sway,image_blend,_alpha);
+	draw_sprite_ext(sprite_current,sprite_current_frame,_character_x,_character_y,_scale_x_face_adjusted,_scale_y_face_adjusted,image_angle + acceleration_sway + sprite_angle_offset,image_blend,_alpha);
 	
 	#region Flash
 		if(flash_alpha > 0){
 			shader_set(sh_monochrome);
-			draw_sprite_ext(sprite_current,sprite_current_frame,_character_x,_character_y,_scale_x_face_adjusted,_scale_y_face_adjusted,image_angle + acceleration_sway,flash_colour,flash_alpha);
+			draw_sprite_ext(sprite_current,sprite_current_frame,_character_x,_character_y,_scale_x_face_adjusted,_scale_y_face_adjusted,image_angle + acceleration_sway + sprite_angle_offset,flash_colour,flash_alpha);
 			shader_reset();
 		}
 	#endregion
