@@ -4,6 +4,7 @@ function player_state_move(){
 
 	//Input
 	player_input();
+	player_flower_wind_input_update();
 	if(swim_active){
 		player_swim_move();
 		return;
@@ -245,7 +246,7 @@ function player_state_move(){
 		_close_enough_to_jump = move_grounded_close && (velocity.y > 0);
 		_jump_available_now = (bump_jump_count > 0) || move_grounded || _close_enough_to_jump;
 
-		if(player_dive_spring_float_input_active() && !(_jump_pressed_now && _jump_available_now)){
+		if(!flower_wind_float_rearm && player_dive_spring_float_input_active() && !(_jump_pressed_now && _jump_available_now)){
 			if((float_countdown > 0) && (!move_grounded)){
 				if((acceleration.y >= 0) && (velocity.y >= 0)){
 					player_frolic_clear();
@@ -358,7 +359,7 @@ function player_state_move(){
 	player_collisions();
 	var _air_spin_launch_step;
 	_air_spin_launch_step = player_air_spin_movement_begin();
-	player_movement_update();
+	player_flower_wind_movement_update();
 	player_air_spin_movement_end(_air_spin_launch_step);
 	player_mushroom_collisions_post_movement();
 	player_landing_smoke_update();
@@ -568,6 +569,8 @@ function player_frolic_update(_frolic_allowed){
 }
 
 function player_air_spin_start(){
+	flower_wind_source = noone;
+	flower_wind_coast = 0;
 	air_spin_active = true;
 	air_spin_apex_seen = false;
 	air_spin_launch_pending = true;

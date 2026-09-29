@@ -359,3 +359,5 @@ is_player = true;
 
 player_swim_setup();
 player_look_setup();
+
+player_flower_wind_reset();

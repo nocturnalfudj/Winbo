@@ -1,5 +1,6 @@
 {
   "FolderOrderSettings":[
+    {"name":"Turret","order":3,"path":"folders/Actors/Hazard/Turret.yy",},
     {"name":"Actors","order":7,"path":"folders/Actors.yy",},
     {"name":"Bombs","order":2,"path":"folders/Actors/Bombs.yy",},
     {"name":"Bullets","order":9,"path":"folders/Actors/Bullets.yy",},
@@ -347,6 +348,11 @@
     {"name":"States","order":1,"path":"folders/Volumes/Spawners/Parent/Scripts/States.yy",},
   ],
   "ResourceOrderSettings":[
+    {"name":"o_turret","order":0,"path":"objects/o_turret/o_turret.yy",},
+    {"name":"spr_turret_front","order":1,"path":"sprites/spr_turret_front/spr_turret_front.yy",},
+    {"name":"spr_turret_back","order":2,"path":"sprites/spr_turret_back/spr_turret_back.yy",},
+    {"name":"spr_turret_reticle","order":3,"path":"sprites/spr_turret_reticle/spr_turret_reticle.yy",},
+
     {"name":"curve_back_in_extreme","order":31,"path":"animcurves/curve_back_in_extreme/curve_back_in_extreme.yy",},
     {"name":"curve_back_in_out","order":3,"path":"animcurves/curve_back_in_out/curve_back_in_out.yy",},
     {"name":"curve_back_in","order":1,"path":"animcurves/curve_back_in/curve_back_in.yy",},

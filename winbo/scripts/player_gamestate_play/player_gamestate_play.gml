@@ -25,6 +25,9 @@ function player_gamestate_play(){
 	#endregion
 
 	player_swim_contact_update();
+	if(move_grounded || swim_active || state == PlayerState.hit || state == PlayerState.death){
+		player_flower_wind_reset();
+	}
 
 	//State Switch
 	switch(state){
@@ -86,6 +89,8 @@ function player_gamestate_play(){
 
 	if((state != PlayerState.move) && (state != PlayerState.float)){
 		player_air_spin_clear();
+		flower_wind_source = noone;
+		flower_wind_coast = 0;
 	}
 
 	//Status Effects
@@ -178,6 +183,7 @@ function player_gamestate_play(){
 		
 				//Bump Happened
 				if(_bump){
+					player_flower_wind_reset();
 					if(collision.x != 0) flower_fan_bump(move_collision_object_instance_x);
 					if(collision.y != 0) flower_fan_bump(move_collision_object_instance_y);
 					//Trigger Bump

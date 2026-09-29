@@ -1,4 +1,5 @@
 function player_state_hit(){
+	player_flower_wind_reset();
 	// Make sure GameState is Player Hit
 	if(global.game_state != GameState.play_player_hit){
 		game_state_set_target(GameState.play_player_hit);
