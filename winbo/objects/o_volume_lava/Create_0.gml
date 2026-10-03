@@ -25,3 +25,4 @@ volume_liquid_wave_setup();
 // Simulation params
 wave_tension = 0.95;       // Laplacian spring factor
 wave_damping = 0.85;    // slightly lower for faster settle (0..1)
+splash_colour = make_colour_rgb(247, 145, 19);

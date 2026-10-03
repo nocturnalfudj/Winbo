@@ -26,7 +26,7 @@ function player_gamestate_play(){
 
 	player_swim_contact_update();
 	if(move_grounded || swim_active || state == PlayerState.hit || state == PlayerState.death){
-		player_flower_wind_reset();
+		player_flower_wind_reset(move_grounded || swim_active);
 	}
 
 	//State Switch
@@ -183,7 +183,7 @@ function player_gamestate_play(){
 		
 				//Bump Happened
 				if(_bump){
-					player_flower_wind_reset();
+					player_flower_wind_reset(false);
 					if(collision.x != 0) flower_fan_bump(move_collision_object_instance_x);
 					if(collision.y != 0) flower_fan_bump(move_collision_object_instance_y);
 					//Trigger Bump

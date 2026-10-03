@@ -70,3 +70,11 @@ cached_surf_w = -1;
 cached_surf_h = -1;
 ambient_bubbles_enable = false;
 ambient_bubbles_countdown = random_range(SECOND * 0.6, SECOND * 1.4);
+
+// Surface effects are configured before any drawing or contact checks.
+splash_colour = make_colour_rgb(129, 196, 253);
+submerged_ripple_time = 0;
+submerged_ripple_strength = 4;
+submerged_ripple_uniform_time = shader_get_uniform(sh_liquid_ripple, "u_time");
+submerged_ripple_uniform_texel = shader_get_uniform(sh_liquid_ripple, "u_texel");
+submerged_ripple_uniform_strength = shader_get_uniform(sh_liquid_ripple, "u_strength");

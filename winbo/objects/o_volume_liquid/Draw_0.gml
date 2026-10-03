@@ -138,7 +138,13 @@ else {
 	
 		gpu_set_colorwriteenable(true,true,true,true);
 		gpu_set_blendmode_ext(bm_dest_alpha,bm_inv_dest_alpha);
+		// Distort the submerged scene inside the existing liquid alpha mask.
+		shader_set(sh_liquid_ripple);
+		shader_set_uniform_f(submerged_ripple_uniform_time, submerged_ripple_time);
+		shader_set_uniform_f(submerged_ripple_uniform_texel, 1 / _surf_w, 1 / _surf_h);
+		shader_set_uniform_f(submerged_ripple_uniform_strength, submerged_ripple_strength);
 		draw_surface(underwater_surface,0,0);
+		shader_reset();
 	
 	
 		gpu_set_blendmode(bm_normal);
@@ -197,7 +203,12 @@ else {
 		draw_surface(water_mask_surface,0,0);
 		gpu_set_colorwriteenable(true,true,true,true);
 		gpu_set_blendmode_ext(bm_dest_alpha,bm_inv_dest_alpha);
+		shader_set(sh_liquid_ripple);
+		shader_set_uniform_f(submerged_ripple_uniform_time, submerged_ripple_time);
+		shader_set_uniform_f(submerged_ripple_uniform_texel, 1 / _surf_w, 1 / _surf_h);
+		shader_set_uniform_f(submerged_ripple_uniform_strength, submerged_ripple_strength);
 		draw_surface(underwater_surface,0,0);
+		shader_reset();
 	
 		draw_surface_ext(reflection_surface,0,(_height_buffer * _scale_to_app) * 2,1,-1,0,c_white,reflection_alpha);
 		

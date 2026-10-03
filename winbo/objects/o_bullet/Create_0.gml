@@ -87,19 +87,6 @@ owner = noone;
 		death_anim_fps = ANIMATION_FPS_DEFAULT;
 		death_anim_started = false;
 		death_anim_suppressed = false;
-		death_anim_suppress_on_deflect = false;
-
-		// Deflect behavior
-		deflect_enable = true;
-
-		// Deflect fly-off
-		deflect_flyoff_enable = false;
-		deflect_flyoff_active = false;
-		deflect_flyoff_speed = 42;
-		deflect_flyoff_margin = 128;
-		deflect_flyoff_lifetime = 1.5 * SECOND;
-		deflect_flyoff_sprite_spin_speed = 0;
-		deflect_flyoff_sprite = noone;
 	#endregion
 
 //Create

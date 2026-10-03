@@ -20,6 +20,8 @@ if (!_fx_started) {
 
 // Only advance animation during gameplay; freeze/pause keeps the current frame visible.
 switch (global.game_state) {
+	case GameState.play_player_hit:
+		if(!fx_animate_during_hit) break;
 	case GameState.play:
 		// Destroy one step AFTER the animation completes so the last frame is rendered once.
 		if (image == noone || !image.animate) {

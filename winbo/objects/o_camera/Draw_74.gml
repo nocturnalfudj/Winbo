@@ -1,3 +1,8 @@
+// The application surface already contains the fully composited scene. Copy
+// its RGB without blending its accumulated alpha a second time. This preserves
+// translucent flashes, particles and the intended vignette opacity.
+var _scene_blend_enabled = gpu_get_blendenable();
+gpu_set_blendenable(false);
 #region VFX
 	if(glitch_enable){
 		var _glitch_magnitude;
@@ -99,6 +104,8 @@
 		draw_surface(application_surface, 0, 0);
 	}
 #endregion
+
+gpu_set_blendenable(_scene_blend_enabled);
 
 #region Recording
 	if(gif_record || screenshot_record){

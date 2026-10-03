@@ -337,7 +337,6 @@ transform_system_relative_enable();
 	look_pan_lerp_factor = CAMERA_LOOK_PAN_LERP_FACTOR_RETURN;
 
 	#macro CAMERA_LOOK_PAN_FACTOR_X 0.12			// Fraction of view width revealed looking left/right
-	#macro CAMERA_LOOK_PAN_FACTOR_UP 0.15			// Fraction of view height revealed looking up
 	#macro CAMERA_LOOK_PAN_FACTOR_DOWN 0.22			// Fraction of view height revealed looking down
 
 	#macro CAMERA_LOOK_PAN_LERP_FACTOR_PAN 0.06			// Ease toward the look offset

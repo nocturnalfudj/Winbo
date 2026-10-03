@@ -46,8 +46,8 @@
 	// Player damage sparks use the shared foreground system so their lifetime is
 	// independent of the short hit-state freeze.
 	pfx_type_player_damage_spark = part_type_create();
-	part_type_shape(pfx_type_player_damage_spark, pt_shape_sphere);
-	part_type_size(pfx_type_player_damage_spark, 0.18, 0.22, -0.01, 0.02);
+	part_type_shape(pfx_type_player_damage_spark, pt_shape_disk);
+	part_type_size(pfx_type_player_damage_spark, 0.224, 0.336, 0, 0);
 	part_type_speed(pfx_type_player_damage_spark, 4, 8, -0.2, 1);
 	part_type_direction(pfx_type_player_damage_spark, 0, 0, 0, 12);
 	part_type_gravity(pfx_type_player_damage_spark, 0.18, 270);
@@ -55,6 +55,16 @@
 	part_type_alpha2(pfx_type_player_damage_spark, 1, 0);
 	part_type_life(pfx_type_player_damage_spark, 12, 20);
 	
+	// Upward droplets for both liquid surfaces; colour is set per burst.
+	pfx_type_liquid_splash = part_type_create();
+	part_type_shape(pfx_type_liquid_splash, pt_shape_disk);
+	part_type_size(pfx_type_liquid_splash, 0.3, 0.5, -0.002, 0);
+	part_type_speed(pfx_type_liquid_splash, 5, 10, -0.1, 0);
+	part_type_direction(pfx_type_liquid_splash, 65, 115, 0, 0);
+	part_type_gravity(pfx_type_liquid_splash, 0.3, 270);
+	part_type_alpha2(pfx_type_liquid_splash, 1, 0);
+	part_type_life(pfx_type_liquid_splash, 24, 36);
+
 	#region Effects
 		#region Example
 			//enum PFXExample{

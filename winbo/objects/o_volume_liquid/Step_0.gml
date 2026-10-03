@@ -26,6 +26,7 @@ event_inherited();
 #endregion
 
 liquid_bubbles_update();
+submerged_ripple_time += global.delta_time_factor_scaled / SECOND;
 
 //Texture Position
 texture_x += texture_x_speed;

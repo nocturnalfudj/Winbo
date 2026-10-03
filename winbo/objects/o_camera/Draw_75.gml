@@ -16,8 +16,14 @@
 					//Draw to Screenshot Surface
 					surface_set_target(_surface);
 		
-					//Draw Application Surface
+					// Keep the exported scene opaque, including translucent effects.
+					draw_clear_alpha(c_black,1);
+					gpu_set_colorwriteenable(true, true, true, false);
+					// Copy the already composited scene before blending the GUI.
+					var _screenshot_blend = gpu_get_blendenable();
+					gpu_set_blendenable(false);
 					draw_surface(application_surface,0,0);
+					gpu_set_blendenable(_screenshot_blend);
 			
 					//Draw GUI Surface with Alpha Write Disabled
 					gpu_set_colorwriteenable(true, true, true, false);
@@ -120,11 +126,16 @@
 			//Set Target Surface to GIF Surface
 			//And Clear it
 			surface_set_target(gif_surface);
-			draw_clear_alpha(c_black,0);
+			draw_clear_alpha(c_black,1);
+			gpu_set_colorwriteenable(true, true, true, false);
 					
 			//Draw GUI and Application Surfaces to GIF Surface
+			var _gif_blend = gpu_get_blendenable();
+			gpu_set_blendenable(false);
 			draw_surface_stretched(application_surface,0,0,gif_width,gif_height);
+			gpu_set_blendenable(_gif_blend);
 			draw_surface_stretched(gui_surface,0,0,gif_width,gif_height);
+			gpu_set_colorwriteenable(true, true, true, true);
 					
 			//Stop Drawing to GIF Surface
 			surface_reset_target();

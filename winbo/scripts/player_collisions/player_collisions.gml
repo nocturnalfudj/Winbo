@@ -52,73 +52,11 @@ function player_collisions(){
 				if((state == BulletState.death) || (state == BulletState.destroy))
 					break;
 
-				// Check if player is dashing/recently dashed - deflect bullet instead of damage
-				// Uses bump_allow for 0.1s leniency window (same as wall bumps)
-				if(other.bump_allow && deflect_enable){
-					if(deflect_flyoff_enable){
-						var _flyoff_direction = point_direction(other.x, other.y, x, y);
-						bullet_begin_deflect_flyoff(_flyoff_direction);
-					}
-					else{
-						if(death_anim_suppress_on_deflect){
-							death_anim_suppressed = true;
-						}
-						
-						// Bullet destroyed (no damage to player)
-						state = BulletState.death;
-					}
-
-					// Trigger bump bounce if not already triggered this dash
-					if(!other.bump_triggered){
-						with(other){
-							// Calculate bounce direction away from bullet
-							var _bump_dir = point_direction(_bullet_collision_instance.x, _bullet_collision_instance.y, x, y);
-							var _bump_acceleration = 100;
-
-							// Trigger bump
-							bump_triggered = true;
-							bump_jump_count++;
-
-							// Refill dash stamina
-							dash_stamina = dash_stamina_max;
-							dash_stamina_depleted = false;
-
-							// Reset float countdown
-							float_countdown = float_countdown_max;
-
-							// End current dash
-							dash_countdown = 0;
-							dash_hold_check_countdown = 0;
-
-							// Apply bounce acceleration
-							acceleration.AddMagnitudeDirection(_bump_acceleration, _bump_dir);
-
-							// Update dash no input direction for follow-up dash
-							dash_no_input_direction = _bump_dir;
-
-							// Bump sprite
-							image_system_setup(sprite_bump, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
-
-							// Camera shake
-							camera_shake_add(0.2, 500, 10, 5, false, false, true, 1,, false, 100,);
-
-							// Freeze frame
-							game_freeze(1);
-
-							// Text poster
-							with(instance_create_layer(x, y - 100, "lyr_pfx_foreground", o_txtPstr_bump)){
-								text_string = "DEFLECT!";
-							}
-						}
-					}
+				// Projectiles always use the normal hit path, including during a bump.
+				with(other){
+					player_hit(1, other, false);
 				}
-				else{
-					// Normal damage - hit player and destroy bullet
-					with(other){
-						player_hit(1, other, false);
-					}
-					state = BulletState.death;
-				}
+				state = BulletState.death;
 			}
 		#endregion
 				

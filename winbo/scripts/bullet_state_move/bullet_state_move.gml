@@ -48,15 +48,6 @@ function bullet_state_move(){
 	//Update Velocity
 	movement_velocity_update(_delta_time,false);
 
-	// Deflected fly-off projectiles should despawn once they leave the room bounds.
-	if(deflect_flyoff_active){
-		var _margin = max(0, deflect_flyoff_margin);
-		if((x < -_margin) || (x > room_width + _margin) || (y < -_margin) || (y > room_height + _margin)){
-			instance_destroy();
-			exit;
-		}
-	}
-	
 	#region Handle Solid Collision6
 		if(_collision){			
 			state = BulletState.hit;
@@ -79,14 +70,7 @@ function bullet_state_move(){
 	
 	#region Update Angle
 		if(state == BulletState.move){
-			// Deflected fly-off uses sprite spin instead of velocity-facing.
-			if(deflect_flyoff_active){
-				if(deflect_flyoff_sprite_spin_speed != 0){
-					transform_set(transform[TransformType.anchor],TransformValue.angle,deflect_flyoff_sprite_spin_speed * _delta_time,true);
-				}
-			}
-			// Set direction to velocity (with optional sprite offset for backwards-facing sprites).
-			else if(rotate_to_velocity_direction){
+			if(rotate_to_velocity_direction){
 				transform_set(transform[TransformType.anchor],TransformValue.angle,velocity_dir + sprite_angle_offset,false);
 			}
 		}

@@ -348,6 +348,9 @@
     {"name":"States","order":1,"path":"folders/Volumes/Spawners/Parent/Scripts/States.yy",},
   ],
   "ResourceOrderSettings":[
+    {"name":"o_prop_banner","order":0,"path":"objects/o_prop_banner/o_prop_banner.yy",},
+    {"name":"spr_prop_banner","order":0,"path":"sprites/spr_prop_banner/spr_prop_banner.yy",},
+    {"name":"sh_liquid_ripple","order":0,"path":"shaders/sh_liquid_ripple/sh_liquid_ripple.yy",},
     {"name":"o_turret","order":0,"path":"objects/o_turret/o_turret.yy",},
     {"name":"spr_turret_front","order":1,"path":"sprites/spr_turret_front/spr_turret_front.yy",},
     {"name":"spr_turret_back","order":2,"path":"sprites/spr_turret_back/spr_turret_back.yy",},
@@ -571,7 +574,6 @@
     {"name":"btn_start_active_main","order":3,"path":"scripts/btn_start_active_main/btn_start_active_main.yy",},
     {"name":"btn_stop_active_main","order":1,"path":"scripts/btn_stop_active_main/btn_stop_active_main.yy",},
     {"name":"btn_stop_advert_active_main","order":1,"path":"scripts/btn_stop_advert_active_main/btn_stop_advert_active_main.yy",},
-    {"name":"bullet_begin_deflect_flyoff","order":1,"path":"scripts/bullet_begin_deflect_flyoff/bullet_begin_deflect_flyoff.yy",},
     {"name":"bullet_gamestate_gameover","order":1,"path":"scripts/bullet_gamestate_gameover/bullet_gamestate_gameover.yy",},
     {"name":"bullet_state_death","order":3,"path":"scripts/bullet_state_death/bullet_state_death.yy",},
     {"name":"bullet_state_destroy","order":4,"path":"scripts/bullet_state_destroy/bullet_state_destroy.yy",},

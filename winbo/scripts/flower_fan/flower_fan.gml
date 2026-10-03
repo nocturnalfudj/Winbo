@@ -1,4 +1,5 @@
 #macro FLOWER_WIND_COAST_DECELERATION 1.1
+#macro FLOWER_WIND_JUMP_LIFT 6
 
 /// Called by the player's confirmed solid bump, never by ordinary overlap.
 function flower_fan_bump(_solid){
@@ -74,9 +75,10 @@ function player_flower_wind_apply(_fan){
 
 /// Player state belongs to this airtime, so neither room changes nor landings
 /// can carry a spent fan or an old launch into the next jump.
-function player_flower_wind_reset(){
+function player_flower_wind_reset(_reset_jump = true){
     flower_wind_source = noone;
     flower_wind_spent = noone;
+    if(_reset_jump) flower_wind_jump_used = false;
     flower_wind_direction = 90;
     flower_wind_end_x = 0;
     flower_wind_end_y = 0;
@@ -124,9 +126,29 @@ function player_flower_wind_contact(_fan){
     flower_wind_source = noone;
 }
 
+/// A normal jump gets one small lift per airtime. Float retains its stronger
+/// launch path; ordinary wind never disables gravity or turns into a platform.
+function player_flower_wind_jump_lift(){
+    if(state != PlayerState.move || move_grounded || swim_active
+    || velocity.y >= 0 || flower_wind_jump_used || flower_wind_coast > 0) return;
+    var _px = (bbox_left + bbox_right) * 0.5;
+    var _py = (bbox_top + bbox_bottom) * 0.5;
+    var _count = instance_number(o_flower_fan);
+    for(var _i = 0; _i < _count; _i++){
+        var _fan = instance_find(o_flower_fan, _i);
+        var _direction = _fan.image_angle + (_fan.image_yscale >= 0 ? 90 : 270);
+        if(lengthdir_y(1, _direction) < -0.5 && flower_fan_contains(_fan, _px, _py)){
+            velocity.y -= FLOWER_WIND_JUMP_LIFT;
+            flower_wind_jump_used = true;
+            return;
+        }
+    }
+}
+
 /// Preserve the launch axis through the ordinary collision solver, while
 /// retaining normal steering drag across the wind. All overrides are local.
 function player_flower_wind_movement_update(){
+    player_flower_wind_jump_lift();
     var _fan = player_flower_wind_find();
     player_flower_wind_contact(_fan);
     var _coasting = flower_wind_coast > 0;

@@ -34,10 +34,15 @@ function player_hit(_damage, _source = noone, _slash = false){
 
 	var _hit_sprite;
 	_hit_sprite = _slash ? spr_fx_hit_slash : spr_fx_hit_impact;
-	fx_spawn_sprite_once(x, y, "lyr_pfx_foreground", _hit_sprite, 1, 1, _hit_direction, 24);
+	var _hit_fx = fx_spawn_sprite_once(x, y, "lyr_pfx_foreground", _hit_sprite, 1, 1, _hit_direction, 24);
+	_hit_fx.fx_animate_during_hit = true;
 
 	part_type_direction(o_pfx.pfx_type_player_damage_spark, _hit_direction - 22, _hit_direction + 22, 0, 12);
-	part_particles_create(o_pfx.part_system_foreground, x, y, o_pfx.pfx_type_player_damage_spark, irandom_range(6, 10));
+	var _spark_distance = min(bbox_right - bbox_left, bbox_bottom - bbox_top) * 0.48;
+	part_particles_create(o_pfx.part_system_foreground,
+		x + lengthdir_x(_spark_distance, _hit_direction),
+		y + lengthdir_y(_spark_distance, _hit_direction),
+		o_pfx.pfx_type_player_damage_spark, irandom_range(6, 10));
 	camera_shake_add(0.18, 450, 12, 4, false, false, true, 0.8, , false, 100, 0.6);
 	with(o_fade_hud_damage){
 		fade_factor = fade_factor_target_active;
@@ -47,6 +52,7 @@ function player_hit(_damage, _source = noone, _slash = false){
 	master_time_scale_effect_slow(0.2,hit_countdown.time_max);
 	
 	// Flash
+	flash_colour = c_white;
 	flash_alpha = 0.8;
 	
 	// Reset Hit Countdown

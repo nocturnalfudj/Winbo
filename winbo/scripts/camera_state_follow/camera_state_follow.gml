@@ -202,10 +202,7 @@ function camera_state_follow() {
 				#region Player Look Pan
 					var _look_pan_target_x,_look_pan_target_y;
 					_look_pan_target_x = look_pan_direction.x * width * CAMERA_LOOK_PAN_FACTOR_X;
-					if(look_pan_direction.y > 0)
-						_look_pan_target_y = look_pan_direction.y * height * CAMERA_LOOK_PAN_FACTOR_DOWN;
-					else
-						_look_pan_target_y = look_pan_direction.y * height * CAMERA_LOOK_PAN_FACTOR_UP;
+					_look_pan_target_y = max(0, look_pan_direction.y) * height * CAMERA_LOOK_PAN_FACTOR_DOWN;
 
 					var _look_lerp = 1 - power(1 - look_pan_lerp_factor, global.delta_time_factor_scaled);
 					look_pan_offset.x = lerp(look_pan_offset.x,_look_pan_target_x,_look_lerp);

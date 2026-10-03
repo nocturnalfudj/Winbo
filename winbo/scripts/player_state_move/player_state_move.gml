@@ -213,7 +213,7 @@ function player_state_move(){
 	acceleration.AddMagnitudeDirection(INPUT_MOVE_ACCELERATION * input_move_magnitude, input_move_direction);
 
 	#region Arrow Input
-		if(!player_look_arrow_keys_captured() && keyboard_check(vk_up)){
+		if(keyboard_check(vk_up)){
 			input_current[UserControl.jump] = true;
 		}
 

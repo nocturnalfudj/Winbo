@@ -10,7 +10,6 @@ enum PlayerLookPhase{
 
 enum PlayerLookDirection{
 	none,
-	up,
 	down,
 	left,
 	right,
@@ -30,7 +29,6 @@ enum PlayerLookDirection{
 #macro PLAYER_LOOK_CAMERA_PAN_START_FRAME 2
 
 //Input
-#macro PLAYER_LOOK_KEY_MODIFIER ord("Q")		//Hold with the arrow keys; WASD movement is untouched
 #macro PLAYER_LOOK_STICK_THRESHOLD_ENTER 0.6	//Right stick deflection needed to start a look
 #macro PLAYER_LOOK_STICK_THRESHOLD_EXIT 0.35	//Deflection needed to keep holding the current look
 
@@ -42,7 +40,6 @@ function player_look_setup(){
 	look_face_horizontal_draw_enable_previous = face_horizontal_draw_enable;
 
 	look_sprite = array_create(PlayerLookDirection.SIZE, noone);
-	look_sprite[PlayerLookDirection.up]		= spr_player_look_up;
 	look_sprite[PlayerLookDirection.down]	= spr_player_look_down;
 	look_sprite[PlayerLookDirection.left]	= spr_player_look_left;
 	look_sprite[PlayerLookDirection.right]	= spr_player_look_right;
@@ -61,9 +58,9 @@ function player_look_active(){
 	return look_phase != PlayerLookPhase.inactive;
 }
 
-/// @function player_look_modifier_held
-/// @summary Whether the keyboard look modifier is held on a keyboard-capable input type.
-function player_look_modifier_held(){
+/// @function player_look_keyboard_enabled
+/// @summary Whether directional keyboard looking is available on a keyboard-capable input type.
+function player_look_keyboard_enabled(){
 	if(IS_MOBILE){
 		return false;
 	}
@@ -72,7 +69,7 @@ function player_look_modifier_held(){
 		case Input.keyboard:
 		case Input.mouse_and_keyboard:
 		case Input.mouse_and_keyboard_and_gamepad:
-			return keyboard_check(PLAYER_LOOK_KEY_MODIFIER);
+			return true;
 	}
 
 	return false;
@@ -81,11 +78,12 @@ function player_look_modifier_held(){
 /// @function player_look_arrow_keys_captured
 /// @summary Whether arrow keys belong to look this step and must not jump, drop or dash.
 function player_look_arrow_keys_captured(){
-	return move_grounded && player_look_modifier_held();
+	return move_grounded && stationary && input_move_magnitude == 0
+		&& !swim_active && player_look_keyboard_enabled();
 }
 
 /// @function player_look_input_direction
-/// @summary Read the requested look direction from the right stick or the look modifier + arrow keys.
+/// @summary Read the requested look direction from the right stick or the arrow keys.
 /// @returns {real} PlayerLookDirection value.
 function player_look_input_direction(){
 	if(IS_MOBILE){
@@ -107,7 +105,6 @@ function player_look_input_direction(){
 				_stick_along = 0;
 
 				switch(look_direction){
-					case PlayerLookDirection.up:	_stick_along = -_stick_v;	break;
 					case PlayerLookDirection.down:	_stick_along = _stick_v;	break;
 					case PlayerLookDirection.left:	_stick_along = -_stick_h;	break;
 					case PlayerLookDirection.right:	_stick_along = _stick_h;	break;
@@ -120,7 +117,7 @@ function player_look_input_direction(){
 
 			if(max(abs(_stick_h), abs(_stick_v)) >= PLAYER_LOOK_STICK_THRESHOLD_ENTER){
 				if(abs(_stick_v) >= abs(_stick_h)){
-					return (_stick_v > 0) ? PlayerLookDirection.down : PlayerLookDirection.up;
+					return (_stick_v > 0) ? PlayerLookDirection.down : PlayerLookDirection.none;
 				}
 
 				return (_stick_h > 0) ? PlayerLookDirection.right : PlayerLookDirection.left;
@@ -128,10 +125,9 @@ function player_look_input_direction(){
 		}
 	#endregion
 
-	#region Keyboard Modifier + Arrows
-		if(player_look_modifier_held()){
-			var _key_up, _key_down, _key_left, _key_right;
-			_key_up = keyboard_check(vk_up);
+	#region Keyboard Arrows
+		if(player_look_keyboard_enabled()){
+			var _key_down, _key_left, _key_right;
 			_key_down = keyboard_check(vk_down);
 			_key_left = keyboard_check(vk_left);
 			_key_right = keyboard_check(vk_right);
@@ -139,7 +135,6 @@ function player_look_input_direction(){
 			//A second arrow does not steal an existing look
 			if(look_phase == PlayerLookPhase.hold){
 				switch(look_direction){
-					case PlayerLookDirection.up:	if(_key_up)		return look_direction;	break;
 					case PlayerLookDirection.down:	if(_key_down)	return look_direction;	break;
 					case PlayerLookDirection.left:	if(_key_left)	return look_direction;	break;
 					case PlayerLookDirection.right:	if(_key_right)	return look_direction;	break;
@@ -147,7 +142,6 @@ function player_look_input_direction(){
 			}
 
 			if(_key_down)	return PlayerLookDirection.down;
-			if(_key_up)		return PlayerLookDirection.up;
 			if(_key_left && !_key_right)	return PlayerLookDirection.left;
 			if(_key_right && !_key_left)	return PlayerLookDirection.right;
 		}
@@ -332,7 +326,6 @@ function player_look_camera_set(_direction, _lerp_factor){
 	_y = 0;
 
 	switch(_direction){
-		case PlayerLookDirection.up:	_y = -1;	break;
 		case PlayerLookDirection.down:	_y = 1;		break;
 		case PlayerLookDirection.left:	_x = -1;	break;
 		case PlayerLookDirection.right:	_x = 1;		break;
