@@ -2,6 +2,11 @@
 /// continue through the normal player collision path.
 function player_swim_setup(){
 	swim_active = false;
+	swim_previous_x = x;
+	swim_previous_y = y;
+	swim_surface_left = 0;
+	swim_surface_right = 0;
+	swim_surface_top = 0;
 	liquid_surface_previous = noone;
 	liquid_surface_previous_x = x;
 	liquid_surface_previous_y = bbox_bottom;
@@ -26,6 +31,20 @@ function player_swim_contact_update(){
 	var _liquid = instance_position(x, y, o_volume_liquid);
 	player_liquid_surface_crossing_update(instance_position(x, bbox_bottom, o_volume_liquid));
 	var _submerged = _can_swim && (_liquid != noone);
+	var _surface_jump = false;
+	if(swim_active && _can_swim && _liquid == noone
+	&& swim_previous_y >= swim_surface_top && y < swim_surface_top){
+		var _cross_fraction = (swim_surface_top - swim_previous_y) / (y - swim_previous_y);
+		var _cross_x = lerp(swim_previous_x, x, _cross_fraction);
+		_surface_jump = _cross_x >= swim_surface_left && _cross_x <= swim_surface_right;
+	}
+	if(_submerged){
+		swim_surface_left = _liquid.bbox_left;
+		swim_surface_right = _liquid.bbox_right;
+		swim_surface_top = _liquid.bbox_top;
+	}
+	swim_previous_x = x;
+	swim_previous_y = y;
 	if(_submerged == swim_active) return;
 	swim_active = _submerged;
 	swim_direction_previous = -1;
@@ -54,11 +73,37 @@ function player_swim_contact_update(){
 		player_swim_bubbles(false, 90, true);
 	}
 	else{
-		// Release the water-specific pose immediately on leaving the surface.
-		if(_can_swim){
+		if(_surface_jump){
+			player_swim_surface_jump();
+		}
+		else if(_can_swim){
 			image_system_setup(state == PlayerState.dash ? sprite_dash : sprite_fall,
 				ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 		}
+	}
+}
+
+/// Give an upward surface crossing a normal jump without needing a button edge
+/// or wall bump. Keep horizontal steering and any faster upward dash momentum.
+function player_swim_surface_jump(){
+	state = PlayerState.move;
+	move_grounded = false;
+	move_grounded_instance = noone;
+	move_grounded_close = false;
+	move_grounded_close_instance = noone;
+	velocity.y = min(velocity.y, -input_move_acceleration_jump);
+	acceleration.y = 0;
+	move_gravity.Copy(move_gravity_rise);
+	velocity_retention = velocity_retention_default;
+	speed_stretch_enable = false;
+	jump_hold_allow_countdown = jump_hold_allow_countdown_max;
+	float_countdown = float_countdown_max;
+	dash_stamina = dash_stamina_max;
+	dash_stamina_depleted = false;
+	image_system_setup(abs(velocity.x) > 5 ? sprite_jump_sideways : sprite_jump,
+		ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+	with(o_camera){
+		if(follow_jump_dampening_enable) follow_jump_dampening_factor = 0;
 	}
 }
 
