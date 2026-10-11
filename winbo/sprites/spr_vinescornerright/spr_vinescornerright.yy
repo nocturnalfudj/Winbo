@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_vinescornerright",
   "bboxMode":0,
-  "bbox_bottom":454,
+  "bbox_bottom":404,
   "bbox_left":0,
-  "bbox_right":672,
+  "bbox_right":624,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"fee3d034-1d11-455d-9189-2f5aeeae8737","name":"fee3d034-1d11-455d-9189-2f5aeeae8737","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"44d09403-26c9-4659-a76c-0593a1c5fd4b","name":"44d09403-26c9-4659-a76c-0593a1c5fd4b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":455,
+  "height":405,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"859e57eb-21e5-4e3c-9bac-9a16c4a1e2ca","blendMode":0,"displayName":"default","isLocked":false,"name":"859e57eb-21e5-4e3c-9bac-9a16c4a1e2ca","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"a6748163-670a-4ad3-9df7-a025d5f3d789","blendMode":0,"displayName":"default","isLocked":false,"name":"a6748163-670a-4ad3-9df7-a025d5f3d789","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_vinescornerright",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"fee3d034-1d11-455d-9189-2f5aeeae8737","path":"sprites/spr_vinescornerright/spr_vinescornerright.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"9ae768c6-eae4-465d-8a3b-62532c212339","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"44d09403-26c9-4659-a76c-0593a1c5fd4b","path":"sprites/spr_vinescornerright/spr_vinescornerright.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"05841643-4370-4ecd-b63f-8997fdb6c427","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":673,
+  "width":625,
 }
