@@ -25,8 +25,9 @@ function player_gamestate_play(){
 	#endregion
 
 	player_swim_contact_update();
+	player_jump_face_update();
 	if(move_grounded || swim_active || state == PlayerState.hit || state == PlayerState.death){
-		player_flower_wind_reset(move_grounded || swim_active);
+		player_flower_wind_reset(false);
 	}
 
 	//State Switch
@@ -91,7 +92,15 @@ function player_gamestate_play(){
 		player_air_spin_clear();
 		flower_wind_source = noone;
 		flower_wind_coast = 0;
+		flower_wind_strength = 0;
+		flower_wind_drift = false;
 	}
+
+	// A bud opens only under Winbo's feet; side and underside bumps leave it closed.
+	if(collision.y == 1){
+		flower_fan_land(move_collision_object_instance_y);
+	}
+	player_flower_wind_visual_update();
 
 	//Status Effects
 	status_effect_system_update();
@@ -184,8 +193,6 @@ function player_gamestate_play(){
 				//Bump Happened
 				if(_bump){
 					player_flower_wind_reset(false);
-					if(collision.x != 0) flower_fan_bump(move_collision_object_instance_x);
-					if(collision.y != 0) flower_fan_bump(move_collision_object_instance_y);
 					//Trigger Bump
 					bump_triggered = true;
 				
@@ -284,4 +291,5 @@ function player_gamestate_play(){
 
 	//PFX System Execute
 	//pfx_system_execute();
+	player_jump_face_update();
 }

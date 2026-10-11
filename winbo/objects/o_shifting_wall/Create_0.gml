@@ -11,6 +11,7 @@ use_ns = false;
 shifting_wall_track_draw = true;
 shifting_wall_track_bound = noone;
 shifting_wall_horizontal = false;
+shifting_wall_pause_countdown = max(0, shifting_wall_pause_seconds);
 
 shifting_wall_path_configure = function(){
 	shifting_wall_track_bound = noone;
@@ -97,6 +98,7 @@ shifting_wall_path_configure = function(){
 	path_direction = 1;
 	path_point_current = (path_point_total > 1) ? 1 : 0;
 	path_time = 0;
+	shifting_wall_pause_countdown = max(0, shifting_wall_pause_seconds);
 	path_point_start_x = 0;
 	path_point_start_y = 0;
 	path_x = 0;
@@ -133,3 +135,40 @@ path_x = 0;
 path_y = 0;
 start_x = x;
 start_y = y;
+
+
+// Consume elapsed time across both the endpoint lock and the eased traverse.
+// This wall owns its timing; ordinary moving platforms keep their own path loop.
+shifting_wall_motion_update = function(_delta){
+	var _remaining = max(0, _delta);
+	while(_remaining > 0){
+		if(shifting_wall_pause_countdown > 0){
+			var _wait = min(_remaining, shifting_wall_pause_countdown);
+			shifting_wall_pause_countdown -= _wait;
+			_remaining -= _wait;
+			if(_remaining <= 0) break;
+		}
+
+		var _target = path_point[path_point_current];
+		var _transition = (path_direction == 1) ? _target.forward : _target.backward;
+		var _duration = max(1, _transition.time);
+		var _advance = min(_remaining, _duration - path_time);
+		path_time += _advance;
+		_remaining -= _advance;
+		path_x = script_execute(_transition.ease_x, path_point_start_x, _target.x, false, path_time, _duration);
+		path_y = script_execute(_transition.ease_y, path_point_start_y, _target.y, false, path_time, _duration);
+
+		if(path_time >= _duration){
+			path_x = _target.x;
+			path_y = _target.y;
+			path_point_start_x = path_x;
+			path_point_start_y = path_y;
+			path_point_current = 1 - path_point_current;
+			path_direction *= -1;
+			path_time = 0;
+			shifting_wall_pause_countdown = max(0, shifting_wall_pause_seconds);
+		}
+	}
+	x = start_x + path_x;
+	y = start_y + path_y;
+};

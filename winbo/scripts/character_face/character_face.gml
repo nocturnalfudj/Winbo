@@ -22,6 +22,14 @@ function character_face(_image_update){
 		}
 	}
 
+	// A player jump commits its facing until landing; enemies keep their normal steering.
+	if(is_player){
+		if(jump_face_locked && !swim_active){
+			face_horizontal = jump_face_horizontal;
+			return;
+		}
+	}
+
 	//Horizontal
 	if((face_horizontal_update_enable) && (input_move_magnitude > 0)){
 		if((input_aim_direction > 90) && (input_aim_direction < 270)){

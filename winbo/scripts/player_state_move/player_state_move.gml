@@ -4,7 +4,6 @@ function player_state_move(){
 
 	//Input
 	player_input();
-	player_flower_wind_input_update();
 	if(swim_active){
 		player_swim_move();
 		return;
@@ -137,14 +136,14 @@ function player_state_move(){
 					if((acceleration.y < 0) || (velocity.y < 0)){
 						if((sprite_current != sprite_jump) && (sprite_current != sprite_jump_sideways)){
 							var _use_sideways_jump, _target_jump_sprite;
-							_use_sideways_jump = (abs(velocity.x) > 5);
+							_use_sideways_jump = (jump_face_locked ? jump_face_sideways : (abs(velocity.x) > 5));
 							_target_jump_sprite = _use_sideways_jump ? sprite_jump_sideways : sprite_jump;
 
 							image_system_setup(_target_jump_sprite, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 						}
 						else{
 							var _should_use_sideways_jump, _current_jump_is_sideways;
-							_should_use_sideways_jump = (abs(velocity.x) > 5);
+							_should_use_sideways_jump = (jump_face_locked ? jump_face_sideways : (abs(velocity.x) > 5));
 							_current_jump_is_sideways = (sprite_current == sprite_jump_sideways);
 
 							if(_should_use_sideways_jump != _current_jump_is_sideways){
@@ -160,7 +159,7 @@ function player_state_move(){
 						else{
 							if((sprite_current != sprite_fall) && (sprite_current != sprite_fall_sideways)){
 								var _use_sideways_fall, _target_fall_sprite;
-								_use_sideways_fall = (abs(velocity.x) > 5);
+								_use_sideways_fall = (jump_face_locked ? jump_face_sideways : (abs(velocity.x) > 5));
 								_target_fall_sprite = _use_sideways_fall ? sprite_fall_sideways : sprite_fall;
 
 								if(sprite_current == sprite_float){
@@ -191,7 +190,7 @@ function player_state_move(){
 							}
 							else{
 								var _should_use_sideways_fall, _current_fall_is_sideways;
-								_should_use_sideways_fall = (abs(velocity.x) > 5);
+								_should_use_sideways_fall = (jump_face_locked ? jump_face_sideways : (abs(velocity.x) > 5));
 								_current_fall_is_sideways = (sprite_current == sprite_fall_sideways);
 
 								if(_should_use_sideways_fall != _current_fall_is_sideways){
@@ -246,7 +245,9 @@ function player_state_move(){
 		_close_enough_to_jump = move_grounded_close && (velocity.y > 0);
 		_jump_available_now = (bump_jump_count > 0) || move_grounded || _close_enough_to_jump;
 
-		if(!flower_wind_float_rearm && player_dive_spring_float_input_active() && !(_jump_pressed_now && _jump_available_now)){
+		player_jump_float_input_update(_jump_pressed_now && _jump_available_now);
+
+		if(jump_float_requested && player_jump_float_active() && !(_jump_pressed_now && _jump_available_now)){
 			if((float_countdown > 0) && (!move_grounded)){
 				if((acceleration.y >= 0) && (velocity.y >= 0)){
 					player_frolic_clear();
@@ -266,36 +267,9 @@ function player_state_move(){
 	}
 
 	#region Jump
-		if(_jump_pressed_now){
-			if(_jump_available_now){
-				player_frolic_clear();
-
-				acceleration.AddMagnitudeDirection(input_move_acceleration_jump, 90);
-				jump_hold_allow_countdown = jump_hold_allow_countdown_max;
-				move_gravity.Copy(move_gravity_rise);
-
-				if(bump_jump_count > 0){
-					bump_jump_count--;
-				}
-
-				with(o_camera){
-					if(follow_jump_dampening_enable){
-						follow_jump_dampening_factor = 0;
-					}
-				}
-
-				if(jump_smoke_fx_enable && move_grounded){
-					var _jump_smoke_sprite, _jump_smoke_xscale;
-					_jump_smoke_sprite = (input_move_magnitude > 0.1) ? spr_smoke_jump_diagonal : spr_smoke_jump_upward;
-					_jump_smoke_xscale = 1;
-
-					if(input_move_magnitude > 0.1){
-						_jump_smoke_xscale = (input_move_direction > 90 && input_move_direction < 270) ? 1 : -1;
-					}
-
-					fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_midground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT);
-				}
-			}
+		if(_jump_pressed_now && _jump_available_now){
+			player_frolic_clear();
+			character_jump();
 		}
 	#endregion
 
@@ -1322,3 +1296,57 @@ function player_frolic_end_to_walk(){
 #macro PLAYER_SECRET_IDLE_PHASE_SITDOWN 1
 #macro PLAYER_SECRET_IDLE_PHASE_INTRO 2
 #macro PLAYER_SECRET_IDLE_PHASE_LOOP 3
+
+/// Share the existing ground/coyote/bump jump impulse across move and float.
+function character_jump(){
+	player_jump_face_begin();
+	jump_float_requested = false;
+	acceleration.AddMagnitudeDirection(input_move_acceleration_jump, 90);
+	jump_hold_allow_countdown = jump_hold_allow_countdown_max;
+	move_gravity.Copy(move_gravity_rise);
+	if(bump_jump_count > 0) bump_jump_count--;
+	with(o_camera){
+		if(follow_jump_dampening_enable) follow_jump_dampening_factor = 0;
+	}
+	if(jump_smoke_fx_enable && move_grounded){
+		var _sideways = input_move_magnitude > 0.1;
+		var _sprite = _sideways ? spr_smoke_jump_diagonal : spr_smoke_jump_upward;
+		var _scale = _sideways && !((input_move_direction > 90) && (input_move_direction < 270)) ? -1 : 1;
+		fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_midground", _sprite, _scale, 1, 0, ANIMATION_FPS_DEFAULT);
+	}
+}
+
+function player_jump_face_begin(){
+	// A bounce during an existing jump does not undo the original commitment.
+	if(jump_face_locked) return;
+	jump_face_locked = true;
+	jump_face_sideways = (input_move_magnitude > 0.1) && (abs(lengthdir_x(1, input_move_direction)) > 0.1);
+	if(jump_face_sideways){
+		face_horizontal = lengthdir_x(1, input_move_direction) < 0 ? -1 : 1;
+	}
+	jump_face_horizontal = face_horizontal;
+}
+
+function player_jump_face_update(){
+	if((move_grounded && velocity.y >= 0) || swim_active || state == PlayerState.hit || state == PlayerState.death){
+		jump_face_locked = false;
+		jump_float_requested = false;
+	}
+}
+
+function player_jump_float_active(){
+	return input_current[UserControl.jump] || input_current[UserControl.float] || keyboard_check(vk_up);
+}
+
+function player_jump_float_input_update(_ground_jump){
+	if(!player_jump_float_active() || move_grounded || swim_active){
+		jump_float_requested = false;
+	}
+	var _pressed = (input_current[UserControl.jump] && !input_previous[UserControl.jump])
+		|| (input_current[UserControl.float] && !input_previous[UserControl.float])
+		|| keyboard_check_pressed(vk_up);
+	// An early second press can be held through the apex. Holding takeoff never arms float.
+	if(_pressed && !_ground_jump && !move_grounded && !swim_active){
+		jump_float_requested = true;
+	}
+}

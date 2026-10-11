@@ -120,14 +120,14 @@ event_inherited();
 
 	// Enable detection to aggro when player gets close
 	hostility_detection_enable = true;
-	hostility_detection_range = 1000; // Horizontal detection distance
-	hostility_detection_y_threshold = 1000; // Vertical detection distance
+	hostility_detection_range = 1800; // Radial detection distance across visible platforms
+	hostility_detection_y_threshold = 1200; // Include players on nearby elevated platforms
 
 	// De-aggro when player escapes range (Space Ranger uses custom deaggro logic for both X and Y)
 	deaggro_enable = false; // Disable base deaggro (only checks Y distance)
 	deaggro_timer_max = SECOND * 1.5;
-	deaggro_x_distance_threshold = 1600; // Horizontal escape distance
-	deaggro_y_distance_threshold = 1600; // Vertical escape distance
+	deaggro_x_distance_threshold = 2400; // Horizontal escape distance
+	deaggro_y_distance_threshold = 1800; // Vertical escape distance
 	deaggro_timer = 0; // Custom timer for Space Ranger
 #endregion
 

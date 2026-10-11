@@ -637,8 +637,15 @@ function player_mushroom_bounce(_mushroom){
 }
 
 /// @function player_mushroom_side_bounce
-/// @summary Preserve the red wall mushroom's original horizontal ricochet.
+/// @summary Launch away from red wall mushrooms with their stronger side impulse.
 function player_mushroom_side_bounce(_mushroom, _approach_direction = 0){
+	// End the incoming dash before ricocheting so its next tick cannot fight the spring.
+	if(state == PlayerState.dash){
+		state = PlayerState.move;
+		dash_countdown = 0;
+		velocity_retention = velocity_retention_default;
+		speed_stretch_enable = false;
+	}
 	if(state == PlayerState.dive_spring){
 		player_dive_spring_reset();
 		state = PlayerState.move;
@@ -658,7 +665,7 @@ function player_mushroom_side_bounce(_mushroom, _approach_direction = 0){
 		acceleration.y = 0;
 	}
 
-	acceleration.AddMagnitudeDirection(_mushroom.spring_acceleration * input_move_acceleration_jump * 1.2, _bounce_direction);
+	acceleration.AddMagnitudeDirection(_mushroom.spring_side_acceleration * input_move_acceleration_jump * 1.2, _bounce_direction);
 	move_gravity.Copy(move_gravity_rise);
 	dash_stamina = dash_stamina_max;
 	dash_stamina_depleted = false;

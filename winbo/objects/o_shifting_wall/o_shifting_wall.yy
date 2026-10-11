@@ -2,6 +2,7 @@
   "$GMObject":"",
   "%Name":"o_shifting_wall",
   "eventList":[
+    {"$GMEvent":"v1","%Name":"Step_1","collisionObjectId":null,"eventNum":1,"eventType":3,"isDnD":false,"name":"Step_1","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"Create_0","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"Create_0","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"Draw_0","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"Draw_0","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"Other_4","collisionObjectId":null,"eventNum":4,"eventType":7,"isDnD":false,"name":"Other_4","resourceType":"GMEvent","resourceVersion":"2.0",},
@@ -31,6 +32,7 @@
   "physicsShapePoints":[],
   "physicsStartAwake":true,
   "properties":[
+    {"$GMObjectProperty":"v2","%Name":"shifting_wall_pause_seconds","filters":[],"listItems":null,"multiselect":false,"name":"shifting_wall_pause_seconds","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"SECOND * 0.5","varType":4,},
     {"$GMObjectProperty":"v2","%Name":"shifting_wall_variant","filters":[],"listItems":null,"multiselect":false,"name":"shifting_wall_variant","rangeEnabled":true,"rangeMax":1.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"0","varType":0,},
     {"$GMObjectProperty":"v2","%Name":"shifting_wall_scale","filters":[],"listItems":null,"multiselect":false,"name":"shifting_wall_scale","rangeEnabled":true,"rangeMax":1.25,"rangeMin":0.5,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"0.8","varType":0,},
     {"$GMObjectProperty":"v2","%Name":"shifting_wall_track_group","filters":[

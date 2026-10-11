@@ -1,8 +1,15 @@
 #macro FLOWER_WIND_COAST_DECELERATION 1.1
-#macro FLOWER_WIND_JUMP_LIFT 6
+#macro FLOWER_WIND_ACCELERATION 1.5
+#macro FLOWER_WIND_RAMP_TIME (SECOND * 0.4)
+#macro FLOWER_WIND_GRAVITY_SCALE 0.3
+#macro FLOWER_WIND_FLUTTER_FADE (SECOND * 0.25)
+#macro FLOWER_WIND_FLUTTER_X 3
+#macro FLOWER_WIND_FLUTTER_Y 2
 
-/// Called by the player's confirmed solid bump, never by ordinary overlap.
-function flower_fan_bump(_solid){
+/// Player context. Called with the solid that stopped the player's downward
+/// movement. Only standing on top of a bud opens it; side and underside
+/// contact never reach this.
+function flower_fan_land(_solid){
     if(_solid == noone){
         return false;
     }
@@ -10,6 +17,9 @@ function flower_fan_bump(_solid){
         return false;
     }
     if(_solid.fan_state != FlowerFanState.bud){
+        return false;
+    }
+    if(bbox_bottom > _solid.bbox_top + 1){
         return false;
     }
     with(_solid){
@@ -60,34 +70,57 @@ function player_flower_wind_find(){
     return noone;
 }
 
-/// Player context. Smoothly approach a launch velocity along the tunnel.
+/// Player context. An ordinary airborne jump is never carried, but a wind
+/// tunnel lightens its gravity while rising and while descending.
+function player_flower_wind_drift_find(){
+    if(state != PlayerState.move || move_grounded || swim_active || air_spin_active || move_trapped){
+        return false;
+    }
+    var _px = (bbox_left + bbox_right) * 0.5;
+    var _py = (bbox_top + bbox_bottom) * 0.5;
+    var _count = instance_number(o_flower_fan);
+    for(var _i = 0; _i < _count; _i++){
+        var _fan = instance_find(o_flower_fan, _i);
+        if(flower_fan_contains(_fan, _px, _py)){
+            return true;
+        }
+    }
+    return false;
+}
+
+/// Player context. Approach the tunnel speed under an acceleration limit that
+/// builds with time in the wind, so entry is a gradual pick-up, not a jet kick.
 /// Crosswind steering remains available; the normal movement solver handles all walls.
 function player_flower_wind_apply(_fan){
     var _direction = _fan.image_angle + (_fan.image_yscale >= 0 ? 90 : 270);
     var _ux = lengthdir_x(1, _direction);
     var _uy = lengthdir_y(1, _direction);
+    var _dt = global.delta_time_factor_scaled;
     var _along = velocity.x * _ux + velocity.y * _uy;
-    var _blend = 1 - power(1 - clamp(_fan.wind_response, 0, 1), global.delta_time_factor_scaled);
-    var _change = (max(0, _fan.wind_speed) - _along) * _blend;
+    var _blend = 1 - power(1 - clamp(_fan.wind_response, 0, 1), _dt);
+    var _limit = FLOWER_WIND_ACCELERATION * flower_wind_strength * _dt;
+    var _change = clamp((max(0, _fan.wind_speed) - _along) * _blend, -_limit, _limit);
     velocity.x += _ux * _change;
     velocity.y += _uy * _change;
 }
 
 /// Player state belongs to this airtime, so neither room changes nor landings
-/// can carry a spent fan or an old launch into the next jump.
-function player_flower_wind_reset(_reset_jump = true){
+/// can carry a spent fan or an old launch into the next jump. Create also
+/// initialises the render-only flutter; gameplay resets let it fade by itself.
+function player_flower_wind_reset(_reset_render = true){
     flower_wind_source = noone;
     flower_wind_spent = noone;
-    if(_reset_jump) flower_wind_jump_used = false;
     flower_wind_direction = 90;
     flower_wind_end_x = 0;
     flower_wind_end_y = 0;
     flower_wind_coast = 0;
-    flower_wind_float_rearm = false;
-}
-
-function player_flower_wind_input_update(){
-    if(!player_dive_spring_float_input_active()) flower_wind_float_rearm = false;
+    flower_wind_strength = 0;
+    flower_wind_drift = false;
+    flower_wind_float_hold = false;
+    if(_reset_render){
+        flower_wind_flutter = 0;
+        flower_wind_flutter_time = 0;
+    }
 }
 
 function player_flower_wind_contact(_fan){
@@ -104,8 +137,8 @@ function player_flower_wind_contact(_fan){
         return;
     }
     if(flower_wind_source == noone) return;
-    // Only leaving the downwind end launches. Releasing Float or steering out
-    // of the side stops the force without giving a remote boost.
+    // Only leaving the downwind end keeps its momentum. Releasing Float or
+    // steering out of the side stops the force without giving a remote boost.
     var _px = (bbox_left + bbox_right) * 0.5;
     var _py = (bbox_top + bbox_bottom) * 0.5;
     var _past_end = (_px - flower_wind_end_x) * lengthdir_x(1, flower_wind_direction)
@@ -120,40 +153,55 @@ function player_flower_wind_contact(_fan){
         velocity.x += _ux * (_launch_speed - _along);
         velocity.y += _uy * (_launch_speed - _along);
         flower_wind_coast = SECOND * 0.6;
-        flower_wind_spent = flower_wind_source;
-        flower_wind_float_rearm = true;
     }
     flower_wind_source = noone;
 }
 
-/// A normal jump gets one small lift per airtime. Float retains its stronger
-/// launch path; ordinary wind never disables gravity or turns into a platform.
-function player_flower_wind_jump_lift(){
-    if(state != PlayerState.move || move_grounded || swim_active
-    || velocity.y >= 0 || flower_wind_jump_used || flower_wind_coast > 0) return;
-    var _px = (bbox_left + bbox_right) * 0.5;
-    var _py = (bbox_top + bbox_bottom) * 0.5;
-    var _count = instance_number(o_flower_fan);
-    for(var _i = 0; _i < _count; _i++){
-        var _fan = instance_find(o_flower_fan, _i);
-        var _direction = _fan.image_angle + (_fan.image_yscale >= 0 ? 90 : 270);
-        if(lengthdir_y(1, _direction) < -0.5 && flower_fan_contains(_fan, _px, _py)){
-            velocity.y -= FLOWER_WIND_JUMP_LIFT;
-            flower_wind_jump_used = true;
-            return;
-        }
-    }
+/// Run the usual rise/fall gravity blend, then keep only part of what it
+/// added. The gravity vectors themselves are untouched, so full weight
+/// returns as soon as Winbo is outside the tunnel.
+function player_flower_wind_drift_movement_update(){
+    var _gravity = move_gravity_enable;
+    var _acceleration_y = acceleration.y;
+    movement_gravity_update();
+    acceleration.y -= (acceleration.y - _acceleration_y) * (1 - FLOWER_WIND_GRAVITY_SCALE) * flower_wind_strength;
+    move_gravity_enable = false;
+    player_movement_update();
+    move_gravity_enable = _gravity;
+}
+
+/// Render only: a light flutter of the drawn body while wind acts on Winbo.
+/// It rides the character draw offset, so position and collision mask never
+/// move. Once faded out, the offset is left to its other owners.
+function player_flower_wind_visual_update(){
+    var _windy = (flower_wind_source != noone) || flower_wind_drift;
+    if(!_windy && flower_wind_flutter <= 0) return;
+    var _dt = global.delta_time_factor_scaled;
+    flower_wind_flutter = clamp(flower_wind_flutter + (_windy ? _dt : -_dt) / FLOWER_WIND_FLUTTER_FADE, 0, 1);
+    flower_wind_flutter_time += _dt;
+    draw_adjustment_x = flower_wind_flutter * FLOWER_WIND_FLUTTER_X
+        * (dsin(flower_wind_flutter_time * 37) * 0.65 + dsin(flower_wind_flutter_time * 61 + 40) * 0.35);
+    draw_adjustment_y = flower_wind_flutter * FLOWER_WIND_FLUTTER_Y * dsin(flower_wind_flutter_time * 29 + 115);
 }
 
 /// Preserve the launch axis through the ordinary collision solver, while
 /// retaining normal steering drag across the wind. All overrides are local.
 function player_flower_wind_movement_update(){
-    player_flower_wind_jump_lift();
+    var _dt = global.delta_time_factor_scaled;
     var _fan = player_flower_wind_find();
     player_flower_wind_contact(_fan);
+    flower_wind_drift = (_fan == noone) && player_flower_wind_drift_find();
+    // One shared build-up eases in both the carry and the lighter gravity.
+    flower_wind_strength = clamp(flower_wind_strength
+        + ((_fan != noone || flower_wind_drift) ? _dt : -_dt) / FLOWER_WIND_RAMP_TIME, 0, 1);
     var _coasting = flower_wind_coast > 0;
     if(_fan == noone && !_coasting){
-        player_movement_update();
+        if(flower_wind_drift){
+            player_flower_wind_drift_movement_update();
+        }
+        else{
+            player_movement_update();
+        }
         return;
     }
     if((state != PlayerState.move && state != PlayerState.float) || swim_active){
@@ -161,7 +209,6 @@ function player_flower_wind_movement_update(){
         player_movement_update();
         return;
     }
-    var _dt = global.delta_time_factor_scaled;
     var _ux = lengthdir_x(1, flower_wind_direction);
     var _uy = lengthdir_y(1, flower_wind_direction);
     // Keep player steering perpendicular to the launch, so holding towards a
@@ -203,7 +250,6 @@ function player_flower_wind_movement_update(){
         if(_fan != noone) flower_wind_spent = _fan;
         flower_wind_source = noone;
         flower_wind_coast = 0;
-        flower_wind_float_rearm = true;
     }
     else{
         var _along = velocity.x * _ux + velocity.y * _uy;

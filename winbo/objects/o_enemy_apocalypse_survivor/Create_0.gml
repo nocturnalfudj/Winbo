@@ -254,13 +254,13 @@ event_inherited();
 
 	// Enable detection to aggro when player gets close
 	hostility_detection_enable = true;
-	hostility_detection_range = 1000; // Horizontal detection distance
-	hostility_detection_y_threshold = 1000; // Vertical detection distance
+	hostility_detection_range = 1800; // Radial detection distance across visible platforms
+	hostility_detection_y_threshold = 1200; // Include players on nearby elevated platforms
 
 	// De-aggro tuning
 	deaggro_enable = true;
 	deaggro_timer_max = SECOND * 1.5;
-	deaggro_distance_threshold = 1600;
+	deaggro_distance_threshold = 2400;
 	deaggro_y_distance_threshold = deaggro_distance_threshold; // legacy alias (kept for compatibility)
 #endregion
 

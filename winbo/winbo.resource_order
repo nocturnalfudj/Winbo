@@ -344,6 +344,10 @@
     {"name":"States","order":1,"path":"folders/Volumes/Spawners/Parent/Scripts/States.yy",},
   ],
   "ResourceOrderSettings":[
+    {"name":"o_shifting_wall_stone","order":20,"path":"objects/o_shifting_wall_stone/o_shifting_wall_stone.yy",},
+    {"name":"o_conveyor_right_to_left","order":21,"path":"objects/o_conveyor_right_to_left/o_conveyor_right_to_left.yy",},
+    {"name":"o_conveyor_double_right_to_left","order":22,"path":"objects/o_conveyor_double_right_to_left/o_conveyor_double_right_to_left.yy",},
+    {"name":"music_tutorial","order":20,"path":"sounds/music_tutorial/music_tutorial.yy",},
     {"name":"curve_back_in_extreme","order":31,"path":"animcurves/curve_back_in_extreme/curve_back_in_extreme.yy",},
     {"name":"curve_back_in_out","order":3,"path":"animcurves/curve_back_in_out/curve_back_in_out.yy",},
     {"name":"curve_back_in","order":1,"path":"animcurves/curve_back_in/curve_back_in.yy",},

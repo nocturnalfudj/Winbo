@@ -133,6 +133,12 @@ is_player = true;
 	//Jump
 	input_move_acceleration_jump = PLAYER_INPUT_ACCELERATION_DEFAULT * 15;
 	
+	// Keep both the artwork and its facing committed to the takeoff input.
+	jump_face_locked = false;
+	jump_face_horizontal = face_horizontal;
+	jump_face_sideways = false;
+	jump_float_requested = false;
+
 	//Jump Hold
 	jump_hold_enable = true;
 	jump_hold_allow_countdown_max = SECOND * 0.2;

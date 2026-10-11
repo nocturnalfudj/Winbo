@@ -97,13 +97,13 @@ event_inherited();
 	// Hostility / detection
 	is_hostile = false;
 	hostility_detection_enable = true;
-	hostility_detection_range = 600;
-	hostility_detection_y_threshold = 200; // only aggro if player is within vertical range
+	hostility_detection_range = 1000;
+	hostility_detection_y_threshold = 400; // only aggro if player is within vertical range
 
 	// De-aggro: sheathe weapon when player is out of range for too long
 	deaggro_enable = true;
 	deaggro_timer_max = SECOND * 1.5;
-	deaggro_distance_threshold = 1200;
+	deaggro_distance_threshold = 1600;
 	deaggro_y_distance_threshold = deaggro_distance_threshold; // legacy alias (kept for compatibility)
 	
 	// Scale down (and set rest scale)

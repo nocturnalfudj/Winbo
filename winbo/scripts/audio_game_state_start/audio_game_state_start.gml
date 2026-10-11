@@ -30,6 +30,9 @@ function audio_gameplay_music_resolve(_room) {
 	var _loop_start = 0;
 
 	switch(_room){
+		case r_tutorial:
+			_music = music_tutorial;
+		break;
 		case r_game_level_0:
 			_music = music_level_test;
 			_loop_start = 3.97;

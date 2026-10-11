@@ -27,7 +27,6 @@ function player_state_float(){
 	
 	//Input
 	player_input();
-	player_flower_wind_input_update();
 	acceleration.AddMagnitudeDirection(INPUT_MOVE_ACCELERATION*input_move_magnitude,input_move_direction);
 	
 	#region Arrow Input
@@ -61,16 +60,23 @@ function player_state_float(){
 		}
 		
 		//Float
-		if((!input_current[UserControl.float]) && (!keyboard_check(vk_up))){
+		if(!player_jump_float_active()){
 			//Go to Move State
 			state = PlayerState.move;
 		}
 		
-		// Wind carries a floating player upward without cancelling float.
+		// Wind carries a floating player upward without cancelling float, and
+		// leaving the tunnel never ends it: the rise it gave plays out first.
 		var _flower_wind = player_flower_wind_find();
 		player_flower_wind_contact(_flower_wind);
-		if(_flower_wind == noone && flower_wind_coast <= 0
-		&& (flower_wind_float_rearm || (acceleration.y < 0) || (velocity.y < 0))){
+		if(_flower_wind != noone){
+			flower_wind_float_hold = true;
+		}
+		else if(flower_wind_float_hold && flower_wind_coast <= 0 && velocity.y >= 0){
+			flower_wind_float_hold = false;
+		}
+		if(_flower_wind == noone && flower_wind_coast <= 0 && !flower_wind_float_hold
+		&& ((acceleration.y < 0) || (velocity.y < 0))){
 			//Go to Move State
 			state = PlayerState.move;
 		}
@@ -101,39 +107,9 @@ function player_state_float(){
 			//OR
 			//Grounded
 			if((bump_jump_count) || (move_grounded) || (_close_enough_to_jump)){
-				//Accelerate Upward
-				acceleration.AddMagnitudeDirection(input_move_acceleration_jump,90);
-				
-				//Reset Jump Hold Countdown for Variable Jump
-				jump_hold_allow_countdown = jump_hold_allow_countdown_max;
-			
-				//Start with Rise Gravity
-				move_gravity.Copy(move_gravity_rise);	
-				
-				//Reduce Bump Jump
-				if(bump_jump_count > 0){
-					bump_jump_count--;
-				}
-				
-				// Tell camera to dampen vertical follow during jump
-					with(o_camera){
-						if(follow_jump_dampening_enable){
-							follow_jump_dampening_factor = 0;
-						}
-					}
-					
-						if(jump_smoke_fx_enable && move_grounded){
-							// Jumping smoke FX (ground puff)
-							var _jump_smoke_sprite = (input_move_magnitude > 0.1) ? spr_smoke_jump_diagonal : spr_smoke_jump_upward;
-							var _jump_smoke_xscale = 1;
-							if (input_move_magnitude > 0.1) {
-								// The diagonal jump smoke art faces left by default; flip so it matches travel direction.
-								_jump_smoke_xscale = (input_move_direction > 90 && input_move_direction < 270) ? 1 : -1;
-							}
-							fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_midground", _jump_smoke_sprite, _jump_smoke_xscale, 1, 0, ANIMATION_FPS_DEFAULT);
-						}
-					}
-				}
+				character_jump();
+			}
+		}
 	#endregion
 	
 	#region Jump Hold (Variable Jump Height)

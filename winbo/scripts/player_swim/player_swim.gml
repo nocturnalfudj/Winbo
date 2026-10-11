@@ -17,6 +17,9 @@ function player_swim_setup(){
 	swim_dash_visual = false;
 	swim_dash_direction = 0;
 	swim_direction_previous = -1;
+	swim_direction_input_previous = 0;
+	swim_dash_input_pressed = false;
+	swim_dash_input_direction = 0;
 	swim_bubble_countdown = 0;
 	swim_dash_recovery = 0;
 	swim_acceleration = 1.8;
@@ -50,6 +53,8 @@ function player_swim_contact_update(){
 	swim_direction_previous = -1;
 	swim_dash_visual = false;
 	if(swim_active){
+		jump_face_locked = false;
+		jump_float_requested = false;
 		player_look_cancel(true);
 		player_secret_idle_cancel(false);
 		player_frolic_clear();
@@ -86,6 +91,8 @@ function player_swim_contact_update(){
 /// Give an upward surface crossing a normal jump without needing a button edge
 /// or wall bump. Keep horizontal steering and any faster upward dash momentum.
 function player_swim_surface_jump(){
+	player_jump_face_begin();
+	jump_float_requested = false;
 	state = PlayerState.move;
 	move_grounded = false;
 	move_grounded_instance = noone;
@@ -171,7 +178,19 @@ function player_swim_move(){
 	// A submerged floor is still swimmable, including the dash input.
 	var _grounded = move_grounded;
 	move_grounded = false;
+	var _dash_current = input_current[UserControl.dash];
+	var _dash_previous = input_previous[UserControl.dash];
+	if(swim_dash_input_pressed && swim_dash_recovery <= 0){
+		input_move_direction = swim_dash_input_direction;
+		input_aim_direction = swim_dash_input_direction;
+		input_move_magnitude = 1;
+		input_current[UserControl.dash] = true;
+		input_previous[UserControl.dash] = false;
+	}
 	character_dash();
+	// The generated edge belongs only to swimming; keep the real button history.
+	input_current[UserControl.dash] = _dash_current;
+	input_previous[UserControl.dash] = _dash_previous;
 	move_grounded = _grounded;
 	if(state == PlayerState.dash){
 		swim_dash_direction = input_move_direction;
@@ -281,4 +300,18 @@ function player_liquid_splash(_left, _right, _top, _colour){
             clamp(_cross_x + random_range(-_spread, _spread), _left, _right), _top,
             o_pfx.pfx_type_liquid_splash, _colour, 1);
     }
+}
+
+/// D-pad/WASD/arrows and analog sticks share direction edges. A lower release
+/// threshold avoids repeated dashes from a stick resting near its deadzone.
+function player_swim_direction_input_update(_input_x, _input_y){
+	var _previous = swim_direction_input_previous;
+	var _left = _input_x < -((_previous & 1) != 0 ? 0.2 : 0.35);
+	var _right = _input_x > ((_previous & 2) != 0 ? 0.2 : 0.35);
+	var _up = _input_y < -((_previous & 4) != 0 ? 0.2 : 0.35);
+	var _down = _input_y > ((_previous & 8) != 0 ? 0.2 : 0.35);
+	var _current = (_left ? 1 : 0) | (_right ? 2 : 0) | (_up ? 4 : 0) | (_down ? 8 : 0);
+	swim_dash_input_pressed = swim_active && ((_current & ~_previous) != 0);
+	swim_dash_input_direction = point_direction(0, 0, _input_x, _input_y);
+	swim_direction_input_previous = _current;
 }
