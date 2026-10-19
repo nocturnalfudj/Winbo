@@ -602,13 +602,6 @@ function player_mushroom_collisions_post_movement(){
 /// @function player_mushroom_bounce
 /// @summary Bounce from the top of any mushroom, regardless of the current aerial state.
 function player_mushroom_bounce(_mushroom){
-	// A mushroom bounce always wins over Dive Spring: cancel the special state
-	// before applying the standard vertical spring impulse.
-	if(state == PlayerState.dive_spring){
-		player_dive_spring_reset();
-		state = PlayerState.move;
-	}
-
 	// Swept detection can catch a fast Dive Spring after the movement step has
 	// crossed the mushroom top. Resolve that penetration before launching.
 	if(bbox_bottom > _mushroom.bbox_top){
@@ -616,6 +609,23 @@ function player_mushroom_bounce(_mushroom){
 		transform_set(transform[TransformType.anchor], TransformValue.y, y, false);
 	}
 
+	player_spring_bounce(_mushroom.spring_acceleration * input_move_acceleration_jump);
+	with(_mushroom){
+		image_system_setup(sprite_active, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+	}
+}
+
+/// Shared vertical bounce for mushrooms and unopened Fan Flowers.
+function player_spring_bounce(_impulse){
+	if(state == PlayerState.dive_spring) player_dive_spring_reset();
+	state = PlayerState.move;
+	dash_countdown = 0;
+	dash_hold_allow_countdown = 0;
+	velocity_retention = velocity_retention_default;
+	speed_stretch_enable = false;
+	bump_allow = false;
+	jump_hold_allow_countdown = 0;
+	player_second_jump_reset();
 	spring_countdown = SPRING_COUNTDOWN_MAX;
 	move_grounded = false;
 	move_grounded_instance = noone;
@@ -623,17 +633,12 @@ function player_mushroom_bounce(_mushroom){
 	move_grounded_close_instance = noone;
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
-	acceleration.AddMagnitudeDirection(_mushroom.spring_acceleration * input_move_acceleration_jump, 90);
+	acceleration.AddMagnitudeDirection(_impulse, 90);
 	move_gravity.Copy(move_gravity_rise);
 	player_air_spin_start();
 	dash_stamina = dash_stamina_max;
 	dash_stamina_depleted = false;
 	float_countdown = float_countdown_max;
-
-	with(_mushroom){
-		image_system_setup(sprite_active, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
-	}
-
 }
 
 /// @function player_mushroom_side_bounce

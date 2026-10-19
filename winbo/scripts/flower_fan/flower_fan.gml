@@ -1,7 +1,7 @@
 #macro FLOWER_WIND_COAST_DECELERATION 1.1
 #macro FLOWER_WIND_ACCELERATION 1.5
 #macro FLOWER_WIND_RAMP_TIME (SECOND * 0.4)
-#macro FLOWER_WIND_GRAVITY_SCALE 0.3
+#macro FLOWER_WIND_GRAVITY_SCALE 0.15
 #macro FLOWER_WIND_FLUTTER_FADE (SECOND * 0.25)
 #macro FLOWER_WIND_FLUTTER_X 3
 #macro FLOWER_WIND_FLUTTER_Y 2
@@ -22,6 +22,11 @@ function flower_fan_land(_solid){
     if(bbox_bottom > _solid.bbox_top + 1){
         return false;
     }
+    if(swim_active || (state != PlayerState.move && state != PlayerState.float
+    && state != PlayerState.dash && state != PlayerState.dive_spring)){
+        return false;
+    }
+    player_spring_bounce(input_move_acceleration_jump * 2);
     with(_solid){
         fan_state = FlowerFanState.blooming;
         image_system_setup(spr_flower_fan_bloom, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);

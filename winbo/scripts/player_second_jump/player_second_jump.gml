@@ -25,6 +25,7 @@ function player_second_jump_hold_update(){
 
 	second_jump_hold_pending = false;
 	second_jump_active = true;
+	second_jump_landing_armed = false;
 	jump_hold_allow_countdown = 0;
 	velocity.y -= second_jump_hold_boost;
 	// Keep the shared takeoff frames already played instead of restarting the wind-up.

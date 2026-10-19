@@ -9,7 +9,7 @@ sprite_active = spr_spring_red_active;
 image_system_setup(sprite_idle,ANIMATION_FPS_DEFAULT,true,true,0,IMAGE_LOOP_FULL);
 
 spring_acceleration = 2;	//Keep the normal vertical top bounce.
-spring_side_acceleration = 8;	//Four times the original horizontal ricochet strength.
+spring_side_acceleration = 4;	//Twice the original reach, with a readable bounce arc.
 // spring_direction will be calculated dynamically based on player approach direction
 
 // Configure directional collision for horizontal spring

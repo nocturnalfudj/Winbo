@@ -91,6 +91,17 @@ function character_dash(){
 		
 			//Player
 			if(is_player){
+				// A deliberate dash commits a new facing through its rebound.
+				input_aim_direction = input_move_direction;
+				var _dash_x = lengthdir_x(1, input_move_direction);
+				if(abs(_dash_x) > 0.1){
+					face_horizontal = sign(_dash_x);
+					if(!swim_active){
+						jump_face_locked = true;
+						jump_face_sideways = true;
+						jump_face_horizontal = face_horizontal;
+					}
+				}
 				//Start Invincible
 				//status_effect_start(StatusEffect.invincible_dash,0.6*SECOND);
 				
@@ -103,7 +114,7 @@ function character_dash(){
 				//Dash Sprite
 				image_system_setup(sprite_dash,ANIMATION_FPS_DEFAULT,true,false,0,IMAGE_LOOP_FULL);
 
-				audio_player_air_dash_play();
+				if(!swim_active) audio_player_air_dash_play();
 			}
 		
 			#region Effects

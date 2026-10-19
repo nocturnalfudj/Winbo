@@ -68,9 +68,7 @@ function player_input(){
 				input_current[UserControl.attack] = false;
 			}
 			
-			player_swim_direction_input_update(
-				lengthdir_x(input_move_magnitude, input_move_direction),
-				-lengthdir_y(input_move_magnitude, input_move_direction));
+			player_swim_dash_input_update(0, 0);
 
 			//No Need to Consider Other Inputs so Exit
 			exit;
@@ -153,12 +151,11 @@ function player_input(){
 			}
 		#endregion
 		
-		// Track all four swim directions outside water too. Entering water with
-		// a key/stick already held must not manufacture a new directional press.
-		var _swim_up = input_current[UserControl.up] || keyboard_check(vk_up);
-		var _swim_down = input_current[UserControl.down] || keyboard_check(vk_down);
-		var _swim_left = input_current[UserControl.left] || keyboard_check(vk_left);
-		var _swim_right = input_current[UserControl.right] || keyboard_check(vk_right);
+		// Movement controls swim normally; only arrow edges request keyboard dashes.
+		var _swim_up = input_current[UserControl.up];
+		var _swim_down = input_current[UserControl.down];
+		var _swim_left = input_current[UserControl.left];
+		var _swim_right = input_current[UserControl.right];
 		var _axis_x = 0, _axis_y = 0;
 		if(_gamepad_thumbstick_check_enable){
 			_axis_x = input_check_gamepad(_gamepad_device, gp_axislh);
@@ -168,7 +165,14 @@ function player_input(){
 		var _swim_y = _swim_down - _swim_up;
 		if(_swim_x == 0) _swim_x = _axis_x;
 		if(_swim_y == 0) _swim_y = _axis_y;
-		player_swim_direction_input_update(_swim_x, _swim_y);
+		// Track arrows outside water too, so entering with a held key cannot dash.
+		player_swim_dash_input_update(keyboard_check(vk_right) - keyboard_check(vk_left),
+			keyboard_check(vk_down) - keyboard_check(vk_up));
+		if(swim_active){
+			// Keep the controller's explicit dash button, separate from its swim stick.
+			input_current[UserControl.dash] = _gamepad_thumbstick_check_enable
+				&& input_check_gamepad(_gamepad_device, user.control[UserControl.dash].input[Input.gamepad][InputProperty.key]);
+		}
 
 		var _input_y = swim_active ? _swim_y : 0;
 		var _input_x = swim_active ? _swim_x : input_current[UserControl.right] - input_current[UserControl.left];

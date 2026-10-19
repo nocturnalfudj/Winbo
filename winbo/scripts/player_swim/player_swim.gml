@@ -17,7 +17,7 @@ function player_swim_setup(){
 	swim_dash_visual = false;
 	swim_dash_direction = 0;
 	swim_direction_previous = -1;
-	swim_direction_input_previous = 0;
+	swim_dash_input_previous = 0;
 	swim_dash_input_pressed = false;
 	swim_dash_input_direction = 0;
 	swim_bubble_countdown = 0;
@@ -187,6 +187,7 @@ function player_swim_move(){
 		input_current[UserControl.dash] = true;
 		input_previous[UserControl.dash] = false;
 	}
+	if(swim_dash_recovery > 0) input_current[UserControl.dash] = false;
 	character_dash();
 	// The generated edge belongs only to swimming; keep the real button history.
 	input_current[UserControl.dash] = _dash_current;
@@ -302,16 +303,15 @@ function player_liquid_splash(_left, _right, _top, _colour){
     }
 }
 
-/// D-pad/WASD/arrows and analog sticks share direction edges. A lower release
-/// threshold avoids repeated dashes from a stick resting near its deadzone.
-function player_swim_direction_input_update(_input_x, _input_y){
-	var _previous = swim_direction_input_previous;
-	var _left = _input_x < -((_previous & 1) != 0 ? 0.2 : 0.35);
-	var _right = _input_x > ((_previous & 2) != 0 ? 0.2 : 0.35);
-	var _up = _input_y < -((_previous & 4) != 0 ? 0.2 : 0.35);
-	var _down = _input_y > ((_previous & 8) != 0 ? 0.2 : 0.35);
+/// Arrow-key edges are independent of WASD and controller movement.
+function player_swim_dash_input_update(_input_x, _input_y){
+	var _previous = swim_dash_input_previous;
+	var _left = _input_x < 0;
+	var _right = _input_x > 0;
+	var _up = _input_y < 0;
+	var _down = _input_y > 0;
 	var _current = (_left ? 1 : 0) | (_right ? 2 : 0) | (_up ? 4 : 0) | (_down ? 8 : 0);
 	swim_dash_input_pressed = swim_active && ((_current & ~_previous) != 0);
 	swim_dash_input_direction = point_direction(0, 0, _input_x, _input_y);
-	swim_direction_input_previous = _current;
+	swim_dash_input_previous = _current;
 }

@@ -13,10 +13,10 @@ shifting_wall_track_bound = noone;
 shifting_wall_horizontal = false;
 shifting_wall_pause_countdown = max(0, shifting_wall_pause_seconds);
 
-shifting_wall_path_configure = function(){
+shifting_wall_path_configure = function(_bind_track = true){
 	shifting_wall_track_bound = noone;
 	var _nearest_distance = 1000000000;
-	var _track_count = instance_number(o_shifting_wall_track);
+	var _track_count = _bind_track ? instance_number(o_shifting_wall_track) : 0;
 
 	for(var _i = 0; _i < _track_count; _i++){
 		var _candidate = instance_find(o_shifting_wall_track,_i);
@@ -33,6 +33,8 @@ shifting_wall_path_configure = function(){
 	shifting_wall_horizontal = false;
 	image_angle = 0;
 	var _path_seconds = shifting_wall_path_seconds;
+	var _track_sprite = (shifting_wall_variant == 1) ? spr_shifting_wall_track_stone : spr_shifting_wall_track;
+	var _travel = max(0, sprite_get_height(_track_sprite) - sprite_get_height(sprite_current) * abs(image_yscale));
 
 	with(path_point[0]){
 		x = 0;
@@ -43,7 +45,7 @@ shifting_wall_path_configure = function(){
 
 	with(path_point[1]){
 		x = 0;
-		y = -320;
+		y = -_travel;
 		forward.time = _path_seconds;
 		backward.time = _path_seconds;
 	}
@@ -107,34 +109,8 @@ shifting_wall_path_configure = function(){
 	y = start_y;
 };
 
-var _path_seconds_default = shifting_wall_path_seconds;
-
-with(path_point[0]){
-	x = 0;
-	y = 0;
-	forward.time = _path_seconds_default;
-	backward.time = _path_seconds_default;
-}
-
-with(path_point[1]){
-	x = 0;
-	y = -320;
-	forward.time = _path_seconds_default;
-	backward.time = _path_seconds_default;
-}
-
-path_point_total = array_length(path_point);
-path_loop = true;
-path_loop_swap_direction = true;
-path_direction = 1;
-path_point_current = (path_point_total > 1) ? 1 : 0;
-path_time = 0;
-path_point_start_x = 0;
-path_point_start_y = 0;
-path_x = 0;
-path_y = 0;
-start_x = x;
-start_y = y;
+// Preserve the authored position until every room track has finished Create.
+shifting_wall_path_configure(false);
 
 
 // Consume elapsed time across both the endpoint lock and the eased traverse.

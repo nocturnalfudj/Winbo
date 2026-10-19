@@ -58,7 +58,7 @@
         "GMTimeLine",
         "GMObject",
         "GMRoom",
-      ],"listItems":null,"multiselect":false,"name":"shifting_wall_path_seconds","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"SECOND * 0.35","varType":4,},
+      ],"listItems":null,"multiselect":false,"name":"shifting_wall_path_seconds","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"SECOND * 0.25","varType":4,},
   ],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",

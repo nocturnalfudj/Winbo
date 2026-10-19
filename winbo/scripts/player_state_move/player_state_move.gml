@@ -1295,7 +1295,8 @@ function character_jump(){
 	player_second_jump_reset();
 	player_jump_face_begin();
 	jump_float_requested = false;
-	second_jump_landing_armed = true;
+	// Only a normal jump can lead into a timed higher jump.
+	second_jump_landing_armed = !_second;
 	second_jump_hold_pending = move_grounded && !jump_face_sideways && abs(velocity.x) <= 0.05;
 	second_jump_active = _second;
 	if(_second){

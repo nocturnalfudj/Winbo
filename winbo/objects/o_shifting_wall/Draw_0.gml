@@ -11,7 +11,7 @@ var _track_sprite = (shifting_wall_variant == 1) ? spr_shifting_wall_track_stone
 var _wall_width = sprite_get_width(sprite_current) * abs(image_xscale);
 var _wall_height = sprite_get_height(sprite_current) * abs(image_yscale);
 var _track_x = start_x + (_wall_width - sprite_get_width(_track_sprite)) * 0.5;
-var _track_y = min(start_y, start_y + path_point[1].y) - ((sprite_get_height(_track_sprite) - (_wall_height + abs(path_point[1].y))) * 0.5);
+var _track_y = start_y + path_point[1].y;
 
 if(shifting_wall_track_draw){
 	draw_sprite_ext(_track_sprite,0,_track_x,_track_y,1,1,0,image_blend,image_alpha);
