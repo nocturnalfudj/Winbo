@@ -8,8 +8,8 @@
   "name":"o_depth_object",
   "overriddenProperties":[],
   "parent":{
-    "name":"winbo",
-    "path":"winbo.yyp",
+    "name":"Props",
+    "path":"folders/Props.yy",
   },
   "parentObjectId":null,
   "persistent":false,

@@ -11,7 +11,7 @@ function player_state_move(){
 
 	var _bump_block, _landing_block;
 	_bump_block = (sprite_current == sprite_bump) && (sprite_current_frame < (image.sprite_number - 1));
-	_landing_block = ((sprite_current == sprite_land) || (sprite_current == sprite_land_sideways)) && (sprite_current_frame < (image.sprite_number - 1));
+	_landing_block = ((sprite_current == sprite_land) || (sprite_current == sprite_land_sideways) || (sprite_current == sprite_land_second_sideways)) && (sprite_current_frame < (image.sprite_number - 1));
 
 	player_look_update(_bump_block, _landing_block);
 
@@ -109,7 +109,7 @@ function player_state_move(){
 						}
 						else{
 							if(sprite_current != sprite_walk){
-								if(sprite_current == sprite_land_sideways){
+								if(sprite_current == sprite_land_sideways || sprite_current == sprite_land_second_sideways){
 									image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
 									image_set_frame(image, 1);
 								}
@@ -134,27 +134,16 @@ function player_state_move(){
 				}
 				else{
 					if((acceleration.y < 0) || (velocity.y < 0)){
-						if((sprite_current != sprite_jump) && (sprite_current != sprite_jump_sideways)){
-							var _use_sideways_jump, _target_jump_sprite;
-							_use_sideways_jump = (jump_face_locked ? jump_face_sideways : (abs(velocity.x) > 5));
-							_target_jump_sprite = _use_sideways_jump ? sprite_jump_sideways : sprite_jump;
-
-							image_system_setup(_target_jump_sprite, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
-						}
-						else{
-							var _should_use_sideways_jump, _current_jump_is_sideways;
-							_should_use_sideways_jump = (jump_face_locked ? jump_face_sideways : (abs(velocity.x) > 5));
-							_current_jump_is_sideways = (sprite_current == sprite_jump_sideways);
-
-							if(_should_use_sideways_jump != _current_jump_is_sideways){
-								var _target_jump_sprite;
-								_target_jump_sprite = _should_use_sideways_jump ? sprite_jump_sideways : sprite_jump;
-								image_set_sprite(image, _target_jump_sprite, false);
-							}
+						var _sideways = jump_face_locked ? jump_face_sideways : abs(velocity.x) > 5;
+						var _target = second_jump_active
+							? (_sideways ? sprite_jump_second_sideways : sprite_jump_second)
+							: (_sideways ? sprite_jump_sideways : sprite_jump);
+						if(sprite_current != _target){
+							image_system_setup(_target, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 						}
 					}
 					else{
-						if(((sprite_current == sprite_jump) || (sprite_current == sprite_jump_sideways)) && (sprite_current_frame < image.sprite_number - 1)){
+						if(((sprite_current == sprite_jump) || (sprite_current == sprite_jump_sideways) || (sprite_current == sprite_jump_second) || (sprite_current == sprite_jump_second_sideways)) && (sprite_current_frame < image.sprite_number - 1)){
 						}
 						else{
 							if((sprite_current != sprite_fall) && (sprite_current != sprite_fall_sideways)){
@@ -265,6 +254,8 @@ function player_state_move(){
 	if(input_move_magnitude > 0){
 		dash_no_input_direction = input_move_direction;
 	}
+
+	player_second_jump_hold_update();
 
 	#region Jump
 		if(_jump_pressed_now && _jump_available_now){
@@ -1299,10 +1290,28 @@ function player_frolic_end_to_walk(){
 
 /// Share the existing ground/coyote/bump jump impulse across move and float.
 function character_jump(){
+	var _second = move_grounded && second_jump_landing_age >= 0
+		&& second_jump_landing_age <= second_jump_landing_window;
+	player_second_jump_reset();
 	player_jump_face_begin();
 	jump_float_requested = false;
-	acceleration.AddMagnitudeDirection(input_move_acceleration_jump, 90);
-	jump_hold_allow_countdown = jump_hold_allow_countdown_max;
+	second_jump_landing_armed = true;
+	second_jump_hold_pending = move_grounded && !jump_face_sideways && abs(velocity.x) <= 0.05;
+	second_jump_active = _second;
+	if(_second){
+		// Always the same tier; never accumulate the preceding jump's velocity.
+		velocity.y = 0;
+		acceleration.y = 0;
+		second_jump_hold_pending = false;
+	}
+	acceleration.AddMagnitudeDirection(_second ? second_jump_impulse : input_move_acceleration_jump, 90);
+	jump_hold_allow_countdown = _second ? 0 : jump_hold_allow_countdown_max;
+	state = PlayerState.move;
+	// A fresh jump interrupts landing immediately, including within the ten-frame window.
+	var _jump_sprite = _second
+		? (jump_face_sideways ? sprite_jump_second_sideways : sprite_jump_second)
+		: (jump_face_sideways ? sprite_jump_sideways : sprite_jump);
+	image_system_setup(_jump_sprite, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 	move_gravity.Copy(move_gravity_rise);
 	if(bump_jump_count > 0) bump_jump_count--;
 	with(o_camera){

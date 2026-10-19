@@ -25,6 +25,11 @@ function player_gamestate_play(){
 	#endregion
 
 	player_swim_contact_update();
+	player_second_jump_validate();
+	if(second_jump_landing_age >= 0){
+		second_jump_landing_age += _delta_time_scaled;
+		if(second_jump_landing_age > second_jump_landing_window) second_jump_landing_age = -1;
+	}
 	player_jump_face_update();
 	if(move_grounded || swim_active || state == PlayerState.hit || state == PlayerState.death){
 		player_flower_wind_reset(false);
@@ -192,6 +197,7 @@ function player_gamestate_play(){
 		
 				//Bump Happened
 				if(_bump){
+					player_second_jump_reset();
 					player_flower_wind_reset(false);
 					//Trigger Bump
 					bump_triggered = true;
@@ -281,6 +287,7 @@ function player_gamestate_play(){
 		}
 	#endregion
 	
+	player_second_jump_validate();
 	player_swim_visual_update();
 
 	//Image Update

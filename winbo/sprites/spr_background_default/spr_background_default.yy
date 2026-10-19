@@ -36,8 +36,8 @@
   "nineSlice":null,
   "origin":4,
   "parent":{
-    "name":"winbo",
-    "path":"winbo.yyp",
+    "name":"Background",
+    "path":"folders/Control/Director/Environment/Background.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

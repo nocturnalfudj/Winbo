@@ -177,9 +177,14 @@ function player_stage_entrance_finish(){
 	collision.Set(0,0);
 	move_collision_object_instance = noone;
 
-	move_grounded = place_meeting(x, y + 1, move_collision_object);
+	// Match the movement system's support probe. Collision separation can leave
+	// a fractional gap greater than one pixel; treating it as airborne here
+	// would replay the landing animation on the first normal gameplay frame.
+	var _ground = instance_place(x, y + 10, move_collision_object);
+	move_grounded = (_ground != noone) && (_ground != move_drop_through_instance);
+	if(move_grounded) move_grounded = bbox_bottom <= _ground.bbox_top + 1;
 	if(move_grounded){
-		move_grounded_instance = instance_place(x, y + 1, move_collision_object);
+		move_grounded_instance = _ground;
 		move_grounded_close = true;
 		move_grounded_close_instance = move_grounded_instance;
 	}

@@ -40,6 +40,9 @@ is_player = true;
 	sprite_jump				= spr_player_jump;			//director_get_custom_sprite(spr_player_jump);
 	sprite_jump_sideways	= spr_player_jump_sideways;	//director_get_custom_sprite(spr_player_jump_sideways);
 	sprite_air_spin			= spr_player_air_spin;
+	sprite_jump_second = spr_player_jump_second;
+	sprite_jump_second_sideways = spr_player_jump_second_sideways;
+	sprite_land_second_sideways = spr_player_land_second_sideways;
 	sprite_land				= spr_player_land;			//director_get_custom_sprite(spr_player_land);
 	sprite_land_sideways	= spr_player_land_sideways;	//director_get_custom_sprite(spr_player_land_sideways);
 	sprite_float			= spr_player_float;			//director_get_custom_sprite(spr_player_float);
@@ -138,6 +141,18 @@ is_player = true;
 	jump_face_horizontal = face_horizontal;
 	jump_face_sideways = false;
 	jump_float_requested = false;
+
+	// One higher tier: hold a stationary takeoff or jump again just after landing.
+	second_jump_hold_frames = 6;
+	second_jump_landing_window = 10;
+	second_jump_impulse = 90;
+	second_jump_hold_boost = 26;
+	second_jump_active = false;
+	second_jump_hold_pending = false;
+	second_jump_hold_time = 0;
+	second_jump_landing_age = -1;
+	second_jump_landing_armed = false;
+	second_jump_airborne_seen = false;
 
 	//Jump Hold
 	jump_hold_enable = true;

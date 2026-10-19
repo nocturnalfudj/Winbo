@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"player_second_jump",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"player_second_jump",
+  "parent":{
+    "name":"Parent",
+    "path":"folders/Actors/Characters/Player/Parent.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
