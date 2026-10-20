@@ -17,8 +17,10 @@ function player_movement_update(){
 	if(second_jump_landing_armed && !move_grounded) second_jump_airborne_seen = true;
 
 	#region Landing
+		var _was_jump_grounded = jump_grounded;
+		jump_grounded = player_jump_grounded();
 		if(!swim_active && (state == PlayerState.move || state == PlayerState.float)
-		&& move_grounded && !move_grounded_previous){
+		&& jump_grounded && !_was_jump_grounded){
 			var _land = player_second_jump_landed();
 			image_system_setup(_land, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 			velocity.x = 0;

@@ -24,6 +24,12 @@ function character_face(_image_update){
 
 	// A player jump commits its facing until landing; enemies keep their normal steering.
 	if(is_player){
+		// The swim dash artwork outlasts its impulse. New steering must not flip
+		// that rotating artwork during recovery.
+		if(swim_active && swim_dash_visual){
+			face_horizontal = swim_dash_face_horizontal;
+			return;
+		}
 		if(jump_face_locked && !swim_active){
 			face_horizontal = jump_face_horizontal;
 			return;

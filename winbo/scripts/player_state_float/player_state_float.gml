@@ -94,19 +94,10 @@ function player_state_float(){
 	#region Jump
 		//Input Pressed
 		if((input_current[UserControl.jump]) && (!input_previous[UserControl.jump])){
-			var _close_enough_to_jump;
-			_close_enough_to_jump = false;
-			if(move_grounded_close){
-				//Moving Down
-				if(velocity.y > 0){
-					_close_enough_to_jump = true;
-				}
-			}
-			
 			//Bump Jump
 			//OR
 			//Grounded
-			if((bump_jump_count) || (move_grounded) || (_close_enough_to_jump)){
+			if((bump_jump_count) || player_jump_grounded()){
 				character_jump();
 			}
 		}

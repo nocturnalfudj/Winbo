@@ -16,6 +16,7 @@ function player_swim_setup(){
 	liquid_surface_colour = c_white;
 	swim_dash_visual = false;
 	swim_dash_direction = 0;
+	swim_dash_face_horizontal = 1;
 	swim_direction_previous = -1;
 	swim_dash_input_previous = 0;
 	swim_dash_input_pressed = false;
@@ -71,6 +72,7 @@ function player_swim_contact_update(){
 		image_set_frame(image, 0);
 		if(state == PlayerState.dash){
 			swim_dash_direction = input_move_direction;
+			swim_dash_face_horizontal = face_horizontal;
 			swim_dash_visual = true;
 			swim_dash_recovery = swim_dash_recovery_max;
 			image_system_setup(spr_player_swim_dash, 15, true, false, 0, IMAGE_LOOP_FULL);
@@ -195,6 +197,7 @@ function player_swim_move(){
 	move_grounded = _grounded;
 	if(state == PlayerState.dash){
 		swim_dash_direction = input_move_direction;
+		swim_dash_face_horizontal = face_horizontal;
 		swim_dash_recovery = swim_dash_recovery_max;
 		swim_dash_visual = true;
 		speed_stretch_enable = false;
@@ -236,6 +239,7 @@ function player_swim_visual_update(){
 	if(swim_dash_visual){
 		if(sprite_current == spr_player_swim_dash && image.animate) return;
 		swim_dash_visual = false;
+		character_face(false);
 	}
 	if(sprite_current != spr_player_swim){
 		image_system_setup(spr_player_swim, 15, true, true, 5, IMAGE_LOOP_FULL);

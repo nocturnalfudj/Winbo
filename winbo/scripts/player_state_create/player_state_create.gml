@@ -195,6 +195,7 @@ function player_stage_entrance_finish(){
 	}
 	move_grounded_previous = move_grounded;
 	move_grounded_close_prev = move_grounded_close;
+	jump_grounded = player_jump_grounded();
 	stationary = true;
 	stationary_time = 0;
 

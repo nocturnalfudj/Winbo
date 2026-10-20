@@ -229,18 +229,16 @@ function player_state_move(){
 
 		// Jump and Float share W on keyboard. Work out whether this press belongs
 		// to a real ground/bounce jump before allowing Float to consume it.
-		var _jump_pressed_now, _close_enough_to_jump, _jump_available_now;
+		var _jump_pressed_now, _jump_available_now;
 		_jump_pressed_now = input_current[UserControl.jump] && !input_previous[UserControl.jump];
-		_close_enough_to_jump = move_grounded_close && (velocity.y > 0);
-		_jump_available_now = (bump_jump_count > 0) || move_grounded || _close_enough_to_jump;
+		_jump_available_now = (bump_jump_count > 0) || player_jump_grounded();
 
 		player_jump_float_input_update(_jump_pressed_now && _jump_available_now);
 
 		if(jump_float_requested && player_jump_float_active() && !(_jump_pressed_now && _jump_available_now)){
-			if((float_countdown > 0) && (!move_grounded)){
+			if((float_countdown > 0) && (!move_grounded) && !player_ground_within(float_ground_clearance)){
 				if((acceleration.y >= 0) && (velocity.y >= 0)){
 					player_frolic_clear();
-					fx_spawn_sprite_follow_once(id, 0, 0, "lyr_pfx_foreground", spr_fx_float_burst, face_horizontal, 1, 0, 18);
 					state = PlayerState.float;
 				}
 			}
@@ -1027,7 +1025,7 @@ function player_dive_spring_float_cancel_update(){
 	// still held during spring flight, and a stale hold must not interrupt the
 	// rotor arc now that cancels execute promptly.
 	if((input_current[UserControl.float] && !input_previous[UserControl.float]) || keyboard_check_pressed(vk_up)){
-		dive_spring_float_cancel_requested = true;
+		dive_spring_float_cancel_requested = !move_grounded && !player_ground_within(float_ground_clearance);
 	}
 }
 
@@ -1104,6 +1102,10 @@ function player_dive_spring_float_interrupt_try(){
 	if(!dive_spring_float_cancel_requested){
 		return false;
 	}
+	if(move_grounded || player_ground_within(float_ground_clearance)){
+		dive_spring_float_cancel_requested = false;
+		return false;
+	}
 
 	// Float never engages while rising, matching the move-state float rule: a
 	// request made during the rise is honored at the apex.
@@ -1114,7 +1116,6 @@ function player_dive_spring_float_interrupt_try(){
 	player_dive_spring_restore_movement();
 	dive_spring_phase = DiveSpringPhase.dive;
 	dive_spring_float_cancel_requested = false;
-	fx_spawn_sprite_follow_once(id, 0, 0, "lyr_pfx_foreground", spr_fx_float_burst, face_horizontal, 1, 0, 18);
 	state = PlayerState.float;
 	image_system_setup(sprite_float, ANIMATION_FPS_DEFAULT, true, true, 5, IMAGE_LOOP_FULL);
 	return true;
@@ -1288,16 +1289,17 @@ function player_frolic_end_to_walk(){
 #macro PLAYER_SECRET_IDLE_PHASE_INTRO 2
 #macro PLAYER_SECRET_IDLE_PHASE_LOOP 3
 
-/// Share the existing ground/coyote/bump jump impulse across move and float.
+/// Share ground and earned bump jumps across move and float.
 function character_jump(){
-	var _second = move_grounded && second_jump_landing_age >= 0
+	var _grounded = player_jump_grounded();
+	var _second = _grounded && second_jump_landing_age >= 0
 		&& second_jump_landing_age <= second_jump_landing_window;
 	player_second_jump_reset();
 	player_jump_face_begin();
 	jump_float_requested = false;
 	// Only a normal jump can lead into a timed higher jump.
 	second_jump_landing_armed = !_second;
-	second_jump_hold_pending = move_grounded && !jump_face_sideways && abs(velocity.x) <= 0.05;
+	second_jump_hold_pending = _grounded && !jump_face_sideways && abs(velocity.x) <= 0.05;
 	second_jump_active = _second;
 	if(_second){
 		// Always the same tier; never accumulate the preceding jump's velocity.
@@ -1348,15 +1350,40 @@ function player_jump_float_active(){
 	return input_current[UserControl.jump] || input_current[UserControl.float] || keyboard_check(vk_up);
 }
 
+/// Query support below the feet, excluding side walls and a dropped platform.
+function player_ground_within(_distance){
+	var _contacts = ds_list_create();
+	var _count = collision_rectangle_list(bbox_left, bbox_bottom, bbox_right, bbox_bottom + _distance,
+		move_collision_object, false, true, _contacts, false);
+	var _supported = false;
+	for(var _i = 0; _i < _count; _i++){
+		var _solid = _contacts[| _i];
+		if(_solid != move_drop_through_instance && bbox_bottom <= _solid.bbox_top + 1
+		&& _solid.bbox_top - bbox_bottom <= _distance){
+			_supported = true;
+			break;
+		}
+	}
+	ds_list_destroy(_contacts);
+	return _supported;
+}
+
+function player_jump_grounded(){
+	// Collision separation can leave a small gap at rest. Accept that support,
+	// but never reinterpret a press during the last falling step as a jump.
+	return move_grounded && velocity.y == 0 && player_ground_within(float_ground_clearance);
+}
+
 function player_jump_float_input_update(_ground_jump){
-	if(!player_jump_float_active() || move_grounded || swim_active){
+	var _clear = !move_grounded && !swim_active && !player_ground_within(float_ground_clearance);
+	if(!player_jump_float_active() || !_clear){
 		jump_float_requested = false;
 	}
 	var _pressed = (input_current[UserControl.jump] && !input_previous[UserControl.jump])
 		|| (input_current[UserControl.float] && !input_previous[UserControl.float])
 		|| keyboard_check_pressed(vk_up);
 	// An early second press can be held through the apex. Holding takeoff never arms float.
-	if(_pressed && !_ground_jump && !move_grounded && !swim_active){
+	if(_pressed && !_ground_jump && _clear){
 		jump_float_requested = true;
 	}
 }
