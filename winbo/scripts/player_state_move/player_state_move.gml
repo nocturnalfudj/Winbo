@@ -1371,7 +1371,7 @@ function player_ground_within(_distance){
 function player_jump_grounded(){
 	// Collision separation can leave a small gap at rest. Accept that support,
 	// but never reinterpret a press during the last falling step as a jump.
-	return move_grounded && velocity.y == 0 && player_ground_within(float_ground_clearance);
+	return move_grounded && velocity.y == 0 && player_ground_within(10);
 }
 
 function player_jump_float_input_update(_ground_jump){

@@ -142,7 +142,7 @@ is_player = true;
 	jump_face_sideways = false;
 	jump_float_requested = false;
 	jump_grounded = false;
-	float_ground_clearance = 10;
+	float_ground_clearance = 20;
 
 	// One higher tier: hold a stationary takeoff or jump again just after landing.
 	second_jump_hold_frames = 12;
