@@ -8,29 +8,18 @@
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
-  "ConfigValues":{
-    "desktop":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
-    },
-    "android":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
-    },
-    "ios":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
-    },
-  },
   "DynamicTexturePage":false,
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"3c1af748-ec0a-4dd2-818e-f82638133454","name":"3c1af748-ec0a-4dd2-818e-f82638133454","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"2b19bdd7-ddae-405e-9956-bbd8f292ab62","name":"2b19bdd7-ddae-405e-9956-bbd8f292ab62","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
   "height":1920,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"5518f205-e3e7-4b3b-a5da-f96046dbe601","blendMode":0,"displayName":"default","isLocked":false,"name":"5518f205-e3e7-4b3b-a5da-f96046dbe601","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"605aa310-946c-4f26-b9d3-1c5b08c8ca2a","blendMode":0,"displayName":"default","isLocked":false,"name":"605aa310-946c-4f26-b9d3-1c5b08c8ca2a","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_mossystone",
   "nineSlice":null,
@@ -80,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"3c1af748-ec0a-4dd2-818e-f82638133454","path":"sprites/spr_mossystone/spr_mossystone.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"034b0e97-4a5a-4610-aa72-492282d7b210","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"2b19bdd7-ddae-405e-9956-bbd8f292ab62","path":"sprites/spr_mossystone/spr_mossystone.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"f01da5d9-667a-42d0-9c64-e84eb16e3f2d","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -92,8 +81,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"game",
-    "path":"texturegroups/game",
+    "name":"Default",
+    "path":"texturegroups/Default",
   },
   "type":0,
   "VTile":false,

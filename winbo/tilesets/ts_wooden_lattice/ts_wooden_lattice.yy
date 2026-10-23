@@ -2,25 +2,19 @@
   "$GMTileSet":"v1",
   "%Name":"ts_wooden_lattice",
   "autoTileSets":[
-    {"$GMAutoTileSet":"","%Name":"wooden_lattice","closed_edge":false,"name":"wooden_lattice","resourceType":"GMAutoTileSet","resourceVersion":"2.0","tiles":[
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        0,
-      ],},
+    {"$GMAutoTileSet":"","%Name":"wooden_lattice","closed_edge":false,"name":"wooden_lattice","resourceType":"GMAutoTileSet","resourceVersion":"2.0","tiles":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0,],},
   ],
+  "ConfigValues":{
+    "android":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+    "desktop":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+    "ios":{
+      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
+    },
+  },
   "macroPageTiles":{
     "SerialiseHeight":0,
     "SerialiseWidth":0,
@@ -54,15 +48,4 @@
   "tilexoff":0,
   "tileyoff":0,
   "tile_count":16,
-  "ConfigValues":{
-    "android":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
-    },
-    "desktop":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
-    },
-    "ios":{
-      "textureGroupId":"{ \"name\":\"game\", \"path\":\"texturegroups/game\" }",
-    },
-  },
 }
