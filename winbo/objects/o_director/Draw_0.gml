@@ -127,7 +127,8 @@ if(o_master.debug_navigation_grid_enable){
 								_layer.offset_y,
 								_layer.repeat_x,
 								_layer.clamp_top,
-								_layer.clamp_bottom
+								_layer.clamp_bottom,
+								_environment_data.parallax_anchor_bottom_y
 							);
 						break;
 
@@ -144,7 +145,7 @@ if(o_master.debug_navigation_grid_enable){
 								_layer.repeat_x,
 								_layer.clamp_top,
 								_layer.clamp_bottom,
-								true
+								room_height
 							);
 						break;
 					
@@ -160,7 +161,8 @@ if(o_master.debug_navigation_grid_enable){
 								_layer.parallax_y,
 								_layer.offset_y,
 								_layer.clamp_top,
-								_layer.clamp_bottom
+								_layer.clamp_bottom,
+								_environment_data.parallax_anchor_bottom_y
 							);
 						break;
 					
@@ -182,7 +184,8 @@ if(o_master.debug_navigation_grid_enable){
 								_layer.parallax_y,
 								_layer.offset_y,
 								_layer.clamp_top,
-								_layer.clamp_bottom
+								_layer.clamp_bottom,
+								_environment_data.parallax_anchor_bottom_y
 							);
 						break;
 					
@@ -208,7 +211,8 @@ if(o_master.debug_navigation_grid_enable){
 								_layer.anchor_x,
 								_layer.anchor_sprite_x,
 								_layer.clamp_top,
-								_layer.clamp_bottom
+								_layer.clamp_bottom,
+								_environment_data.parallax_anchor_bottom_y
 							);
 						break;
 					}

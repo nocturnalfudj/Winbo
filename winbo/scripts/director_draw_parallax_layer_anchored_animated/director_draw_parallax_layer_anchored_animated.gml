@@ -15,6 +15,7 @@
 /// @param {Real} [_anchor_sprite_x=0] Sprite-space X offset to align each anchor to.
 /// @param {Bool} [_clamp_top=true] Prevent the sprite top moving below the camera top.
 /// @param {Bool} [_clamp_bottom=true] Prevent the sprite bottom moving above the camera bottom.
+/// @param {Real|Undefined} [_anchor_bottom_y=undefined] Camera bottom Y at which the canvas bottom meets the view bottom.
 function director_draw_parallax_layer_anchored_animated(
 	_base_sprite,
 	_animated_sprite,
@@ -30,7 +31,8 @@ function director_draw_parallax_layer_anchored_animated(
 	_anchor_x,
 	_anchor_sprite_x = 0,
 	_clamp_top = true,
-	_clamp_bottom = true
+	_clamp_bottom = true,
+	_anchor_bottom_y = undefined
 ) {
 	if(_loop_width <= 0){
 		return;
@@ -45,16 +47,17 @@ function director_draw_parallax_layer_anchored_animated(
 	var _sprite_height = max(sprite_get_height(_base_sprite), sprite_get_height(_animated_sprite));
 	
 	var _base_x = _camera_x * _parallax_x;
-	var _base_y = (_camera_y * _parallax_y) + _offset_y;
-	
-	if(_clamp_bottom){
-		var _bottom_limit = (_camera_y + _camera_height) - _sprite_height;
-		_base_y = max(_base_y, _bottom_limit);
-	}
-	if(_clamp_top){
-		_base_y = min(_base_y, _camera_y);
-	}
-	
+	var _base_y = director_parallax_layer_base_y(
+		_camera_y,
+		_camera_height,
+		_sprite_height,
+		_parallax_y,
+		_offset_y,
+		_anchor_bottom_y,
+		_clamp_top,
+		_clamp_bottom
+	);
+
 	var _camera_right = _camera_x + _camera_width;
 	var _loop_start = floor((_camera_x - _base_x) / _loop_width) - 1;
 	var _loop_end = ceil((_camera_right - _base_x) / _loop_width) + 1;

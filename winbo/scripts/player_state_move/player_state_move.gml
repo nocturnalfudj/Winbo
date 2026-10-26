@@ -8,6 +8,7 @@ function player_state_move(){
 		player_swim_move();
 		return;
 	}
+	player_drop_through_input_update();
 
 	var _bump_block, _landing_block;
 	_bump_block = (sprite_current == sprite_bump) && (sprite_current_frame < (image.sprite_number - 1));
@@ -283,20 +284,7 @@ function player_state_move(){
 	#endregion
 
 	#region Drop Through
-		if(move_grounded && move_grounded_instance != noone){
-			if(move_grounded_instance.drop_through_enabled){
-				if(input_current[UserControl.down]){
-					player_frolic_clear();
-
-					move_drop_through_instance = move_grounded_instance;
-					move_grounded = false;
-					move_grounded_instance = noone;
-
-					y += 10;
-					transform_set(transform[TransformType.anchor], TransformValue.y, 10, true);
-				}
-			}
-		}
+		player_drop_through_update();
 	#endregion
 
 	var _face_horizontal_prev;
@@ -322,9 +310,10 @@ function player_state_move(){
 	player_collisions();
 	var _air_spin_launch_step;
 	_air_spin_launch_step = player_air_spin_movement_begin();
+	var _movement_start_x = x, _movement_start_y = y;
 	player_flower_wind_movement_update();
 	player_air_spin_movement_end(_air_spin_launch_step);
-	player_mushroom_collisions_post_movement();
+	player_mushroom_collisions_post_movement(_movement_start_x, _movement_start_y);
 	player_landing_smoke_update();
 
 	if(move_grounded){
@@ -720,10 +709,11 @@ function player_dive_spring_state_dive(){
 
 	_gravity_enable_previous = move_gravity_enable;
 	move_gravity_enable = false;
+	var _movement_start_x = x, _movement_start_y = y;
 	player_movement_update();
 	move_gravity_enable = _gravity_enable_previous;
 	velocity.y = min(velocity.y, dive_spring_max_speed);
-	player_mushroom_collisions_post_movement();
+	player_mushroom_collisions_post_movement(_movement_start_x, _movement_start_y);
 
 	if((state != PlayerState.dive_spring) || (dive_spring_phase != DiveSpringPhase.dive)){
 		return;
@@ -909,6 +899,7 @@ function player_dive_spring_state_spring(){
 		move_gravity_factor = dive_spring_rise_gravity_factor;
 		move_gravity.Copy(move_gravity_rise);
 	}
+	var _movement_start_x = x, _movement_start_y = y;
 	player_movement_update();
 	if(_launch_impulse_this_step){
 		move_grounded_check = _move_grounded_check_previous;
@@ -916,7 +907,7 @@ function player_dive_spring_state_spring(){
 		move_grounded = false;
 		move_grounded_instance = noone;
 	}
-	player_mushroom_collisions_post_movement();
+	player_mushroom_collisions_post_movement(_movement_start_x, _movement_start_y);
 
 	if((state != PlayerState.dive_spring) || (dive_spring_phase != DiveSpringPhase.spring)){
 		return;
@@ -976,8 +967,9 @@ function player_dive_spring_state_transition(){
 	velocity_retention_aerial = power(dive_spring_velocity_retention_aerial_previous, _delta_time_scaled);
 	move_gravity_factor = 1;
 	move_gravity.Copy(move_gravity_fall);
+	var _movement_start_x = x, _movement_start_y = y;
 	player_movement_update();
-	player_mushroom_collisions_post_movement();
+	player_mushroom_collisions_post_movement(_movement_start_x, _movement_start_y);
 
 	if((state != PlayerState.dive_spring) || (dive_spring_phase != DiveSpringPhase.transition)){
 		return;
@@ -1369,9 +1361,41 @@ function player_ground_within(_distance){
 }
 
 function player_jump_grounded(){
-	// Collision separation can leave a small gap at rest. Accept that support,
-	// but never reinterpret a press during the last falling step as a jump.
-	return move_grounded && velocity.y == 0 && player_ground_within(10);
+	if(!move_grounded || velocity.y != 0) return false;
+	// After movement, the solved feet already touch the current surface.
+	// Prefer that contact so platform displacement is never applied twice.
+	if(movement_ground_support_at(x, y, 2) != noone) return true;
+	// Moving platforms advance in Begin Step, before this frame's jump input.
+	// Until the solver carries the rider, test the same known support at the
+	// carried position. A nearby unrelated platform cannot grant a ground jump.
+	if(move_grounded_instance == noone) return false;
+	var _support = move_grounded_instance;
+	var _carry_x = _support.x - _support.xprevious;
+	var _carry_y = _support.y - _support.yprevious;
+	return movement_ground_support_at(x + _carry_x, y + _carry_y, 2) == _support;
+}
+
+function player_drop_through_available(){
+	return move_grounded && move_grounded_instance != noone
+		&& move_grounded_instance.drop_through_enabled;
+}
+
+function player_drop_through_input_update(){
+	// Read the keyboard edge before Look; controller Down already comes from player_input.
+	if(player_drop_through_available() && player_look_keyboard_enabled() && keyboard_check_pressed(vk_down)){
+		input_current[UserControl.down] = true;
+	}
+}
+
+function player_drop_through_update(){
+	if(!input_current[UserControl.down] || !player_drop_through_available()) return false;
+	player_frolic_clear();
+	move_drop_through_instance = move_grounded_instance;
+	move_grounded = false;
+	move_grounded_instance = noone;
+	y += 10;
+	transform_set(transform[TransformType.anchor], TransformValue.y, 10, true);
+	return true;
 }
 
 function player_jump_float_input_update(_ground_jump){

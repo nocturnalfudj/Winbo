@@ -1,6 +1,13 @@
 // Inherit the parent event
 event_inherited();
 
+if(liquid_geometry_left != bbox_left || liquid_geometry_top != bbox_top
+|| liquid_geometry_right != bbox_right || liquid_geometry_bottom != bbox_bottom
+|| liquid_geometry_count != instance_number(o_volume_liquid)) volume_liquid_body_rebuild();
+
+// One simulation and composite for the whole connected body.
+if(liquid_body.owner != id) exit;
+
 #region Camera Visible
 	// Camera frustum culling - skip rendering if completely off-screen
 	var _buffer = camera_visible_buffer; // Account for wave effects extending beyond bbox
@@ -11,16 +18,16 @@ event_inherited();
 		_cam_start_y = start_y;
 		_cam_end_y = end_y;
 	}
-	if (bbox_right + _buffer < _cam_start_x || 
-	    bbox_left - _buffer > _cam_end_x ||
-	    bbox_bottom + _buffer < _cam_start_y || 
-	    bbox_top - _buffer > _cam_end_y) {
+	if (liquid_body.right + _buffer < _cam_start_x ||
+	    liquid_body.left - _buffer > _cam_end_x ||
+	    liquid_body.bottom + _buffer < _cam_start_y ||
+	    liquid_body.top - _buffer > _cam_end_y) {
 	    camera_visible = false;
 	}
 	else{
 		camera_visible = true;
 	}
-	
+
 	if(!camera_visible)
 		exit;
 #endregion
@@ -35,34 +42,19 @@ texture_y += texture_y_speed;
 // Advance wave phase
 wave_phase += wave_speed;
 
-// Rebuild arrays on width/segment change
+// Exposed surface spans share one simulation across authoring seams.
 if(wave_sim_enable){
-	var _width_px;
-	_width_px = abs(bbox_right - bbox_left);
-	if((_width_px != wave_last_width_px) || (wave_dx <= 0)){
-		wave_width_px = _width_px;
-		wave_segments = max(8, floor(wave_width_px / wave_segment_px));
-		wave_dx = wave_width_px / wave_segments;
-		wave_y = array_create(wave_segments + 1, 0);
-		wave_v = array_create(wave_segments + 1, 0);
-		wave_last_width_px = _width_px;
+	for(var _si = 0; _si < array_length(liquid_body.surfaces); _si++){
+		var _s = liquid_body.surfaces[_si];
+		for(var _i = 1; _i < _s.segments; _i++){
+			_s.velocity[_i] += wave_tension * (_s.displacement[_i - 1]
+				- 2 * _s.displacement[_i] + _s.displacement[_i + 1]);
+		}
+		for(var _i = 0; _i <= _s.segments; _i++){
+			_s.velocity[_i] = clamp(_s.velocity[_i] * wave_damping, -wave_vel_max, wave_vel_max);
+			_s.displacement[_i] += _s.velocity[_i];
+		}
+		_s.displacement[0] = 0; _s.velocity[0] = 0;
+		_s.displacement[_s.segments] = 0; _s.velocity[_s.segments] = 0;
 	}
-
-	// Stable Laplacian-based tension update with damping
-	var _accel;
-	for(var i=1; i<wave_segments; i++){
-		_accel = wave_tension * (wave_y[i-1] - 2*wave_y[i] + wave_y[i+1]);
-		wave_v[i] += _accel;
-	}
-
-	// Damping, clamp velocity, integrate displacement
-	for(var i=0; i<=wave_segments; i++){
-		wave_v[i] *= wave_damping;
-		wave_v[i] = clamp(wave_v[i], -wave_vel_max, wave_vel_max);
-		wave_y[i] += wave_v[i];
-	}
-
-	// Pin endpoints (edges cannot move)
-	wave_y[0] = 0; wave_v[0] = 0;
-	wave_y[wave_segments] = 0; wave_v[wave_segments] = 0;
 }

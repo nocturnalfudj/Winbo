@@ -17,10 +17,7 @@ fx_follow_target = noone;
 fx_follow_offset_x = 0;
 fx_follow_offset_y = 0;
 fx_liquid_clip_enable = false;
-fx_liquid_clip_left = 0;
-fx_liquid_clip_top = 0;
-fx_liquid_clip_right = 0;
-fx_liquid_clip_bottom = 0;
+fx_liquid_clip_cells = [];
 fx_liquid_clip_uniform = shader_get_uniform(sh_fx_liquid_clip, "u_liquid_bounds");
 
 _fx_started = false;

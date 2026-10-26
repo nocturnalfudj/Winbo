@@ -6,16 +6,20 @@ var _desired_angle = neutral_angle;
 var _camera = instance_find(o_camera, 0);
 var _on_screen = false;
 if(_camera != noone){
-    _on_screen = point_in_rectangle(x, y, _camera.start_x, _camera.start_y, _camera.end_x, _camera.end_y);
+    _on_screen = rectangle_in_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom,
+        _camera.start_x, _camera.start_y, _camera.end_x, _camera.end_y) != 0;
 }
 var _player = instance_nearest(x, y, o_player);
 if(_on_screen && _player != noone && _player.target_can_be_targeted[TargetType.attack]){
     var _tx = (_player.bbox_left + _player.bbox_right) * 0.5;
     var _ty = (_player.bbox_top + _player.bbox_bottom) * 0.5;
     var _direction = point_direction(x, y, _tx, _ty);
+    var _sight_mx = x + lengthdir_x(muzzle_distance * abs(image_yscale), _direction);
+    var _sight_my = y + lengthdir_y(muzzle_distance * abs(image_yscale), _direction);
     if(point_distance(x, y, _tx, _ty) <= detection_range
     && abs(angle_difference(_direction, neutral_angle)) <= aim_half_arc
-    && collision_line(x, y, _tx, _ty, o_solid, false, true) == noone){
+    && turret_barrel_clear(_sight_mx, _sight_my)
+    && collision_line(_sight_mx, _sight_my, _tx, _ty, o_solid, false, true) == noone){
         target_instance = _player;
         _desired_angle = _direction;
     }
@@ -44,7 +48,8 @@ if(fire_countdown > 0 || abs(angle_difference(_desired_angle, aim_angle)) > 2) e
 var _muzzle_distance = muzzle_distance * abs(image_yscale);
 var _mx = x + lengthdir_x(_muzzle_distance, aim_angle);
 var _my = y + lengthdir_y(_muzzle_distance, aim_angle);
-if(collision_line(x, y, _mx, _my, o_solid, false, true) != noone) exit;
+if(!turret_barrel_clear(_mx, _my)
+|| collision_line(_mx, _my, _tx, _ty, o_solid, false, true) != noone) exit;
 for(var _i = -1; _i <= 1; _i++){
     var _bullet = instance_create_layer(_mx, _my, "lyr_player", o_bullet);
     _bullet.team = team;

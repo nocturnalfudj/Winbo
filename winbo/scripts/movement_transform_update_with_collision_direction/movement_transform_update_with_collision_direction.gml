@@ -15,19 +15,18 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
     var _displacement_x = (velocity.x + acceleration.x * _acceleration_multiplier) * _delta_time;
     var _displacement_y = (velocity.y + acceleration.y * _acceleration_multiplier) * _delta_time;
 
+    // Platforms advance before this solver. Keep last-frame foot contact so a
+    // new rider caught from below is resolved at the actual rising top.
+    var _feet_before_movement = bbox_bottom;
+    var _was_grounded = move_grounded;
+    var _landed_on_rising_platform = false;
+
     // Grounded Movement
     var _grounded_movement_x = 0;
     var _grounded_movement_y = 0;
     if(move_grounded && move_grounded_instance != noone){
         _grounded_movement_x = move_grounded_instance.x - move_grounded_instance.xprevious;
         _grounded_movement_y = move_grounded_instance.y - move_grounded_instance.yprevious;
-        // Resolve belt travel through the same wall/edge collision sweep as input.
-        // A jump leaves the surface immediately and receives no airborne carrying.
-        if(_displacement_y >= 0
-        && bbox_bottom <= move_grounded_instance.bbox_top + 1
-        && place_meeting(x, y + 2, move_grounded_instance)){
-            _displacement_x += move_grounded_instance.surface_speed_x * _delta_time;
-        }
     }
 
     // Get Old X & Y
@@ -56,6 +55,15 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
         // Get Old Coordinate Values
         _x_old = x;
         _y_old = y;
+    }
+
+    // Use the surface reached by this step, rather than last frame's ground.
+    // The same foot-contact test drives grounding below, including flush seams.
+    if(move_grounded && _displacement_y >= 0){
+        var _surface_support = movement_ground_support_at(x + _displacement_x, y, 2);
+        if(_surface_support != noone){
+            _displacement_x += _surface_support.surface_speed_x * _delta_time;
+        }
     }
 
     // Initialize collision variables
@@ -319,10 +327,10 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
         transform_set(_transform, TransformValue.x, _x_old, false);
         transform_set(_transform, TransformValue.y, _y_old, false);
     }
-	else{
-        x = _x_old;
-        y = _y_old;
-    }
+    // Contact queries must see the solved position now, before the later
+    // transform-system update. Otherwise seams and landings use last frame's feet.
+    x = _x_old;
+    y = _y_old;
 
     // Overlap resolution: If we're inside a solid (not grounded on it), push out
     if(move_collision_object != noone){
@@ -337,8 +345,30 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
                 ceil(max(abs(_platform_dx),abs(_platform_dy))) + 2
             );
             
-            // If platform is actively moving, move player with it first
-            if(abs(_platform_dx) > 0.1 || abs(_platform_dy) > 0.1){
+            var _landing_offset = _overlap.bbox_top - 1 - bbox_bottom;
+            var _rising_top_contact = move_grounded_check && !_was_grounded
+                && _platform_dy < 0 && _displacement_y > _platform_dy
+                && _feet_before_movement <= _overlap.bbox_top - _platform_dy
+                && (_overlap.collision_enable_y_in || _overlap.collision_enable_y_down)
+                && place_meeting(x, y + _landing_offset + 2, _overlap);
+
+            if(_rising_top_contact){
+                // This was airborne contact, not a rider at the start of the
+                // platform's travel. Copying its whole delta overshoots the
+                // surface and leaves an artificial gap after the collision.
+                y += _landing_offset;
+                if(_use_transform_anchor)
+                    transform_set(_transform, TransformValue.y, _landing_offset, true);
+                velocity.y = 0;
+                acceleration.y = 0;
+                collision.y = 1;
+                move_collision_object_instance = _overlap;
+                move_collision_object_instance_y = _overlap;
+                _collision = true;
+                _landed_on_rising_platform = true;
+            }
+            // Existing side/underside pushes retain their directional rules.
+            else if(abs(_platform_dx) > 0.1 || abs(_platform_dy) > 0.1){
                 // Check horizontal platform movement collision enable
                 var _horizontal_collision_allowed = false;
                 if(abs(_platform_dx) > 0.1){
@@ -490,49 +520,21 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
     // Handle other collisions (e.g., grounded, trapped)
     // Grounded Check
     if(move_grounded_check){
-		var _ground_probe_instance_is_below;
-		_ground_probe_instance_is_below = false;
-		
-        var _ground_probe_instance;
-		_ground_probe_instance = instance_place(x, y + 10, move_collision_object);
-		
-		if((_ground_probe_instance != noone) && (_ground_probe_instance != move_drop_through_instance)){
-			var _ground_probe_instance_is_below;
-			_ground_probe_instance_is_below = false;
-			
-			var _platform_bbox_top = 0;
-			var _distance_from_platform = 0;
-				
-			with(_ground_probe_instance){
-				_ground_probe_instance_is_below = (other.bbox_bottom <= bbox_top + 1);
-				_platform_bbox_top = bbox_top;
-				_distance_from_platform = other.bbox_bottom - bbox_top;
-			}
-			
-			if(_ground_probe_instance_is_below){
-				var _was_grounded = move_grounded;
-				var _prev_instance = move_grounded_instance;
-				
-				move_grounded = true;
-				move_grounded_instance = _ground_probe_instance;
-			}
-			else{
-				var _was_grounded = move_grounded;
-				var _prev_instance = move_grounded_instance;
-				
-				move_grounded = false;
-				move_grounded_instance = noone;
-			}
-		}
-		else{
-			var _was_grounded = move_grounded;
-			var _prev_instance = move_grounded_instance;
-			
-			move_grounded = false;
-			move_grounded_instance = noone;
-		}
-		
-		//sdm("_ground_probe_instance_is_below: " + string(_ground_probe_instance_is_below));
+        // A nearby surface is not a landing. Only accept contact while falling
+        // or resting, and settle residual falling velocity through the normal
+        // collision integration so moving-platform landings can jump again.
+        var _ground_support = (_displacement_y >= 0 || _landed_on_rising_platform)
+            ? movement_ground_support_at(x, y, 2) : noone;
+        move_grounded = _ground_support != noone;
+        move_grounded_instance = _ground_support;
+        if(move_grounded){
+            collision.y = 1;
+            _collision = true;
+            // Overlap resolution may have copied an upward platform velocity.
+            // Carry is positional; a landed rider has no vertical self-motion.
+            velocity.y = 0;
+            acceleration.y = 0;
+        }
     }
 	//sdm("move_grounded: " + string(move_grounded));
 	
@@ -582,4 +584,50 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
 
     // Return collision status
     return _collision;
+}
+
+/// Find actual support under the projected feet. Mask-test every candidate,
+/// exclude side walls and dropped/one-way undersides, then choose the nearest
+/// top. A touching belt takes traction immediately; ties use foot overlap.
+function movement_ground_support_at(_x, _y, _distance){
+    if(move_collision_object == noone) return noone;
+
+    // Bounds are quantized by the collision mask. Translating today's bbox
+    // by fractional carry can reject a genuine two-pixel projected contact.
+    var _restore_x = x, _restore_y = y;
+    x = _x;
+    y = _y;
+    var _contacts = ds_list_create();
+    var _count = instance_place_list(x, y + _distance, move_collision_object, _contacts, false);
+    var _bottom = bbox_bottom;
+    var _left = bbox_left;
+    var _right = bbox_right;
+    x = _restore_x;
+    y = _restore_y;
+    var _support = noone;
+    var _nearest = _distance + 1;
+    var _widest = -1;
+    var _surface_moving = false;
+
+    for(var _i = 0; _i < _count; _i++){
+        var _solid = _contacts[| _i];
+        if(_solid == move_drop_through_instance) continue;
+        if(!_solid.collision_enable_y_in && !_solid.collision_enable_y_down) continue;
+
+        var _gap = _solid.bbox_top - _bottom;
+        if(_gap < 0 || _gap > _distance) continue;
+
+        var _overlap = min(_right, _solid.bbox_right) - max(_left, _solid.bbox_left) + 1;
+        var _moving = _solid.surface_speed_x != 0;
+        if(_gap < _nearest || (_gap == _nearest
+        && ((_moving && !_surface_moving) || (_moving == _surface_moving && _overlap > _widest)))){
+            _support = _solid;
+            _nearest = _gap;
+            _widest = _overlap;
+            _surface_moving = _moving;
+        }
+    }
+
+    ds_list_destroy(_contacts);
+    return _support;
 }

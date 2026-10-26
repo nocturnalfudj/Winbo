@@ -375,32 +375,12 @@ function player_collisions(){
 			#endregion
 				
 		#region Liquids
-			//Default to Gravity Factor of 1
 			move_gravity_factor = 1;
-					
-			//Previous
-			var _liquid_collision_instance_previous;
-			_liquid_collision_instance_previous = liquid_collision_instance;
-					
-			//Update Gravity Factor Whilst In Liquid
-			var _liquid_collision_instance;
-			_liquid_collision_instance = instance_position(x,y+height/2,o_volume_liquid);
-			with(_liquid_collision_instance){
-				other.move_gravity_factor = gravity_factor;
-						
-				//New Liquid Collision
-				if(_liquid_collision_instance_previous != _liquid_collision_instance){
-					liquid_impulse(other.x - other.width/4,other.y,3,128,true);
-				}
-			}
-			liquid_collision_instance = _liquid_collision_instance;
-					
-			//Leaving a Liquid
-			if((_liquid_collision_instance_previous != noone) && (liquid_collision_instance == noone)){
-				with(_liquid_collision_instance_previous){
-					liquid_impulse(other.x - other.width/4,other.y,3,128,false);
-				}
-			}
+			liquid_collision_instance = liquid_volume_at(x, y + height / 2);
+			if(liquid_collision_instance != noone)
+				move_gravity_factor = liquid_collision_instance.gravity_factor;
+			// Surface crossings own impulses; changing authoring rectangles
+			// underwater is neither an entry nor an exit.
 		#endregion
 	#endregion
 			
@@ -424,25 +404,14 @@ function player_collisions(){
 }
 
 /// @function player_mushroom_collisions_post_movement
-/// @summary Resolve mushroom contacts against the movement system's updated anchor transform.
-function player_mushroom_collisions_post_movement(){
+/// @summary Resolve mushroom contacts swept from the position before this movement step.
+function player_mushroom_collisions_post_movement(_movement_start_x, _movement_start_y){
 	var _spring_sweep_x, _spring_sweep_y;
-	var _movement_transform, _position_x, _position_y;
-	_movement_transform = transform[TransformType.anchor];
-	_position_x = _movement_transform.value[TransformValue.x].current;
-	_position_y = _movement_transform.value[TransformValue.y].current;
-	_spring_sweep_x = _position_x - x;
-	_spring_sweep_y = _position_y - y;
+	_spring_sweep_x = x - _movement_start_x;
+	_spring_sweep_y = y - _movement_start_y;
 	if((_spring_sweep_x == 0) && (_spring_sweep_y == 0)){
 		return;
 	}
-
-	// Movement writes the anchor transform first; the normal transform-system
-	// pass does not copy it back to x/y until later in the player Step event.
-	// Synchronize now so bbox values and the contact resolution use the actual
-	// post-movement position.
-	x = _position_x;
-	y = _position_y;
 
 	if(spring_countdown > 0){
 		return;

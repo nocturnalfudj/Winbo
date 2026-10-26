@@ -40,15 +40,3 @@
 		break;
 	}
 #endregion
-
-#region Gameplay Music Loop Maintenance
-	if (global.game_state != GameState.pause && music_snd_id_game != noone && audio_is_playing(music_snd_id_game) && music_game_loop_start > 0) {
-		var _track_length = audio_sound_length(music_game);
-		var _track_position = audio_sound_get_track_position(music_snd_id_game);
-		
-		// Loop back when near the end
-		if (_track_position >= _track_length - 0.1) {
-			audio_sound_set_track_position(music_snd_id_game, music_game_loop_start);
-		}
-	}
-#endregion

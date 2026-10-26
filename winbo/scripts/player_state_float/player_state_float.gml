@@ -179,9 +179,10 @@ function player_state_float(){
 	//Movement Update
 	var _air_spin_launch_step;
 	_air_spin_launch_step = player_air_spin_movement_begin();
+	var _movement_start_x = x, _movement_start_y = y;
 	player_flower_wind_movement_update();
 	player_air_spin_movement_end(_air_spin_launch_step);
-	player_mushroom_collisions_post_movement();
+	player_mushroom_collisions_post_movement(_movement_start_x, _movement_start_y);
 	player_landing_smoke_update();
 
 	if(move_grounded){

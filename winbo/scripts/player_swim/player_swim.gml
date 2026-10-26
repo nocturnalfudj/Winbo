@@ -4,16 +4,8 @@ function player_swim_setup(){
 	swim_active = false;
 	swim_previous_x = x;
 	swim_previous_y = y;
-	swim_surface_left = 0;
-	swim_surface_right = 0;
-	swim_surface_top = 0;
-	liquid_surface_previous = noone;
 	liquid_surface_previous_x = x;
 	liquid_surface_previous_y = bbox_bottom;
-	liquid_surface_left = 0;
-	liquid_surface_right = 0;
-	liquid_surface_top = 0;
-	liquid_surface_colour = c_white;
 	swim_dash_visual = false;
 	swim_dash_direction = 0;
 	swim_dash_face_horizontal = 1;
@@ -32,24 +24,16 @@ function player_swim_setup(){
 function player_swim_contact_update(){
 	var _can_swim = state == PlayerState.move || state == PlayerState.dash
 		|| state == PlayerState.float || state == PlayerState.dive_spring;
-	var _liquid = instance_position(x, y, o_volume_liquid);
-	player_liquid_surface_crossing_update(instance_position(x, bbox_bottom, o_volume_liquid));
+	var _liquid = liquid_volume_at(x, y);
+	player_liquid_surface_crossing_update();
 	var _submerged = _can_swim && (_liquid != noone);
-	var _surface_jump = false;
-	if(swim_active && _can_swim && _liquid == noone
-	&& swim_previous_y >= swim_surface_top && y < swim_surface_top){
-		var _cross_fraction = (swim_surface_top - swim_previous_y) / (y - swim_previous_y);
-		var _cross_x = lerp(swim_previous_x, x, _cross_fraction);
-		_surface_jump = _cross_x >= swim_surface_left && _cross_x <= swim_surface_right;
-	}
-	if(_submerged){
-		swim_surface_left = _liquid.bbox_left;
-		swim_surface_right = _liquid.bbox_right;
-		swim_surface_top = _liquid.bbox_top;
-	}
+	var _surface_jump = swim_active && _can_swim && _liquid == noone
+		&& player_liquid_surface_find(swim_previous_x, swim_previous_y, x, y, true) != undefined;
+	var _continuous = _submerged && swim_active
+		&& liquid_segment_submerged(_liquid.liquid_body, swim_previous_x, swim_previous_y, x, y);
 	swim_previous_x = x;
 	swim_previous_y = y;
-	if(_submerged == swim_active) return;
+	if(_submerged == swim_active && (!_submerged || _continuous)) return;
 	swim_active = _submerged;
 	swim_direction_previous = -1;
 	swim_dash_visual = false;
@@ -123,7 +107,8 @@ function player_swim_bubbles(_fast, _direction, _entry = false){
 	// Slow artwork ascends; fast artwork trails left of its right-hand origin.
 	var _angle = _fast ? _direction : _direction + 90;
 	if(_entry){
-		_py = bbox_top;
+		// Bottom-origin artwork rises through the submerged part of the body.
+		_py = bbox_bottom;
 		_angle = 0;
 	}
 	else{
@@ -131,7 +116,7 @@ function player_swim_bubbles(_fast, _direction, _entry = false){
 		_py -= lengthdir_y(height * 0.3, _direction);
 	}
 	var _fx = fx_spawn_sprite_once(_px, _py, "lyr_pfx_foreground", _sprite, _scale, _scale, _angle, 15);
-	liquid_bubbles_clip(_fx, instance_position(x, y, o_volume_liquid));
+	liquid_bubbles_clip(_fx, liquid_volume_at(x, y));
 }
 
 function player_swim_tick(){
@@ -252,59 +237,65 @@ function liquid_bubbles_update(){
 	ambient_bubbles_countdown -= global.delta_time_factor_scaled;
 	if(ambient_bubbles_countdown > 0) return;
 	ambient_bubbles_countdown = random_range(SECOND * 0.6, SECOND * 1.4);
+	// Sample the actual union rather than the body's enclosing rectangle.
+	var _cell = liquid_body.cells[irandom(array_length(liquid_body.cells) - 1)];
 	var _scale = random_range(0.75, 1.25);
-	var _margin = min(90, (bbox_bottom - bbox_top) * 0.25);
-	var _fx = fx_spawn_sprite_once(random_range(bbox_left, bbox_right), random_range(bbox_top + _margin, bbox_bottom),
+	var _margin = min(90, (_cell.bottom - _cell.top) * 0.25);
+	var _fx = fx_spawn_sprite_once(random_range(_cell.left, _cell.right),
+		random_range(_cell.top + _margin, _cell.bottom),
 		"lyr_pfx_foreground", spr_fx_bubbles_slow, _scale, _scale, 0, 15, 0.5);
 	liquid_bubbles_clip(_fx, id);
 }
 
-// Snapshot the source volume so bubbles never spill above the surface or
-// dereference a liquid instance after a room transition.
+// Disjoint scalar-only cells survive room changes without retaining instances.
+// A bubble can cross any internal seam while staying clipped to the wet union.
 function liquid_bubbles_clip(_fx, _liquid){
 	if(_liquid == noone) return;
 	_fx.fx_liquid_clip_enable = true;
-	_fx.fx_liquid_clip_left = _liquid.bbox_left;
-	_fx.fx_liquid_clip_top = _liquid.bbox_top;
-	_fx.fx_liquid_clip_right = _liquid.bbox_right;
-	_fx.fx_liquid_clip_bottom = _liquid.bbox_bottom;
+	_fx.fx_liquid_clip_cells = _liquid.liquid_body.cells;
 }
 
-/// Surface crossing is geometric, independent of hit/swim states, so changing
-/// state underwater cannot spawn repeated splashes. Snapshot bounds for exits.
-function player_liquid_surface_crossing_update(_liquid){
-    var _enter = _liquid != noone && _liquid != liquid_surface_previous;
-    var _exit = liquid_surface_previous != noone && _liquid != liquid_surface_previous;
-    if(_exit && liquid_surface_previous_y >= liquid_surface_top && bbox_bottom < liquid_surface_top){
-        player_liquid_splash(liquid_surface_left, liquid_surface_right,
-            liquid_surface_top, liquid_surface_colour);
-    }
-    if(_liquid != noone){
-        liquid_surface_left = _liquid.bbox_left;
-        liquid_surface_right = _liquid.bbox_right;
-        liquid_surface_top = _liquid.bbox_top;
-        liquid_surface_colour = _liquid.splash_colour;
-        if(_enter && liquid_surface_previous_y < liquid_surface_top && bbox_bottom >= liquid_surface_top){
-            player_liquid_splash(liquid_surface_left, liquid_surface_right,
-                liquid_surface_top, liquid_surface_colour);
-        }
-    }
-    liquid_surface_previous = _liquid;
-    liquid_surface_previous_x = x;
-    liquid_surface_previous_y = bbox_bottom;
+function player_liquid_surface_find(_x0, _y0, _x1, _y1, _up){
+	var _result = undefined, _distance = infinity;
+	for(var _i = 0; _i < instance_number(o_volume_liquid); _i++){
+		var _v = instance_find(o_volume_liquid, _i);
+		if(_v.liquid_body.owner != _v) continue;
+		var _crossing = liquid_surface_crossing(_v.liquid_body, _x0, _y0, _x1, _y1, _up);
+		if(_crossing == undefined) continue;
+		var _d = abs(_crossing.surface.top - _y0);
+		if(_d < _distance){
+			_distance = _d;
+			_result = _crossing;
+		}
+	}
+	return _result;
 }
 
-function player_liquid_splash(_left, _right, _top, _colour){
-    var _cross_fraction = (_top - liquid_surface_previous_y) / (bbox_bottom - liquid_surface_previous_y);
-    var _cross_x = lerp(liquid_surface_previous_x, x, clamp(_cross_fraction, 0, 1));
-    if(_cross_x < _left || _cross_x > _right) return;
-    var _spread = (bbox_right - bbox_left) * 0.45;
-    var _count = irandom_range(12, 18);
-    for(var _i = 0; _i < _count; _i++){
-        part_particles_create_colour(o_pfx.part_system_foreground,
-            clamp(_cross_x + random_range(-_spread, _spread), _left, _right), _top,
-            o_pfx.pfx_type_liquid_splash, _colour, 1);
-    }
+/// Geometry owns effects, independent of state or which rectangle contains the
+/// player. Side crossings and fully submerged seams have no exposed top to hit.
+function player_liquid_surface_crossing_update(){
+	var _up = bbox_bottom < liquid_surface_previous_y;
+	var _crossing = player_liquid_surface_find(liquid_surface_previous_x,
+		liquid_surface_previous_y, x, bbox_bottom, _up);
+	if(_crossing != undefined){
+		var _owner = _crossing.body.owner;
+		var _surface = _crossing.surface;
+		player_liquid_splash(_crossing.x, _surface.left, _surface.right,
+			_surface.top, _owner.splash_colour);
+		with(_owner) liquid_impulse(_crossing.x, _surface.top, 3, 128, !_up);
+	}
+	liquid_surface_previous_x = x;
+	liquid_surface_previous_y = bbox_bottom;
+}
+
+function player_liquid_splash(_x, _left, _right, _top, _colour){
+	var _spread = (bbox_right - bbox_left) * 0.45;
+	var _count = irandom_range(12, 18);
+	for(var _i = 0; _i < _count; _i++){
+		part_particles_create_colour(o_pfx.part_system_foreground,
+			clamp(_x + random_range(-_spread, _spread), _left, _right), _top,
+			o_pfx.pfx_type_liquid_splash, _colour, 1);
+	}
 }
 
 /// Arrow-key edges are independent of WASD and controller movement.

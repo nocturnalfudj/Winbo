@@ -35,7 +35,7 @@ function audio_gameplay_music_resolve(_room) {
 		break;
 		case r_game_level_0:
 			_music = music_level_test;
-			_loop_start = 3.97;
+			_loop_start = 3.00;
 		break;
 
 		case r_game_level_1:
@@ -100,6 +100,8 @@ function audio_gameplay_music_apply(_room) {
 		return;
 	}
 
-	var _loop_track_from_start = (music_game_loop_start <= 0);
-	music_snd_id_game = audio_sound_play(music_game, AudioChannel.music, _loop_track_from_start, 0, 1, false, 1, 1);
+	// Native loop points preserve the full tail and play the intro only once.
+	audio_sound_loop_start(music_game, music_game_loop_start);
+	audio_sound_loop_end(music_game, 0);
+	music_snd_id_game = audio_sound_play(music_game, AudioChannel.music, true, 0, 1, false, 1, 1);
 }

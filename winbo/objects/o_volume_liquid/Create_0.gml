@@ -22,6 +22,7 @@ water_mask_surface = -1;
 //Reflection
 reflection_enable = true;
 reflection_alpha = 0.2;
+reflection_fade_depth = 128;
 reflection_surface = -1;
 reflection_composite_surface = -1;
 
@@ -41,16 +42,6 @@ wave_phase = 0;
 
 // Wave simulation
 wave_sim_enable = true;
-
-// Geometry/cache
-wave_last_width_px = abs(bbox_right - bbox_left);
-wave_width_px = wave_last_width_px;
-wave_segments = max(8, floor(wave_width_px / wave_segment_px));
-wave_dx = wave_width_px / wave_segments;
-
-// State arrays
-wave_y = array_create(wave_segments + 1, 0);
-wave_v = array_create(wave_segments + 1, 0);
 
 // Simulation params
 wave_tension = 1;       // Laplacian spring factor
@@ -86,8 +77,8 @@ liquid_surface_update = function(_surface, _width, _height) {
 // surface can stretch its edge pixels into the water when the camera moves.
 liquid_scene_capture = function() {
 	var _camera = view_camera[0];
-	var _source_x = floor((bbox_left - camera_get_view_x(_camera)) * render_scale);
-	var _source_y = floor((bbox_top - render_height_buffer - camera_get_view_y(_camera)) * render_scale);
+	var _source_x = floor((liquid_body.left - camera_get_view_x(_camera)) * render_scale);
+	var _source_y = floor((liquid_body.top - render_height_buffer - camera_get_view_y(_camera)) * render_scale);
 	var _copy_x = max(0, _source_x);
 	var _copy_y = max(0, _source_y);
 	var _destination_x = _copy_x - _source_x;
@@ -116,3 +107,8 @@ submerged_ripple_uniform_time = shader_get_uniform(sh_liquid_ripple, "u_time");
 submerged_ripple_uniform_texel = shader_get_uniform(sh_liquid_ripple, "u_texel");
 submerged_ripple_uniform_strength = shader_get_uniform(sh_liquid_ripple, "u_strength");
 submerged_ripple_uniform_fade_top = shader_get_uniform(sh_liquid_ripple, "u_fade_top");
+submerged_ripple_uniform_reflection_depth = shader_get_uniform(sh_liquid_ripple, "u_reflection_depth");
+
+// A complete standalone body is safe during Create. Room Start connects the
+// room's volumes after every instance has initialized its liquid settings.
+volume_liquid_wave_setup();

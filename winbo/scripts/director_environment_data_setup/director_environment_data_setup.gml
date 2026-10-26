@@ -14,6 +14,16 @@ function director_environment_data_setup(){
 	
 	var _new_bg_offset_y;
 	_new_bg_offset_y = -120;
+
+	// Gameplay levels climb far more than one 4320px canvas, so their layers
+	// are composed at the authored start: canvas bottoms meet the view bottom
+	// there and each layer trails the camera by its parallax factor. The
+	// anchor is the camera bottom framing the player start (follow offset
+	// -250, 16:9 play view of 2160 * CAMERA_ZOOM_ANCHOR_PLAY_REST).
+	var _start_view_bottom_y;
+	_start_view_bottom_y = function(_player_start_y) {
+		return _player_start_y - 250 + (2160 * CAMERA_ZOOM_ANCHOR_PLAY_REST * 0.5);
+	};
 	
 	var _apply_default_vfx;
 	_apply_default_vfx = function(_environment_data){
@@ -82,6 +92,7 @@ function director_environment_data_setup(){
 		with(environment[_environment]){
 			//Texture Group
 			texture_group = "level_1";
+			parallax_anchor_bottom_y = undefined;
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
@@ -97,17 +108,18 @@ function director_environment_data_setup(){
 			_environment_tile,
 			_environment_foreground,
 			[
-				{mode: "normal", sprite: spr_bg_l1_layer_6_sky, parallax_x: 1.00, parallax_y: _gameplay_bg_parallax_y(1.00), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l1_layer_5_mountains, parallax_x: 0.90, parallax_y: _gameplay_bg_parallax_y(0.90), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l1_layer_4_riverside, parallax_x: 0.80, parallax_y: _gameplay_bg_parallax_y(0.80), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l1_layer_3_plains, parallax_x: 0.70, parallax_y: _gameplay_bg_parallax_y(0.70), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l1_layer_2_treeline_second, parallax_x: 0.60, parallax_y: _gameplay_bg_parallax_y(0.60), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l1_layer_1_treeline_main, parallax_x: 0.50, parallax_y: _gameplay_bg_parallax_y(0.50), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true}
+				{mode: "normal", sprite: spr_bg_l1_layer_6_sky, parallax_x: 1.00, parallax_y: _gameplay_bg_parallax_y(1.00), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_5_mountains, parallax_x: 0.90, parallax_y: _gameplay_bg_parallax_y(0.90), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_4_riverside, parallax_x: 0.80, parallax_y: _gameplay_bg_parallax_y(0.80), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_3_plains, parallax_x: 0.70, parallax_y: _gameplay_bg_parallax_y(0.70), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_2_treeline_second, parallax_x: 0.60, parallax_y: _gameplay_bg_parallax_y(0.60), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_1_treeline_main, parallax_x: 0.50, parallax_y: _gameplay_bg_parallax_y(0.50), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true}
 			],
 			[]
 		);
 		with(environment[_environment]){
 			texture_group = "level_1";
+			parallax_anchor_bottom_y = _start_view_bottom_y(14048);
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
@@ -123,31 +135,32 @@ function director_environment_data_setup(){
 			_environment_tile,
 			_environment_foreground,
 			[
-				{mode: "normal", sprite: spr_bg_l2_layer_7_sky, parallax_x: 1.00, parallax_y: _gameplay_bg_parallax_y(1.00), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l2_layer_6_mountains, parallax_x: 0.90, parallax_y: _gameplay_bg_parallax_y(0.90), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: false},
-				{mode: "normal", sprite: spr_bg_l2_layer_5_treeline_bg, parallax_x: 0.80, parallax_y: _gameplay_bg_parallax_y(0.80), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: false},
-				{mode: "normal", sprite: spr_bg_l2_layer_4a_forest_crane, parallax_x: 0.70, parallax_y: _gameplay_bg_parallax_y(0.70), offset_y: _new_bg_offset_y, repeat_x: false, clamp_top: true, clamp_bottom: false},
+				{mode: "normal", sprite: spr_bg_l2_layer_7_sky, parallax_x: 1.00, parallax_y: _gameplay_bg_parallax_y(1.00), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l2_layer_6_mountains, parallax_x: 0.90, parallax_y: _gameplay_bg_parallax_y(0.90), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l2_layer_5_treeline_bg, parallax_x: 0.80, parallax_y: _gameplay_bg_parallax_y(0.80), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l2_layer_4a_forest_crane, parallax_x: 0.70, parallax_y: _gameplay_bg_parallax_y(0.70), offset_y: 0, repeat_x: false, clamp_top: true, clamp_bottom: true},
 				{
-					mode: "normal", sprite: spr_bg_l2_layer_3_treeline_main, parallax_x: 0.60, parallax_y: _gameplay_bg_parallax_y(0.60), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: false
+					mode: "normal", sprite: spr_bg_l2_layer_3_treeline_main, parallax_x: 0.60, parallax_y: _gameplay_bg_parallax_y(0.60), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true
 				},
 				{
-					mode: "normal", sprite: spr_bg_l2_layer_2_shore, parallax_x: 0.50, parallax_y: _gameplay_bg_parallax_y(0.59), offset_y: _new_bg_offset_y, repeat_x: true, clamp_top: true, clamp_bottom: false
+					mode: "normal", sprite: spr_bg_l2_layer_2_shore, parallax_x: 0.50, parallax_y: _gameplay_bg_parallax_y(0.59), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true
 				},
 				{
 					mode: "animated",
 					sprite: spr_bg_l2_layer_1_river,
 					parallax_x: 0.50,
 					parallax_y: _gameplay_bg_parallax_y(0.50),
-					offset_y: _new_bg_offset_y,
+					offset_y: 0,
 					fps: 30,
 					clamp_top: true,
-					clamp_bottom: false
+					clamp_bottom: true
 				}
 			],
 			[]
 		);
 		with(environment[_environment]){
 			texture_group = "level_2";
+			parallax_anchor_bottom_y = _start_view_bottom_y(24096);
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
@@ -185,6 +198,7 @@ function director_environment_data_setup(){
 		);
 		with(environment[_environment]){
 			texture_group = "bonus";
+			parallax_anchor_bottom_y = undefined;
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
@@ -211,6 +225,7 @@ function director_environment_data_setup(){
 		);
 		with(environment[_environment]){
 			texture_group = "opening_cutscene";
+			parallax_anchor_bottom_y = undefined;
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
@@ -235,6 +250,7 @@ function director_environment_data_setup(){
 		);
 		with(environment[_environment]){
 			texture_group = "tutorial";
+			parallax_anchor_bottom_y = undefined;
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
@@ -265,6 +281,7 @@ function director_environment_data_setup(){
 		);
 		with(environment[_environment]){
 			texture_group = "presence";
+			parallax_anchor_bottom_y = undefined;
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion

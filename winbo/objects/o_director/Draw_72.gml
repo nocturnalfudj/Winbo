@@ -98,7 +98,8 @@ else if(_draw_environment_background){
 					_layer.offset_y,
 					_layer.repeat_x,
 					_layer.clamp_top,
-					_layer.clamp_bottom
+					_layer.clamp_bottom,
+					_environment_data.parallax_anchor_bottom_y
 				);
 			break;
 
@@ -115,7 +116,7 @@ else if(_draw_environment_background){
 					_layer.repeat_x,
 					_layer.clamp_top,
 					_layer.clamp_bottom,
-					true
+					room_height
 				);
 			break;
 			
@@ -131,7 +132,8 @@ else if(_draw_environment_background){
 					_layer.parallax_y,
 					_layer.offset_y,
 					_layer.clamp_top,
-					_layer.clamp_bottom
+					_layer.clamp_bottom,
+					_environment_data.parallax_anchor_bottom_y
 				);
 			break;
 			
@@ -153,7 +155,8 @@ else if(_draw_environment_background){
 					_layer.parallax_y,
 					_layer.offset_y,
 					_layer.clamp_top,
-					_layer.clamp_bottom
+					_layer.clamp_bottom,
+					_environment_data.parallax_anchor_bottom_y
 				);
 			break;
 			
@@ -179,7 +182,8 @@ else if(_draw_environment_background){
 					_layer.anchor_x,
 					_layer.anchor_sprite_x,
 					_layer.clamp_top,
-					_layer.clamp_bottom
+					_layer.clamp_bottom,
+					_environment_data.parallax_anchor_bottom_y
 				);
 			break;
 		}

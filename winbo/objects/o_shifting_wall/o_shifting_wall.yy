@@ -2,6 +2,7 @@
   "$GMObject":"",
   "%Name":"o_shifting_wall",
   "eventList":[
+    {"$GMEvent":"v1","%Name":"Step_2","collisionObjectId":null,"eventNum":2,"eventType":3,"isDnD":false,"name":"Step_2","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"Step_1","collisionObjectId":null,"eventNum":1,"eventType":3,"isDnD":false,"name":"Step_1","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"Create_0","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"Create_0","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"Draw_0","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"Draw_0","resourceType":"GMEvent","resourceVersion":"2.0",},

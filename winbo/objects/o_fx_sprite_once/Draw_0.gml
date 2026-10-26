@@ -11,9 +11,11 @@ if(fx_follow_enabled){
 // Give bump smoke a white, opaque core while retaining soft transparent edges.
 if(fx_liquid_clip_enable){
 	shader_set(sh_fx_liquid_clip);
-	shader_set_uniform_f(fx_liquid_clip_uniform, fx_liquid_clip_left, fx_liquid_clip_top,
-		fx_liquid_clip_right, fx_liquid_clip_bottom);
-	event_inherited();
+	for(var _ci = 0; _ci < array_length(fx_liquid_clip_cells); _ci++){
+		var _cell = fx_liquid_clip_cells[_ci];
+		shader_set_uniform_f(fx_liquid_clip_uniform, _cell.left, _cell.top, _cell.right, _cell.bottom);
+		event_inherited();
+	}
 	shader_reset();
 }
 else if(fx_sprite == spr_smoke_bump_impact){

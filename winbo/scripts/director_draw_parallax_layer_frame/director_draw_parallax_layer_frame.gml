@@ -11,21 +11,22 @@
 /// @param {Real} _offset_y Additional Y offset.
 /// @param {Bool} [_clamp_top=true] Prevent the sprite top moving below the camera top.
 /// @param {Bool} [_clamp_bottom=true] Prevent the sprite bottom moving above the camera bottom.
-function director_draw_parallax_layer_frame(_sprite, _frame, _camera_x, _camera_y, _camera_width, _camera_height, _parallax_x, _parallax_y, _offset_y, _clamp_top = true, _clamp_bottom = true) {
+/// @param {Real|Undefined} [_anchor_bottom_y=undefined] Camera bottom Y at which the canvas bottom meets the view bottom.
+function director_draw_parallax_layer_frame(_sprite, _frame, _camera_x, _camera_y, _camera_width, _camera_height, _parallax_x, _parallax_y, _offset_y, _clamp_top = true, _clamp_bottom = true, _anchor_bottom_y = undefined) {
 	var _sprite_width = sprite_get_width(_sprite);
-	var _sprite_height = sprite_get_height(_sprite);
-	
+
 	var _base_x = _camera_x * _parallax_x;
-	var _base_y = (_camera_y * _parallax_y) + _offset_y;
-	
-	if (_clamp_bottom) {
-		var _bottom_limit = (_camera_y + _camera_height) - _sprite_height;
-		_base_y = max(_base_y, _bottom_limit);
-	}
-	if (_clamp_top) {
-		_base_y = min(_base_y, _camera_y);
-	}
-	
+	var _base_y = director_parallax_layer_base_y(
+		_camera_y,
+		_camera_height,
+		sprite_get_height(_sprite),
+		_parallax_y,
+		_offset_y,
+		_anchor_bottom_y,
+		_clamp_top,
+		_clamp_bottom
+	);
+
 	var _camera_right = _camera_x + _camera_width;
 	var _tiles_back = ceil((_base_x - _camera_x) / _sprite_width);
 	var _tile_x = _base_x - (_tiles_back * _sprite_width);

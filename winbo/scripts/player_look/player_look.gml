@@ -128,7 +128,7 @@ function player_look_input_direction(){
 	#region Keyboard Arrows
 		if(player_look_keyboard_enabled()){
 			var _key_down, _key_left, _key_right;
-			_key_down = keyboard_check(vk_down);
+			_key_down = keyboard_check(vk_down) && !player_drop_through_available();
 			_key_left = keyboard_check(vk_left);
 			_key_right = keyboard_check(vk_right);
 
