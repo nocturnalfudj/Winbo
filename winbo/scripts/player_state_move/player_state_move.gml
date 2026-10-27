@@ -9,10 +9,11 @@ function player_state_move(){
 		return;
 	}
 	player_drop_through_input_update();
+	player_post_dash_update();
 
 	var _bump_block, _landing_block;
 	_bump_block = (sprite_current == sprite_bump) && (sprite_current_frame < (image.sprite_number - 1));
-	_landing_block = ((sprite_current == sprite_land) || (sprite_current == sprite_land_sideways) || (sprite_current == sprite_land_second_sideways)) && (sprite_current_frame < (image.sprite_number - 1));
+	_landing_block = player_landing_playing();
 
 	player_look_update(_bump_block, _landing_block);
 
@@ -99,7 +100,21 @@ function player_state_move(){
 
 					default:
 						if(stationary){
-							if(sprite_current != sprite_idle){
+							// Settle a released walk through the march-into-idle frames. It is a
+							// plain sprite, not a queue, so any input or launch replaces it at once.
+							if((sprite_current == sprite_walk) && (input_move_magnitude <= 0)){
+								image_system_setup(sprite_transition_walk_to_idle, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+								image_set_frame(image, 0);
+							}
+							// Stationary still reflects last step here, so fresh input resumes the
+							// walk cycle at once unless a wall blocks it (that case stays idle).
+							else if((sprite_current == sprite_transition_walk_to_idle) && (input_move_magnitude > 0)
+							&& (abs(lengthdir_x(1, input_move_direction)) > 0.1)
+							&& !place_meeting(x + sign(lengthdir_x(1, input_move_direction)), y, move_collision_object)){
+								image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
+								image_set_frame(image, 4);
+							}
+							else if((sprite_current != sprite_idle) && ((sprite_current != sprite_transition_walk_to_idle) || !image.animate)){
 								image_system_setup(sprite_idle, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
 							}
 						}
@@ -110,7 +125,7 @@ function player_state_move(){
 						}
 						else{
 							if(sprite_current != sprite_walk){
-								if(sprite_current == sprite_land_sideways || sprite_current == sprite_land_second_sideways){
+								if(sprite_current == sprite_land_sideways || sprite_current == sprite_land_second_sideways || sprite_current == sprite_land_frolic){
 									image_system_setup(sprite_walk, ANIMATION_FPS_DEFAULT, true, true, 4, IMAGE_LOOP_FULL);
 									image_set_frame(image, 1);
 								}
@@ -133,18 +148,22 @@ function player_state_move(){
 						player_air_spin_begin_sprite();
 					}
 				}
+				// Post-dash owns the whole flight, so a rising dash exit never replays a jump.
+				else if(post_dash_phase != PLAYER_POST_DASH_PHASE_INACTIVE){
+					player_post_dash_sprite_update();
+				}
 				else{
 					if((acceleration.y < 0) || (velocity.y < 0)){
 						var _sideways = jump_face_locked ? jump_face_sideways : abs(velocity.x) > 5;
 						var _target = second_jump_active
 							? (_sideways ? sprite_jump_second_sideways : sprite_jump_second)
-							: (_sideways ? sprite_jump_sideways : sprite_jump);
+							: (jump_frolic_active ? sprite_jump_frolic : (_sideways ? sprite_jump_sideways : sprite_jump));
 						if(sprite_current != _target){
 							image_system_setup(_target, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 						}
 					}
 					else{
-						if(((sprite_current == sprite_jump) || (sprite_current == sprite_jump_sideways) || (sprite_current == sprite_jump_second) || (sprite_current == sprite_jump_second_sideways)) && (sprite_current_frame < image.sprite_number - 1)){
+						if(((sprite_current == sprite_jump) || (sprite_current == sprite_jump_sideways) || (sprite_current == sprite_jump_second) || (sprite_current == sprite_jump_second_sideways) || (sprite_current == sprite_jump_frolic)) && (sprite_current_frame < image.sprite_number - 1)){
 						}
 						else{
 							if((sprite_current != sprite_fall) && (sprite_current != sprite_fall_sideways)){
@@ -240,6 +259,7 @@ function player_state_move(){
 			if((float_countdown > 0) && (!move_grounded) && !player_ground_within(float_ground_clearance)){
 				if((acceleration.y >= 0) && (velocity.y >= 0)){
 					player_frolic_clear();
+					player_landing_context_clear();
 					state = PlayerState.float;
 				}
 			}
@@ -258,8 +278,10 @@ function player_state_move(){
 
 	#region Jump
 		if(_jump_pressed_now && _jump_available_now){
+			// Read Frolic before clearing it so the flight keeps its run-jump artwork.
+			var _jump_from_frolic = frolic_active;
 			player_frolic_clear();
-			character_jump();
+			character_jump(_jump_from_frolic);
 		}
 	#endregion
 
@@ -527,6 +549,7 @@ function player_air_spin_start(){
 	air_spin_apex_seen = false;
 	air_spin_launch_pending = true;
 	player_frolic_clear();
+	player_landing_context_clear();
 	player_air_spin_begin_sprite();
 }
 
@@ -625,6 +648,7 @@ function player_dive_spring_try_start(){
 	player_secret_idle_cancel(false);
 	player_frolic_clear();
 	player_air_spin_clear();
+	player_landing_context_clear();
 
 	state = PlayerState.dive_spring;
 	dive_spring_phase = DiveSpringPhase.dive;
@@ -1282,11 +1306,14 @@ function player_frolic_end_to_walk(){
 #macro PLAYER_SECRET_IDLE_PHASE_LOOP 3
 
 /// Share ground and earned bump jumps across move and float.
-function character_jump(){
+function character_jump(_from_frolic = false){
 	var _grounded = player_jump_grounded();
 	var _second = _grounded && second_jump_landing_age >= 0
 		&& second_jump_landing_age <= second_jump_landing_window;
 	player_second_jump_reset();
+	player_landing_context_clear();
+	// The timed higher jump outranks the Frolic artwork.
+	jump_frolic_active = _from_frolic && !_second;
 	player_jump_face_begin();
 	jump_float_requested = false;
 	// Only a normal jump can lead into a timed higher jump.
@@ -1305,7 +1332,7 @@ function character_jump(){
 	// A fresh jump interrupts landing immediately, including within the ten-frame window.
 	var _jump_sprite = _second
 		? (jump_face_sideways ? sprite_jump_second_sideways : sprite_jump_second)
-		: (jump_face_sideways ? sprite_jump_sideways : sprite_jump);
+		: (jump_frolic_active ? sprite_jump_frolic : (jump_face_sideways ? sprite_jump_sideways : sprite_jump));
 	image_system_setup(_jump_sprite, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 	move_gravity.Copy(move_gravity_rise);
 	if(bump_jump_count > 0) bump_jump_count--;

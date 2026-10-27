@@ -200,6 +200,16 @@ function player_flower_wind_movement_update(){
     flower_wind_strength = clamp(flower_wind_strength
         + ((_fan != noone || flower_wind_drift) ? _dt : -_dt) / FLOWER_WIND_RAMP_TIME, 0, 1);
     var _coasting = flower_wind_coast > 0;
+    if(_fan == noone && _coasting){
+        var _coast_along = velocity.x * lengthdir_x(1, flower_wind_direction)
+            + velocity.y * lengthdir_y(1, flower_wind_direction);
+        // A spent launch has no axis left to preserve. Resume ordinary float
+        // gravity, steering and drag immediately, including this first frame.
+        if(_coast_along <= 0){
+            flower_wind_coast = 0;
+            _coasting = false;
+        }
+    }
     if(_fan == noone && !_coasting){
         if(flower_wind_drift){
             player_flower_wind_drift_movement_update();
@@ -239,6 +249,18 @@ function player_flower_wind_movement_update(){
         flower_wind_coast = max(0, flower_wind_coast - _dt);
     }
     var _gravity = move_gravity_enable;
+    if(_fan == noone){
+        // Coast protects only the launch axis. Gravity perpendicular to it
+        // must keep working, particularly after leaving a horizontal tunnel.
+        // Running the usual blend also keeps float gravity current at exit.
+        var _acceleration_x = acceleration.x;
+        var _acceleration_y = acceleration.y;
+        movement_gravity_update();
+        var _gravity_along = (acceleration.x - _acceleration_x) * _ux
+            + (acceleration.y - _acceleration_y) * _uy;
+        acceleration.x -= _ux * _gravity_along;
+        acceleration.y -= _uy * _gravity_along;
+    }
     var _retention = velocity_retention;
     var _aerial = velocity_retention_aerial;
     move_gravity_enable = false;

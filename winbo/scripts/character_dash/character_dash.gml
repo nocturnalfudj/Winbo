@@ -111,6 +111,9 @@ function character_dash(){
 				bump_allow = true;
 				bump_allow_countdown = bump_allow_countdown_max;
 				
+				// Each dash restarts its own post-dash fall from exit.
+				player_landing_context_clear();
+
 				//Dash Sprite
 				image_system_setup(sprite_dash,ANIMATION_FPS_DEFAULT,true,false,0,IMAGE_LOOP_FULL);
 

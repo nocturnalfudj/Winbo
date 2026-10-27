@@ -12,6 +12,7 @@ if(global.game_state != GameState.play){
 // Damage and scripted states invalidate a chain even while gameplay is frozen.
 // Ordinary pause/dialogue keeps the gameplay-frame timer frozen.
 player_second_jump_validate();
+player_landing_context_validate();
 
 //Game State Switch
 switch(global.game_state){

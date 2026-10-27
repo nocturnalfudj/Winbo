@@ -21,8 +21,7 @@ function player_movement_update(){
 		jump_grounded = player_jump_grounded();
 		if(!swim_active && (state == PlayerState.move || state == PlayerState.float)
 		&& jump_grounded && !_was_jump_grounded){
-			var _land = player_second_jump_landed();
-			image_system_setup(_land, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+			player_land_begin();
 			velocity.x = 0;
 			acceleration.x = 0;
 		}

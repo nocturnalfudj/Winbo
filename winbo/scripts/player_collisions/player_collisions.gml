@@ -631,6 +631,7 @@ function player_mushroom_side_bounce(_mushroom, _approach_direction = 0){
 	}
 	_bounce_direction = (_approach_direction > 0) ? 180 : 0;
 
+	player_landing_context_clear();
 	spring_countdown = SPRING_COUNTDOWN_MAX;
 	velocity.x = 0;
 	acceleration.x = 0;

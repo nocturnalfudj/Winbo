@@ -45,6 +45,11 @@ is_player = true;
 	sprite_land_second_sideways = spr_player_land_second_sideways;
 	sprite_land				= spr_player_land;			//director_get_custom_sprite(spr_player_land);
 	sprite_land_sideways	= spr_player_land_sideways;	//director_get_custom_sprite(spr_player_land_sideways);
+	sprite_jump_frolic		= spr_player_jump_frolic;
+	sprite_land_frolic		= spr_player_land_frolic;
+	sprite_fall_post_dash	= spr_player_fall_post_dash;
+	sprite_fall_post_dash_sideways = spr_player_fall_post_dash_sideways;
+	sprite_land_post_dash	= spr_player_land_post_dash;
 	sprite_float			= spr_player_float;			//director_get_custom_sprite(spr_player_float);
 	sprite_bump				= spr_player_bump;			//director_get_custom_sprite(spr_player_bump);
 	sprite_dive_spring		= spr_player_dive_spring;
@@ -75,6 +80,7 @@ is_player = true;
 	
 	//Transition Sprites
 	sprite_transition_walk_to_walk_other_direction		= spr_player_transition_walk_to_walk_other_direction;
+	sprite_transition_walk_to_idle						= spr_player_transition_walk_to_idle;
 	sprite_transition_walk_to_frolic					= spr_player_transition_walk_to_frolic;
 	sprite_transition_idle_to_frolic					= spr_player_transition_idle_to_frolic;
 	sprite_transition_float_to_fall						= spr_player_transition_float_to_fall;
@@ -155,6 +161,16 @@ is_player = true;
 	second_jump_landing_age = -1;
 	second_jump_landing_armed = false;
 	second_jump_airborne_seen = false;
+
+	// Presentation context for the current flight; physics are unaffected.
+	jump_frolic_active = false;
+	post_dash_phase = PLAYER_POST_DASH_PHASE_INACTIVE;
+	post_dash_fall_time = 0;
+	post_dash_fall_time_max = SECOND * 2;
+	post_dash_loop_frames = 3;
+	post_dash_sideways = false;
+	post_dash_sideways_enter_speed = 5;
+	post_dash_sideways_exit_speed = 2;
 
 	//Jump Hold
 	jump_hold_enable = true;

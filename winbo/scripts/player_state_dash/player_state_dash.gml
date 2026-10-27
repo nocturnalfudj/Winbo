@@ -117,7 +117,12 @@ function player_state_dash(){
 		
 		//Disable Speed Stretch
 		speed_stretch_enable = false;
-		
+
+		// A clean air dash falls in the post-dash pose; a wall bump keeps its own recovery.
+		if(!move_grounded && !bump_triggered){
+			player_post_dash_begin();
+		}
+
 		//Start Invincible
 		//status_effect_start(StatusEffect.invincible_dash,0.5*SECOND);
 	}

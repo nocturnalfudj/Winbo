@@ -42,12 +42,13 @@ function player_gamestate_dialogue(){
 		
 		#region Landing Animation
 			if(second_jump_landing_armed && !move_grounded) second_jump_airborne_seen = true;
+			// Share the landing edge with normal play so resuming cannot consume it twice.
+			var _was_jump_grounded = jump_grounded;
+			jump_grounded = player_jump_grounded();
 			if(!swim_active && (state == PlayerState.move || state == PlayerState.float)
-			&& move_grounded && !move_grounded_previous){
-				var _land = player_second_jump_landed();
-				image_system_setup(_land, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+			&& jump_grounded && !_was_jump_grounded){
 				// Sitting is checked below before the normal animation update.
-				image_set_frame(image, 0);
+				player_land_begin();
 			}
 		#endregion
 
@@ -56,7 +57,7 @@ function player_gamestate_dialogue(){
 			_bump_block = (sprite_current == sprite_bump) && (sprite_current_frame < (image.sprite_number - 1));
 		
 			// Block sprite changes while landing animation is playing and not complete
-			_landing_block = ((sprite_current == sprite_land) || (sprite_current == sprite_land_sideways) || (sprite_current == sprite_land_second_sideways)) && (sprite_current_frame < (image.sprite_number - 1));
+			_landing_block = player_landing_playing();
 		
 			//Not Bumping and Not Landing
 			if(!_bump_block && !_landing_block){

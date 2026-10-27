@@ -19,6 +19,10 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
     // new rider caught from below is resolved at the actual rising top.
     var _feet_before_movement = bbox_bottom;
     var _was_grounded = move_grounded;
+    // Only an existing rider may follow a small, connected floor step.
+    // Airborne contact keeps the ordinary two-pixel support tolerance.
+    var _step_from = (move_grounded_check && _was_grounded
+        && velocity.y >= 0 && _displacement_y >= 0) ? move_grounded_instance : noone;
     var _landed_on_rising_platform = false;
 
     // Grounded Movement
@@ -60,7 +64,9 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
     // Use the surface reached by this step, rather than last frame's ground.
     // The same foot-contact test drives grounding below, including flush seams.
     if(move_grounded && _displacement_y >= 0){
-        var _surface_support = movement_ground_support_at(x + _displacement_x, y, 2);
+        var _surface_support = (_step_from != noone)
+            ? movement_ground_support_at(x + _displacement_x, y, 6, _step_from)
+            : movement_ground_support_at(x + _displacement_x, y, 2);
         if(_surface_support != noone){
             _displacement_x += _surface_support.surface_speed_x * _delta_time;
         }
@@ -137,6 +143,40 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
                 }
             }
 
+            // A four-pixel floor lip is the reverse of the authored belt
+            // step-down. Lift only an existing non-rising rider, and only if
+            // the entire projected mask clears the lip and every other wall.
+            // The generic corner-slip path otherwise lifts partway and briefly
+            // loses support before the next movement step reaches the floor.
+            if(_collision_detected && _step_from != noone){
+                for(var _i = 0; _i < _collision_count; _i++){
+                    var _step_solid = _collision_instance_list[| _i];
+                    if(_step_solid == move_drop_through_instance) continue;
+                    // The candidate itself must block this horizontal approach.
+                    // A separate solid lip cannot turn a one-way underside into a step.
+                    if(!(_step_solid.collision_enable_x_in
+                    || (_step_solid.collision_enable_x_left && _sign_hspd == -1 && _x_old >= _step_solid.bbox_right)
+                    || (_step_solid.collision_enable_x_right && _sign_hspd == 1 && _x_old <= _step_solid.bbox_left))) continue;
+                    if(!_step_solid.collision_enable_y_in && !_step_solid.collision_enable_y_down) continue;
+                    var _step_height = _step_solid.bbox_top - _step_from.bbox_top;
+                    if(_step_height >= 0 || _step_height < -4) continue;
+                    var _foot_width = bbox_right - bbox_left + 1;
+                    if(_step_solid.bbox_left - _step_from.bbox_right - 1 >= _foot_width
+                    || _step_from.bbox_left - _step_solid.bbox_right - 1 >= _foot_width) continue;
+                    var _step_up = _step_solid.bbox_top - 1 - bbox_bottom;
+                    if(_step_up >= 0 || _step_up < -4) continue;
+                    if(move_limit_enable_y && _y_old + _step_up < move_limit_y.x) continue;
+                    if(!place_meeting(_new_x, _y_old + _step_up, move_collision_object)
+                    && movement_ground_support_at(_new_x, _y_old + _step_up, 2) == _step_solid){
+                        _y_old += _step_up;
+                        _collision_detected = false;
+                        move_collision_object_instance = noone;
+                        move_collision_object_instance_x = noone;
+                        break;
+                    }
+                }
+            }
+
             ds_list_destroy(_collision_instance_list);
 
             if(!_collision_detected){
@@ -196,6 +236,22 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
 	        var _adjustment = -collision.x * 1;
 	        _x_old += _adjustment;
 	    }
+
+        // Settle a connected four-pixel step only after horizontal walls have
+        // resolved. Sending the drop through the vertical solver preserves
+        // one-way/drop-through rules and never bridges an unsupported gap.
+        if(_step_from != noone && movement_ground_support_at(_x_old, _y_old, 2) == noone){
+            var _step_support = movement_ground_support_at(_x_old, _y_old, 6, _step_from);
+            if(_step_support != noone){
+                var _restore_x = x, _restore_y = y;
+                x = _x_old;
+                y = _y_old;
+                var _step_down = _step_support.bbox_top - 1 - bbox_bottom;
+                x = _restore_x;
+                y = _restore_y;
+                _displacement_y = max(_displacement_y, _step_down);
+            }
+        }
 
         // Vertical movement
         if(true || _displacement_y != 0){
@@ -589,7 +645,7 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
 /// Find actual support under the projected feet. Mask-test every candidate,
 /// exclude side walls and dropped/one-way undersides, then choose the nearest
 /// top. A touching belt takes traction immediately; ties use foot overlap.
-function movement_ground_support_at(_x, _y, _distance){
+function movement_ground_support_at(_x, _y, _distance, _step_from = noone){
     if(move_collision_object == noone) return noone;
 
     // Bounds are quantized by the collision mask. Translating today's bbox
@@ -616,6 +672,16 @@ function movement_ground_support_at(_x, _y, _distance){
 
         var _gap = _solid.bbox_top - _bottom;
         if(_gap < 0 || _gap > _distance) continue;
+        if(_gap > 2 && _step_from != noone){
+            var _step_height = _solid.bbox_top - _step_from.bbox_top;
+            if(_step_from == move_drop_through_instance || _step_height < 0 || _step_height > 4) continue;
+            // The authored floor/belt seam includes a small horizontal gap.
+            // Feet can straddle it without any unsupported position; a gap
+            // at least as wide as the foot mask must remain a real fall.
+            var _foot_width = _right - _left + 1;
+            if(_solid.bbox_left - _step_from.bbox_right - 1 >= _foot_width
+            || _step_from.bbox_left - _solid.bbox_right - 1 >= _foot_width) continue;
+        }
 
         var _overlap = min(_right, _solid.bbox_right) - max(_left, _solid.bbox_left) + 1;
         var _moving = _solid.surface_speed_x != 0;
