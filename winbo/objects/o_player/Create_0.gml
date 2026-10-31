@@ -41,6 +41,7 @@ is_player = true;
 	sprite_jump_sideways	= spr_player_jump_sideways;	//director_get_custom_sprite(spr_player_jump_sideways);
 	sprite_air_spin			= spr_player_air_spin;
 	sprite_jump_second = spr_player_jump_second;
+	sprite_land_second = spr_player_land_second;
 	sprite_jump_second_sideways = spr_player_jump_second_sideways;
 	sprite_land_second_sideways = spr_player_land_second_sideways;
 	sprite_land				= spr_player_land;			//director_get_custom_sprite(spr_player_land);
@@ -161,6 +162,10 @@ is_player = true;
 	second_jump_landing_age = -1;
 	second_jump_landing_armed = false;
 	second_jump_airborne_seen = false;
+	second_jump_hold_blend_frame = 0;
+	second_jump_hold_blend_offset = 0;
+	// Per-frame difference between the normal and revised neutral artwork's top.
+	second_jump_hold_frame_offsets = [-106, 59, 87, 81, 74, 65];
 
 	// Presentation context for the current flight; physics are unaffected.
 	jump_frolic_active = false;
@@ -285,7 +290,10 @@ is_player = true;
 	dive_spring_rotor_loop_start_frame = 9;
 	dive_spring_rotor_loop_end_frame = 15;
 	dive_spring_transition_start_frame = 15;
-	dive_spring_transition_end_frame = 16;
+	// Frames 15-24 are the twist ending; it finishes facing front.
+	dive_spring_transition_end_frame = 24;
+	// Unscaled time the front fall shows between the twist ending and touchdown.
+	dive_spring_transition_fall_lead_time = SECOND * 0.15;
 	dive_spring_fail_start_frame = 7;
 	dive_spring_launch_hold_time_max = SECOND * 0.18;
 	dive_spring_launch_hold_time = 0;
@@ -298,7 +306,7 @@ is_player = true;
 	dive_spring_velocity_retention_aerial_previous = velocity_retention_aerial;
 	dive_spring_movement_override_active = false;
 	dive_spring_apex_reached = false;
-	dive_spring_transition_ground_probe_distance = 400;
+	dive_spring_fall_front_active = false;
 	dive_spring_enemy_impact = false;
 	dive_spring_float_cancel_requested = false;
 	dive_spring_dash_cancel_requested = false;

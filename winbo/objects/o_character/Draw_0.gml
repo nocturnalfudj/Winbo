@@ -52,6 +52,8 @@ _scale_y = image_yscale * _move_effect_y;
 
 #region Body
 	var _scale_x_face_adjusted,_scale_y_face_adjusted;
+	// Presentation offsets affect the body, independently of collision and HUD positions.
+	_character_y += sprite_y_offset * _scale_y;
 	if(face_horizontal_draw_enable)
 		_scale_x_face_adjusted = _scale_x * face_horizontal * sprite_face_direction;
 	else

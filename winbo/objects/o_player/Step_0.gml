@@ -71,6 +71,8 @@ switch(global.game_state){
 	break;
 }
 
+player_second_jump_visual_update();
+
 // Rotate only the underwater dash body; the HUD and collision mask stay upright.
 sprite_angle_offset = sprite_current == spr_player_swim_dash
 	? swim_dash_direction - (face_horizontal < 0 ? 180 : 0) : 0;

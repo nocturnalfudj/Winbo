@@ -154,7 +154,7 @@ function player_state_move(){
 				}
 				else{
 					if((acceleration.y < 0) || (velocity.y < 0)){
-						var _sideways = jump_face_locked ? jump_face_sideways : abs(velocity.x) > 5;
+						var _sideways = player_air_sideways();
 						var _target = second_jump_active
 							? (_sideways ? sprite_jump_second_sideways : sprite_jump_second)
 							: (jump_frolic_active ? sprite_jump_frolic : (_sideways ? sprite_jump_sideways : sprite_jump));
@@ -163,12 +163,13 @@ function player_state_move(){
 						}
 					}
 					else{
-						if(((sprite_current == sprite_jump) || (sprite_current == sprite_jump_sideways) || (sprite_current == sprite_jump_second) || (sprite_current == sprite_jump_second_sideways) || (sprite_current == sprite_jump_frolic)) && (sprite_current_frame < image.sprite_number - 1)){
+						if(((sprite_current == sprite_jump_second) && image.animate)
+						|| (((sprite_current == sprite_jump) || (sprite_current == sprite_jump_sideways) || (sprite_current == sprite_jump_second_sideways) || (sprite_current == sprite_jump_frolic)) && (sprite_current_frame < image.sprite_number - 1))){
 						}
 						else{
 							if((sprite_current != sprite_fall) && (sprite_current != sprite_fall_sideways)){
 								var _use_sideways_fall, _target_fall_sprite;
-								_use_sideways_fall = (jump_face_locked ? jump_face_sideways : (abs(velocity.x) > 5));
+								_use_sideways_fall = player_air_sideways();
 								_target_fall_sprite = _use_sideways_fall ? sprite_fall_sideways : sprite_fall;
 
 								if(sprite_current == sprite_float){
@@ -199,7 +200,7 @@ function player_state_move(){
 							}
 							else{
 								var _should_use_sideways_fall, _current_fall_is_sideways;
-								_should_use_sideways_fall = (jump_face_locked ? jump_face_sideways : (abs(velocity.x) > 5));
+								_should_use_sideways_fall = player_air_sideways();
 								_current_fall_is_sideways = (sprite_current == sprite_fall_sideways);
 
 								if(_should_use_sideways_fall != _current_fall_is_sideways){
@@ -861,10 +862,6 @@ function player_dive_spring_wrong_input_pressed(){
 function player_dive_spring_state_spring(){
 	var _delta_time_scaled;
 	_delta_time_scaled = max(global.delta_time_factor_scaled, 0.0001);
-	var _launch_impulse_this_step, _move_grounded_check_previous, _velocity_retention_previous;
-	_launch_impulse_this_step = false;
-	_move_grounded_check_previous = move_grounded_check;
-	_velocity_retention_previous = velocity_retention;
 
 	if(dive_spring_launch_hold_time > 0){
 		dive_spring_launch_hold_time = max(0, dive_spring_launch_hold_time - _delta_time_scaled);
@@ -888,6 +885,54 @@ function player_dive_spring_state_spring(){
 		image_system_setup(sprite_dive_spring, dive_spring_rotor_fps, true, true, dive_spring_rotor_loop_start_frame, dive_spring_rotor_loop_end_frame);
 		image_set_frame(image, dive_spring_rotor_loop_start_frame);
 	}
+
+	player_dive_spring_flight_update();
+
+	if((state != PlayerState.dive_spring) || (dive_spring_phase != DiveSpringPhase.spring)){
+		return;
+	}
+
+	player_collisions();
+
+	if((state != PlayerState.dive_spring) || (dive_spring_phase != DiveSpringPhase.spring)){
+		return;
+	}
+
+	player_dive_spring_float_cancel_update();
+	player_dive_spring_dash_cancel_update();
+
+	// An explicit cancel interrupts the rotor arc promptly; uninterrupted
+	// flight keeps the rotor loop and then plays the full twist ending.
+	if(!move_grounded && player_dive_spring_dash_interrupt_try()){
+		return;
+	}
+
+	if(!move_grounded && player_dive_spring_float_interrupt_try()){
+		return;
+	}
+
+	// The rotor keeps looping until the twist ending would just finish on
+	// touchdown, which on a launch-height landing begins shortly before the
+	// apex. Over a deep pit no ground is predicted and the rotor keeps looping.
+	var _apex_this_step;
+	_apex_this_step = player_dive_spring_apex_update();
+	if((dive_spring_apex_reached && !_apex_this_step && move_grounded) || player_dive_spring_ending_landing_due()){
+		dive_spring_phase = DiveSpringPhase.transition;
+		acceleration.Set(0, 0);
+		image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+		image_set_frame(image, dive_spring_transition_start_frame);
+	}
+}
+
+/// One spring flight step: rise or fall physics follow the apex, never the
+/// animation, so starting the ending before the apex keeps the same arc.
+function player_dive_spring_flight_update(){
+	var _delta_time_scaled;
+	_delta_time_scaled = max(global.delta_time_factor_scaled, 0.0001);
+	var _launch_impulse_this_step, _move_grounded_check_previous, _velocity_retention_previous;
+	_launch_impulse_this_step = false;
+	_move_grounded_check_previous = move_grounded_check;
+	_velocity_retention_previous = velocity_retention;
 
 	// The holding-right reference gains horizontal distance immediately rather
 	// than waiting for an apex dash. Neutral input leaves x acceleration at zero.
@@ -932,54 +977,49 @@ function player_dive_spring_state_spring(){
 		move_grounded_instance = noone;
 	}
 	player_mushroom_collisions_post_movement(_movement_start_x, _movement_start_y);
+}
 
-	if((state != PlayerState.dive_spring) || (dive_spring_phase != DiveSpringPhase.spring)){
-		return;
+function player_dive_spring_apex_update(){
+	if(dive_spring_apex_reached || (velocity.y < 0)){
+		return false;
 	}
 
-	player_collisions();
+	dive_spring_apex_reached = true;
+	velocity.y = 0;
+	acceleration.Set(0, 0);
+	return true;
+}
 
-	if((state != PlayerState.dive_spring) || (dive_spring_phase != DiveSpringPhase.spring)){
-		return;
-	}
+/// Whether touchdown falls within the time the twist ending and a short front
+/// fall still need. Mirrors player_dive_spring_flight_update's vertical
+/// integration (rise, apex snap, fall) at this frame's step size, then sweeps
+/// that drop below the feet so thin floors cannot be skipped.
+function player_dive_spring_ending_landing_due(){
+	var _steps, _delta, _velocity_y, _apex, _drop, _gravity, _retention;
+	// The player image animates on unscaled time while movement uses scaled
+	// time. One extra step covers the frame on which the finished image is seen.
+	_steps = ceil(((dive_spring_transition_end_frame + 1 - dive_spring_transition_start_frame) * SECOND / ANIMATION_FPS_DEFAULT
+		+ dive_spring_transition_fall_lead_time) / max(global.delta_time_factor, 0.0001)) + 1;
+	_delta = global.delta_time_factor_scaled;
+	_velocity_y = velocity.y;
+	_apex = dive_spring_apex_reached;
+	_drop = 0;
 
-	player_dive_spring_float_cancel_update();
-	player_dive_spring_dash_cancel_update();
-
-	// An explicit cancel interrupts the rotor arc promptly; uninterrupted
-	// flight keeps the rotor loop and the frames 15-16 landing transition.
-	if(!move_grounded && player_dive_spring_dash_interrupt_try()){
-		return;
-	}
-
-	if(!move_grounded && player_dive_spring_float_interrupt_try()){
-		return;
-	}
-
-	if(!dive_spring_apex_reached && (velocity.y >= 0)){
-		dive_spring_apex_reached = true;
-		velocity.y = 0;
-		acceleration.Set(0, 0);
-	}
-	else if(dive_spring_apex_reached){
-		// Both supplied mockups keep the rotor through the apex and most of the
-		// descent, then play frames 15-16 shortly before landing. Over a deep pit
-		// the rotor must keep looping: never force the transition in mid-air.
-		var _transition_near_ground;
-		_transition_near_ground = place_meeting(x, y + dive_spring_transition_ground_probe_distance, move_collision_object);
-		if(_transition_near_ground || move_grounded){
-			dive_spring_phase = DiveSpringPhase.transition;
-			acceleration.Set(0, 0);
-			image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
-			image_set_frame(image, dive_spring_transition_start_frame);
+	for(var _i = 0; _i < _steps; _i++){
+		_gravity = _apex ? move_gravity_fall.y : (move_gravity_rise.y * dive_spring_rise_gravity_factor);
+		_retention = _apex ? dive_spring_velocity_retention_aerial_previous : dive_spring_velocity_retention_aerial;
+		_drop += (_velocity_y + _gravity * 0.5 * _delta) * _delta;
+		_velocity_y = (_velocity_y + _gravity * _delta) * power(_retention, _delta);
+		if(!_apex && (_velocity_y >= 0)){
+			_apex = true;
+			_velocity_y = 0;
 		}
 	}
+
+	return (_drop > 0) && player_ground_within(_drop);
 }
 
 function player_dive_spring_state_transition(){
-	var _delta_time_scaled;
-	_delta_time_scaled = max(global.delta_time_factor_scaled, 0.0001);
-
 	if(sprite_current != sprite_dive_spring){
 		image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 		image_set_frame(image, dive_spring_transition_start_frame);
@@ -987,13 +1027,7 @@ function player_dive_spring_state_transition(){
 
 	player_dive_spring_float_cancel_update();
 	player_dive_spring_dash_cancel_update();
-	acceleration.AddMagnitudeDirection(INPUT_MOVE_ACCELERATION * dive_spring_horizontal_acceleration_factor_fall * input_move_magnitude, input_move_direction);
-	velocity_retention_aerial = power(dive_spring_velocity_retention_aerial_previous, _delta_time_scaled);
-	move_gravity_factor = 1;
-	move_gravity.Copy(move_gravity_fall);
-	var _movement_start_x = x, _movement_start_y = y;
-	player_movement_update();
-	player_mushroom_collisions_post_movement(_movement_start_x, _movement_start_y);
+	player_dive_spring_flight_update();
 
 	if((state != PlayerState.dive_spring) || (dive_spring_phase != DiveSpringPhase.transition)){
 		return;
@@ -1005,7 +1039,11 @@ function player_dive_spring_state_transition(){
 		return;
 	}
 
-	if(move_grounded || (image.position >= (dive_spring_transition_end_frame + 1))){
+	player_dive_spring_apex_update();
+
+	// The non-looping image rewinds onto its last frame once it overruns, so a
+	// stopped image also counts as finished after a long frame.
+	if(move_grounded || !image.animate || (image.position >= (dive_spring_transition_end_frame + 1))){
 		if(!move_grounded && player_dive_spring_dash_interrupt_try()){
 			return;
 		}
@@ -1014,13 +1052,16 @@ function player_dive_spring_state_transition(){
 			return;
 		}
 
+		// The twist ends facing front; only a held direction turns Winbo sideways.
 		var _target_fall_sprite;
-		_target_fall_sprite = (abs(velocity.x) > 5) ? sprite_fall_sideways : sprite_fall;
+		_target_fall_sprite = player_dive_spring_direction_held() ? sprite_fall_sideways : sprite_fall;
 
 		player_dive_spring_restore_movement();
 		move_gravity.Copy(move_gravity_fall);
 		dive_spring_phase = DiveSpringPhase.dive;
 		state = PlayerState.move;
+		jump_face_locked = false;
+		dive_spring_fall_front_active = !move_grounded;
 
 		if(move_grounded){
 			if(stationary){
@@ -1232,6 +1273,35 @@ function player_dive_spring_restore_movement(){
 }
 
 function player_dive_spring_reset(){
+	// Pause and hit-stop freezes resume the same move, so a live dive spring
+	// keeps its phase rather than restarting as a dive. Every other caller
+	// leaves the dive spring state, which still clears it.
+	if((state == PlayerState.dive_spring)
+	&& ((global.game_state == GameState.pause) || (global.game_state == GameState.os_paused)
+	|| (global.game_state == GameState.freeze))){
+		return;
+	}
+
+	// Dialogue still moves and lands Winbo, so a held flight falls with normal
+	// gravity and drag; the spring step re-applies its own on resume. Landing
+	// during dialogue ends the move rather than resuming the rotor on the ground.
+	if((state == PlayerState.dive_spring) && (global.game_state == GameState.dialogue)){
+		var _flight_held;
+		_flight_held = (dive_spring_phase == DiveSpringPhase.transition)
+			|| ((dive_spring_phase == DiveSpringPhase.spring) && !dive_spring_launch_impulse_pending);
+		if(!_flight_held || !move_grounded){
+			if(_flight_held && (velocity.y >= 0)){
+				dive_spring_apex_reached = true;
+			}
+			move_gravity_factor = 1;
+			if(dive_spring_movement_override_active){
+				velocity_retention_aerial = dive_spring_velocity_retention_aerial_previous;
+			}
+			return;
+		}
+		state = PlayerState.move;
+	}
+
 	player_dive_spring_restore_movement();
 	dive_spring_phase = DiveSpringPhase.dive;
 	dive_spring_impact_timer = 0;
@@ -1244,6 +1314,10 @@ function player_dive_spring_reset(){
 	dive_spring_enemy_impact = false;
 	dive_spring_float_cancel_requested = false;
 	dive_spring_dash_cancel_requested = false;
+}
+
+function player_dive_spring_direction_held(){
+	return (input_move_magnitude > 0.1) && (abs(lengthdir_x(1, input_move_direction)) > 0.1);
 }
 
 function player_dive_spring_float_input_active(){
@@ -1362,7 +1436,24 @@ function player_jump_face_update(){
 	if((move_grounded && velocity.y >= 0) || swim_active || state == PlayerState.hit || state == PlayerState.death){
 		jump_face_locked = false;
 		jump_float_requested = false;
+		dive_spring_fall_front_active = false;
 	}
+	// The front fall after a dive spring ending lasts only for that fall.
+	if(state != PlayerState.move){
+		dive_spring_fall_front_active = false;
+	}
+}
+
+/// Airborne artwork choice: a committed jump facing wins, then the front fall
+/// after a dive spring ending (turned only by held input), then drift.
+function player_air_sideways(){
+	if(jump_face_locked){
+		return jump_face_sideways;
+	}
+	if(dive_spring_fall_front_active){
+		return player_dive_spring_direction_held();
+	}
+	return abs(velocity.x) > 5;
 }
 
 function player_jump_float_active(){

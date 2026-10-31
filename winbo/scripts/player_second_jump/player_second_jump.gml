@@ -6,6 +6,8 @@ function player_second_jump_reset(){
 	second_jump_landing_age = -1;
 	second_jump_landing_armed = false;
 	second_jump_airborne_seen = false;
+	second_jump_hold_blend_offset = 0;
+	sprite_y_offset = 0;
 }
 
 function player_second_jump_validate(){
@@ -32,15 +34,33 @@ function player_second_jump_hold_update(){
 	velocity.y -= second_jump_hold_boost;
 	// Keep the shared takeoff frames already played instead of restarting the wind-up.
 	var _frame = image.frame;
+	// The revised art rises inside its larger canvas. Preserve the displayed
+	// height at promotion, then blend into that authored rise without a pop.
+	second_jump_hold_blend_frame = min(_frame, array_length(second_jump_hold_frame_offsets) - 1);
+	second_jump_hold_blend_offset = second_jump_hold_frame_offsets[second_jump_hold_blend_frame];
 	image_system_setup(sprite_jump_second, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 	image_set_frame(image, min(_frame, sprite_get_number(sprite_jump_second) - 1));
+	player_second_jump_visual_update();
+}
+
+/// Presentation only. The final two airborne poses and every landing use the
+/// original art position; pause freezes the blend with the animation clock.
+function player_second_jump_visual_update(){
+	if(!second_jump_active || sprite_current != sprite_jump_second){
+		second_jump_hold_blend_offset = 0;
+		sprite_y_offset = 0;
+		return;
+	}
+	var _progress = clamp((image.position - second_jump_hold_blend_frame)
+		/ max(1, 8 - second_jump_hold_blend_frame), 0, 1);
+	sprite_y_offset = second_jump_hold_blend_offset * (1 - _progress);
 }
 
 /// Shared by normal play and dialogue so every genuine landing consumes the flight.
 function player_second_jump_landed(){
 	second_jump_landing_age = second_jump_landing_armed && second_jump_airborne_seen ? 0 : -1;
 	var _land = second_jump_active
-		? (jump_face_sideways ? sprite_land_second_sideways : sprite_land)
+		? (jump_face_sideways ? sprite_land_second_sideways : sprite_land_second)
 		: (abs(velocity.x) > 5 ? sprite_land_sideways : sprite_land);
 	second_jump_active = false;
 	second_jump_hold_pending = false;
@@ -73,7 +93,8 @@ function player_land_begin(){
 
 /// True while any landing squash still owns the sprite.
 function player_landing_playing(){
-	if((sprite_current == sprite_land_second_sideways)
+	if((sprite_current == sprite_land_second)
+	|| (sprite_current == sprite_land_second_sideways)
 	|| (sprite_current == sprite_land_frolic)
 	|| (sprite_current == sprite_land_post_dash)){
 		// These non-looping sequences own every frame, but only while supported.
