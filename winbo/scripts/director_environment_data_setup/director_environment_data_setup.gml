@@ -19,10 +19,25 @@ function director_environment_data_setup(){
 	// are composed at the authored start: canvas bottoms meet the view bottom
 	// there and each layer trails the camera by its parallax factor. The
 	// anchor is the camera bottom framing the player start (follow offset
-	// -250, 16:9 play view of 2160 * CAMERA_ZOOM_ANCHOR_PLAY_REST).
+	// -250) in the tallest play view we design for, so shorter views start
+	// with the canvases just past the view bottom instead of clamped to it.
+	// 16:10 window at the 3840px intended width.
+	#macro BACKGROUND_PLAY_VIEW_HEIGHT_MAX (2400 * CAMERA_ZOOM_ANCHOR_PLAY_REST)
 	var _start_view_bottom_y;
 	_start_view_bottom_y = function(_player_start_y) {
-		return _player_start_y - 250 + (2160 * CAMERA_ZOOM_ANCHOR_PLAY_REST * 0.5);
+		return _player_start_y - 250 + (BACKGROUND_PLAY_VIEW_HEIGHT_MAX * 0.5);
+	};
+
+	// Vertical parallax is scaled to each level's climb so the layers never
+	// run out of canvas: the front layer (parallax_x 0.5) spends the 4320px
+	// canvas's spare height over the climb from the start view to the room
+	// top, and each layer behind moves proportionally less, down to half that
+	// speed for the sky (parallax_x 1.0).
+	var _level_parallax_y;
+	_level_parallax_y = function(_anchor_bottom_y, _parallax_x) {
+		var _view_height = BACKGROUND_PLAY_VIEW_HEIGHT_MAX;
+		var _front_speed = (4320 - _view_height) / (_anchor_bottom_y - _view_height);
+		return 1 - (_front_speed * (1.5 - _parallax_x));
 	};
 	
 	var _apply_default_vfx;
@@ -98,6 +113,7 @@ function director_environment_data_setup(){
 	#endregion
 	
 	#region Level 1
+		var _level_1_anchor_bottom_y = _start_view_bottom_y(14048);
 		_environment = Environment.level_1_environment;
 		_environment_name = "Level 1";
 		_environment_tile = noone;
@@ -108,23 +124,24 @@ function director_environment_data_setup(){
 			_environment_tile,
 			_environment_foreground,
 			[
-				{mode: "normal", sprite: spr_bg_l1_layer_6_sky, parallax_x: 1.00, parallax_y: _gameplay_bg_parallax_y(1.00), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l1_layer_5_mountains, parallax_x: 0.90, parallax_y: _gameplay_bg_parallax_y(0.90), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l1_layer_4_riverside, parallax_x: 0.80, parallax_y: _gameplay_bg_parallax_y(0.80), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l1_layer_3_plains, parallax_x: 0.70, parallax_y: _gameplay_bg_parallax_y(0.70), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l1_layer_2_treeline_second, parallax_x: 0.60, parallax_y: _gameplay_bg_parallax_y(0.60), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l1_layer_1_treeline_main, parallax_x: 0.50, parallax_y: _gameplay_bg_parallax_y(0.50), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true}
+				{mode: "normal", sprite: spr_bg_l1_layer_6_sky, parallax_x: 1.00, parallax_y: _level_parallax_y(_level_1_anchor_bottom_y, 1.00), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_5_mountains, parallax_x: 0.90, parallax_y: _level_parallax_y(_level_1_anchor_bottom_y, 0.90), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_4_riverside, parallax_x: 0.80, parallax_y: _level_parallax_y(_level_1_anchor_bottom_y, 0.80), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_3_plains, parallax_x: 0.70, parallax_y: _level_parallax_y(_level_1_anchor_bottom_y, 0.70), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_2_treeline_second, parallax_x: 0.60, parallax_y: _level_parallax_y(_level_1_anchor_bottom_y, 0.60), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l1_layer_1_treeline_main, parallax_x: 0.50, parallax_y: _level_parallax_y(_level_1_anchor_bottom_y, 0.50), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true}
 			],
 			[]
 		);
 		with(environment[_environment]){
 			texture_group = "level_1";
-			parallax_anchor_bottom_y = _start_view_bottom_y(14048);
+			parallax_anchor_bottom_y = _level_1_anchor_bottom_y;
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
 	
 	#region Level 2
+		var _level_2_anchor_bottom_y = _start_view_bottom_y(24096);
 		_environment = Environment.level_2_environment;
 		_environment_name = "Level 2";
 		_environment_tile = noone;
@@ -135,21 +152,21 @@ function director_environment_data_setup(){
 			_environment_tile,
 			_environment_foreground,
 			[
-				{mode: "normal", sprite: spr_bg_l2_layer_7_sky, parallax_x: 1.00, parallax_y: _gameplay_bg_parallax_y(1.00), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l2_layer_6_mountains, parallax_x: 0.90, parallax_y: _gameplay_bg_parallax_y(0.90), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l2_layer_5_treeline_bg, parallax_x: 0.80, parallax_y: _gameplay_bg_parallax_y(0.80), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l2_layer_4a_forest_crane, parallax_x: 0.70, parallax_y: _gameplay_bg_parallax_y(0.70), offset_y: 0, repeat_x: false, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l2_layer_7_sky, parallax_x: 1.00, parallax_y: _level_parallax_y(_level_2_anchor_bottom_y, 1.00), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l2_layer_6_mountains, parallax_x: 0.90, parallax_y: _level_parallax_y(_level_2_anchor_bottom_y, 0.90), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l2_layer_5_treeline_bg, parallax_x: 0.80, parallax_y: _level_parallax_y(_level_2_anchor_bottom_y, 0.80), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
+				{mode: "normal", sprite: spr_bg_l2_layer_4a_forest_crane, parallax_x: 0.70, parallax_y: _level_parallax_y(_level_2_anchor_bottom_y, 0.70), offset_y: 0, repeat_x: false, clamp_top: true, clamp_bottom: true},
 				{
-					mode: "normal", sprite: spr_bg_l2_layer_3_treeline_main, parallax_x: 0.60, parallax_y: _gameplay_bg_parallax_y(0.60), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true
+					mode: "normal", sprite: spr_bg_l2_layer_3_treeline_main, parallax_x: 0.60, parallax_y: _level_parallax_y(_level_2_anchor_bottom_y, 0.60), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true
 				},
 				{
-					mode: "normal", sprite: spr_bg_l2_layer_2_shore, parallax_x: 0.50, parallax_y: _gameplay_bg_parallax_y(0.59), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true
+					mode: "normal", sprite: spr_bg_l2_layer_2_shore, parallax_x: 0.50, parallax_y: _level_parallax_y(_level_2_anchor_bottom_y, 0.59), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true
 				},
 				{
 					mode: "animated",
 					sprite: spr_bg_l2_layer_1_river,
 					parallax_x: 0.50,
-					parallax_y: _gameplay_bg_parallax_y(0.50),
+					parallax_y: _level_parallax_y(_level_2_anchor_bottom_y, 0.50),
 					offset_y: 0,
 					fps: 30,
 					clamp_top: true,
@@ -160,7 +177,7 @@ function director_environment_data_setup(){
 		);
 		with(environment[_environment]){
 			texture_group = "level_2";
-			parallax_anchor_bottom_y = _start_view_bottom_y(24096);
+			parallax_anchor_bottom_y = _level_2_anchor_bottom_y;
 		}
 		_apply_default_vfx(environment[_environment]);
 	#endregion
