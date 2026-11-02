@@ -113,7 +113,7 @@ function player_landing_context_clear(){
 /// Airborne presentation only survives an uninterrupted move-state flight.
 function player_landing_context_validate(){
 	if(swim_active || air_spin_active || (state != PlayerState.move)
-	|| (move_grounded && velocity.y >= 0)){
+	|| (move_grounded && velocity.y >= 0 && !jump_startup_active)){
 		player_landing_context_clear();
 	}
 }

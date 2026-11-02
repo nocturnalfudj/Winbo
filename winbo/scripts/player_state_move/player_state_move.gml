@@ -75,7 +75,7 @@ function player_state_move(){
 	_air_spin_playing = player_air_spin_update_state();
 
 	#region Sprite Update
-		if(!player_look_active() && !_bump_block && !_landing_block && !image.is_playing_queued){
+		if(!player_look_active() && !_bump_block && !_landing_block && !image.is_playing_queued && !jump_startup_active){
 			if(move_grounded){
 				switch(secret_idle_phase){
 					case PLAYER_SECRET_IDLE_PHASE_SITDOWN:
@@ -278,7 +278,10 @@ function player_state_move(){
 	player_second_jump_hold_update();
 
 	#region Jump
-		if(_jump_pressed_now && _jump_available_now){
+		if(jump_startup_active){
+			player_jump_startup_update();
+		}
+		else if(_jump_pressed_now && _jump_available_now){
 			// Read Frolic before clearing it so the flight keeps its run-jump artwork.
 			var _jump_from_frolic = frolic_active;
 			player_frolic_clear();
@@ -314,7 +317,7 @@ function player_state_move(){
 	_face_horizontal_prev = face_horizontal;
 	if(!player_look_active()) character_face(false);
 
-	if(move_grounded && !stationary && !frolic_active && (secret_idle_phase == PLAYER_SECRET_IDLE_PHASE_INACTIVE) && (_face_horizontal_prev != face_horizontal)){
+	if(move_grounded && !stationary && !frolic_active && !jump_startup_active && (secret_idle_phase == PLAYER_SECRET_IDLE_PHASE_INACTIVE) && (_face_horizontal_prev != face_horizontal)){
 		image_system_queue_add_to_front(sprite_transition_walk_to_walk_other_direction, ANIMATION_FPS_DEFAULT);
 
 		if(quick_smoke_fx_enable){
@@ -502,6 +505,7 @@ function player_secret_idle_cancel(_spawn_bubble_out = true){
 
 function player_frolic_can_activate(_bump_block, _landing_block){
 	return (state == PlayerState.move)
+		&& !jump_startup_active
 		&& (secret_idle_phase == PLAYER_SECRET_IDLE_PHASE_INACTIVE)
 		&& move_grounded
 		&& (input_move_magnitude > 0)
@@ -870,6 +874,10 @@ function player_dive_spring_state_spring(){
 		// runs, Winbo stays exactly where the impact landed and the pending
 		// impulse must not be applied or integrated.
 		if(dive_spring_launch_hold_time > 0){
+			// Remember a dash pressed during the grounded pose so it fires on
+			// the first airborne step instead of being lost.
+			player_dive_spring_dash_cancel_update();
+
 			if(sprite_current != sprite_dive_spring){
 				image_system_setup(sprite_dive_spring, 0, false, false, 0, IMAGE_LOOP_FULL);
 			}
@@ -1041,17 +1049,19 @@ function player_dive_spring_state_transition(){
 
 	player_dive_spring_apex_update();
 
+	// The twist ending can start before the apex, so it stays cancellable on
+	// every airborne frame rather than only once the animation has finished.
+	if(!move_grounded && player_dive_spring_dash_interrupt_try()){
+		return;
+	}
+
+	if(!move_grounded && player_dive_spring_float_interrupt_try()){
+		return;
+	}
+
 	// The non-looping image rewinds onto its last frame once it overruns, so a
 	// stopped image also counts as finished after a long frame.
 	if(move_grounded || !image.animate || (image.position >= (dive_spring_transition_end_frame + 1))){
-		if(!move_grounded && player_dive_spring_dash_interrupt_try()){
-			return;
-		}
-
-		if(!move_grounded && player_dive_spring_float_interrupt_try()){
-			return;
-		}
-
 		// The twist ends facing front; only a held direction turns Winbo sideways.
 		var _target_fall_sprite;
 		_target_fall_sprite = player_dive_spring_direction_held() ? sprite_fall_sideways : sprite_fall;
@@ -1395,19 +1405,70 @@ function character_jump(_from_frolic = false){
 	second_jump_hold_pending = _grounded && !jump_face_sideways && abs(velocity.x) <= 0.05;
 	second_jump_active = _second;
 	if(_second){
-		// Always the same tier; never accumulate the preceding jump's velocity.
-		velocity.y = 0;
-		acceleration.y = 0;
 		second_jump_hold_pending = false;
 	}
-	acceleration.AddMagnitudeDirection(_second ? second_jump_impulse : input_move_acceleration_jump, 90);
-	jump_hold_allow_countdown = _second ? 0 : jump_hold_allow_countdown_max;
 	state = PlayerState.move;
 	// A fresh jump interrupts landing immediately, including within the ten-frame window.
 	var _jump_sprite = _second
 		? (jump_face_sideways ? sprite_jump_second_sideways : sprite_jump_second)
 		: (jump_frolic_active ? sprite_jump_frolic : (jump_face_sideways ? sprite_jump_sideways : sprite_jump));
 	image_system_setup(_jump_sprite, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+
+	// Squash frames are the jump's anticipation: play them on the ground and
+	// launch on the first takeoff frame. Off the ground they are skipped.
+	var _startup_frames = player_jump_startup_frames(_jump_sprite);
+	if(_startup_frames > 0){
+		if(_grounded){
+			jump_startup_active = true;
+			jump_startup_frames = _startup_frames;
+			jump_startup_sprite = _jump_sprite;
+			jump_startup_second = _second;
+			return;
+		}
+		image_set_frame(image, _startup_frames);
+	}
+	player_jump_launch(_second);
+}
+
+/// How many leading squash frames a jump sprite has before takeoff.
+function player_jump_startup_frames(_sprite){
+	if(_sprite == sprite_jump_second_sideways) return 2;
+	if((_sprite == sprite_jump_second) || (_sprite == sprite_jump_frolic)) return 1;
+	return 0;
+}
+
+/// Hold the grounded squash until the takeoff frame is shown. Leaving the
+/// ground, or anything else taking over the sprite, launches at once.
+function player_jump_startup_update(){
+	if(move_grounded && (sprite_current == jump_startup_sprite) && (image.frame < jump_startup_frames)){
+		return;
+	}
+	jump_startup_active = false;
+	if(sprite_current == jump_startup_sprite){
+		image_set_frame(image, max(image.frame, jump_startup_frames));
+	}
+	player_jump_launch(jump_startup_second);
+}
+
+function player_jump_startup_clear(){
+	jump_startup_active = false;
+}
+
+/// Damage, swimming, dashes and other states abandon an unlaunched jump.
+function player_jump_startup_validate(){
+	if(jump_startup_active && (swim_active || air_spin_active || (state != PlayerState.move))){
+		player_jump_startup_clear();
+	}
+}
+
+function player_jump_launch(_second){
+	if(_second){
+		// Always the same tier; never accumulate the preceding jump's velocity.
+		velocity.y = 0;
+		acceleration.y = 0;
+	}
+	acceleration.AddMagnitudeDirection(_second ? second_jump_impulse : input_move_acceleration_jump, 90);
+	jump_hold_allow_countdown = _second ? 0 : jump_hold_allow_countdown_max;
 	move_gravity.Copy(move_gravity_rise);
 	if(bump_jump_count > 0) bump_jump_count--;
 	with(o_camera){
@@ -1433,7 +1494,7 @@ function player_jump_face_begin(){
 }
 
 function player_jump_face_update(){
-	if((move_grounded && velocity.y >= 0) || swim_active || state == PlayerState.hit || state == PlayerState.death){
+	if((move_grounded && velocity.y >= 0 && !jump_startup_active) || swim_active || state == PlayerState.hit || state == PlayerState.death){
 		jump_face_locked = false;
 		jump_float_requested = false;
 		dive_spring_fall_front_active = false;

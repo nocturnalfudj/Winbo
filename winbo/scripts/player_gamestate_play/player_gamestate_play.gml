@@ -26,6 +26,7 @@ function player_gamestate_play(){
 
 	player_swim_contact_update();
 	player_second_jump_validate();
+	player_jump_startup_validate();
 	player_landing_context_validate();
 	if(second_jump_landing_age >= 0){
 		second_jump_landing_age += _delta_time_scaled;

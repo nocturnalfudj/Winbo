@@ -167,6 +167,12 @@ is_player = true;
 	// Per-frame difference between the normal and revised neutral artwork's top.
 	second_jump_hold_frame_offsets = [-106, 59, 87, 81, 74, 65];
 
+	// Grounded anticipation: a jump with squash frames launches on its takeoff frame.
+	jump_startup_active = false;
+	jump_startup_frames = 0;
+	jump_startup_sprite = noone;
+	jump_startup_second = false;
+
 	// Presentation context for the current flight; physics are unaffected.
 	jump_frolic_active = false;
 	post_dash_phase = PLAYER_POST_DASH_PHASE_INACTIVE;
