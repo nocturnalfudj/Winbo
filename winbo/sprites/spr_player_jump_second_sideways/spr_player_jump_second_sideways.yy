@@ -99,13 +99,6 @@
       "name": "ae026966-fd77-5c16-b5e3-0102b4ffd4f6",
       "resourceType": "GMSpriteFrame",
       "resourceVersion": "2.0"
-    },
-    {
-      "$GMSpriteFrame": "v1",
-      "%Name": "b978cca0-0266-517c-b2f5-7e238559e616",
-      "name": "b978cca0-0266-517c-b2f5-7e238559e616",
-      "resourceType": "GMSpriteFrame",
-      "resourceVersion": "2.0"
     }
   ],
   "gridX": 0,
@@ -154,7 +147,7 @@
     },
     "eventStubScript": null,
     "eventToFunction": {},
-    "length": 12.0,
+    "length": 11.0,
     "lockOrigin": false,
     "moments": {
       "$KeyframeStore<MomentsEventKeyframe>": "",
@@ -421,28 +414,6 @@
               "id": "8246ae8b-1a5f-50e5-b00d-68d909906be5",
               "IsCreationKey": false,
               "Key": 10.0,
-              "Length": 1.0,
-              "resourceType": "Keyframe<SpriteFrameKeyframe>",
-              "resourceVersion": "2.0",
-              "Stretch": false
-            },
-            {
-              "$Keyframe<SpriteFrameKeyframe>": "",
-              "Channels": {
-                "0": {
-                  "$SpriteFrameKeyframe": "",
-                  "Id": {
-                    "name": "b978cca0-0266-517c-b2f5-7e238559e616",
-                    "path": "sprites/spr_player_jump_second_sideways/spr_player_jump_second_sideways.yy"
-                  },
-                  "resourceType": "SpriteFrameKeyframe",
-                  "resourceVersion": "2.0"
-                }
-              },
-              "Disabled": false,
-              "id": "a159d6fd-4c9f-58ad-9f2a-77ef5bd4f59b",
-              "IsCreationKey": false,
-              "Key": 11.0,
               "Length": 1.0,
               "resourceType": "Keyframe<SpriteFrameKeyframe>",
               "resourceVersion": "2.0",

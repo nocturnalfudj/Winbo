@@ -32,6 +32,8 @@ function player_second_jump_hold_update(){
 	jump_frolic_active = false;
 	jump_hold_allow_countdown = 0;
 	velocity.y -= second_jump_hold_boost;
+	// The sparkle marks the ground the held jump left from, not where it was promoted.
+	player_flourish_ground_fx_spawn();
 	// Keep the shared takeoff frames already played instead of restarting the wind-up.
 	var _frame = image.frame;
 	// The revised art rises inside its larger canvas. Preserve the displayed

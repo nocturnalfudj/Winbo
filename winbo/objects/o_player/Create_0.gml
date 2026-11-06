@@ -82,6 +82,8 @@ is_player = true;
 	//Transition Sprites
 	sprite_transition_walk_to_walk_other_direction		= spr_player_transition_walk_to_walk_other_direction;
 	sprite_transition_walk_to_idle						= spr_player_transition_walk_to_idle;
+	sprite_transition_flourish_jump_to_float			= spr_player_transition_flourish_jump_to_float;
+	sprite_transition_extreme_pose_to_dash				= spr_player_transition_extreme_pose_to_dash;
 	sprite_transition_walk_to_frolic					= spr_player_transition_walk_to_frolic;
 	sprite_transition_idle_to_frolic					= spr_player_transition_idle_to_frolic;
 	sprite_transition_float_to_fall						= spr_player_transition_float_to_fall;
@@ -172,6 +174,8 @@ is_player = true;
 	jump_startup_frames = 0;
 	jump_startup_sprite = noone;
 	jump_startup_second = false;
+	jump_takeoff_x = x;
+	jump_takeoff_y = y;
 
 	// Presentation context for the current flight; physics are unaffected.
 	jump_frolic_active = false;

@@ -261,6 +261,7 @@ function player_state_move(){
 				if((acceleration.y >= 0) && (velocity.y >= 0)){
 					player_frolic_clear();
 					player_landing_context_clear();
+					player_float_begin_from_flourish();
 					state = PlayerState.float;
 				}
 			}
@@ -1158,6 +1159,8 @@ function player_dive_spring_dash_interrupt_try(){
 	bump_allow = true;
 	bump_allow_countdown = bump_allow_countdown_max;
 	image_system_setup(sprite_dash, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+	// Cancelling the dive spring passes through the extreme pose into the dash.
+	image_system_queue_add_to_front(sprite_transition_extreme_pose_to_dash, ANIMATION_FPS_DEFAULT);
 	audio_player_air_dash_play();
 
 	camera_shake(0.1 * SECOND, 2);
@@ -1432,8 +1435,7 @@ function character_jump(_from_frolic = false){
 
 /// How many leading squash frames a jump sprite has before takeoff.
 function player_jump_startup_frames(_sprite){
-	if(_sprite == sprite_jump_second_sideways) return 2;
-	if((_sprite == sprite_jump_second) || (_sprite == sprite_jump_frolic)) return 1;
+	if((_sprite == sprite_jump_second) || (_sprite == sprite_jump_second_sideways) || (_sprite == sprite_jump_frolic)) return 1;
 	return 0;
 }
 
@@ -1466,6 +1468,11 @@ function player_jump_launch(_second){
 		// Always the same tier; never accumulate the preceding jump's velocity.
 		velocity.y = 0;
 		acceleration.y = 0;
+	}
+	if(move_grounded){
+		jump_takeoff_x = x + draw_adjustment_x;
+		jump_takeoff_y = y + draw_adjustment_y;
+		if(_second) player_flourish_ground_fx_spawn();
 	}
 	acceleration.AddMagnitudeDirection(_second ? second_jump_impulse : input_move_acceleration_jump, 90);
 	jump_hold_allow_countdown = _second ? 0 : jump_hold_allow_countdown_max;
@@ -1589,4 +1596,17 @@ function player_jump_float_input_update(_ground_jump){
 	if(_pressed && !_ground_jump && _clear){
 		jump_float_requested = true;
 	}
+}
+
+/// Andy's ground sparkle for a flourish (second) jump. It stays where the
+/// jump left the ground rather than following Winbo up.
+function player_flourish_ground_fx_spawn(){
+	fx_spawn_sprite_once(jump_takeoff_x, jump_takeoff_y, "lyr_pfx_midground", spr_fx_flourish_jump_ground, face_horizontal * image_xscale, image_yscale, 0, ANIMATION_FPS_DEFAULT);
+}
+
+/// Floating out of the sideways flourish jump passes through its in-between pose.
+function player_float_begin_from_flourish(){
+	if(sprite_current != sprite_jump_second_sideways) return;
+	image_system_setup(sprite_float, ANIMATION_FPS_DEFAULT, true, true, 5, IMAGE_LOOP_FULL);
+	image_system_queue_add_to_front(sprite_transition_flourish_jump_to_float, ANIMATION_FPS_DEFAULT);
 }

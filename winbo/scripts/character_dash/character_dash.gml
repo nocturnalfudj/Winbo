@@ -115,7 +115,10 @@ function character_dash(){
 				player_landing_context_clear();
 
 				//Dash Sprite
+				var _from_flourish = (sprite_current == sprite_jump_second_sideways);
 				image_system_setup(sprite_dash,ANIMATION_FPS_DEFAULT,true,false,0,IMAGE_LOOP_FULL);
+				// The sideways flourish jump passes through its extreme pose into the dash.
+				if(_from_flourish) image_system_queue_add_to_front(sprite_transition_extreme_pose_to_dash, ANIMATION_FPS_DEFAULT);
 
 				if(!swim_active) audio_player_air_dash_play();
 			}
