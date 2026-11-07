@@ -174,7 +174,17 @@ saw_path_configure_from_track = function(){
 	for(var _i = 0; _i < _track_count; _i++){
 		var _candidate = instance_find(o_saw_track,_i);
 		if(_candidate.saw_track_group == saw_track_group){
-			var _candidate_distance = point_distance(x,y,_candidate.x + (_candidate.saw_track_width * 0.5),_candidate.y + (_candidate.saw_track_height * 0.5));
+			// Attach to the track whose outline is nearest, so a blade placed on a
+			// track's edge rides that track rather than one with a nearer centre.
+			var _left = _candidate.x;
+			var _top = _candidate.y;
+			var _right = _left + _candidate.saw_track_width;
+			var _bottom = _top + _candidate.saw_track_height;
+			var _outside_x = max(_left - x, 0, x - _right);
+			var _outside_y = max(_top - y, 0, y - _bottom);
+			var _candidate_distance = ((_outside_x > 0) || (_outside_y > 0))
+				? point_distance(0,0,_outside_x,_outside_y)
+				: min(x - _left, _right - x, y - _top, _bottom - y);
 			if(_candidate_distance < _nearest_distance){
 				_nearest_distance = _candidate_distance;
 				saw_track_bound = _candidate;

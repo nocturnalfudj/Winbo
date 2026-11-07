@@ -1619,5 +1619,8 @@ function player_flourish_ground_fx_spawn(){
 function player_float_begin_from_flourish(){
 	if(sprite_current != sprite_jump_second_sideways) return;
 	image_system_setup(sprite_float, ANIMATION_FPS_DEFAULT, true, true, 5, IMAGE_LOOP_FULL);
+	// The queue hands over at the loop start, so queue the full float as well
+	// to keep its opening frames after the in-between.
+	image_system_queue_add_to_front(sprite_float, ANIMATION_FPS_DEFAULT);
 	image_system_queue_add_to_front(sprite_transition_flourish_jump_to_float, ANIMATION_FPS_DEFAULT);
 }
