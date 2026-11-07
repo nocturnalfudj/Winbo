@@ -5,11 +5,14 @@ uniform vec2 u_texel;
 uniform float u_strength;
 uniform vec2 u_fade_top;
 uniform vec2 u_reflection_depth;
+uniform vec4 u_body_frame;
 
 void main() {
+    // The surface covers only the on-screen slice; ripple in whole-body space.
+    vec2 body_uv = u_body_frame.xy + v_vTexcoord * u_body_frame.zw;
     vec2 wave = vec2(
-        sin(v_vTexcoord.y * 42.0 + u_time * 2.4),
-        cos(v_vTexcoord.x * 35.0 - u_time * 1.8) * 0.45
+        sin(body_uv.y * 42.0 + u_time * 2.4),
+        cos(body_uv.x * 35.0 - u_time * 1.8) * 0.45
     );
     vec2 uv = clamp(v_vTexcoord + wave * u_texel * u_strength,
                     u_texel * 0.5, vec2(1.0) - u_texel * 0.5);

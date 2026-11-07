@@ -7,8 +7,19 @@ if(liquid_body.owner != id || !camera_visible) exit;
 // instead of reconstructing it from UI scale and a cached zoom value.
 render_scale = surface_get_width(application_surface) / camera_get_view_width(view_camera[0]);
 render_height_buffer = max(500, liquid_body.bottom - liquid_body.top);
-var _width = max(1, ceil((liquid_body.right - liquid_body.left) * render_scale));
-var _height = max(1, ceil((liquid_body.bottom - liquid_body.top + render_height_buffer) * render_scale));
+
+// Only on-screen pixels can be captured, so the surfaces cover just the part of
+// the body and its reflection headroom inside the view. Their size follows the
+// screen; a tall or wide body must never allocate its whole area every frame.
+var _camera = view_camera[0];
+var _view_left = camera_get_view_x(_camera);
+var _view_top = camera_get_view_y(_camera);
+render_left = max(liquid_body.left, _view_left);
+render_top = max(liquid_body.top - render_height_buffer, _view_top);
+render_right = max(render_left + 1, min(liquid_body.right, _view_left + camera_get_view_width(_camera)));
+render_bottom = max(render_top + 1, min(liquid_body.bottom, _view_top + camera_get_view_height(_camera)));
+var _width = max(1, ceil((render_right - render_left) * render_scale));
+var _height = max(1, ceil((render_bottom - render_top) * render_scale));
 underwater_background_surface = liquid_surface_update(underwater_background_surface, _width, _height);
 water_mask_surface = liquid_surface_update(water_mask_surface, _width, _height);
 underwater_surface = liquid_surface_update(underwater_surface, _width, _height);
@@ -29,10 +40,10 @@ for(var _ci = 0; _ci < array_length(liquid_body.cells); _ci++){
 	for(var _i = 0; _i <= _steps; _i++){
 		var _x = lerp(_cell.left, _cell.right, _i / _steps);
 		var _y = liquid_surface_height(_surface, _x);
-		draw_vertex_colour((_x - liquid_body.left) * render_scale,
-			(_y - liquid_body.top + render_height_buffer) * render_scale, c_white, 1);
-		draw_vertex_colour((_x - liquid_body.left) * render_scale,
-			(_cell.bottom - liquid_body.top + render_height_buffer) * render_scale, c_white, 1);
+		draw_vertex_colour((_x - render_left) * render_scale,
+			(_y - render_top) * render_scale, c_white, 1);
+		draw_vertex_colour((_x - render_left) * render_scale,
+			(_cell.bottom - render_top) * render_scale, c_white, 1);
 	}
 	draw_primitive_end();
 }
@@ -44,10 +55,10 @@ gpu_set_colorwriteenable(false, false, false, true);
 draw_surface(water_mask_surface, 0, 0);
 gpu_set_colorwriteenable(true, true, true, true);
 gpu_set_blendmode_ext(bm_dest_alpha, bm_zero);
-draw_sprite_tiled_ext(sprite_index, 0, texture_x - liquid_body.left * render_scale,
-	texture_y - (liquid_body.top - render_height_buffer) * render_scale, 1, 1, c_white, 1);
+draw_sprite_tiled_ext(sprite_index, 0, texture_x - render_left * render_scale,
+	texture_y - render_top * render_scale, 1, 1, c_white, 1);
 gpu_set_blendmode(bm_normal);
 surface_reset_target();
 
-draw_surface_ext(underwater_background_surface, liquid_body.left, liquid_body.top - render_height_buffer,
+draw_surface_ext(underwater_background_surface, render_left, render_top,
 	1 / render_scale, 1 / render_scale, 0, c_white, 1);

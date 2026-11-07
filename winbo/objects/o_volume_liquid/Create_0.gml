@@ -56,6 +56,11 @@ cached_surf_h = -1;
 render_scale = 1;
 render_height_buffer = 0;
 render_capture_top = 0;
+// Room-space slice of the body that the surfaces cover this frame.
+render_left = 0;
+render_top = 0;
+render_right = 0;
+render_bottom = 0;
 
 // One owner for the existing volatile GPU surface checks. A zero size releases
 // the surface; Draw Begin updates every surface before either draw pass uses it.
@@ -77,8 +82,8 @@ liquid_surface_update = function(_surface, _width, _height) {
 // surface can stretch its edge pixels into the water when the camera moves.
 liquid_scene_capture = function() {
 	var _camera = view_camera[0];
-	var _source_x = floor((liquid_body.left - camera_get_view_x(_camera)) * render_scale);
-	var _source_y = floor((liquid_body.top - render_height_buffer - camera_get_view_y(_camera)) * render_scale);
+	var _source_x = floor((render_left - camera_get_view_x(_camera)) * render_scale);
+	var _source_y = floor((render_top - camera_get_view_y(_camera)) * render_scale);
 	var _copy_x = max(0, _source_x);
 	var _copy_y = max(0, _source_y);
 	var _destination_x = _copy_x - _source_x;
@@ -108,6 +113,7 @@ submerged_ripple_uniform_texel = shader_get_uniform(sh_liquid_ripple, "u_texel")
 submerged_ripple_uniform_strength = shader_get_uniform(sh_liquid_ripple, "u_strength");
 submerged_ripple_uniform_fade_top = shader_get_uniform(sh_liquid_ripple, "u_fade_top");
 submerged_ripple_uniform_reflection_depth = shader_get_uniform(sh_liquid_ripple, "u_reflection_depth");
+submerged_ripple_uniform_body_frame = shader_get_uniform(sh_liquid_ripple, "u_body_frame");
 
 // A complete standalone body is safe during Create. Room Start connects the
 // room's volumes after every instance has initialized its liquid settings.
