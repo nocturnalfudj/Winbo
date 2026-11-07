@@ -291,18 +291,19 @@ is_player = true;
 	// retention below so the same height is reached sooner.
 	dive_spring_jump_acceleration_factor = 2.376;
 	dive_spring_rise_gravity_factor = 1.2;
-	dive_spring_descent_loop_start_frame = 4;
-	dive_spring_descent_loop_end_frame = 6;
-	dive_spring_impact_start_frame = 6;
-	dive_spring_impact_loop_start_frame = 7;
-	dive_spring_impact_loop_end_frame = 8;
-	dive_spring_launch_frame = 8;
-	dive_spring_rotor_loop_start_frame = 9;
-	dive_spring_rotor_loop_end_frame = 15;
-	dive_spring_transition_start_frame = 15;
-	// Frames 15-24 are the twist ending; it finishes facing front.
-	dive_spring_transition_end_frame = 24;
-	// Unscaled time the front fall shows between the twist ending and touchdown.
+	dive_spring_descent_loop_start_frame = 3;
+	dive_spring_descent_loop_end_frame = 5;
+	dive_spring_impact_start_frame = 5;
+	dive_spring_impact_loop_start_frame = 6;
+	dive_spring_impact_loop_end_frame = 7;
+	dive_spring_launch_frame = 7;
+	// Frames 8-11 are the upside-down spin loop.
+	dive_spring_rotor_loop_start_frame = 8;
+	dive_spring_rotor_loop_end_frame = 12;
+	dive_spring_transition_start_frame = 12;
+	// Frames 12-22 spin Winbo upright; it finishes facing front.
+	dive_spring_transition_end_frame = 22;
+	// Unscaled time the front fall shows between the upright spin ending and touchdown.
 	dive_spring_transition_fall_lead_time = SECOND * 0.15;
 	dive_spring_fail_start_frame = 7;
 	dive_spring_launch_hold_time_max = SECOND * 0.18;

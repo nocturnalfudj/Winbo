@@ -206,7 +206,15 @@ function player_state_move(){
 								if(_should_use_sideways_fall != _current_fall_is_sideways){
 									var _target_fall_sprite;
 									_target_fall_sprite = _should_use_sideways_fall ? sprite_fall_sideways : sprite_fall;
-									image_set_sprite(image, _target_fall_sprite, false);
+									// Turning out of the front fall after a dive spring passes
+									// through the front-to-side in-between.
+									if(dive_spring_fall_front_active && _should_use_sideways_fall){
+										image_system_setup(_target_fall_sprite, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+										image_system_queue_add_to_front(sprite_transition_bump_to_fall_sideways, ANIMATION_FPS_DEFAULT);
+									}
+									else{
+										image_set_sprite(image, _target_fall_sprite, false);
+									}
 								}
 							}
 						}
@@ -871,7 +879,7 @@ function player_dive_spring_state_spring(){
 	if(dive_spring_launch_hold_time > 0){
 		dive_spring_launch_hold_time = max(0, dive_spring_launch_hold_time - _delta_time_scaled);
 
-		// Frame 8 is the grounded in-between before the launch: while the hold
+		// The launch frame is the grounded in-between before the launch: while the hold
 		// runs, Winbo stays exactly where the impact landed and the pending
 		// impulse must not be applied or integrated.
 		if(dive_spring_launch_hold_time > 0){
@@ -911,7 +919,7 @@ function player_dive_spring_state_spring(){
 	player_dive_spring_dash_cancel_update();
 
 	// An explicit cancel interrupts the rotor arc promptly; uninterrupted
-	// flight keeps the rotor loop and then plays the full twist ending.
+	// flight keeps the rotor loop and then plays the full upright spin ending.
 	if(!move_grounded && player_dive_spring_dash_interrupt_try()){
 		return;
 	}
@@ -920,7 +928,7 @@ function player_dive_spring_state_spring(){
 		return;
 	}
 
-	// The rotor keeps looping until the twist ending would just finish on
+	// The rotor keeps looping until the upright spin ending would just finish on
 	// touchdown, which on a launch-height landing begins shortly before the
 	// apex. Over a deep pit no ground is predicted and the rotor keeps looping.
 	var _apex_this_step;
@@ -999,7 +1007,7 @@ function player_dive_spring_apex_update(){
 	return true;
 }
 
-/// Whether touchdown falls within the time the twist ending and a short front
+/// Whether touchdown falls within the time the upright spin ending and a short front
 /// fall still need. Mirrors player_dive_spring_flight_update's vertical
 /// integration (rise, apex snap, fall) at this frame's step size, then sweeps
 /// that drop below the feet so thin floors cannot be skipped.
@@ -1050,7 +1058,7 @@ function player_dive_spring_state_transition(){
 
 	player_dive_spring_apex_update();
 
-	// The twist ending can start before the apex, so it stays cancellable on
+	// The upright spin ending can start before the apex, so it stays cancellable on
 	// every airborne frame rather than only once the animation has finished.
 	if(!move_grounded && player_dive_spring_dash_interrupt_try()){
 		return;
@@ -1063,7 +1071,7 @@ function player_dive_spring_state_transition(){
 	// The non-looping image rewinds onto its last frame once it overruns, so a
 	// stopped image also counts as finished after a long frame.
 	if(move_grounded || !image.animate || (image.position >= (dive_spring_transition_end_frame + 1))){
-		// The twist ends facing front; only a held direction turns Winbo sideways.
+		// The upright spin ends facing front; only a held direction turns Winbo sideways.
 		var _target_fall_sprite;
 		_target_fall_sprite = player_dive_spring_direction_held() ? sprite_fall_sideways : sprite_fall;
 
@@ -1084,6 +1092,9 @@ function player_dive_spring_state_transition(){
 		}
 		else{
 			image_system_setup(_target_fall_sprite, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+			if(_target_fall_sprite == sprite_fall_sideways){
+				image_system_queue_add_to_front(sprite_transition_bump_to_fall_sideways, ANIMATION_FPS_DEFAULT);
+			}
 		}
 	}
 }
