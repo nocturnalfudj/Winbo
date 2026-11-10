@@ -56,11 +56,14 @@ cached_surf_h = -1;
 render_scale = 1;
 render_height_buffer = 0;
 render_capture_top = 0;
-// Room-space slice of the body that the surfaces cover this frame.
+// Room-space origin of the window of the body that the surfaces cover this frame.
 render_left = 0;
 render_top = 0;
-render_right = 0;
-render_bottom = 0;
+// Surface-pixel rectangle of that window that is on screen; passes fill only this.
+render_clip_x = 0;
+render_clip_y = 0;
+render_clip_w = 0;
+render_clip_h = 0;
 
 // One owner for the existing volatile GPU surface checks. A zero size releases
 // the surface; Draw Begin updates every surface before either draw pass uses it.

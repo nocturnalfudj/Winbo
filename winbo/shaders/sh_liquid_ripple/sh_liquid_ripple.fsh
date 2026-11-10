@@ -8,7 +8,7 @@ uniform vec2 u_reflection_depth;
 uniform vec4 u_body_frame;
 
 void main() {
-    // The surface covers only the on-screen slice; ripple in whole-body space.
+    // The surface covers only a window of the body; ripple in whole-body space.
     vec2 body_uv = u_body_frame.xy + v_vTexcoord * u_body_frame.zw;
     vec2 wave = vec2(
         sin(body_uv.y * 42.0 + u_time * 2.4),
