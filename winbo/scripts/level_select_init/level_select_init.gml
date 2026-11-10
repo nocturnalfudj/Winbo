@@ -68,7 +68,7 @@ function level_select_init() {
 			LEVEL_SELECT_TRANSITION_VIA_PRESENCE_HUB,
 			false,
 			Environment.level_2_environment,
-			["game","level_2"]
+			["game","level_2","enemies"]
 		);
 		level_select_register(
 			"asset_test",

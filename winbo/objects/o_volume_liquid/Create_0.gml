@@ -78,6 +78,16 @@ liquid_surface_update = function(_surface, _width, _height) {
 	return _surface;
 };
 
+// Off-screen bodies hold no GPU memory; Draw Begin recreates them on return.
+liquid_surfaces_release = function() {
+	underwater_background_surface = liquid_surface_update(underwater_background_surface, 0, 0);
+	water_mask_surface = liquid_surface_update(water_mask_surface, 0, 0);
+	underwater_surface = liquid_surface_update(underwater_surface, 0, 0);
+	underwater_composite_surface = liquid_surface_update(underwater_composite_surface, 0, 0);
+	reflection_surface = liquid_surface_update(reflection_surface, 0, 0);
+	reflection_composite_surface = liquid_surface_update(reflection_composite_surface, 0, 0);
+};
+
 // Unavailable scene pixels must stay transparent. Copying beyond the application
 // surface can stretch its edge pixels into the water when the camera moves.
 liquid_scene_capture = function() {

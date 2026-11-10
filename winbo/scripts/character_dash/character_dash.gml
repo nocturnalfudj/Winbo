@@ -44,7 +44,7 @@ function character_dash(){
 	#endregion
 	
 	//Dash
-	if((!move_grounded) && (dash_enable) && (input_current[UserControl.dash]) && (!input_previous[UserControl.dash]) && (camera_visible)){
+	if((!move_grounded) && (dash_enable) && (input_current[UserControl.dash]) && (!input_previous[UserControl.dash]) && (camera_visible) && !player_flourish_cancel_locked()){
 		if((!dash_stamina_depleted) && (dash_cooldown <= 0) && (dash_stamina >= dash_stamina_cost)){
 			//Go to Dash State
 			state = dash_state;
@@ -117,8 +117,8 @@ function character_dash(){
 				//Dash Sprite
 				var _from_flourish = (sprite_current == sprite_jump_second_sideways);
 				image_system_setup(sprite_dash,ANIMATION_FPS_DEFAULT,true,false,0,IMAGE_LOOP_FULL);
-				// The sideways flourish jump passes through its extreme pose into the dash.
-				if(_from_flourish) image_system_queue_add_to_front(sprite_transition_extreme_pose_to_dash, ANIMATION_FPS_DEFAULT);
+				// The sideways flourish jump passes through its in-between poses into the dash.
+				if(_from_flourish) player_flourish_cancel_transition(sprite_transition_flourish_jump_to_dash);
 
 				if(!swim_active) audio_player_air_dash_play();
 			}

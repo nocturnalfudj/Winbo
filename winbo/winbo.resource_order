@@ -1150,7 +1150,6 @@
     {"name":"txtPstr_level_timer_idle_main","order":1,"path":"scripts/txtPstr_level_timer_idle_main/txtPstr_level_timer_idle_main.yy",},
     {"name":"txtPstr_life_idle_main","order":2,"path":"scripts/txtPstr_life_idle_main/txtPstr_life_idle_main.yy",},
     {"name":"txtPstr_orb_idle_main","order":2,"path":"scripts/txtPstr_orb_idle_main/txtPstr_orb_idle_main.yy",},
-    {"name":"txtPstr_talisman_idle_main","order":1,"path":"scripts/txtPstr_talisman_idle_main/txtPstr_talisman_idle_main.yy",},
     {"name":"txtPstr_winbo_lives_idle_main","order":1,"path":"scripts/txtPstr_winbo_lives_idle_main/txtPstr_winbo_lives_idle_main.yy",},
     {"name":"ui_anchor_create","order":5,"path":"scripts/ui_anchor_create/ui_anchor_create.yy",},
     {"name":"ui_anchor_hide","order":3,"path":"scripts/ui_anchor_hide/ui_anchor_hide.yy",},

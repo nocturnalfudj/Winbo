@@ -34,6 +34,7 @@ function player_second_jump_hold_update(){
 	velocity.y -= second_jump_hold_boost;
 	// The sparkle marks the ground the held jump left from, not where it was promoted.
 	player_flourish_ground_fx_spawn();
+	audio_player_second_jump_play();
 	// Keep the shared takeoff frames already played instead of restarting the wind-up.
 	var _frame = image.frame;
 	// The revised art rises inside its larger canvas. Preserve the displayed
@@ -56,6 +57,19 @@ function player_second_jump_visual_update(){
 	var _progress = clamp((image.position - second_jump_hold_blend_frame)
 		/ max(1, 8 - second_jump_hold_blend_frame), 0, 1);
 	sprite_y_offset = second_jump_hold_blend_offset * (1 - _progress);
+}
+
+/// The sideways flourish commits Winbo until its extreme pose.
+function player_flourish_cancel_locked(){
+	return (sprite_current == sprite_jump_second_sideways) && (image.frame < second_jump_cancel_frame);
+}
+
+/// Cancelling the sideways flourish plays Andy's in-between poses in place of
+/// the next move's opening frames, so the move keeps its length and snap.
+/// Call after the next move's image_system_setup.
+function player_flourish_cancel_transition(_transition){
+	image.target_start_frame = sprite_get_number(_transition);
+	image_system_queue_add_to_front(_transition, ANIMATION_FPS_DEFAULT);
 }
 
 /// Shared by normal play and dialogue so every genuine landing consumes the flight.

@@ -38,6 +38,8 @@ function Image(_sprite_current,_frames_per_second,_animate,_loop,_loop_start,_lo
 	target_loop = _loop;
 	target_loop_start = _loop_start;
 	target_loop_end = _loop_end;
+	// Where the target resumes after the queue; a lead-in can replace its opening frames.
+	target_start_frame = _loop_start;
 	is_playing_queued = false;
 }
 

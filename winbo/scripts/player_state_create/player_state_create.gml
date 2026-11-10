@@ -103,7 +103,7 @@ function player_state_stage_entrance(){
 	if((sprite_current_frame >= (image.sprite_number - 1)) && move_grounded){
 		if(stage_entrance_landing_smoke_pending){
 			stage_entrance_landing_smoke_pending = false;
-			fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", spr_fx_smoke_landing, 1, 1, 0, 18);
+			player_landing_smoke_spawn();
 		}
 		player_stage_entrance_finish();
 	}

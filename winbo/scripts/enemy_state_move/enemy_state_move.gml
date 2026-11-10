@@ -355,6 +355,7 @@ function enemy_state_move(){
 				// so when the queue ends, it switches to the correct directional sprite.
 				image.target_sprite = _target_sprite;
 				image.target_loop_start = _target_loop_start;
+				image.target_start_frame = _target_loop_start;
 				image.target_loop_end = _target_loop_end;
 				image.target_loop = _target_loop;
 				image.target_animate = _target_animate;

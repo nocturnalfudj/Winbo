@@ -4,8 +4,12 @@ if (sprite_current < 0) {
 }
 
 if(fx_follow_enabled){
-	x = fx_follow_target.x + fx_follow_offset_x;
-	y = fx_follow_target.y + fx_follow_offset_y;
+	// A destroyed target leaves the FX where it was last seen.
+	var _fx = id;
+	with(fx_follow_target){
+		_fx.x = x + _fx.fx_follow_offset_x;
+		_fx.y = y + _fx.fx_follow_offset_y;
+	}
 }
 
 // Give bump smoke a white, opaque core while retaining soft transparent edges.

@@ -1,8 +1,4 @@
 function pickup_collect_talisman(){
-	//Abort if No Talisman ID Set
-	if(talisman_id == noone)
-		exit;
-	
 	with(o_director){
 		talisman_found[other.talisman_id] = true;
 	}
@@ -10,8 +6,7 @@ function pickup_collect_talisman(){
 	//Track talisman collection
 	level_stat_add(LevelStat.talismans_collected);
 	
-	instance_create_layer(x,y,"lyr_pfx_foreground",o_txtPstr_talisman);
-	
-	//Camera Shake
-	camera_shake_add(0.1,250,10,5,false,false,false,1,,false,100,);
+	// Freeze the frame and play the "Talisman Got" sequence over it.
+	instance_create_layer(0, 0, "lyr_cutscene_front", o_talisman_got, {talisman_id: talisman_id});
+	game_state_set_target(GameState.cutscene);
 }

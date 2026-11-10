@@ -54,6 +54,6 @@ else{
 	image_yscale = follow.image_yscale * offset_yscale;
 	image_alpha = follow.image_alpha * offset_alpha;
 	
-	camera_visible_buff_width = sprite_width * camera_visible_buff_factor;
-	camera_visible_buff_height = sprite_height * camera_visible_buff_factor;
+	camera_visible_buff_width = abs(sprite_width) * camera_visible_buff_factor;
+	camera_visible_buff_height = abs(sprite_height) * camera_visible_buff_factor;
 }

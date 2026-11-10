@@ -57,8 +57,8 @@ function image_animate(_image,_update_sprite_current_frame){
 						loop = target_loop;
 						loop_start = target_loop_start;
 						loop_end = target_loop_end;
-						position = target_loop_start;
-						frame = target_loop_start;
+						position = target_start_frame;
+						frame = floor(target_start_frame);
 						is_playing_queued = false;
 					}
 				} else {

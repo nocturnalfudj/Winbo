@@ -28,8 +28,10 @@ if(liquid_body.owner != id) exit;
 		camera_visible = true;
 	}
 
-	if(!camera_visible)
+	if(!camera_visible){
+		liquid_surfaces_release();
 		exit;
+	}
 #endregion
 
 liquid_bubbles_update();

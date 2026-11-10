@@ -51,11 +51,12 @@ event_inherited();
 	presence_visual_front_eyes_intro_end = 20;
 	presence_visual_front_eyes_idle_start = 30;
 	presence_visual_front_eyes_idle_end = 39;
-	// Andy's diagram defines the allowed eye travel window directly as 142x76.
+	// Andy's diagram is a 142x76 box the whole pair of eyes stays inside, so the
+	// eyes travel by the box less the solid eye pair (107x35 at sprite scale).
 	// The Step event subtracts each directional sprite's baked displacement so
 	// the visible eyes, not the full sprite canvas, remain inside that boundary.
-	presence_visual_eye_tracking_range_x = 142;
-	presence_visual_eye_tracking_range_y = 76;
+	presence_visual_eye_tracking_range_x = 142 - 107;
+	presence_visual_eye_tracking_range_y = 76 - 35;
 	presence_visual_eye_tracking_world_range_x = 600;
 	presence_visual_eye_tracking_world_range_y = 420;
 	presence_visual_eye_tracking_inbetween_threshold = 0.33;

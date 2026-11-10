@@ -266,7 +266,7 @@ function player_state_move(){
 
 		if(jump_float_requested && player_jump_float_active() && !(_jump_pressed_now && _jump_available_now)){
 			if((float_countdown > 0) && (!move_grounded) && !player_ground_within(float_ground_clearance)){
-				if((acceleration.y >= 0) && (velocity.y >= 0)){
+				if((acceleration.y >= 0) && (velocity.y >= 0) && !player_flourish_cancel_locked()){
 					player_frolic_clear();
 					player_landing_context_clear();
 					player_float_begin_from_flourish();
@@ -401,8 +401,13 @@ function player_landing_smoke_update(){
 
 	if(landing_smoke_armed){
 		landing_smoke_armed = false;
-		fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", spr_fx_smoke_landing, 1, 1, 0, 18);
+		player_landing_smoke_spawn();
 	}
+}
+
+/// The landing puff stays at Winbo's feet, so it rides moving platforms with him.
+function player_landing_smoke_spawn(){
+	fx_spawn_sprite_follow_once(id, 0, bbox_bottom - y, "lyr_pfx_foreground", spr_fx_smoke_landing, 1, 1, 0, 18);
 }
 
 function player_secret_idle_gate_open(_bump_block, _landing_block){
@@ -655,10 +660,11 @@ function player_dive_spring_try_start(){
 	var _down_pressed;
 	_down_pressed = (input_current[UserControl.down] && !input_previous[UserControl.down]) || keyboard_check_pressed(vk_down);
 
-	if(!_down_pressed || move_grounded){
+	if(!_down_pressed || move_grounded || player_flourish_cancel_locked()){
 		return false;
 	}
 
+	var _from_flourish = (sprite_current == sprite_jump_second_sideways);
 	player_secret_idle_cancel(false);
 	player_frolic_clear();
 	player_air_spin_clear();
@@ -685,6 +691,7 @@ function player_dive_spring_try_start(){
 	dive_spring_startup_animation_active = true;
 	image_system_setup(sprite_dive_spring, dive_spring_startup_fps, true, true, dive_spring_descent_loop_start_frame, dive_spring_descent_loop_end_frame);
 	image_set_frame(image, 0);
+	if(_from_flourish) player_flourish_cancel_transition(sprite_transition_flourish_jump_to_dive);
 	return true;
 }
 
@@ -728,14 +735,17 @@ function player_dive_spring_state_dive(){
 	dive_spring_dive_timer += _delta_time_scaled;
 	dive_spring_enemy_impact = false;
 
-	if(sprite_current != sprite_dive_spring){
+	// A flourish in-between leads into the dive and must not restart it.
+	if((sprite_current != sprite_dive_spring) && !image.is_playing_queued){
 		dive_spring_startup_animation_active = true;
 		image_system_setup(sprite_dive_spring, dive_spring_startup_fps, true, true, dive_spring_descent_loop_start_frame, dive_spring_descent_loop_end_frame);
 		image_set_frame(image, 0);
 	}
-	if(dive_spring_startup_animation_active && (image.position >= dive_spring_descent_loop_start_frame)){
+	if(dive_spring_startup_animation_active && !image.is_playing_queued && (image.position >= dive_spring_descent_loop_start_frame)){
 		image_set_fps(image, ANIMATION_FPS_DEFAULT);
 		dive_spring_startup_animation_active = false;
+		// The dive is heard once the wind-up ends and Winbo plunges.
+		audio_player_dive_play();
 	}
 
 	velocity.x = dive_spring_momentum_x;
@@ -902,6 +912,8 @@ function player_dive_spring_state_spring(){
 		image_system_setup(sprite_dive_spring, dive_spring_rotor_fps, true, true, dive_spring_rotor_loop_start_frame, dive_spring_rotor_loop_end_frame);
 		image_set_frame(image, dive_spring_rotor_loop_start_frame);
 	}
+	// The rotor runs on the image clock, which is unscaled time.
+	dive_spring_rotor_time += global.delta_time_factor;
 
 	player_dive_spring_flight_update();
 
@@ -928,12 +940,13 @@ function player_dive_spring_state_spring(){
 		return;
 	}
 
-	// The rotor keeps looping until the upright spin ending would just finish on
-	// touchdown, which on a launch-height landing begins shortly before the
-	// apex. Over a deep pit no ground is predicted and the rotor keeps looping.
+	// The rotor plays its minimum spins, then keeps looping until the upright
+	// spin ending would just finish on touchdown. Over a deep pit no ground is
+	// predicted and the rotor keeps looping.
 	var _apex_this_step;
 	_apex_this_step = player_dive_spring_apex_update();
-	if((dive_spring_apex_reached && !_apex_this_step && move_grounded) || player_dive_spring_ending_landing_due()){
+	if((dive_spring_apex_reached && !_apex_this_step && move_grounded)
+	|| ((dive_spring_rotor_time >= dive_spring_rotor_time_min) && player_dive_spring_ending_landing_due(player_dive_spring_air_time_needed()))){
 		dive_spring_phase = DiveSpringPhase.transition;
 		acceleration.Set(0, 0);
 		image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
@@ -980,6 +993,13 @@ function player_dive_spring_flight_update(){
 	if(dive_spring_apex_reached){
 		move_gravity_factor = 1;
 		move_gravity.Copy(move_gravity_fall);
+		// Hang at the apex while the spins and ending still need more air time
+		// than the fall to the predicted ground allows.
+		if(player_dive_spring_ending_landing_due(player_dive_spring_air_time_needed())){
+			move_gravity_factor = 0;
+			velocity.y = 0;
+			acceleration.y = 0;
+		}
 	}
 	else{
 		move_gravity_factor = dive_spring_rise_gravity_factor;
@@ -1007,16 +1027,28 @@ function player_dive_spring_apex_update(){
 	return true;
 }
 
-/// Whether touchdown falls within the time the upright spin ending and a short front
-/// fall still need. Mirrors player_dive_spring_flight_update's vertical
-/// integration (rise, apex snap, fall) at this frame's step size, then sweeps
-/// that drop below the feet so thin floors cannot be skipped.
-function player_dive_spring_ending_landing_due(){
+/// Image time the spring still needs in the air: the rest of the minimum rotor
+/// spins, the rest of the upright spin ending and a short front fall.
+function player_dive_spring_air_time_needed(){
+	var _ending_frames;
+	if(dive_spring_phase == DiveSpringPhase.transition){
+		_ending_frames = max(0, dive_spring_transition_end_frame + 1 - image.position);
+		return _ending_frames * SECOND / ANIMATION_FPS_DEFAULT + dive_spring_transition_fall_lead_time;
+	}
+	_ending_frames = dive_spring_transition_end_frame + 1 - dive_spring_transition_start_frame;
+	return max(0, dive_spring_rotor_time_min - dive_spring_rotor_time)
+		+ _ending_frames * SECOND / ANIMATION_FPS_DEFAULT + dive_spring_transition_fall_lead_time;
+}
+
+/// Whether touchdown falls within the given image time. Mirrors
+/// player_dive_spring_flight_update's vertical integration (rise, apex snap,
+/// fall) at this frame's step size, then sweeps that drop below the feet so
+/// thin floors cannot be skipped.
+function player_dive_spring_ending_landing_due(_time){
 	var _steps, _delta, _velocity_y, _apex, _drop, _gravity, _retention;
 	// The player image animates on unscaled time while movement uses scaled
 	// time. One extra step covers the frame on which the finished image is seen.
-	_steps = ceil(((dive_spring_transition_end_frame + 1 - dive_spring_transition_start_frame) * SECOND / ANIMATION_FPS_DEFAULT
-		+ dive_spring_transition_fall_lead_time) / max(global.delta_time_factor, 0.0001)) + 1;
+	_steps = ceil(_time / max(global.delta_time_factor, 0.0001)) + 1;
 	_delta = global.delta_time_factor_scaled;
 	_velocity_y = velocity.y;
 	_apex = dive_spring_apex_reached;
@@ -1235,7 +1267,7 @@ function player_dive_spring_begin_impact(){
 	fx_spawn_sprite_once(x, y, "lyr_pfx_foreground", sprite_dive_spring_effect_lines, image_xscale, image_yscale, 0, ANIMATION_FPS_DEFAULT);
 	if(move_grounded || (collision.y != 0)){
 		landing_smoke_armed = false;
-		fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", spr_fx_smoke_landing, 1, 1, 0, 18);
+		player_landing_smoke_spawn();
 	}
 
 	if(player_dive_spring_jump_pressed()){
@@ -1250,6 +1282,8 @@ function player_dive_spring_begin_spring(){
 	dive_spring_dive_timer = 0;
 	dive_spring_launch_hold_time = dive_spring_launch_hold_time_max;
 	dive_spring_launch_impulse_pending = true;
+	dive_spring_rotor_time = 0;
+	audio_player_dive_spring_jump_play();
 	dive_spring_apex_reached = false;
 	move_gravity_factor = 1;
 	velocity.Set(0, 0);
@@ -1334,6 +1368,7 @@ function player_dive_spring_reset(){
 	dive_spring_startup_animation_active = false;
 	dive_spring_launch_hold_time = 0;
 	dive_spring_launch_impulse_pending = false;
+	dive_spring_rotor_time = 0;
 	dive_spring_apex_reached = false;
 	dive_spring_enemy_impact = false;
 	dive_spring_float_cancel_requested = false;
@@ -1446,7 +1481,8 @@ function character_jump(_from_frolic = false){
 
 /// How many leading squash frames a jump sprite has before takeoff.
 function player_jump_startup_frames(_sprite){
-	if((_sprite == sprite_jump_second) || (_sprite == sprite_jump_second_sideways) || (_sprite == sprite_jump_frolic)) return 1;
+	if(_sprite == sprite_jump_second_sideways) return 2;
+	if((_sprite == sprite_jump_second) || (_sprite == sprite_jump_frolic)) return 1;
 	return 0;
 }
 
@@ -1487,6 +1523,8 @@ function player_jump_launch(_second){
 	}
 	acceleration.AddMagnitudeDirection(_second ? second_jump_impulse : input_move_acceleration_jump, 90);
 	jump_hold_allow_countdown = _second ? 0 : jump_hold_allow_countdown_max;
+	if(_second) audio_player_second_jump_play();
+	else audio_player_jump_play();
 	move_gravity.Copy(move_gravity_rise);
 	if(bump_jump_count > 0) bump_jump_count--;
 	with(o_camera){
@@ -1615,12 +1653,9 @@ function player_flourish_ground_fx_spawn(){
 	fx_spawn_sprite_once(jump_takeoff_x, jump_takeoff_y, "lyr_pfx_midground", spr_fx_flourish_jump_ground, face_horizontal * image_xscale, image_yscale, 0, ANIMATION_FPS_DEFAULT);
 }
 
-/// Floating out of the sideways flourish jump passes through its in-between pose.
+/// Floating out of the sideways flourish jump passes through its in-between poses.
 function player_float_begin_from_flourish(){
 	if(sprite_current != sprite_jump_second_sideways) return;
 	image_system_setup(sprite_float, ANIMATION_FPS_DEFAULT, true, true, 5, IMAGE_LOOP_FULL);
-	// The queue hands over at the loop start, so queue the full float as well
-	// to keep its opening frames after the in-between.
-	image_system_queue_add_to_front(sprite_float, ANIMATION_FPS_DEFAULT);
-	image_system_queue_add_to_front(sprite_transition_flourish_jump_to_float, ANIMATION_FPS_DEFAULT);
+	player_flourish_cancel_transition(sprite_transition_flourish_jump_to_float);
 }

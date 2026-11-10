@@ -83,6 +83,8 @@ is_player = true;
 	sprite_transition_walk_to_walk_other_direction		= spr_player_transition_walk_to_walk_other_direction;
 	sprite_transition_walk_to_idle						= spr_player_transition_walk_to_idle;
 	sprite_transition_flourish_jump_to_float			= spr_player_transition_flourish_jump_to_float;
+	sprite_transition_flourish_jump_to_dash				= spr_player_transition_flourish_jump_to_dash;
+	sprite_transition_flourish_jump_to_dive				= spr_player_transition_flourish_jump_to_dive;
 	sprite_transition_extreme_pose_to_dash				= spr_player_transition_extreme_pose_to_dash;
 	sprite_transition_walk_to_frolic					= spr_player_transition_walk_to_frolic;
 	sprite_transition_idle_to_frolic					= spr_player_transition_idle_to_frolic;
@@ -168,6 +170,9 @@ is_player = true;
 	second_jump_hold_blend_offset = 0;
 	// Per-frame difference between the normal and revised neutral artwork's top.
 	second_jump_hold_frame_offsets = [-106, 59, 87, 81, 74, 65];
+	// The sideways flourish commits Winbo to its wind-up; float, dash and dive
+	// can only cancel it from this frame on.
+	second_jump_cancel_frame = 4;
 
 	// Grounded anticipation: a jump with squash frames launches on its takeoff frame.
 	jump_startup_active = false;
@@ -310,6 +315,11 @@ is_player = true;
 	dive_spring_launch_hold_time = 0;
 	dive_spring_launch_impulse_pending = false;
 	dive_spring_rotor_fps = ANIMATION_FPS_DEFAULT;
+	// The rotor must read as a spinning top: at least this many full loops play
+	// before the upright spin ending, hanging at the apex if the arc is too short.
+	dive_spring_rotor_min_spins = 2;
+	dive_spring_rotor_time_min = dive_spring_rotor_min_spins * (dive_spring_rotor_loop_end_frame - dive_spring_rotor_loop_start_frame) * SECOND / dive_spring_rotor_fps;
+	dive_spring_rotor_time = 0;
 	dive_spring_momentum_x = 0;
 	dive_spring_horizontal_acceleration_factor_rise = 0.424;
 	dive_spring_horizontal_acceleration_factor_fall = 0.9152;
