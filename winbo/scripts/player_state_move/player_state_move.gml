@@ -405,9 +405,14 @@ function player_landing_smoke_update(){
 	}
 }
 
-/// The landing puff stays at Winbo's feet, so it rides moving platforms with him.
+/// The landing puff stays where Winbo touched down. On a platform it rides that
+/// platform, so it neither trails a moving one nor follows Winbo's next jump.
 function player_landing_smoke_spawn(){
-	fx_spawn_sprite_follow_once(id, 0, bbox_bottom - y, "lyr_pfx_foreground", spr_fx_smoke_landing, 1, 1, 0, 18);
+	if(move_grounded_instance == noone){
+		fx_spawn_sprite_once(x, bbox_bottom, "lyr_pfx_foreground", spr_fx_smoke_landing, 1, 1, 0, 18);
+		return;
+	}
+	fx_spawn_sprite_follow_once(move_grounded_instance, x - move_grounded_instance.x, bbox_bottom - move_grounded_instance.y, "lyr_pfx_foreground", spr_fx_smoke_landing, 1, 1, 0, 18);
 }
 
 function player_secret_idle_gate_open(_bump_block, _landing_block){
@@ -912,9 +917,6 @@ function player_dive_spring_state_spring(){
 		image_system_setup(sprite_dive_spring, dive_spring_rotor_fps, true, true, dive_spring_rotor_loop_start_frame, dive_spring_rotor_loop_end_frame);
 		image_set_frame(image, dive_spring_rotor_loop_start_frame);
 	}
-	// The rotor runs on the image clock, which is unscaled time.
-	dive_spring_rotor_time += global.delta_time_factor;
-
 	player_dive_spring_flight_update();
 
 	if((state != PlayerState.dive_spring) || (dive_spring_phase != DiveSpringPhase.spring)){
@@ -940,13 +942,12 @@ function player_dive_spring_state_spring(){
 		return;
 	}
 
-	// The rotor plays its minimum spins, then keeps looping until the upright
-	// spin ending would just finish on touchdown. Over a deep pit no ground is
-	// predicted and the rotor keeps looping.
+	// The rotor keeps looping until the upright spin ending would just finish on
+	// touchdown, which on a launch-height landing begins shortly before the
+	// apex. Over a deep pit no ground is predicted and the rotor keeps looping.
 	var _apex_this_step;
 	_apex_this_step = player_dive_spring_apex_update();
-	if((dive_spring_apex_reached && !_apex_this_step && move_grounded)
-	|| ((dive_spring_rotor_time >= dive_spring_rotor_time_min) && player_dive_spring_ending_landing_due(player_dive_spring_air_time_needed()))){
+	if((dive_spring_apex_reached && !_apex_this_step && move_grounded) || player_dive_spring_ending_landing_due()){
 		dive_spring_phase = DiveSpringPhase.transition;
 		acceleration.Set(0, 0);
 		image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
@@ -993,13 +994,6 @@ function player_dive_spring_flight_update(){
 	if(dive_spring_apex_reached){
 		move_gravity_factor = 1;
 		move_gravity.Copy(move_gravity_fall);
-		// Hang at the apex while the spins and ending still need more air time
-		// than the fall to the predicted ground allows.
-		if(player_dive_spring_ending_landing_due(player_dive_spring_air_time_needed())){
-			move_gravity_factor = 0;
-			velocity.y = 0;
-			acceleration.y = 0;
-		}
 	}
 	else{
 		move_gravity_factor = dive_spring_rise_gravity_factor;
@@ -1027,28 +1021,18 @@ function player_dive_spring_apex_update(){
 	return true;
 }
 
-/// Image time the spring still needs in the air: the rest of the minimum rotor
-/// spins, the rest of the upright spin ending and a short front fall.
-function player_dive_spring_air_time_needed(){
-	var _ending_frames;
-	if(dive_spring_phase == DiveSpringPhase.transition){
-		_ending_frames = max(0, dive_spring_transition_end_frame + 1 - image.position);
-		return _ending_frames * SECOND / ANIMATION_FPS_DEFAULT + dive_spring_transition_fall_lead_time;
-	}
-	_ending_frames = dive_spring_transition_end_frame + 1 - dive_spring_transition_start_frame;
-	return max(0, dive_spring_rotor_time_min - dive_spring_rotor_time)
-		+ _ending_frames * SECOND / ANIMATION_FPS_DEFAULT + dive_spring_transition_fall_lead_time;
-}
-
-/// Whether touchdown falls within the given image time. Mirrors
+/// Whether touchdown falls within the time the upright spin ending still
+/// needs. The rotor's extra frames come out of the short front fall that used
+/// to follow the ending, so the arc and air time stay as they were. Mirrors
 /// player_dive_spring_flight_update's vertical integration (rise, apex snap,
 /// fall) at this frame's step size, then sweeps that drop below the feet so
 /// thin floors cannot be skipped.
-function player_dive_spring_ending_landing_due(_time){
+function player_dive_spring_ending_landing_due(){
 	var _steps, _delta, _velocity_y, _apex, _drop, _gravity, _retention;
 	// The player image animates on unscaled time while movement uses scaled
 	// time. One extra step covers the frame on which the finished image is seen.
-	_steps = ceil(_time / max(global.delta_time_factor, 0.0001)) + 1;
+	_steps = ceil(((dive_spring_transition_end_frame + 1 - dive_spring_transition_start_frame) * SECOND / ANIMATION_FPS_DEFAULT
+		+ dive_spring_transition_fall_lead_time - dive_spring_rotor_extra_frames * SECOND / dive_spring_rotor_fps) / max(global.delta_time_factor, 0.0001)) + 1;
 	_delta = global.delta_time_factor_scaled;
 	_velocity_y = velocity.y;
 	_apex = dive_spring_apex_reached;
@@ -1282,7 +1266,6 @@ function player_dive_spring_begin_spring(){
 	dive_spring_dive_timer = 0;
 	dive_spring_launch_hold_time = dive_spring_launch_hold_time_max;
 	dive_spring_launch_impulse_pending = true;
-	dive_spring_rotor_time = 0;
 	audio_player_dive_spring_jump_play();
 	dive_spring_apex_reached = false;
 	move_gravity_factor = 1;
@@ -1368,7 +1351,6 @@ function player_dive_spring_reset(){
 	dive_spring_startup_animation_active = false;
 	dive_spring_launch_hold_time = 0;
 	dive_spring_launch_impulse_pending = false;
-	dive_spring_rotor_time = 0;
 	dive_spring_apex_reached = false;
 	dive_spring_enemy_impact = false;
 	dive_spring_float_cancel_requested = false;

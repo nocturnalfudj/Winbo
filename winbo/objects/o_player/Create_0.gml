@@ -171,8 +171,8 @@ is_player = true;
 	// Per-frame difference between the normal and revised neutral artwork's top.
 	second_jump_hold_frame_offsets = [-106, 59, 87, 81, 74, 65];
 	// The sideways flourish commits Winbo to its wind-up; float, dash and dive
-	// can only cancel it from this frame on.
-	second_jump_cancel_frame = 4;
+	// can only cancel it from this frame on, which is the takeoff frame.
+	second_jump_cancel_frame = 2;
 
 	// Grounded anticipation: a jump with squash frames launches on its takeoff frame.
 	jump_startup_active = false;
@@ -315,11 +315,9 @@ is_player = true;
 	dive_spring_launch_hold_time = 0;
 	dive_spring_launch_impulse_pending = false;
 	dive_spring_rotor_fps = ANIMATION_FPS_DEFAULT;
-	// The rotor must read as a spinning top: at least this many full loops play
-	// before the upright spin ending, hanging at the apex if the arc is too short.
-	dive_spring_rotor_min_spins = 2;
-	dive_spring_rotor_time_min = dive_spring_rotor_min_spins * (dive_spring_rotor_loop_end_frame - dive_spring_rotor_loop_start_frame) * SECOND / dive_spring_rotor_fps;
-	dive_spring_rotor_time = 0;
+	// Extra rotor frames before the upright spin ending, taken from the front
+	// fall that follows it so the jump's arc and air time do not change.
+	dive_spring_rotor_extra_frames = 2;
 	dive_spring_momentum_x = 0;
 	dive_spring_horizontal_acceleration_factor_rise = 0.424;
 	dive_spring_horizontal_acceleration_factor_fall = 0.9152;
