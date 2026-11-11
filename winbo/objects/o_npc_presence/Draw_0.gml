@@ -26,12 +26,13 @@ if(status_effect_active_count[StatusEffect.invincible] > 0){
 }
 
 var _body_frame;
-var _head_sprite,_head_frame;
+var _head_sprite,_head_frame,_head_scale_x;
 var _eyes_sprite,_eyes_frame;
 var _eyes_x,_eyes_y;
 _body_frame = floor(presence_visual_body_idle_frame);
 _head_sprite = spr_npc_presence_head_front;
 _head_frame = floor(presence_visual_head_idle_frame);
+_head_scale_x = _scale_x;
 _eyes_sprite = presence_visual_eye_sprite;
 _eyes_frame = floor(presence_visual_eyes_idle_frame);
 _eyes_x = _character_x + (presence_visual_eye_offset_x * _scale_x);
@@ -54,13 +55,24 @@ switch(presence_visual_state){
 	case PresenceVisualState.idle:
 		_body_frame = clamp(floor(presence_visual_body_idle_frame),presence_visual_body_idle_start,presence_visual_body_idle_end);
 
-		// Eye sprites still track Winbo; only the head outline stays fixed.
-		_head_sprite = spr_npc_presence_head_right;
+		// The head tilts toward Winbo. Looking left reuses the smoky right-facing
+		// head mirrored, so the outline stays smoky in every direction.
+		switch(presence_visual_head_direction){
+			case PresenceHeadDirection.left:
+				_head_sprite = spr_npc_presence_head_right;
+				_head_scale_x = -_scale_x;
+			break;
 
-		var _head_idle_end;
-		_head_idle_end = presence_visual_head_right_idle_end;
+			case PresenceHeadDirection.right:
+				_head_sprite = spr_npc_presence_head_right;
+			break;
 
-		_head_frame = clamp(floor(presence_visual_head_idle_frame),0,_head_idle_end);
+			default:
+				_head_sprite = spr_npc_presence_head_front;
+			break;
+		}
+
+		_head_frame = clamp(floor(presence_visual_head_idle_frame),0,presence_visual_head_idle_end);
 
 		if(_eyes_sprite == spr_npc_presence_eyes_front){
 			_eyes_frame = clamp(floor(presence_visual_eyes_idle_frame),presence_visual_front_eyes_idle_start,presence_visual_front_eyes_idle_end);
@@ -93,7 +105,7 @@ if(spr_npc_presence_body != noone){
 }
 
 if(_head_sprite != noone){
-	draw_sprite_ext(_head_sprite,_head_frame,_character_x,_character_y,_scale_x,_scale_y,image_angle + acceleration_sway,image_blend,_alpha);
+	draw_sprite_ext(_head_sprite,_head_frame,_character_x,_character_y,_head_scale_x,_scale_y,image_angle + acceleration_sway,image_blend,_alpha);
 }
 
 if(_eyes_sprite != noone){
@@ -107,7 +119,7 @@ if(flash_alpha > 0){
 	}
 
 	if(_head_sprite != noone){
-		draw_sprite_ext(_head_sprite,_head_frame,_character_x,_character_y,_scale_x,_scale_y,image_angle + acceleration_sway,flash_colour,flash_alpha);
+		draw_sprite_ext(_head_sprite,_head_frame,_character_x,_character_y,_head_scale_x,_scale_y,image_angle + acceleration_sway,flash_colour,flash_alpha);
 	}
 
 	if(_eyes_sprite != noone){
