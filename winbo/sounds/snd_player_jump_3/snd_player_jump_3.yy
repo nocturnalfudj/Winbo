@@ -10,7 +10,7 @@
   "compression": 0,
   "compressionQuality": 4,
   "conversionMode": 0,
-  "duration": 1.332245,
+  "duration": 1.123265,
   "exportDir": "",
   "name": "snd_player_jump_3",
   "parent": {

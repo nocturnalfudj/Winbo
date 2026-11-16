@@ -203,7 +203,8 @@ function player_state_move(){
 								_should_use_sideways_fall = player_air_sideways();
 								_current_fall_is_sideways = (sprite_current == sprite_fall_sideways);
 
-								if(_should_use_sideways_fall != _current_fall_is_sideways){
+								// The dive cancel spin finishes before Winbo turns sideways.
+								if((_should_use_sideways_fall != _current_fall_is_sideways) && !player_dive_spring_cancel_playing()){
 									var _target_fall_sprite;
 									_target_fall_sprite = _should_use_sideways_fall ? sprite_fall_sideways : sprite_fall;
 									// Turning out of the front fall after a dive spring passes
@@ -753,6 +754,10 @@ function player_dive_spring_state_dive(){
 		audio_player_dive_play();
 	}
 
+	if(player_dive_spring_cancel_try()){
+		return;
+	}
+
 	velocity.x = dive_spring_momentum_x;
 	acceleration.x = 0;
 
@@ -781,6 +786,43 @@ function player_dive_spring_state_dive(){
 	if(dive_spring_enemy_impact || move_grounded || (collision.x != 0) || (collision.y != 0)){
 		player_dive_spring_begin_impact();
 	}
+}
+
+/// Up mirrors the Down that started the dive: once the wind-up reaches its last
+/// frame, a fresh Up press flips Winbo upright and hands him back to a normal fall.
+function player_dive_spring_cancel_try(){
+	var _up_pressed;
+	_up_pressed = (input_current[UserControl.up] && !input_previous[UserControl.up]) || keyboard_check_pressed(vk_up);
+
+	if(!_up_pressed || move_grounded || (sprite_current != sprite_dive_spring) || image.is_playing_queued
+	|| (image.position < dive_spring_cancel_start_frame)){
+		return false;
+	}
+
+	player_dive_spring_restore_movement();
+	dive_spring_phase = DiveSpringPhase.dive;
+	dive_spring_startup_animation_active = false;
+	state = PlayerState.move;
+	jump_face_locked = false;
+	jump_float_requested = false;
+	// The arrow key counts as Jump in the move state; mark it held so the same
+	// press cannot also start a float on the next step.
+	if(keyboard_check(vk_up)){
+		input_current[UserControl.jump] = true;
+	}
+	move_gravity.Copy(move_gravity_fall);
+	acceleration.Set(0, 0);
+
+	// The cancel spin ends facing front, so the front fall follows it and a held
+	// direction turns Winbo sideways once the spin has finished.
+	dive_spring_fall_front_active = true;
+	image_system_setup(sprite_fall, ANIMATION_FPS_DEFAULT, true, true, 0, IMAGE_LOOP_FULL);
+	image_system_queue_add_to_front(sprite_dive_spring_cancel, ANIMATION_FPS_DEFAULT);
+	return true;
+}
+
+function player_dive_spring_cancel_playing(){
+	return image.is_playing_queued && (image.sprite_current == sprite_dive_spring_cancel);
 }
 
 function player_dive_spring_state_impact(){
@@ -913,6 +955,11 @@ function player_dive_spring_state_spring(){
 		}
 	}
 
+	if(dive_spring_jump_sound_pending){
+		dive_spring_jump_sound_pending = false;
+		audio_player_dive_spring_jump_play();
+	}
+
 	if(sprite_current != sprite_dive_spring || !image.animate || image.loop_start != dive_spring_rotor_loop_start_frame){
 		image_system_setup(sprite_dive_spring, dive_spring_rotor_fps, true, true, dive_spring_rotor_loop_start_frame, dive_spring_rotor_loop_end_frame);
 		image_set_frame(image, dive_spring_rotor_loop_start_frame);
@@ -992,7 +1039,8 @@ function player_dive_spring_flight_update(){
 		: dive_spring_velocity_retention_aerial;
 	velocity_retention_aerial = power(_retention_base, _delta_time_scaled);
 	if(dive_spring_apex_reached){
-		move_gravity_factor = 1;
+		// The descent copies fall gravity each step, so this factor scales it exactly.
+		move_gravity_factor = dive_spring_fall_gravity_factor;
 		move_gravity.Copy(move_gravity_fall);
 	}
 	else{
@@ -1039,7 +1087,7 @@ function player_dive_spring_ending_landing_due(){
 	_drop = 0;
 
 	for(var _i = 0; _i < _steps; _i++){
-		_gravity = _apex ? move_gravity_fall.y : (move_gravity_rise.y * dive_spring_rise_gravity_factor);
+		_gravity = _apex ? (move_gravity_fall.y * dive_spring_fall_gravity_factor) : (move_gravity_rise.y * dive_spring_rise_gravity_factor);
 		_retention = _apex ? dive_spring_velocity_retention_aerial_previous : dive_spring_velocity_retention_aerial;
 		_drop += (_velocity_y + _gravity * 0.5 * _delta) * _delta;
 		_velocity_y = (_velocity_y + _gravity * _delta) * power(_retention, _delta);
@@ -1092,7 +1140,9 @@ function player_dive_spring_state_transition(){
 		_target_fall_sprite = player_dive_spring_direction_held() ? sprite_fall_sideways : sprite_fall;
 
 		player_dive_spring_restore_movement();
+		// The front fall starts at the lighter descent gravity and eases back to normal.
 		move_gravity.Copy(move_gravity_fall);
+		move_gravity.MultiplyFactor(dive_spring_fall_gravity_factor);
 		dive_spring_phase = DiveSpringPhase.dive;
 		state = PlayerState.move;
 		jump_face_locked = false;
@@ -1266,7 +1316,8 @@ function player_dive_spring_begin_spring(){
 	dive_spring_dive_timer = 0;
 	dive_spring_launch_hold_time = dive_spring_launch_hold_time_max;
 	dive_spring_launch_impulse_pending = true;
-	audio_player_dive_spring_jump_play();
+	// The launch sound waits for the grounded hold so it plays as Winbo leaves the ground.
+	dive_spring_jump_sound_pending = true;
 	dive_spring_apex_reached = false;
 	move_gravity_factor = 1;
 	velocity.Set(0, 0);
@@ -1287,6 +1338,7 @@ function player_dive_spring_begin_spring(){
 
 function player_dive_spring_begin_fail(){
 	dive_spring_phase = DiveSpringPhase.fail;
+	dive_spring_jump_sound_pending = false;
 	dive_spring_move_input_previous = 0;
 	dive_spring_dive_timer = 0;
 	dive_spring_startup_animation_active = false;
@@ -1458,7 +1510,7 @@ function character_jump(_from_frolic = false){
 		}
 		image_set_frame(image, _startup_frames);
 	}
-	player_jump_launch(_second);
+	player_jump_launch(_second, _grounded);
 }
 
 /// How many leading squash frames a jump sprite has before takeoff.
@@ -1478,7 +1530,8 @@ function player_jump_startup_update(){
 	if(sprite_current == jump_startup_sprite){
 		image_set_frame(image, max(image.frame, jump_startup_frames));
 	}
-	player_jump_launch(jump_startup_second);
+	// The squash only plays on the ground, so this jump left a solid surface.
+	player_jump_launch(jump_startup_second, true);
 }
 
 function player_jump_startup_clear(){
@@ -1492,7 +1545,9 @@ function player_jump_startup_validate(){
 	}
 }
 
-function player_jump_launch(_second){
+/// @param _second Whether this is the timed higher jump.
+/// @param _grounded Whether the jump left a solid surface; mid-air bounce jumps stay silent.
+function player_jump_launch(_second, _grounded){
 	if(_second){
 		// Always the same tier; never accumulate the preceding jump's velocity.
 		velocity.y = 0;
@@ -1506,7 +1561,7 @@ function player_jump_launch(_second){
 	acceleration.AddMagnitudeDirection(_second ? second_jump_impulse : input_move_acceleration_jump, 90);
 	jump_hold_allow_countdown = _second ? 0 : jump_hold_allow_countdown_max;
 	if(_second) audio_player_second_jump_play();
-	else audio_player_jump_play();
+	else if(_grounded) audio_player_jump_play();
 	move_gravity.Copy(move_gravity_rise);
 	if(bump_jump_count > 0) bump_jump_count--;
 	with(o_camera){

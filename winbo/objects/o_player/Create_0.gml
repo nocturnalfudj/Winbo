@@ -55,6 +55,7 @@ is_player = true;
 	sprite_bump				= spr_player_bump;			//director_get_custom_sprite(spr_player_bump);
 	sprite_dive_spring		= spr_player_dive_spring;
 	sprite_dive_spring_fail	= spr_player_dive_spring_fail;
+	sprite_dive_spring_cancel = spr_player_dive_spring_cancel;
 	sprite_dive_spring_effect_lines = spr_player_dive_spring_effect_lines;
 	sprite_sitdown			= spr_player_sitdown;		//director_get_custom_sprite(spr_player_sitdown);
 	sprite_dialogue_idle	= spr_player_dialogue_idle;
@@ -289,15 +290,20 @@ is_player = true;
 	// half-step acceleration term, and the launch step starts from 0.825 base
 	// gravity because the rise vector lerps toward fall while velocity.y is 0.
 	// A neutral launch rises about 848px (the mockup anchor), peaking by the
-	// 29th 60fps engine step and touching down at launch height on the 61st;
+	// 29th 60fps engine step and touching down at launch height on about the 66th
+	// with the lighter descent gravity (61st at full gravity);
 	// held right it gains about +241px at the apex and about +488px one step
 	// into the landing transition.
 	// Pair this calibrated impulse with the spring-only rise gravity and aerial
 	// retention below so the same height is reached sooner.
 	dive_spring_jump_acceleration_factor = 2.376;
 	dive_spring_rise_gravity_factor = 1.2;
+	// Lighter gravity after the apex so the spring descent floats down a little slower.
+	dive_spring_fall_gravity_factor = 0.85;
 	dive_spring_descent_loop_start_frame = 3;
 	dive_spring_descent_loop_end_frame = 5;
+	// Up cancels the dive from the last wind-up frame onward.
+	dive_spring_cancel_start_frame = 2;
 	dive_spring_impact_start_frame = 5;
 	dive_spring_impact_loop_start_frame = 6;
 	dive_spring_impact_loop_end_frame = 7;
@@ -314,6 +320,7 @@ is_player = true;
 	dive_spring_launch_hold_time_max = SECOND * 0.18;
 	dive_spring_launch_hold_time = 0;
 	dive_spring_launch_impulse_pending = false;
+	dive_spring_jump_sound_pending = false;
 	dive_spring_rotor_fps = ANIMATION_FPS_DEFAULT;
 	// Extra rotor frames before the upright spin ending, taken from the front
 	// fall that follows it so the jump's arc and air time do not change.

@@ -1,6 +1,6 @@
 {
   "$GMSound": "v2",
-  "%Name": "snd_player_second_jump",
+  "%Name": "snd_player_second_jump_2",
   "audioGroupId": {
     "name": "audiogroup_default",
     "path": "audiogroups/audiogroup_default",
@@ -10,9 +10,9 @@
   "compression": 0,
   "compressionQuality": 4,
   "conversionMode": 0,
-  "duration": 1.201633,
+  "duration": 1.175510,
   "exportDir": "",
-  "name": "snd_player_second_jump",
+  "name": "snd_player_second_jump_2",
   "parent": {
     "name": "SFX",
     "path": "folders/Control/Audio/SFX.yy",
@@ -21,6 +21,6 @@
   "resourceType": "GMSound",
   "resourceVersion": "2.0",
   "sampleRate": 44100,
-  "soundFile": "snd_player_second_jump.wav",
+  "soundFile": "snd_player_second_jump_2.wav",
   "volume": 1.0,
 }

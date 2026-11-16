@@ -10,7 +10,7 @@
   "compression": 0,
   "compressionQuality": 4,
   "conversionMode": 0,
-  "duration": 1.802449,
+  "duration": 1.645714,
   "exportDir": "",
   "name": "snd_player_dive_spring_jump_1",
   "parent": {

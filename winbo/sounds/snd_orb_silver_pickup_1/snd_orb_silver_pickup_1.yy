@@ -10,7 +10,7 @@
   "compression": 0,
   "compressionQuality": 4,
   "conversionMode": 0,
-  "duration": 1.697959,
+  "duration": 1.541224,
   "exportDir": "",
   "name": "snd_orb_silver_pickup_1",
   "parent": {
