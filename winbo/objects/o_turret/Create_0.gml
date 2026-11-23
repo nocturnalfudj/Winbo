@@ -22,19 +22,25 @@ reticle_lock_frame = 30;
 team = Team.enemy;
 image_speed = 0;
 
-// The pivot is embedded in its mounting platform. Only that platform may
-// intersect the barrel; the muzzle and the sightline still have to be clear.
+// The pivot is embedded in its mount, which can be several overlapping
+// platforms, or sit on a platform's edge where a single point test misses it.
+// Every solid touching the pivot counts as the mount and may intersect the
+// barrel; the muzzle and the sightline still have to be clear.
+mount_probe = 4;
 turret_barrel_clear = function(_mx, _my) {
-    var _mount = collision_point(x, y, o_solid, false, true);
+    var _mount = ds_list_create();
+    collision_rectangle_list(x - mount_probe, y - mount_probe, x + mount_probe, y + mount_probe,
+        o_solid, false, true, _mount, false);
     var _hits = ds_list_create();
     var _count = collision_line_list(x, y, _mx, _my, o_solid, false, true, _hits, false);
     var _clear = true;
     for(var _i = 0; _i < _count; _i++){
-        if(_hits[| _i] != _mount){
+        if(ds_list_find_index(_mount, _hits[| _i]) == -1){
             _clear = false;
             break;
         }
     }
     ds_list_destroy(_hits);
+    ds_list_destroy(_mount);
     return _clear && collision_point(_mx, _my, o_solid, false, true) == noone;
 };

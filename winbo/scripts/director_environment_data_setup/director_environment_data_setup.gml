@@ -155,7 +155,8 @@ function director_environment_data_setup(){
 				{mode: "normal", sprite: spr_bg_l2_layer_7_sky, parallax_x: 1.00, parallax_y: _level_parallax_y(_level_2_anchor_bottom_y, 1.00), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
 				{mode: "normal", sprite: spr_bg_l2_layer_6_mountains, parallax_x: 0.90, parallax_y: _level_parallax_y(_level_2_anchor_bottom_y, 0.90), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
 				{mode: "normal", sprite: spr_bg_l2_layer_5_treeline_bg, parallax_x: 0.80, parallax_y: _level_parallax_y(_level_2_anchor_bottom_y, 0.80), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true},
-				{mode: "normal", sprite: spr_bg_l2_layer_4a_forest_crane, parallax_x: 0.70, parallax_y: _level_parallax_y(_level_2_anchor_bottom_y, 0.70), offset_y: 0, repeat_x: false, clamp_top: true, clamp_bottom: true},
+				// The crane forest is the start tile only; the crane-free forest repeats on both sides.
+				{mode: "variant_once", sprite_first: spr_bg_l2_layer_4a_forest_crane, sprite_loop: spr_bg_l2_layer_4b_forest_no_crane, parallax_x: 0.70, parallax_y: _level_parallax_y(_level_2_anchor_bottom_y, 0.70), offset_y: 0, clamp_top: true, clamp_bottom: true},
 				{
 					mode: "normal", sprite: spr_bg_l2_layer_3_treeline_main, parallax_x: 0.60, parallax_y: _level_parallax_y(_level_2_anchor_bottom_y, 0.60), offset_y: 0, repeat_x: true, clamp_top: true, clamp_bottom: true
 				},

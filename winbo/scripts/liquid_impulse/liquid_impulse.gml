@@ -4,6 +4,7 @@ function liquid_impulse(_x, _y, _impulse_strength, _impulse_radius, _invert){
 	for(var _si = 0; _si < array_length(liquid_body.surfaces); _si++){
 		var _s = liquid_body.surfaces[_si];
 		if(_x < _s.left || _x >= _s.right || abs(_y - _s.top) > 1) continue;
+		_s.disturbed = true;
 		var _i = clamp(round((_x - _s.left) / _s.dx), 0, _s.segments);
 		var _radius = ceil(_impulse_radius / _s.dx);
 		var _sigma2 = max(1, sqr(_radius * 0.5));

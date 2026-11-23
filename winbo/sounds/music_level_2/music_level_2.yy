@@ -10,7 +10,7 @@
   "compression": 0,
   "compressionQuality": 4,
   "conversionMode": 0,
-  "duration": 129.328125,
+  "duration": 182.661497,
   "exportDir": "",
   "name": "music_level_2",
   "parent": {

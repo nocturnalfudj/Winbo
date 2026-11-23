@@ -9,22 +9,16 @@ event_inherited();
 //Gravity
 gravity_factor = 0.75;
 
-//Underwater Background
-underwater_background_surface = -1;
-
-//Underwater
+// Two window-sized surfaces: the captured scene and the wave mask. Every pass
+// clips against the mask in its shader and draws straight to the target, so
+// no intermediate composite surfaces are filled or allocated.
 underwater_surface = -1;
-underwater_composite_surface = -1;
-
-//Mask
 water_mask_surface = -1;
 
 //Reflection
 reflection_enable = true;
 reflection_alpha = 0.2;
 reflection_fade_depth = 128;
-reflection_surface = -1;
-reflection_composite_surface = -1;
 
 //Texture
 texture_x = 0;
@@ -66,7 +60,7 @@ render_clip_w = 0;
 render_clip_h = 0;
 
 // One owner for the existing volatile GPU surface checks. A zero size releases
-// the surface; Draw Begin updates every surface before either draw pass uses it.
+// the surface; Draw Begin updates both surfaces before either draw pass uses them.
 liquid_surface_update = function(_surface, _width, _height) {
 	if (!surface_exists(_surface)) {
 		return (_width > 0 && _height > 0) ? surface_create(_width, _height) : -1;
@@ -83,12 +77,34 @@ liquid_surface_update = function(_surface, _width, _height) {
 
 // Off-screen bodies hold no GPU memory; Draw Begin recreates them on return.
 liquid_surfaces_release = function() {
-	underwater_background_surface = liquid_surface_update(underwater_background_surface, 0, 0);
 	water_mask_surface = liquid_surface_update(water_mask_surface, 0, 0);
 	underwater_surface = liquid_surface_update(underwater_surface, 0, 0);
-	underwater_composite_surface = liquid_surface_update(underwater_composite_surface, 0, 0);
-	reflection_surface = liquid_surface_update(reflection_surface, 0, 0);
-	reflection_composite_surface = liquid_surface_update(reflection_composite_surface, 0, 0);
+};
+
+// The water texture tiles in room space across the on-screen rectangle only.
+// Its shader clips each tile to the wave mask, replacing a masked surface.
+liquid_tiles_draw = function(_alpha) {
+	var _scale = 1 / render_scale;
+	var _tile_width = sprite_get_width(sprite_index) * _scale;
+	var _tile_height = sprite_get_height(sprite_index) * _scale;
+	var _origin_x = texture_x * _scale;
+	var _origin_y = texture_y * _scale;
+	var _left = render_left + render_clip_x * _scale;
+	var _top = render_top + render_clip_y * _scale;
+	var _right = _left + render_clip_w * _scale;
+	var _bottom = _top + render_clip_h * _scale;
+	var _tile_left = _origin_x + floor((_left - _origin_x) / _tile_width) * _tile_width;
+	var _tile_top = _origin_y + floor((_top - _origin_y) / _tile_height) * _tile_height;
+	shader_set(sh_liquid_mask_tile);
+	texture_set_stage(mask_tile_sampler_mask, surface_get_texture(water_mask_surface));
+	shader_set_uniform_f(mask_tile_uniform_frame, render_left, render_top,
+		render_scale / cached_surf_w, render_scale / cached_surf_h);
+	for(var _tile_y = _tile_top; _tile_y < _bottom; _tile_y += _tile_height){
+		for(var _tile_x = _tile_left; _tile_x < _right; _tile_x += _tile_width){
+			draw_sprite_ext(sprite_index, 0, _tile_x, _tile_y, _scale, _scale, 0, c_white, _alpha);
+		}
+	}
+	shader_reset();
 };
 
 // Unavailable scene pixels must stay transparent. Copying beyond the application
@@ -127,7 +143,12 @@ submerged_ripple_uniform_strength = shader_get_uniform(sh_liquid_ripple, "u_stre
 submerged_ripple_uniform_fade_top = shader_get_uniform(sh_liquid_ripple, "u_fade_top");
 submerged_ripple_uniform_reflection_depth = shader_get_uniform(sh_liquid_ripple, "u_reflection_depth");
 submerged_ripple_uniform_body_frame = shader_get_uniform(sh_liquid_ripple, "u_body_frame");
+submerged_ripple_uniform_mask_mode = shader_get_uniform(sh_liquid_ripple, "u_mask_mode");
+submerged_ripple_sampler_mask = shader_get_sampler_index(sh_liquid_ripple, "u_mask");
+mask_tile_uniform_frame = shader_get_uniform(sh_liquid_mask_tile, "u_mask_frame");
+mask_tile_sampler_mask = shader_get_sampler_index(sh_liquid_mask_tile, "u_mask");
 
 // A complete standalone body is safe during Create. Room Start connects the
 // room's volumes after every instance has initialized its liquid settings.
+liquid_shape_parts = [];
 volume_liquid_wave_setup();

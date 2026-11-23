@@ -24,6 +24,9 @@ saw_start_x = x;
 saw_start_y = y;
 saw_track_draw_width_scale = 1;
 saw_track_draw_height_scale = 1;
+// Give the player time to react when a blade crosses a long horizontal
+// tunnel from off screen. Vertical legs keep the level designer's timing.
+saw_path_speed_max = 720;
 
 saw_path_make_point = function(_x,_y,_time){
 	return {
@@ -44,9 +47,15 @@ saw_path_make_point = function(_x,_y,_time){
 
 saw_path_configure_loop_points = function(_points){
 	saw_path_point = array_create(0);
-	
-	for(var _i = 0; _i < array_length(_points); _i++){
-		saw_path_point[_i] = saw_path_make_point(_points[_i].x,_points[_i].y,saw_path_seconds);
+	var _point_count = array_length(_points);
+
+	// Each point is reached from the one before it; point 0 closes the loop
+	// from the last point.
+	for(var _i = 0; _i < _point_count; _i++){
+		var _from = _points[(_i + _point_count - 1) mod _point_count];
+		var _horizontal_distance = abs(_points[_i].x - _from.x);
+		var _time = max(saw_path_seconds, _horizontal_distance * SECOND / saw_path_speed_max);
+		saw_path_point[_i] = saw_path_make_point(_points[_i].x,_points[_i].y,_time);
 	}
 	
 	if(saw_move_enabled > 0){

@@ -13,54 +13,38 @@ var _frame_y = (render_top - liquid_body.top + render_height_buffer) / _body_hei
 var _frame_width = cached_surf_w / render_scale / _body_width;
 var _frame_height = cached_surf_h / render_scale / _body_height;
 
-// Every pass fills only the on-screen rectangle set in Draw Begin.
+// Every pass reads only the on-screen rectangle set in Draw Begin and draws
+// straight to the target; the shader clips against the wave mask.
 var _clip_x = render_clip_x;
 var _clip_y = render_clip_y;
 var _clip_w = render_clip_w;
 var _clip_h = render_clip_h;
+var _left = render_left;
+var _top = render_top;
+var _scale = 1 / render_scale;
+var _mask_texture = surface_get_texture(water_mask_surface);
 
-surface_set_target(underwater_composite_surface);
-draw_clear_alpha(c_black, 0);
-gpu_set_colorwriteenable(false, false, false, true);
-draw_surface_part(water_mask_surface, _clip_x, _clip_y, _clip_w, _clip_h, _clip_x, _clip_y);
-gpu_set_colorwriteenable(true, true, true, true);
-gpu_set_blendmode_ext(bm_dest_alpha, bm_zero);
 shader_set(sh_liquid_ripple);
+texture_set_stage(submerged_ripple_sampler_mask, _mask_texture);
 shader_set_uniform_f(submerged_ripple_uniform_time, submerged_ripple_time);
 shader_set_uniform_f(submerged_ripple_uniform_texel, 1 / cached_surf_w, 1 / cached_surf_h);
 shader_set_uniform_f(submerged_ripple_uniform_strength, submerged_ripple_strength);
 shader_set_uniform_f(submerged_ripple_uniform_body_frame, _frame_x, _frame_y, _frame_width, _frame_height);
 shader_set_uniform_f(submerged_ripple_uniform_fade_top, 0, 0);
 shader_set_uniform_f(submerged_ripple_uniform_reflection_depth, 0, 0);
-draw_surface_part(underwater_surface, _clip_x, _clip_y, _clip_w, _clip_h, _clip_x, _clip_y);
+shader_set_uniform_f(submerged_ripple_uniform_mask_mode, 0, 1, 0);
+draw_surface_part_ext(underwater_surface, _clip_x, _clip_y, _clip_w, _clip_h,
+	_left + _clip_x * _scale, _top + _clip_y * _scale, _scale, _scale, c_white, 1);
 shader_reset();
-gpu_set_blendmode(bm_normal);
-surface_reset_target();
 
-var _left = render_left;
-var _top = render_top;
-var _scale = 1 / render_scale;
-draw_surface_ext(underwater_composite_surface, _left, _top, _scale, _scale, 0, c_white, 1);
-draw_surface_ext(underwater_background_surface, _left, _top, _scale, _scale, 0, c_white, 0.3);
+liquid_tiles_draw(0.3);
 
 if (reflection_enable) {
-	// Remove submerged source pixels before mirroring the captured scene.
-	// Outside the rectangle the capture is transparent, so a clear matches it.
-	surface_set_target(reflection_surface);
-	draw_clear_alpha(c_black, 0);
-	gpu_set_blendmode_ext(bm_one, bm_zero);
-	draw_surface_part(underwater_surface, _clip_x, _clip_y, _clip_w, _clip_h, _clip_x, _clip_y);
-	gpu_set_blendmode_ext(bm_zero, bm_inv_src_alpha);
-	draw_surface_part(water_mask_surface, _clip_x, _clip_y, _clip_w, _clip_h, _clip_x, _clip_y);
-	gpu_set_blendmode(bm_normal);
-	surface_reset_target();
-
 	// Each exposed surface reflects into its own vertical wet interval. The
-	// shared union mask clips waves and holes after these disjoint strips.
-	surface_set_target(reflection_composite_surface);
-	draw_clear_alpha(c_black, 0);
-	gpu_set_blendmode_ext(bm_one, bm_zero);
+	// shader drops submerged source pixels and clips the mirror to the current
+	// wave contour, so these disjoint strips draw straight to the target.
 	shader_set(sh_liquid_ripple);
+	texture_set_stage(submerged_ripple_sampler_mask, _mask_texture);
 	shader_set_uniform_f(submerged_ripple_uniform_time, submerged_ripple_time);
 	shader_set_uniform_f(submerged_ripple_uniform_texel, 1 / cached_surf_w, 1 / cached_surf_h);
 	shader_set_uniform_f(submerged_ripple_uniform_strength, submerged_ripple_strength);
@@ -82,19 +66,23 @@ if (reflection_enable) {
 		// down the entire column when neighbouring cells have a higher top.
 		shader_set_uniform_f(submerged_ripple_uniform_reflection_depth,
 			_sy / cached_surf_h, reflection_fade_depth * render_scale / cached_surf_h);
+		// A source row v lands on mask row 2 * surface - v below the surface.
+		shader_set_uniform_f(submerged_ripple_uniform_mask_mode, 2 * _sy / cached_surf_h, -1, 1);
 		// Source ends at the nominal surface; invert around that surface.
-		draw_surface_part_ext(reflection_surface, _sx, 2 * _sy - _dest_bottom,
+		// Reflection opacity is the draw alpha, applied once per pixel.
+		draw_surface_part_ext(underwater_surface, _sx, 2 * _sy - _dest_bottom,
 			_sx_end - _sx, _dest_bottom - _dest_top,
-			_sx, _dest_bottom, 1, -1, c_white, 1);
+			_left + _sx * _scale, _top + _dest_bottom * _scale, _scale, -_scale,
+			c_white, reflection_alpha);
 	}
 	shader_reset();
-	// Clip the mirrored image to the current wave contour. Apply reflection
-	// opacity only once, when compositing, without redrawing the submerged scene.
-	gpu_set_blendmode_ext(bm_zero, bm_src_alpha);
-	draw_surface_part(water_mask_surface, _clip_x, _clip_y, _clip_w, _clip_h, _clip_x, _clip_y);
-	gpu_set_blendmode(bm_normal);
-	surface_reset_target();
-	draw_surface_ext(reflection_composite_surface, _left, _top, _scale, _scale, 0, c_white, reflection_alpha);
 }
 
-if (o_master.dev_mode) draw_bounding_box(true);
+if (o_master.dev_mode) {
+	for(var _i = 0; _i < array_length(liquid_body.rects); _i++){
+		var _r = liquid_body.rects[_i];
+		draw_rectangle_colour(_r.left, _r.top, _r.right, _r.bottom,
+			c_ags_red, c_ags_red, c_ags_red, c_ags_red, true);
+	}
+	draw_circle_colour(x, y, 3, c_ags_red, c_ags_red, false);
+}

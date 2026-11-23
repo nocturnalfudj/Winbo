@@ -30,7 +30,9 @@ function director_draw_parallax_layer_variant(_sprite_first, _sprite_loop, _came
 	var _camera_right = _camera_x + _camera_width;
 	var _tiles_back = ceil((_base_x - _camera_x) / _sprite_width);
 	var _tile_x = _base_x - (_tiles_back * _sprite_width);
-	var _tile_index = _tiles_back;
+	// Tile 0 sits at _base_x, so the first visible tile is _tiles_back tiles
+	// before it. Every tile either side of tile 0 uses the loop sprite.
+	var _tile_index = -_tiles_back;
 	
 	while (_tile_x < _camera_right) {
 		var _sprite_to_draw = (_tile_index == 0) ? _sprite_first : _sprite_loop;

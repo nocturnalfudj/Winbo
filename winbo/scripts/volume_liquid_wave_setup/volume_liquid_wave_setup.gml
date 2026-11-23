@@ -9,8 +9,13 @@ function volume_liquid_wave_setup(){
 function liquid_volume_at(_x, _y){
 	for(var _i = 0; _i < instance_number(o_volume_liquid); _i++){
 		var _v = instance_find(o_volume_liquid, _i);
-		if(_x >= _v.bbox_left && _x < _v.bbox_right + 1
-		&& _y >= _v.bbox_top && _y < _v.bbox_bottom + 1) return _v;
+		var _body = _v.liquid_body;
+		if(_v != _body.owner || _x < _body.left || _x >= _body.right
+		|| _y < _body.top || _y >= _body.bottom) continue;
+		for(var _c = 0; _c < array_length(_body.cells); _c++){
+			var _cell = _body.cells[_c];
+			if(_x >= _cell.left && _x < _cell.right && _y >= _cell.top && _y < _cell.bottom) return _v;
+		}
 	}
 	return noone;
 }
@@ -19,6 +24,30 @@ function liquid_rects_connected(_a, _b){
 	var _x = min(_a.right, _b.right) - max(_a.left, _b.left);
 	var _y = min(_a.bottom, _b.bottom) - max(_a.top, _b.top);
 	return (_x > 0 && _y >= 0) || (_x >= 0 && _y > 0);
+}
+
+/// Room-authored compound volumes use the same transformed footprint for
+/// rendering, waves and contact. Ordinary volumes keep their sprite mask bounds.
+function liquid_volume_rects(_volume){
+	var _parts = _volume.liquid_shape_parts;
+	if(array_length(_parts) == 0){
+		return [{left: _volume.bbox_left, top: _volume.bbox_top,
+			right: _volume.bbox_right + 1, bottom: _volume.bbox_bottom + 1}];
+	}
+	var _cos = dcos(_volume.image_angle), _sin = dsin(_volume.image_angle);
+	var _rects = [];
+	for(var _i = 0; _i < array_length(_parts); _i++){
+		var _part = _parts[_i];
+		var _x0 = _part[0] * _volume.image_xscale, _x1 = _part[2] * _volume.image_xscale;
+		var _y0 = _part[1] * _volume.image_yscale, _y1 = _part[3] * _volume.image_yscale;
+		array_push(_rects, {
+			left: round(_volume.x + min(_x0 * _cos, _x1 * _cos) + min(_y0 * _sin, _y1 * _sin)),
+			right: round(_volume.x + max(_x0 * _cos, _x1 * _cos) + max(_y0 * _sin, _y1 * _sin)),
+			top: round(_volume.y + min(-_x0 * _sin, -_x1 * _sin) + min(_y0 * _cos, _y1 * _cos)),
+			bottom: round(_volume.y + max(-_x0 * _sin, -_x1 * _sin) + max(_y0 * _cos, _y1 * _cos))
+		});
+	}
+	return _rects;
 }
 
 /// Called after all room Create events, or for a later geometry/count change.
@@ -30,19 +59,22 @@ function volume_liquid_body_rebuild(){
 }
 
 function volume_liquid_body_build(_volumes){
-	var _count = array_length(_volumes);
 	var _room_count = instance_number(o_volume_liquid);
-	var _rects = [], _assigned = array_create(_count, false);
-	for(var _i = 0; _i < _count; _i++){
+	var _rects = [], _owners = [];
+	for(var _i = 0; _i < array_length(_volumes); _i++){
 		var _v = _volumes[_i];
-		array_push(_rects, {left: _v.bbox_left, top: _v.bbox_top,
-			right: _v.bbox_right + 1, bottom: _v.bbox_bottom + 1});
+		var _parts = liquid_volume_rects(_v);
+		for(var _p = 0; _p < array_length(_parts); _p++){
+			array_push(_rects, _parts[_p]);
+			array_push(_owners, _v);
+		}
 		_v.liquid_geometry_left = _v.bbox_left;
 		_v.liquid_geometry_top = _v.bbox_top;
 		_v.liquid_geometry_right = _v.bbox_right;
 		_v.liquid_geometry_bottom = _v.bbox_bottom;
 		_v.liquid_geometry_count = _room_count;
 	}
+	var _count = array_length(_rects), _assigned = array_create(_count, false);
 	for(var _seed = 0; _seed < _count; _seed++){
 		if(_assigned[_seed]) continue;
 		var _members = [_seed];
@@ -50,14 +82,14 @@ function volume_liquid_body_build(_volumes){
 		for(var _q = 0; _q < array_length(_members); _q++){
 			var _a = _members[_q];
 			for(var _j = 0; _j < _count; _j++){
-				if(_assigned[_j] || _volumes[_j].object_index != _volumes[_seed].object_index) continue;
-				if(liquid_rects_connected(_rects[_a], _rects[_j])){
+				if(_assigned[_j] || _owners[_j].object_index != _owners[_seed].object_index) continue;
+				if(_owners[_a] == _owners[_j] || liquid_rects_connected(_rects[_a], _rects[_j])){
 					_assigned[_j] = true;
 					array_push(_members, _j);
 				}
 			}
 		}
-		var _body = {owner: _volumes[_seed], left: infinity, top: infinity,
+		var _body = {owner: _owners[_seed], left: infinity, top: infinity,
 			right: -infinity, bottom: -infinity, rects: [], cells: [], surfaces: []};
 		var _xs = [];
 		for(var _m = 0; _m < array_length(_members); _m++){
@@ -100,7 +132,7 @@ function volume_liquid_body_build(_volumes){
 				if(_surface < 0){
 					_surface = array_length(_body.surfaces);
 					array_push(_body.surfaces, {left: _left, right: _right, top: _top,
-						segments: 0, dx: 0, displacement: [], velocity: []});
+						segments: 0, dx: 0, disturbed: false, displacement: [], velocity: []});
 				}
 				array_push(_body.cells, {left: _left, right: _right,
 					top: _top, bottom: _bottom, surface: _surface});
@@ -108,13 +140,13 @@ function volume_liquid_body_build(_volumes){
 		}
 		for(var _si = 0; _si < array_length(_body.surfaces); _si++){
 			var _s = _body.surfaces[_si];
-			_s.segments = max(8, ceil((_s.right - _s.left) / _volumes[_seed].wave_segment_px));
+			_s.segments = max(8, ceil((_s.right - _s.left) / _owners[_seed].wave_segment_px));
 			_s.dx = (_s.right - _s.left) / _s.segments;
 			_s.displacement = array_create(_s.segments + 1, 0);
 			_s.velocity = array_create(_s.segments + 1, 0);
 		}
 		for(var _m = 0; _m < array_length(_members); _m++)
-			_volumes[_members[_m]].liquid_body = _body;
+			_owners[_members[_m]].liquid_body = _body;
 	}
 }
 
@@ -169,7 +201,7 @@ function liquid_segment_submerged(_body, _x0, _y0, _x1, _y1){
 		}
 		if(_enter <= _leave) array_push(_intervals, {start: _enter, finish: _leave});
 	}
-	array_sort(_intervals, function(_a, _b){ return _a.start - _b.start; });
+	array_sort(_intervals, function(_a, _b){ return sign(_a.start - _b.start); });
 	var _covered = 0;
 	for(var _i = 0; _i < array_length(_intervals); _i++){
 		if(_intervals[_i].start > _covered) return false;

@@ -48,6 +48,9 @@ wave_phase += wave_speed;
 if(wave_sim_enable){
 	for(var _si = 0; _si < array_length(liquid_body.surfaces); _si++){
 		var _s = liquid_body.surfaces[_si];
+		// The analytic surface still moves at rest. Only simulate the spring
+		// chain on spans that have actually received a splash impulse.
+		if(!_s.disturbed) continue;
 		for(var _i = 1; _i < _s.segments; _i++){
 			_s.velocity[_i] += wave_tension * (_s.displacement[_i - 1]
 				- 2 * _s.displacement[_i] + _s.displacement[_i + 1]);

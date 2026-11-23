@@ -147,7 +147,16 @@ function player_gamestate_play(){
 					}
 				}
 				
-				if(collision.x == 1){
+				// Room borders stop the dash without a bump; ordinary walls still bump.
+				var _border_x, _border_y, _contact_x, _contact_y;
+				_border_x = (collision.x != 0) && !_platform_crumble_dash_collision
+					&& player_bump_contact_is_border(move_collision_object_instance_x, collision.x, 0);
+				_border_y = (collision.y == -1) && !_platform_crumble_dash_collision
+					&& player_bump_contact_is_border(move_collision_object_instance_y, 0, -1);
+				_contact_x = _border_x ? 0 : collision.x;
+				_contact_y = _border_y ? 0 : collision.y;
+
+				if(_contact_x == 1){
 					_bump = true;
 					if(!_platform_crumble_dash_collision){
 						_bump_acceleration_direction = 180 - _bump_acceleration_direction_additional;
@@ -159,7 +168,7 @@ function player_gamestate_play(){
 					}
 					_bump_text_poster_x += _bump_text_poster_distance;
 				}
-				else if(collision.x == -1){
+				else if(_contact_x == -1){
 					_bump = true;
 					if(!_platform_crumble_dash_collision){
 						_bump_acceleration_direction = 0 + _bump_acceleration_direction_additional;
@@ -172,7 +181,7 @@ function player_gamestate_play(){
 					_bump_text_poster_x -= _bump_text_poster_distance;
 				}
 		
-				if(collision.y == 1){
+				if(_contact_y == 1){
 					_bump = true;
 					if(!_platform_crumble_dash_collision){
 						_bump_acceleration_direction = 90;
@@ -184,7 +193,7 @@ function player_gamestate_play(){
 					}
 					_bump_text_poster_y += _bump_text_poster_distance;
 				}
-				else if(collision.y == -1){
+				else if(_contact_y == -1){
 					_bump = true;
 					if(!_platform_crumble_dash_collision){
 						_bump_acceleration_direction = input_move_direction;
@@ -236,22 +245,22 @@ function player_gamestate_play(){
 								// The supplied sprite grows rightward from its centre-line edge.
 								// Read the exact collided surface rather than Winbo's separated bbox,
 								// then place the centre-line edge there and rotate/flip it inward.
-								if (collision.x == 1) {
+								if (_contact_x == 1) {
 									with(move_collision_object_instance_x){
 										fx_spawn_sprite_once(bbox_left, other.y, "lyr_pfx_foreground", spr_smoke_bump_impact, -1, 1, 0, ANIMATION_FPS_DEFAULT);
 									}
 								}
-								else if (collision.x == -1) {
+								else if (_contact_x == -1) {
 									with(move_collision_object_instance_x){
 										fx_spawn_sprite_once(bbox_right, other.y, "lyr_pfx_foreground", spr_smoke_bump_impact, 1, 1, 0, ANIMATION_FPS_DEFAULT);
 									}
 								}
-								else if (collision.y == 1) {
+								else if (_contact_y == 1) {
 									with(move_collision_object_instance_y){
 										fx_spawn_sprite_once(other.x, bbox_top, "lyr_pfx_foreground", spr_smoke_bump_impact, 1, 1, 90, ANIMATION_FPS_DEFAULT);
 									}
 								}
-								else if (collision.y == -1) {
+								else if (_contact_y == -1) {
 									with(move_collision_object_instance_y){
 										fx_spawn_sprite_once(other.x, bbox_bottom, "lyr_pfx_foreground", spr_smoke_bump_impact, 1, 1, -90, ANIMATION_FPS_DEFAULT);
 									}
@@ -285,6 +294,9 @@ function player_gamestate_play(){
 						if(_platform_crumble_dash_collision)
 							text_string = "SMASH!";
 					}
+				}
+				else if(_border_x || _border_y){
+					player_dash_border_stop();
 				}
 			}
 		}

@@ -285,8 +285,6 @@ function player_state_move(){
 		dash_no_input_direction = input_move_direction;
 	}
 
-	player_second_jump_hold_update();
-
 	#region Jump
 		if(jump_startup_active){
 			player_jump_startup_update();
@@ -831,8 +829,9 @@ function player_dive_spring_state_impact(){
 	_jump_pressed = player_dive_spring_jump_pressed();
 	_wrong_input_pressed = player_dive_spring_wrong_input_pressed();
 
-	velocity.Set(0, 0);
-	acceleration.Set(0, 0);
+	if(!player_dive_spring_planted_update()){
+		return;
+	}
 	dive_spring_impact_timer += _delta_time_scaled;
 
 	if(sprite_current != sprite_dive_spring){
@@ -935,29 +934,29 @@ function player_dive_spring_state_spring(){
 
 	if(dive_spring_launch_hold_time > 0){
 		dive_spring_launch_hold_time = max(0, dive_spring_launch_hold_time - _delta_time_scaled);
-
-		// The launch frame is the grounded in-between before the launch: while the hold
-		// runs, Winbo stays exactly where the impact landed and the pending
-		// impulse must not be applied or integrated.
-		if(dive_spring_launch_hold_time > 0){
-			// Remember a dash pressed during the grounded pose so it fires on
-			// the first airborne step instead of being lost.
-			player_dive_spring_dash_cancel_update();
-
-			if(sprite_current != sprite_dive_spring){
-				image_system_setup(sprite_dive_spring, 0, false, false, 0, IMAGE_LOOP_FULL);
-			}
-
-			image_set_frame(image, dive_spring_launch_frame);
-			velocity.Set(0, 0);
-			acceleration.Set(0, 0);
-			return;
-		}
 	}
 
-	if(dive_spring_jump_sound_pending){
+	// The launch sound leads the takeoff slightly so it lands with the jump.
+	if(dive_spring_jump_sound_pending && (dive_spring_launch_hold_time <= dive_spring_jump_sound_lead_time)){
 		dive_spring_jump_sound_pending = false;
 		audio_player_dive_spring_jump_play();
+	}
+
+	// The launch frame is the grounded in-between before the launch: while the hold
+	// runs, Winbo stays on the surface the impact landed on (riding it if it moves)
+	// and the pending impulse must not be applied or integrated.
+	if(dive_spring_launch_hold_time > 0){
+		// Remember a dash pressed during the grounded pose so it fires on
+		// the first airborne step instead of being lost.
+		player_dive_spring_dash_cancel_update();
+
+		if(sprite_current != sprite_dive_spring){
+			image_system_setup(sprite_dive_spring, 0, false, false, 0, IMAGE_LOOP_FULL);
+		}
+
+		image_set_frame(image, dive_spring_launch_frame);
+		player_dive_spring_planted_update();
+		return;
 	}
 
 	if(sprite_current != sprite_dive_spring || !image.animate || image.loop_start != dive_spring_rotor_loop_start_frame){
@@ -1269,8 +1268,9 @@ function player_dive_spring_float_interrupt_try(){
 }
 
 function player_dive_spring_state_fail(){
-	velocity.Set(0, 0);
-	acceleration.Set(0, 0);
+	if(!player_dive_spring_planted_update()){
+		return;
+	}
 
 	if(sprite_current != sprite_dive_spring_fail){
 		image_system_setup(sprite_dive_spring_fail, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
@@ -1294,6 +1294,7 @@ function player_dive_spring_begin_impact(){
 	dive_spring_impact_timer = 0;
 	dive_spring_move_input_previous = input_move_magnitude;
 	dive_spring_dive_timer = 0;
+	dive_spring_planted = move_grounded;
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
 	image_system_setup(sprite_dive_spring, ANIMATION_FPS_DEFAULT, true, true, dive_spring_impact_loop_start_frame, dive_spring_impact_loop_end_frame);
@@ -1302,6 +1303,12 @@ function player_dive_spring_begin_impact(){
 	if(move_grounded || (collision.y != 0)){
 		landing_smoke_armed = false;
 		player_landing_smoke_spawn();
+	}
+
+	// Diving into an enemy springs Winbo off it with no further input.
+	if(dive_spring_enemy_impact){
+		player_dive_spring_begin_spring();
+		return;
 	}
 
 	if(player_dive_spring_jump_pressed()){
@@ -1316,7 +1323,7 @@ function player_dive_spring_begin_spring(){
 	dive_spring_dive_timer = 0;
 	dive_spring_launch_hold_time = dive_spring_launch_hold_time_max;
 	dive_spring_launch_impulse_pending = true;
-	// The launch sound waits for the grounded hold so it plays as Winbo leaves the ground.
+	// The launch sound waits for the grounded hold, playing just before Winbo leaves the ground.
 	dive_spring_jump_sound_pending = true;
 	dive_spring_apex_reached = false;
 	move_gravity_factor = 1;
@@ -1355,6 +1362,34 @@ function player_dive_spring_begin_fail(){
 
 function player_dive_spring_register_impact(){
 	dive_spring_enemy_impact = true;
+}
+
+/// Planted Dive Spring poses (impact, launch hold, fail) ride the surface under
+/// Winbo: a moving platform carries him up or down with it and a conveyor belt
+/// keeps its traction. A midair impact (an enemy or a wall) holds still.
+/// @returns Whether the dive spring still owns this step in the same phase.
+function player_dive_spring_planted_update(){
+	var _phase = dive_spring_phase;
+	velocity.x = 0;
+	acceleration.Set(0, 0);
+	if(!dive_spring_planted){
+		velocity.y = 0;
+		return true;
+	}
+
+	// Gravity keeps the feet seated; a belt carried off its end falls normally.
+	if(move_grounded){
+		velocity.y = 0;
+	}
+	player_movement_update();
+	velocity.x = 0;
+	if((state != PlayerState.dive_spring) || (dive_spring_phase != _phase)){
+		return false;
+	}
+
+	// Riding a surface can carry Winbo into hazards, pickups or checkpoints.
+	player_collisions();
+	return (state == PlayerState.dive_spring) && (dive_spring_phase == _phase);
 }
 
 function player_dive_spring_restore_movement(){
@@ -1405,6 +1440,7 @@ function player_dive_spring_reset(){
 	dive_spring_launch_impulse_pending = false;
 	dive_spring_apex_reached = false;
 	dive_spring_enemy_impact = false;
+	dive_spring_planted = false;
 	dive_spring_float_cancel_requested = false;
 	dive_spring_dash_cancel_requested = false;
 }
@@ -1485,14 +1521,16 @@ function character_jump(_from_frolic = false){
 	jump_float_requested = false;
 	// Only a normal jump can lead into a timed higher jump.
 	second_jump_landing_armed = !_second;
-	second_jump_hold_pending = _grounded && !jump_face_sideways && abs(velocity.x) <= 0.05;
 	second_jump_active = _second;
-	if(_second){
-		second_jump_hold_pending = false;
-	}
+	// A stationary neutral takeoff plays the second jump's squash on the ground and
+	// commits once it ends: still pressed, the second jump leaves exactly like the
+	// landing-window one; released during the squash, the normal jump leaves instead.
+	// Nothing is promoted in the air, so a held jump never reads as a double jump.
+	var _second_choice = !_second && _grounded && !jump_face_sideways && !jump_frolic_active
+		&& (abs(velocity.x) <= 0.05);
 	state = PlayerState.move;
 	// A fresh jump interrupts landing immediately, including within the ten-frame window.
-	var _jump_sprite = _second
+	var _jump_sprite = (_second || _second_choice)
 		? (jump_face_sideways ? sprite_jump_second_sideways : sprite_jump_second)
 		: (jump_frolic_active ? sprite_jump_frolic : (jump_face_sideways ? sprite_jump_sideways : sprite_jump));
 	image_system_setup(_jump_sprite, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
@@ -1506,6 +1544,7 @@ function character_jump(_from_frolic = false){
 			jump_startup_frames = _startup_frames;
 			jump_startup_sprite = _jump_sprite;
 			jump_startup_second = _second;
+			jump_startup_second_choice = _second_choice;
 			return;
 		}
 		image_set_frame(image, _startup_frames);
@@ -1523,6 +1562,14 @@ function player_jump_startup_frames(_sprite){
 /// Hold the grounded squash until the takeoff frame is shown. Leaving the
 /// ground, or anything else taking over the sprite, launches at once.
 function player_jump_startup_update(){
+	// Released during a stationary squash: the normal neutral jump leaves now.
+	if(jump_startup_second_choice && !input_current[UserControl.jump]){
+		jump_startup_active = false;
+		jump_startup_second_choice = false;
+		image_system_setup(sprite_jump, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
+		player_jump_launch(false, true);
+		return;
+	}
 	if(move_grounded && (sprite_current == jump_startup_sprite) && (image.frame < jump_startup_frames)){
 		return;
 	}
@@ -1530,12 +1577,20 @@ function player_jump_startup_update(){
 	if(sprite_current == jump_startup_sprite){
 		image_set_frame(image, max(image.frame, jump_startup_frames));
 	}
+	// Pressed through the whole squash: the second jump owns this flight.
+	if(jump_startup_second_choice){
+		jump_startup_second_choice = false;
+		jump_startup_second = true;
+		second_jump_active = true;
+		second_jump_landing_armed = false;
+	}
 	// The squash only plays on the ground, so this jump left a solid surface.
 	player_jump_launch(jump_startup_second, true);
 }
 
 function player_jump_startup_clear(){
 	jump_startup_active = false;
+	jump_startup_second_choice = false;
 }
 
 /// Damage, swimming, dashes and other states abandon an unlaunched jump.

@@ -9,20 +9,30 @@ if(_camera != noone){
     _on_screen = rectangle_in_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom,
         _camera.start_x, _camera.start_y, _camera.end_x, _camera.end_y) != 0;
 }
-var _player = instance_nearest(x, y, o_player);
-if(_on_screen && _player != noone && _player.target_can_be_targeted[TargetType.attack]){
-    var _tx = (_player.bbox_left + _player.bbox_right) * 0.5;
-    var _ty = (_player.bbox_top + _player.bbox_bottom) * 0.5;
-    var _direction = point_direction(x, y, _tx, _ty);
+// Pick the nearest player this turret can actually see, so an unseen or
+// untargetable player never blinds it to one that is in its arc.
+var _tx = 0;
+var _ty = 0;
+var _target_distance = detection_range;
+var _player_count = _on_screen ? instance_number(o_player) : 0;
+for(var _p = 0; _p < _player_count; _p++){
+    var _player = instance_find(o_player, _p);
+    if(!_player.target_can_be_targeted[TargetType.attack]) continue;
+    var _px = (_player.bbox_left + _player.bbox_right) * 0.5;
+    var _py = (_player.bbox_top + _player.bbox_bottom) * 0.5;
+    var _distance = point_distance(x, y, _px, _py);
+    var _direction = point_direction(x, y, _px, _py);
+    if(_distance > _target_distance
+    || abs(angle_difference(_direction, neutral_angle)) > aim_half_arc) continue;
     var _sight_mx = x + lengthdir_x(muzzle_distance * abs(image_yscale), _direction);
     var _sight_my = y + lengthdir_y(muzzle_distance * abs(image_yscale), _direction);
-    if(point_distance(x, y, _tx, _ty) <= detection_range
-    && abs(angle_difference(_direction, neutral_angle)) <= aim_half_arc
-    && turret_barrel_clear(_sight_mx, _sight_my)
-    && collision_line(_sight_mx, _sight_my, _tx, _ty, o_solid, false, true) == noone){
-        target_instance = _player;
-        _desired_angle = _direction;
-    }
+    if(!turret_barrel_clear(_sight_mx, _sight_my)
+    || collision_line(_sight_mx, _sight_my, _px, _py, o_solid, false, true) != noone) continue;
+    target_instance = _player;
+    _desired_angle = _direction;
+    _target_distance = _distance;
+    _tx = _px;
+    _ty = _py;
 }
 aim_angle += clamp(angle_difference(_desired_angle, aim_angle), -turn_speed * _dt, turn_speed * _dt);
 if(shot_animating){

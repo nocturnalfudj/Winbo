@@ -3,7 +3,7 @@ function player_collisions(){
 		#region Hazard
 			// Sea mines consume their own single contact and then leave an explosion.
 			var _mine_collisions = ds_list_create();
-			var _mine_count = instance_place_list(x, y, o_sea_mine, _mine_collisions, false);
+			var _mine_count = player_hurtbox_list(o_sea_mine, _mine_collisions);
 			for(var _mine_index = 0; _mine_index < _mine_count; _mine_index++){
 				var _mine = _mine_collisions[| _mine_index];
 				_mine.detonate(id);
@@ -12,7 +12,7 @@ function player_collisions(){
 
 			// Check every overlap: an inactive spike must not hide another hazard.
 			var _hazard_collisions = ds_list_create();
-			var _hazard_count = instance_place_list(x,y,o_hazard,_hazard_collisions,false);
+			var _hazard_count = player_hurtbox_list(o_hazard, _hazard_collisions);
 			for(var _hazard_index = 0; _hazard_index < _hazard_count; _hazard_index++){
 				with(_hazard_collisions[| _hazard_index]){
 					if(!hazard_is_active()){
@@ -42,7 +42,7 @@ function player_collisions(){
 
 		#region Bullet
 			var _bullet_collision_instance;
-			_bullet_collision_instance = instance_place(x,y,o_bullet);
+			_bullet_collision_instance = player_hurtbox_instance(o_bullet);
 			with(_bullet_collision_instance){
 				//Ignore if Same Team
 				if(team == other.team)
@@ -62,7 +62,7 @@ function player_collisions(){
 				
 		#region Melee Attack
 			var _melee_attack_collision_instance;
-			_melee_attack_collision_instance = instance_place(x,y,o_melee_attack);
+			_melee_attack_collision_instance = player_hurtbox_instance(o_melee_attack);
 			with(_melee_attack_collision_instance){
 				//Ignore if Same Team
 				if(team == other.team)
@@ -138,6 +138,13 @@ function player_collisions(){
 							
 					//Bounce Player
 					with(other){
+						// A Dive Spring flight hands the bounce to the move state, so it
+						// gets the same impulse, gravity and drag as any enemy bounce.
+						if(state == PlayerState.dive_spring){
+							state = PlayerState.move;
+							player_dive_spring_reset();
+						}
+
 						acceleration.Set(0,0);
 						velocity.Set(0,0);
 								
@@ -153,10 +160,11 @@ function player_collisions(){
 						dash_stamina_depleted = false;
 					}
 				}
-				//Contact Damage - player takes damage from touching enemies (not stomping)
+				// Stomps use the full movement mask. Side contact deals damage
+				// only once the enemy also overlaps the inset hurtbox.
 				else{
 					with(other){
-					player_hit(1, other, false);
+						if(player_hurtbox_instance(other.id) != noone) player_hit(1, other, false);
 					}
 				}
 			}
@@ -648,4 +656,35 @@ function player_mushroom_side_bounce(_mushroom, _approach_direction = 0){
 	with(_mushroom){
 		image_system_setup(sprite_active, ANIMATION_FPS_DEFAULT, true, false, 0, IMAGE_LOOP_FULL);
 	}
+}
+
+/// @function player_hurtbox_list
+/// @summary Damage sources touching Winbo's hurtbox, which sits slightly inside
+/// the solid mask so a marginal graze misses. Movement keeps the full mask.
+function player_hurtbox_list(_object, _list){
+	return collision_rectangle_list(
+		bbox_left + hurtbox_inset_x,
+		bbox_top + hurtbox_inset_top,
+		bbox_right - hurtbox_inset_x,
+		bbox_bottom - hurtbox_inset_bottom,
+		_object,
+		true,
+		true,
+		_list,
+		false
+	);
+}
+
+/// @function player_hurtbox_instance
+/// @summary First damage source of this object touching Winbo's hurtbox.
+function player_hurtbox_instance(_object){
+	return collision_rectangle(
+		bbox_left + hurtbox_inset_x,
+		bbox_top + hurtbox_inset_top,
+		bbox_right - hurtbox_inset_x,
+		bbox_bottom - hurtbox_inset_bottom,
+		_object,
+		true,
+		true
+	);
 }

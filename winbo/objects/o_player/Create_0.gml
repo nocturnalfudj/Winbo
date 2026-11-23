@@ -48,7 +48,6 @@ is_player = true;
 	sprite_land_sideways	= spr_player_land_sideways;	//director_get_custom_sprite(spr_player_land_sideways);
 	sprite_jump_frolic		= spr_player_jump_frolic;
 	sprite_land_frolic		= spr_player_land_frolic;
-	sprite_fall_post_dash	= spr_player_fall_post_dash;
 	sprite_fall_post_dash_sideways = spr_player_fall_post_dash_sideways;
 	sprite_land_post_dash	= spr_player_land_post_dash;
 	sprite_float			= spr_player_float;			//director_get_custom_sprite(spr_player_float);
@@ -156,21 +155,14 @@ is_player = true;
 	jump_grounded = false;
 	float_ground_clearance = 20;
 
-	// One higher tier: hold a stationary takeoff or jump again just after landing.
-	second_jump_hold_frames = 12;
+	// One higher tier: jump again just after landing, or keep Jump pressed through
+	// a stationary takeoff's squash. Both take off from the ground the same way.
 	second_jump_landing_window = 10;
 	second_jump_impulse = 94;
-	second_jump_hold_boost = 12;
 	second_jump_active = false;
-	second_jump_hold_pending = false;
-	second_jump_hold_time = 0;
 	second_jump_landing_age = -1;
 	second_jump_landing_armed = false;
 	second_jump_airborne_seen = false;
-	second_jump_hold_blend_frame = 0;
-	second_jump_hold_blend_offset = 0;
-	// Per-frame difference between the normal and revised neutral artwork's top.
-	second_jump_hold_frame_offsets = [-106, 59, 87, 81, 74, 65];
 	// The sideways flourish commits Winbo to its wind-up; float, dash and dive
 	// can only cancel it from this frame on, which is the takeoff frame.
 	second_jump_cancel_frame = 2;
@@ -180,6 +172,9 @@ is_player = true;
 	jump_startup_frames = 0;
 	jump_startup_sprite = noone;
 	jump_startup_second = false;
+	// A stationary takeoff is decided on the ground: Jump still pressed when the
+	// squash ends gives the second jump, a release during it the normal jump.
+	jump_startup_second_choice = false;
 	jump_takeoff_x = x;
 	jump_takeoff_y = y;
 
@@ -189,9 +184,6 @@ is_player = true;
 	post_dash_fall_time = 0;
 	post_dash_fall_time_max = SECOND * 2;
 	post_dash_loop_frames = 3;
-	post_dash_sideways = false;
-	post_dash_sideways_enter_speed = 5;
-	post_dash_sideways_exit_speed = 2;
 
 	//Jump Hold
 	jump_hold_enable = true;
@@ -321,6 +313,11 @@ is_player = true;
 	dive_spring_launch_hold_time = 0;
 	dive_spring_launch_impulse_pending = false;
 	dive_spring_jump_sound_pending = false;
+	// The launch sound leads the takeoff by three 60fps frames.
+	dive_spring_jump_sound_lead_time = SECOND * 3 / 60;
+	// Whether the impact landed on a surface. Planted poses ride moving
+	// platforms and conveyor belts; a midair impact holds still.
+	dive_spring_planted = false;
 	dive_spring_rotor_fps = ANIMATION_FPS_DEFAULT;
 	// Extra rotor frames before the upright spin ending, taken from the front
 	// fall that follows it so the jump's arc and air time do not change.
@@ -393,6 +390,12 @@ is_player = true;
 	hit_countdown = new Countdown(_hit_countdown_time,_hit_countdown_time,true,COUNTDOWN_RESET_COUNT_NEVER);
 	
 	hit_state_previous = PlayerState.idle;
+
+	// Damage reads a rectangle slightly inside the solid mask, so a graze of a
+	// saw, spike, mine or shot misses. Walls and floors keep the full mask.
+	hurtbox_inset_x = 18;
+	hurtbox_inset_top = 18;
+	hurtbox_inset_bottom = 10;
 #endregion
 
 #region Health

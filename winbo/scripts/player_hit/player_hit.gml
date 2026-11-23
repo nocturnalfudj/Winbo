@@ -67,6 +67,9 @@ function player_hit(_damage, _source = noone, _slash = false){
 		hit_state_previous = state;
 	}
 	
+	// A swim dash queued before the hit must not fire after recovery.
+	swim_dash_chain_pending = false;
+
 	// Go to Hit State
 	state = PlayerState.hit;
 }
