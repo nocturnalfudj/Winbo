@@ -32,7 +32,7 @@ function director_room_finalize_gameplay(_request) {
 		instance_create_layer(0,0,"lyr_player",o_opening_cutscene_controller);
 	}
 
-	if(_request.target_room == r_game_level_0 || _request.target_room == r_game_level_1) {
+	if(_request.target_room == r_game_level_1 || _request.target_room == r_game_level_2) {
 		instance_create_layer(0,0,"lyr_spawner",o_floating_decor_controller);
 	}
 	

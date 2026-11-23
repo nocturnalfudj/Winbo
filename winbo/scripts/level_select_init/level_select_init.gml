@@ -50,7 +50,7 @@ function level_select_init() {
 	// Progression uses 0-based asset IDs and 1-based player labels
 	level_select_register(
 		"level_0",
-		r_game_level_0,
+		r_game_level_1,
 		"Level 1",
 		3,
 			"level_1",
@@ -61,7 +61,7 @@ function level_select_init() {
 		);
 		level_select_register(
 			"level_1",
-			r_game_level_1,
+			r_game_level_2,
 		"Level 2",
 		4,
 			"level_0",

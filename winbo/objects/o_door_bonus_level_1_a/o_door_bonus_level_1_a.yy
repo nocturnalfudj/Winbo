@@ -8,8 +8,8 @@
   "name":"o_door_bonus_level_1_a",
   "overriddenProperties":[],
   "parent":{
-    "name":"Level 1",
-    "path":"folders/Actors/Door/Bonus/Level 1.yy",
+    "name":"Level 2",
+    "path":"folders/Actors/Door/Bonus/Level 2.yy",
   },
   "parentObjectId":{
     "name":"o_door_bonus_ornate",

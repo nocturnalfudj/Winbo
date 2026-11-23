@@ -33,12 +33,12 @@ function audio_gameplay_music_resolve(_room) {
 		case r_tutorial:
 			_music = music_tutorial;
 		break;
-		case r_game_level_0:
+		case r_game_level_1:
 			_music = music_level_test;
 			_loop_start = 3.00;
 		break;
 
-		case r_game_level_1:
+		case r_game_level_2:
 			_music = music_level_2;
 			_loop_start = 0;
 		break;

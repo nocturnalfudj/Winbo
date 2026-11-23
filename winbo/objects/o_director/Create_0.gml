@@ -244,7 +244,7 @@ status_effect_system_data_setup();
 	campaign_entry_room = r_opening_cutscene;
 	
 	//Next Level
-	next_level = r_game_level_0;	// Default presence exit target before progression overwrites it
+	next_level = r_game_level_1;	// Default presence exit target before progression overwrites it
 	
 	// Flag to prevent life deduction during level transitions
 	level_transitioning = false;

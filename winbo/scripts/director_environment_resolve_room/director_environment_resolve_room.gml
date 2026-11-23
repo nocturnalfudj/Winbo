@@ -20,12 +20,12 @@ function director_environment_resolve_room(_room) {
 	}
 	
 	// Level 1 -> level_0 room
-	if (_room == r_game_level_0) {
+	if (_room == r_game_level_1) {
 		return Environment.level_1_environment;
 	}
 	
 	// Level 2 -> level_1 room
-	if (_room == r_game_level_1) {
+	if (_room == r_game_level_2) {
 		return Environment.level_2_environment;
 	}
 	

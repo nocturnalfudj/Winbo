@@ -139,8 +139,8 @@
   ],
   "name":"r_game_level_1_bonus_a",
   "parent":{
-    "name":"1",
-    "path":"folders/Rooms/Game/1.yy",
+    "name":"Level 2",
+    "path":"folders/Rooms/Game/Level 2.yy",
   },
   "parentRoom":{
     "name":"r_game",

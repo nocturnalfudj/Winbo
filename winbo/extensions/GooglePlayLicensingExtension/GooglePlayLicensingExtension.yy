@@ -1,5 +1,5 @@
 {
-  "$GMExtension":"",
+  "$GMExtension":"v1",
   "%Name":"GooglePlayLicensingExtension",
   "androidactivityinject":"",
   "androidclassname":"GooglePlayLicensingAsExt",
@@ -36,8 +36,10 @@
   "iosSystemFrameworkEntries":[],
   "iosThirdPartyFrameworkEntries":[],
   "license":"Free to use, also for commercial games.",
+  "maccodeinjection":"",
   "maccompilerflags":"",
   "maclinkerflags":"",
+  "macProps":false,
   "macsourcedir":"",
   "name":"GooglePlayLicensingExtension",
   "options":[],

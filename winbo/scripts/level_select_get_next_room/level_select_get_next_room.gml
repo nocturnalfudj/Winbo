@@ -10,7 +10,7 @@ function level_select_get_next_room(_current_room) {
 	}
 	
 	// Fallback to test level if not found
-	return r_game_level_0;
+	return r_game_level_1;
 }
 
 /// @function level_select_build_transition
@@ -24,7 +24,7 @@ function level_select_build_transition(_current_room) {
 	}
 	
 	var _next_level = level_select_get_next_level(_current_room);
-	var _next_room = !is_undefined(_next_level) ? _next_level.level_room : r_game_level_0;
+	var _next_room = !is_undefined(_next_level) ? _next_level.level_room : r_game_level_1;
 	var _target_room = _next_room;
 	var _route_via_presence = false;
 	

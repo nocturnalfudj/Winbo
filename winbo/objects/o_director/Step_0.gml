@@ -62,7 +62,7 @@ bg_anim_time_seconds += delta_time / 1000000;
 					//resource[Resource.cash][Team.player] = 0;
 					
 					//Reset Next Level
-					next_level = r_game_level_0;
+					next_level = r_game_level_1;
 				}
 			}
 		#endregion

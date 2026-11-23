@@ -1,5 +1,5 @@
 {
-  "$GMExtension":"",
+  "$GMExtension":"v1",
   "%Name":"iOS_IAPs",
   "androidactivityinject":"",
   "androidclassname":"",
@@ -67,8 +67,10 @@
     {"$GMExtensionFrameworkEntry":"","%Name":"libssl.a","embed":0,"name":"libssl.a","resourceType":"GMExtensionFrameworkEntry","resourceVersion":"2.0","weakReference":false,},
   ],
   "license":"",
+  "maccodeinjection":"",
   "maccompilerflags":"",
   "maclinkerflags":"",
+  "macProps":false,
   "macsourcedir":"",
   "name":"iOS_IAPs",
   "options":[],

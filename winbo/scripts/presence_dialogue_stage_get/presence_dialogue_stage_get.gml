@@ -7,7 +7,7 @@ function presence_dialogue_stage_get() {
 	_target_room = o_director.next_level;
 
 	switch(_target_room) {
-		case r_game_level_0:
+		case r_game_level_1:
 			return "level_1";
 
 		default:
