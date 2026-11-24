@@ -35,6 +35,15 @@ bg_anim_time_seconds += delta_time / 1000000;
 					
 					//Track death
 					level_stat_add(LevelStat.deaths);
+					// Finish any enemy deaths still animating before consuming the room's list.
+					with(o_enemy){
+						if(state == EnemyState.death || state == EnemyState.destroy) instance_destroy();
+					}
+					for(var _i = 0; _i < array_length(defeated_enemy_placements); _i++){
+						var _spawn = defeated_enemy_placements[_i];
+						instance_create_layer(_spawn.x, _spawn.y, _spawn.layer, _spawn.object, _spawn.transform);
+					}
+					defeated_enemy_placements = [];
 					
 					//Respawn Player
 					director_spawn_player_all_joined();

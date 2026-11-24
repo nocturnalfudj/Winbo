@@ -41,7 +41,6 @@ function enemy_apocalypse_survivor_state_attack_active(){
 				sprite_current = spr_apocalypse_survivor_projectile;
 				image_system_setup(spr_apocalypse_survivor_projectile,15,true,true,0,IMAGE_LOOP_FULL);
 				mask_index = spr_apocalypse_survivor_projectile;
-				sprite_angle_offset = 180;
 				death_anim_sprite = spr_apocalypse_survivor_projectile_impact;
 				death_anim_fps = 18;
 				acceleration.AddMagnitudeDirection(other.attack_projectile_speed, other.aim_angle);

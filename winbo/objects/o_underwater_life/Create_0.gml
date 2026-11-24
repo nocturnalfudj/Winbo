@@ -1,6 +1,4 @@
-// Purely decorative underwater life for the room it is placed in. It sits on
-// lyr_underwater_life, behind the water, so the water's own capture, ripple and
-// underwater filter treat it like everything else that is submerged.
+// Fish swim behind the water. Room-authored props share the water objects' draw layer.
 
 #region Foliage
 	// Foliage sprites placed on this layer sway in place with their base fixed.
@@ -30,8 +28,8 @@
 		spr_underwater_fish_seahorse_b
 	];
 	fish = [];
-	// One fish for every four 320 px water tiles.
-	fish_area_per_fish = 4 * 320 * 320;
+	// One fish for every eight 320 px water tiles.
+	fish_area_per_fish = 8 * 320 * 320;
 	fish_scale_min = 0.75;
 	fish_scale_max = 1.25;
 	// Room pixels per frame at 60 fps.
@@ -49,15 +47,21 @@
 	fish_active_margin = 960;
 #endregion
 
-/// Take over the props layer's foliage sprites so they can bend. Static coral
-/// and everything else stays on the asset layer.
-underwater_foliage_collect = function() {
-	var _elements = layer_get_all_elements(layer_get_id(props_layer_name));
+/// The editor uses a foreground asset layer for placement. In play, submit its
+/// sprites with the water objects so both receive the same filter in one pass.
+underwater_props_setup = function() {
+	var _props = layer_get_id(props_layer_name);
+	if(!layer_get_visible(_props)) return;
+	var _water = layer_get_id("lyr_water");
+	var _elements = layer_get_all_elements(_props);
 	for(var _i = 0; _i < array_length(_elements); _i++){
 		var _element = _elements[_i];
 		if(layer_get_element_type(_element) != layerelementtype_sprite) continue;
 		var _sprite = layer_sprite_get_sprite(_element);
-		if(array_get_index(foliage_sprites, _sprite) < 0) continue;
+		if(array_get_index(foliage_sprites, _sprite) < 0){
+			layer_element_move(_element, _water);
+			continue;
+		}
 		var _index = floor(layer_sprite_get_index(_element));
 		var _width = sprite_get_width(_sprite);
 		var _height = sprite_get_height(_sprite);
@@ -86,6 +90,24 @@ underwater_foliage_collect = function() {
 			radius: _radius
 		});
 		layer_sprite_destroy(_element);
+	}
+	if(array_length(foliage) > 0) layer_script_end(_water, underwater_foliage_draw_visible);
+	if(array_length(layer_get_all_elements(_props)) == 0) layer_enable_fx(_props, false);
+};
+
+underwater_foliage_draw_visible = function(){
+	if(event_type != ev_draw || event_number != ev_draw_normal) return;
+	var _camera = view_camera[0];
+	var _view_left = camera_get_view_x(_camera);
+	var _view_top = camera_get_view_y(_camera);
+	var _view_right = _view_left + camera_get_view_width(_camera);
+	var _view_bottom = _view_top + camera_get_view_height(_camera);
+
+	for(var _i = 0; _i < array_length(foliage); _i++){
+		var _plant = foliage[_i];
+		if(_plant.x + _plant.radius < _view_left || _plant.x - _plant.radius > _view_right
+		|| _plant.y + _plant.radius < _view_top || _plant.y - _plant.radius > _view_bottom) continue;
+		underwater_foliage_draw(_plant);
 	}
 };
 

@@ -1,3 +1,9 @@
+// Capture the authored transform before actor creation starts its appearance animation.
+respawn_placement = {
+	x: x, y: y, object: object_index, layer: layer,
+	transform: {image_xscale: image_xscale, image_yscale: image_yscale, image_angle: image_angle}
+};
+
 // Inherit the parent event
 event_inherited();
 

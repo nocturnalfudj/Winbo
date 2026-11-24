@@ -1,6 +1,9 @@
 // Inherit the parent event
 event_inherited();
 
+conveyor_carry_speed = 0;
+conveyor_reversal_hold = 0;
+
 #region State
 	enum PlayerState{
 		create,

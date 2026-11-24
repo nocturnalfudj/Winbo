@@ -12,7 +12,7 @@ function pickup_collect_orb(){
 
 	var _silver = (object_index == o_orb_silver);
 	var _collect_sprite = _silver ? spr_fx_collect_orb_silver : spr_fx_collect_orb_red;
-	fx_spawn_sprite_once(x, y, "lyr_pfx_foreground", _collect_sprite, 1, 1, 0, 20);
+	pickup_collect_sparkle(_collect_sprite);
 	audio_orb_pickup_play(_silver);
 	
 	//Camera Shake
@@ -33,4 +33,11 @@ function pickup_collect_orb(){
 			user.hp = hp;
 		}
 	}
+}
+
+/// Draw the burst at the visible pickup, including pickups authored on top of the water.
+function pickup_collect_sparkle(_sprite){
+	var _burst = fx_spawn_sprite_once(x + adjustment_x, y + adjustment_y,
+		"lyr_pfx_foreground", _sprite, abs(image_xscale), abs(image_yscale), 0, 20);
+	_burst.depth = min(depth, _burst.depth) - 1;
 }

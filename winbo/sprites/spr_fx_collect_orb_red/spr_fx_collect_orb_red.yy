@@ -2,9 +2,9 @@
   "$GMSprite": "v2",
   "%Name": "spr_fx_collect_orb_red",
   "bboxMode": 0,
-  "bbox_bottom": 169,
+  "bbox_bottom": 299,
   "bbox_left": 0,
-  "bbox_right": 169,
+  "bbox_right": 299,
   "bbox_top": 0,
   "collisionKind": 1,
   "collisionTolerance": 0,
@@ -88,11 +88,60 @@
       "name": "f9bf5d2904cc456e86713e6fed6ce4c8",
       "resourceType": "GMSpriteFrame",
       "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "e313417337514dbe83f22060f22f13a1",
+      "name": "e313417337514dbe83f22060f22f13a1",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "4ad3d770e6a84d7eb41a4abeeb7e4834",
+      "name": "4ad3d770e6a84d7eb41a4abeeb7e4834",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "d52c822206eb4c318fa6483933b01203",
+      "name": "d52c822206eb4c318fa6483933b01203",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "96c37facb0f0475c8914dc9e4f79aea8",
+      "name": "96c37facb0f0475c8914dc9e4f79aea8",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "dd7b50cbec4d47fd9e1b200142729c63",
+      "name": "dd7b50cbec4d47fd9e1b200142729c63",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "93821961978b427fbe2602adab8e9c0b",
+      "name": "93821961978b427fbe2602adab8e9c0b",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "a1835de71e4e405ab4386ca14cfc6526",
+      "name": "a1835de71e4e405ab4386ca14cfc6526",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
     }
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 170,
+  "height": 300,
   "HTile": false,
   "layers": [
     {
@@ -136,7 +185,7 @@
     },
     "eventStubScript": null,
     "eventToFunction": {},
-    "length": 11,
+    "length": 18,
     "lockOrigin": false,
     "moments": {
       "$KeyframeStore<MomentsEventKeyframe>": "",
@@ -405,6 +454,160 @@
               "resourceType": "Keyframe<SpriteFrameKeyframe>",
               "resourceVersion": "2.0",
               "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "e313417337514dbe83f22060f22f13a1",
+                    "path": "sprites/spr_fx_collect_orb_red/spr_fx_collect_orb_red.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "ea133e6a-b66b-4771-b2f9-b080bd0fbe74",
+              "IsCreationKey": false,
+              "Key": 11,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "4ad3d770e6a84d7eb41a4abeeb7e4834",
+                    "path": "sprites/spr_fx_collect_orb_red/spr_fx_collect_orb_red.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "62743e5d-8040-41fc-9966-32855f16ddeb",
+              "IsCreationKey": false,
+              "Key": 12,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "d52c822206eb4c318fa6483933b01203",
+                    "path": "sprites/spr_fx_collect_orb_red/spr_fx_collect_orb_red.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "8cf60d94-9b87-4b52-9efa-846b08133392",
+              "IsCreationKey": false,
+              "Key": 13,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "96c37facb0f0475c8914dc9e4f79aea8",
+                    "path": "sprites/spr_fx_collect_orb_red/spr_fx_collect_orb_red.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "ea64fc96-b575-41bc-b56e-b765609d0f70",
+              "IsCreationKey": false,
+              "Key": 14,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "dd7b50cbec4d47fd9e1b200142729c63",
+                    "path": "sprites/spr_fx_collect_orb_red/spr_fx_collect_orb_red.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "72d6236f-b3f5-48c2-b3dd-bdae25ba6b3a",
+              "IsCreationKey": false,
+              "Key": 15,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "93821961978b427fbe2602adab8e9c0b",
+                    "path": "sprites/spr_fx_collect_orb_red/spr_fx_collect_orb_red.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "74339702-3cc8-4287-8201-1d1ca2c3bbc4",
+              "IsCreationKey": false,
+              "Key": 16,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "a1835de71e4e405ab4386ca14cfc6526",
+                    "path": "sprites/spr_fx_collect_orb_red/spr_fx_collect_orb_red.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "3846eae8-789b-4f7f-ab2f-a240955dbf74",
+              "IsCreationKey": false,
+              "Key": 17,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
             }
           ],
           "resourceType": "KeyframeStore<SpriteFrameKeyframe>",
@@ -422,8 +625,8 @@
     ],
     "visibleRange": null,
     "volume": 1,
-    "xorigin": 85,
-    "yorigin": 85
+    "xorigin": 150,
+    "yorigin": 150
   },
   "swatchColours": null,
   "swfPrecision": 2.525,
@@ -433,5 +636,5 @@
   },
   "type": 0,
   "VTile": false,
-  "width": 170
+  "width": 300
 }

@@ -2,9 +2,9 @@
   "$GMSprite": "v2",
   "%Name": "spr_fx_collect_life",
   "bboxMode": 0,
-  "bbox_bottom": 169,
+  "bbox_bottom": 299,
   "bbox_left": 0,
-  "bbox_right": 169,
+  "bbox_right": 299,
   "bbox_top": 0,
   "collisionKind": 1,
   "collisionTolerance": 0,
@@ -88,11 +88,60 @@
       "name": "4ae9ca418d4e4f98ad6c1d6c7c625281",
       "resourceType": "GMSpriteFrame",
       "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "31daf006557b4f73ace273d4c7bdb011",
+      "name": "31daf006557b4f73ace273d4c7bdb011",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "10ee79979c654ade8e4e987306adc81c",
+      "name": "10ee79979c654ade8e4e987306adc81c",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "487301e8f7654b9ba6c91980bf5afe02",
+      "name": "487301e8f7654b9ba6c91980bf5afe02",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "ff92d722664d40f39761e0948bc3f1ea",
+      "name": "ff92d722664d40f39761e0948bc3f1ea",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "36c5254621574a9b8ecee9dfcce63a00",
+      "name": "36c5254621574a9b8ecee9dfcce63a00",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "fe95ad08318648d39608e43b1c7d1530",
+      "name": "fe95ad08318648d39608e43b1c7d1530",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
+    },
+    {
+      "$GMSpriteFrame": "v1",
+      "%Name": "e7674b415042464480f1faea2b4156aa",
+      "name": "e7674b415042464480f1faea2b4156aa",
+      "resourceType": "GMSpriteFrame",
+      "resourceVersion": "2.0"
     }
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 170,
+  "height": 300,
   "HTile": false,
   "layers": [
     {
@@ -136,7 +185,7 @@
     },
     "eventStubScript": null,
     "eventToFunction": {},
-    "length": 11,
+    "length": 18,
     "lockOrigin": false,
     "moments": {
       "$KeyframeStore<MomentsEventKeyframe>": "",
@@ -405,6 +454,160 @@
               "resourceType": "Keyframe<SpriteFrameKeyframe>",
               "resourceVersion": "2.0",
               "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "31daf006557b4f73ace273d4c7bdb011",
+                    "path": "sprites/spr_fx_collect_life/spr_fx_collect_life.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "e4ea7959-16af-4126-90ba-c9e76e92cbbc",
+              "IsCreationKey": false,
+              "Key": 11,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "10ee79979c654ade8e4e987306adc81c",
+                    "path": "sprites/spr_fx_collect_life/spr_fx_collect_life.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "b5fdac14-0ac8-4157-8875-2b5f487d30b3",
+              "IsCreationKey": false,
+              "Key": 12,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "487301e8f7654b9ba6c91980bf5afe02",
+                    "path": "sprites/spr_fx_collect_life/spr_fx_collect_life.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "71fb34d1-0270-4aec-8a44-2d869c98f559",
+              "IsCreationKey": false,
+              "Key": 13,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "ff92d722664d40f39761e0948bc3f1ea",
+                    "path": "sprites/spr_fx_collect_life/spr_fx_collect_life.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "9250da2f-9a19-4586-93ba-2f349b8ddbd3",
+              "IsCreationKey": false,
+              "Key": 14,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "36c5254621574a9b8ecee9dfcce63a00",
+                    "path": "sprites/spr_fx_collect_life/spr_fx_collect_life.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "85af5530-d1d9-48ba-8956-7e31b56ddb85",
+              "IsCreationKey": false,
+              "Key": 15,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "fe95ad08318648d39608e43b1c7d1530",
+                    "path": "sprites/spr_fx_collect_life/spr_fx_collect_life.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "e3f30aa2-7644-4023-9b54-b5d06a064451",
+              "IsCreationKey": false,
+              "Key": 16,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
+            },
+            {
+              "$Keyframe<SpriteFrameKeyframe>": "",
+              "Channels": {
+                "0": {
+                  "$SpriteFrameKeyframe": "",
+                  "Id": {
+                    "name": "e7674b415042464480f1faea2b4156aa",
+                    "path": "sprites/spr_fx_collect_life/spr_fx_collect_life.yy"
+                  },
+                  "resourceType": "SpriteFrameKeyframe",
+                  "resourceVersion": "2.0"
+                }
+              },
+              "Disabled": false,
+              "id": "166fb7fe-a802-4872-9567-29873bd3e4ce",
+              "IsCreationKey": false,
+              "Key": 17,
+              "Length": 1,
+              "resourceType": "Keyframe<SpriteFrameKeyframe>",
+              "resourceVersion": "2.0",
+              "Stretch": false
             }
           ],
           "resourceType": "KeyframeStore<SpriteFrameKeyframe>",
@@ -422,8 +625,8 @@
     ],
     "visibleRange": null,
     "volume": 1,
-    "xorigin": 85,
-    "yorigin": 85
+    "xorigin": 150,
+    "yorigin": 150
   },
   "swatchColours": null,
   "swfPrecision": 2.525,
@@ -433,5 +636,5 @@
   },
   "type": 0,
   "VTile": false,
-  "width": 170
+  "width": 300
 }

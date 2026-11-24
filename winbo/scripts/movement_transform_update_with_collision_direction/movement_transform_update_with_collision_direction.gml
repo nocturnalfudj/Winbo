@@ -63,14 +63,30 @@ function movement_transform_update_with_collision_direction(_delta_time, _use_tr
 
     // Use the surface reached by this step, rather than last frame's ground.
     // The same foot-contact test drives grounding below, including flush seams.
+    var _surface_speed = 0;
     if(move_grounded && _displacement_y >= 0){
         var _surface_support = (_step_from != noone)
             ? movement_ground_support_at(x + _displacement_x, y, 6, _step_from)
             : movement_ground_support_at(x + _displacement_x, y, 2);
         if(_surface_support != noone){
-            _displacement_x += _surface_support.surface_speed_x * _delta_time;
+            _surface_speed = _surface_support.surface_speed_x;
         }
     }
+    if(object_index == o_player){
+        if(_surface_speed == 0){
+            conveyor_reversal_hold = 0;
+        }
+        else if(conveyor_reversal_hold > 0){
+            _surface_speed = conveyor_carry_speed;
+        }
+        else if(conveyor_carry_speed * _surface_speed < 0){
+            // Let the newly reached belt push Winbo clear of the seam before reversing again.
+            conveyor_reversal_hold = SECOND * 0.5;
+        }
+        conveyor_carry_speed = _surface_speed;
+        conveyor_reversal_hold = max(0, conveyor_reversal_hold - _delta_time);
+    }
+    _displacement_x += _surface_speed * _delta_time;
 
     // Initialize collision variables
     collision.Set(0, 0);

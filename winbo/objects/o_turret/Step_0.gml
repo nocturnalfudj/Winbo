@@ -69,7 +69,6 @@ for(var _i = -1; _i <= 1; _i++){
     _bullet.sprite_current = spr_apocalypse_survivor_projectile;
     with(_bullet) image_system_setup(spr_apocalypse_survivor_projectile, 15, true, true, 0, IMAGE_LOOP_FULL);
     _bullet.mask_index = spr_apocalypse_survivor_projectile;
-    _bullet.sprite_angle_offset = 180;
     _bullet.death_anim_sprite = spr_apocalypse_survivor_projectile_impact;
     _bullet.death_anim_fps = 18;
     _bullet.acceleration.AddMagnitudeDirection(projectile_speed, aim_angle + _i * spread_angle);

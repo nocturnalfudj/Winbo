@@ -14,7 +14,9 @@ function player_swim_setup(){
 	swim_dash_input_pressed = false;
 	swim_dash_input_direction = 0;
 	swim_bubble_countdown = 0;
-	// A dash pressed during a burst fires as soon as that burst ends.
+	// Delay both the burst's input window and the next launch by three gameplay frames.
+	swim_dash_chain_delay = 3;
+	swim_dash_recovery = 0;
 	swim_dash_chain_pending = false;
 	swim_dash_chain_direction = 0;
 	swim_acceleration = 1.8;
@@ -38,6 +40,8 @@ function player_swim_contact_update(){
 	swim_active = _submerged;
 	swim_direction_previous = -1;
 	swim_dash_visual = false;
+	swim_dash_chain_pending = false;
+	swim_dash_recovery = 0;
 	if(swim_active){
 		jump_face_locked = false;
 		jump_float_requested = false;
@@ -50,12 +54,12 @@ function player_swim_contact_update(){
 		landing_smoke_armed = false;
 		jump_hold_allow_countdown = 0;
 		velocity.MultiplyFactor(0.65);
-		swim_dash_chain_pending = false;
 		dash_stamina = dash_stamina_max;
 		dash_stamina_depleted = false;
 		image_system_setup(spr_player_swim, 15, true, true, 5, IMAGE_LOOP_FULL);
 		image_set_frame(image, 0);
 		if(state == PlayerState.dash){
+			swim_dash_recovery = swim_dash_chain_delay;
 			swim_dash_direction = input_move_direction;
 			swim_dash_face_horizontal = face_horizontal;
 			swim_dash_visual = true;
@@ -64,7 +68,6 @@ function player_swim_contact_update(){
 		player_swim_bubbles(false, 90, true);
 	}
 	else{
-		swim_dash_chain_pending = false;
 		if(_surface_jump){
 			player_swim_surface_jump();
 		}
@@ -123,7 +126,6 @@ function player_swim_bubbles(_fast, _direction, _entry = false){
 function player_swim_tick(){
 	var _dt = global.delta_time_factor_scaled;
 	swim_bubble_countdown = max(0, swim_bubble_countdown - _dt);
-	// The next dash is ready once the burst ends, while its artwork still recovers.
 	if(state != PlayerState.dash){
 		dash_stamina = dash_stamina_max;
 		dash_stamina_depleted = false;
@@ -149,8 +151,6 @@ function player_swim_integrate(){
 }
 
 function player_swim_move(){
-	var _dash_chain = swim_dash_chain_pending;
-	swim_dash_chain_pending = false;
 	character_health();
 	if(state != PlayerState.move) return;
 	player_swim_tick();
@@ -170,8 +170,14 @@ function player_swim_move(){
 	move_grounded = false;
 	var _dash_current = input_current[UserControl.dash];
 	var _dash_previous = input_previous[UserControl.dash];
-	if(swim_dash_input_pressed || _dash_chain){
+	if(swim_dash_recovery > 0){
+		swim_dash_recovery = max(0, swim_dash_recovery - global.delta_time_factor_scaled);
+		// Consume fresh edges during recovery. A late press from the burst stays queued.
+		input_current[UserControl.dash] = false;
+	}
+	else if(swim_dash_input_pressed || swim_dash_chain_pending){
 		var _dash_direction = swim_dash_input_pressed ? swim_dash_input_direction : swim_dash_chain_direction;
+		swim_dash_chain_pending = false;
 		input_move_direction = _dash_direction;
 		input_aim_direction = _dash_direction;
 		input_move_magnitude = 1;
@@ -184,6 +190,7 @@ function player_swim_move(){
 	input_previous[UserControl.dash] = _dash_previous;
 	move_grounded = _grounded;
 	if(state == PlayerState.dash){
+		swim_dash_recovery = swim_dash_chain_delay;
 		// No burst movement has run yet. The previous swim step may still
 		// report floor contact, which mustn't turn this new dash into a bump.
 		collision.Set(0, 0);
@@ -202,8 +209,6 @@ function player_swim_move(){
 
 function player_swim_dash(){
 	player_input();
-	// A press during the burst queues the next dash for the moment it ends,
-	// so dashes chain while the dash artwork is still recovering.
 	var _chain_pressed = swim_dash_input_pressed
 		|| (input_current[UserControl.dash] && !input_previous[UserControl.dash]);
 	var _chain_direction = swim_dash_input_pressed ? swim_dash_input_direction
@@ -217,7 +222,7 @@ function player_swim_dash(){
 		swim_dash_chain_pending = false;
 		return;
 	}
-	if(_chain_pressed){
+	if(_chain_pressed && dash_countdown_max - dash_countdown >= swim_dash_chain_delay){
 		swim_dash_chain_pending = true;
 		swim_dash_chain_direction = _chain_direction;
 	}
@@ -231,7 +236,7 @@ function player_swim_dash(){
 		state = PlayerState.move;
 		velocity_retention = velocity_retention_default;
 		speed_stretch_enable = false;
-		// The burst is the swim dash's own cooldown.
+		// Swimming uses its own recovery timer after the burst.
 		dash_cooldown = 0;
 	}
 	character_face(false);

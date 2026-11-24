@@ -100,8 +100,17 @@ liquid_tiles_draw = function(_alpha) {
 	shader_set_uniform_f(mask_tile_uniform_frame, render_left, render_top,
 		render_scale / cached_surf_w, render_scale / cached_surf_h);
 	for(var _tile_y = _tile_top; _tile_y < _bottom; _tile_y += _tile_height){
+		var _y0 = max(_tile_y, _top);
+		var _y1 = min(_tile_y + _tile_height, _bottom);
 		for(var _tile_x = _tile_left; _tile_x < _right; _tile_x += _tile_width){
-			draw_sprite_ext(sprite_index, 0, _tile_x, _tile_y, _scale, _scale, 0, c_white, _alpha);
+			// Outside the mask its edge texel can still be opaque. Crop the tile
+			// itself so that texel cannot stretch water past a wall or floor.
+			var _x0 = max(_tile_x, _left);
+			var _x1 = min(_tile_x + _tile_width, _right);
+			draw_sprite_part_ext(sprite_index, 0,
+				(_x0 - _tile_x) * render_scale, (_y0 - _tile_y) * render_scale,
+				(_x1 - _x0) * render_scale, (_y1 - _y0) * render_scale,
+				_x0, _y0, _scale, _scale, c_white, _alpha);
 		}
 	}
 	shader_reset();
